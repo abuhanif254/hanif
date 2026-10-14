@@ -68,6 +68,11 @@ export default function AdminPage() {
   const [projectToDelete, setProjectToDelete] = useState<ProjectItem | null>(null);
   const [projectSearch, setProjectSearch] = useState("");
 
+  // Service editing & modal states
+  const [editingService, setEditingService] = useState<ServicePricing | null>(null);
+  const [serviceToDelete, setServiceToDelete] = useState<ServicePricing | null>(null);
+  const [serviceSearch, setServiceSearch] = useState("");
+
   // Forms state
   const [newProject, setNewProject] = useState({
     title: "",
@@ -420,6 +425,81 @@ export default function AdminPage() {
       isPopular: false,
     });
     showNotification("Service & pricing tier added!");
+  }
+
+  // Save Service Edit
+  function handleSaveServiceEdit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!editingService) return;
+
+    setServices(services.map((s) => (s.id === editingService.id ? editingService : s)));
+
+    if (isSupabaseConfigured && supabase) {
+      supabase
+        .from("services")
+        .update({
+          title: editingService.title,
+          slug: editingService.slug,
+          description: editingService.description,
+          pricing_type: editingService.pricingType,
+          price_display: editingService.priceDisplay,
+          timeline: editingService.timeline,
+          deliverables: editingService.deliverables,
+          is_popular: editingService.isPopular,
+          is_active: editingService.isActive,
+        })
+        .eq("id", editingService.id)
+        .then();
+    }
+
+    setEditingService(null);
+    showNotification("Pricing package successfully updated in database!");
+  }
+
+  // Confirm Delete Service
+  function handleConfirmDeleteService() {
+    if (!serviceToDelete) return;
+
+    setServices(services.filter((s) => s.id !== serviceToDelete.id));
+
+    if (isSupabaseConfigured && supabase) {
+      supabase.from("services").delete().eq("id", serviceToDelete.id).then();
+    }
+
+    setServiceToDelete(null);
+    showNotification("Pricing package deleted from database.");
+  }
+
+  // Toggle Service Active status
+  function toggleServiceActive(id: string) {
+    const updated = services.map((s) => {
+      if (s.id === id) {
+        const nextActive = !s.isActive;
+        if (isSupabaseConfigured && supabase) {
+          supabase.from("services").update({ is_active: nextActive }).eq("id", id).then();
+        }
+        return { ...s, isActive: nextActive };
+      }
+      return s;
+    });
+    setServices(updated);
+    showNotification("Service status updated.");
+  }
+
+  // Toggle Service Popular status
+  function toggleServicePopular(id: string) {
+    const updated = services.map((s) => {
+      if (s.id === id) {
+        const nextPopular = !s.isPopular;
+        if (isSupabaseConfigured && supabase) {
+          supabase.from("services").update({ is_popular: nextPopular }).eq("id", id).then();
+        }
+        return { ...s, isPopular: nextPopular };
+      }
+      return s;
+    });
+    setServices(updated);
+    showNotification("Service popular badge status updated.");
   }
 
   // Add blog post handler
@@ -1107,16 +1187,35 @@ export default function AdminPage() {
           {/* TAB 3: SERVICES */}
           {activeTab === "services" && (
             <div>
-              <h2 style={{ fontSize: "24px", fontWeight: "800", margin: "0 0 16px 0" }}>
-                Transparent Services &amp; Work Pricing Manager
-              </h2>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "12px" }}>
+                <div>
+                  <h2 style={{ fontSize: "24px", fontWeight: "800", margin: "0 0 6px 0" }}>
+                    Work Pricing &amp; Engineering Services Manager
+                  </h2>
+                  <p style={{ margin: 0, fontSize: "14px", color: "#94a3b8" }}>
+                    Add, edit, and curate transparent engineering packages, deliverables, timelines, and rates synced with Supabase.
+                  </p>
+                </div>
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <span style={{ fontSize: "12px", padding: "6px 12px", backgroundColor: "#0f172a", border: "1px solid #1e293b", borderRadius: "4px", color: "#e2e8f0" }}>
+                    Total Packages: <strong style={{ color: "#38bdf8" }}>{services.length}</strong>
+                  </span>
+                  <span style={{ fontSize: "12px", padding: "6px 12px", backgroundColor: "#064e3b", border: "1px solid #047857", borderRadius: "4px", color: "#6ee7b7" }}>
+                    Active: <strong>{services.filter((s) => s.isActive).length}</strong>
+                  </span>
+                  <span style={{ fontSize: "12px", padding: "6px 12px", backgroundColor: "#78350f", border: "1px solid #b45309", borderRadius: "4px", color: "#fcd34d" }}>
+                    Popular: <strong>{services.filter((s) => s.isPopular).length}</strong>
+                  </span>
+                </div>
+              </div>
 
+              {/* Add Pricing Package Form */}
               <div style={{ backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "6px", padding: "24px", marginBottom: "30px" }}>
                 <h3 style={{ fontSize: "16px", fontWeight: "700", margin: "0 0 16px 0", color: "#38bdf8" }}>
                   + Add New Pricing Package
                 </h3>
                 <form onSubmit={handleAddService}>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", marginBottom: "14px" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "14px", marginBottom: "14px" }}>
                     <div>
                       <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Service Title *</label>
                       <input
@@ -1124,8 +1223,29 @@ export default function AdminPage() {
                         value={newService.title}
                         onChange={(e) => setNewService({ ...newService, title: e.target.value })}
                         placeholder="e.g. Performance Audit Sprint"
-                        style={{ width: "100%", padding: "8px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px" }}
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
                       />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>URL Slug (optional)</label>
+                      <input
+                        value={newService.slug}
+                        onChange={(e) => setNewService({ ...newService, slug: e.target.value })}
+                        placeholder="e.g. performance-audit-sprint"
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Pricing Model *</label>
+                      <select
+                        value={newService.pricingType}
+                        onChange={(e) => setNewService({ ...newService, pricingType: e.target.value as any })}
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      >
+                        <option value="fixed">Fixed-Scope Milestone</option>
+                        <option value="retainer">Monthly Retainer</option>
+                        <option value="hourly">Hourly Advisory</option>
+                      </select>
                     </div>
                     <div>
                       <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Price Display *</label>
@@ -1133,85 +1253,293 @@ export default function AdminPage() {
                         required
                         value={newService.priceDisplay}
                         onChange={(e) => setNewService({ ...newService, priceDisplay: e.target.value })}
-                        placeholder="e.g. $3,500 or $140 / hr"
-                        style={{ width: "100%", padding: "8px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px" }}
+                        placeholder="e.g. $4,500 or $5,500 / mo"
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
                       />
                     </div>
                     <div>
-                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Timeline / Scope</label>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Timeline / Capacity</label>
                       <input
                         value={newService.timeline}
                         onChange={(e) => setNewService({ ...newService, timeline: e.target.value })}
-                        placeholder="e.g. 5 Business Days"
-                        style={{ width: "100%", padding: "8px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px" }}
+                        placeholder="e.g. 1 Week or 15–20h / wk"
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
                       />
                     </div>
                   </div>
+
                   <div style={{ marginBottom: "14px" }}>
-                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Deliverables (comma separated)</label>
+                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Key Deliverables (comma separated) *</label>
                     <input
+                      required
                       value={newService.deliverables}
                       onChange={(e) => setNewService({ ...newService, deliverables: e.target.value })}
-                      placeholder="Deliverable 1, Deliverable 2, Deliverable 3"
-                      style={{ width: "100%", padding: "8px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px" }}
+                      placeholder="e.g. Full query plan analysis, B-tree indexing, Connection pooling, 30-day warranty"
+                      style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
                     />
                   </div>
+
                   <div style={{ marginBottom: "16px" }}>
-                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Description *</label>
+                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Scope Description *</label>
                     <textarea
                       required
                       rows={2}
                       value={newService.description}
                       onChange={(e) => setNewService({ ...newService, description: e.target.value })}
-                      placeholder="Brief overview of the scope and deliverables..."
-                      style={{ width: "100%", padding: "8px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px" }}
+                      placeholder="Detailed overview of technical problems solved and execution approach..."
+                      style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
                     />
                   </div>
+
+                  <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "18px" }}>
+                    <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "#e2e8f0", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        checked={newService.isPopular}
+                        onChange={(e) => setNewService({ ...newService, isPopular: e.target.checked })}
+                      />
+                      <span>Mark as &ldquo;Most Popular&rdquo; highlighted package</span>
+                    </label>
+                  </div>
+
                   <button
                     type="submit"
                     style={{
-                      padding: "10px 20px",
+                      padding: "10px 22px",
                       backgroundColor: "#16a34a",
                       color: "#fff",
                       border: "none",
                       borderRadius: "4px",
                       fontWeight: "700",
+                      fontSize: "13px",
                       cursor: "pointer",
                     }}
                   >
-                    Add Pricing Package
+                    + Add Pricing Package
                   </button>
                 </form>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
-                {services.map((serv) => (
-                  <div key={serv.id} style={{ padding: "20px", backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "6px" }}>
-                    <div style={{ fontSize: "24px", fontWeight: "800", color: "#ffffff" }}>{serv.priceDisplay}</div>
-                    <div style={{ fontSize: "16px", fontWeight: "700", color: "#38bdf8", marginTop: "4px" }}>{serv.title}</div>
-                    <div style={{ fontSize: "12px", color: "#94a3b8", margin: "6px 0 12px 0" }}>⏱ {serv.timeline}</div>
-                    <p style={{ fontSize: "13px", color: "#cbd5e1", lineHeight: "1.5" }}>{serv.description}</p>
+              {/* Filter and Search Bar */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", gap: "12px", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: "1 1 300px" }}>
+                  <input
+                    type="text"
+                    value={serviceSearch}
+                    onChange={(e) => setServiceSearch(e.target.value)}
+                    placeholder="Search packages by title, description, pricing, or deliverables..."
+                    style={{
+                      width: "100%",
+                      padding: "8px 12px",
+                      backgroundColor: "#071324",
+                      border: "1px solid #1e293b",
+                      borderRadius: "4px",
+                      color: "#fff",
+                      fontSize: "13px",
+                    }}
+                  />
+                  {serviceSearch && (
                     <button
-                      onClick={() => {
-                        setServices(services.filter((s) => s.id !== serv.id));
-                        showNotification("Pricing package removed.");
-                      }}
+                      type="button"
+                      onClick={() => setServiceSearch("")}
                       style={{
-                        marginTop: "14px",
-                        padding: "6px 10px",
-                        backgroundColor: "#7f1d1d",
-                        color: "#fecaca",
+                        padding: "8px 12px",
+                        backgroundColor: "#334155",
+                        color: "#fff",
                         border: "none",
-                        borderRadius: "3px",
-                        fontSize: "11px",
+                        borderRadius: "4px",
+                        fontSize: "12px",
                         cursor: "pointer",
                       }}
                     >
-                      Remove Package
+                      Clear
                     </button>
-                  </div>
-                ))}
+                  )}
+                </div>
+                <div style={{ fontSize: "13px", color: "#94a3b8" }}>
+                  Showing{" "}
+                  <strong style={{ color: "#ffffff" }}>
+                    {services.filter((s) => {
+                      if (!serviceSearch.trim()) return true;
+                      const q = serviceSearch.toLowerCase();
+                      return (
+                        s.title.toLowerCase().includes(q) ||
+                        s.description.toLowerCase().includes(q) ||
+                        s.priceDisplay.toLowerCase().includes(q) ||
+                        s.deliverables.some((d) => d.toLowerCase().includes(q))
+                      );
+                    }).length}
+                  </strong>{" "}
+                  of {services.length} packages
+                </div>
               </div>
+
+              {/* Services Cards Grid */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "16px" }}>
+                {services
+                  .filter((serv) => {
+                    if (!serviceSearch.trim()) return true;
+                    const q = serviceSearch.toLowerCase();
+                    return (
+                      serv.title.toLowerCase().includes(q) ||
+                      serv.description.toLowerCase().includes(q) ||
+                      serv.priceDisplay.toLowerCase().includes(q) ||
+                      serv.deliverables.some((d) => d.toLowerCase().includes(q))
+                    );
+                  })
+                  .map((serv) => (
+                    <div
+                      key={serv.id}
+                      style={{
+                        padding: "20px",
+                        backgroundColor: "#0a192f",
+                        border: serv.isPopular ? "1px solid #16a34a" : "1px solid #1e293b",
+                        borderRadius: "6px",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "8px", marginBottom: "8px" }}>
+                          <div>
+                            <span style={{ fontSize: "11px", textTransform: "uppercase", color: "#94a3b8", fontWeight: "700" }}>
+                              {serv.pricingType}
+                            </span>
+                            <div style={{ fontSize: "24px", fontWeight: "800", color: "#ffffff", margin: "2px 0 4px 0" }}>
+                              {serv.priceDisplay}
+                            </div>
+                          </div>
+                          <div style={{ display: "flex", gap: "6px" }}>
+                            {/* Active Toggle Button */}
+                            <button
+                              type="button"
+                              onClick={() => toggleServiceActive(serv.id)}
+                              title="Toggle public visibility"
+                              style={{
+                                padding: "4px 8px",
+                                borderRadius: "3px",
+                                fontSize: "11px",
+                                fontWeight: "700",
+                                border: "none",
+                                cursor: "pointer",
+                                backgroundColor: serv.isActive ? "#065f46" : "#334155",
+                                color: serv.isActive ? "#a7f3d0" : "#94a3b8",
+                              }}
+                            >
+                              {serv.isActive ? "● Active" : "○ Inactive"}
+                            </button>
+                            {/* Popular Toggle Button */}
+                            <button
+                              type="button"
+                              onClick={() => toggleServicePopular(serv.id)}
+                              title="Toggle popular highlight badge"
+                              style={{
+                                padding: "4px 8px",
+                                borderRadius: "3px",
+                                fontSize: "11px",
+                                fontWeight: "700",
+                                border: "none",
+                                cursor: "pointer",
+                                backgroundColor: serv.isPopular ? "#78350f" : "#1e293b",
+                                color: serv.isPopular ? "#fde68a" : "#64748b",
+                              }}
+                            >
+                              {serv.isPopular ? "★ Popular" : "☆ Standard"}
+                            </button>
+                          </div>
+                        </div>
+
+                        <div style={{ fontSize: "17px", fontWeight: "700", color: "#38bdf8", marginBottom: "4px" }}>
+                          {serv.title}
+                        </div>
+                        <div style={{ fontSize: "12px", color: "#94a3b8", marginBottom: "12px" }}>
+                          ⏱ Timeline: <strong style={{ color: "#e2e8f0" }}>{serv.timeline}</strong>
+                        </div>
+
+                        <p style={{ fontSize: "13px", color: "#cbd5e1", lineHeight: "1.5", margin: "0 0 14px 0" }}>
+                          {serv.description}
+                        </p>
+
+                        <div style={{ borderTop: "1px solid #1e293b", paddingTop: "10px", marginBottom: "16px" }}>
+                          <strong style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase", display: "block", marginBottom: "6px" }}>
+                            Included Deliverables ({serv.deliverables.length}):
+                          </strong>
+                          <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "12px", color: "#94a3b8", lineHeight: "1.5" }}>
+                            {serv.deliverables.map((deliv, idx) => (
+                              <li key={idx} style={{ marginBottom: "3px" }}>
+                                {deliv}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #1e293b", paddingTop: "12px", marginTop: "10px" }}>
+                        <Link
+                          href="/pricing"
+                          target="_blank"
+                          style={{
+                            fontSize: "12px",
+                            color: "#38bdf8",
+                            textDecoration: "none",
+                            fontWeight: "600",
+                          }}
+                        >
+                          ↗ View on Site
+                        </Link>
+                        <div style={{ display: "flex", gap: "8px" }}>
+                          <button
+                            type="button"
+                            onClick={() => setEditingService({ ...serv })}
+                            style={{
+                              padding: "5px 12px",
+                              backgroundColor: "#1e3a8a",
+                              color: "#bfdbfe",
+                              border: "1px solid #2563eb",
+                              borderRadius: "4px",
+                              fontSize: "12px",
+                              fontWeight: "600",
+                              cursor: "pointer",
+                            }}
+                          >
+                            ✏️ Edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setServiceToDelete(serv)}
+                            style={{
+                              padding: "5px 12px",
+                              backgroundColor: "#7f1d1d",
+                              color: "#fecaca",
+                              border: "none",
+                              borderRadius: "4px",
+                              fontSize: "12px",
+                              cursor: "pointer",
+                            }}
+                          >
+                            🗑️ Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+
+              {services.filter((s) => {
+                if (!serviceSearch.trim()) return true;
+                const q = serviceSearch.toLowerCase();
+                return (
+                  s.title.toLowerCase().includes(q) ||
+                  s.description.toLowerCase().includes(q) ||
+                  s.priceDisplay.toLowerCase().includes(q) ||
+                  s.deliverables.some((d) => d.toLowerCase().includes(q))
+                );
+              }).length === 0 && (
+                <div style={{ padding: "40px", textAlign: "center", backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "6px", color: "#94a3b8" }}>
+                  No packages found matching &ldquo;{serviceSearch}&rdquo;.
+                </div>
+              )}
             </div>
           )}
 
@@ -1743,6 +2071,259 @@ export default function AdminPage() {
                   <button
                     type="button"
                     onClick={handleConfirmDeleteProject}
+                    style={{
+                      padding: "8px 18px",
+                      backgroundColor: "#dc2626",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "4px",
+                      fontSize: "13px",
+                      fontWeight: "700",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Delete Permanently
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* EDIT SERVICE MODAL */}
+          {editingService && (
+            <div
+              style={{
+                position: "fixed",
+                inset: 0,
+                backgroundColor: "rgba(0, 0, 0, 0.75)",
+                zIndex: 9999,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "20px",
+              }}
+            >
+              <div
+                style={{
+                  backgroundColor: "#0a192f",
+                  border: "1px solid #334155",
+                  borderRadius: "8px",
+                  maxWidth: "700px",
+                  width: "100%",
+                  maxHeight: "90vh",
+                  overflowY: "auto",
+                  padding: "24px",
+                  boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.5)",
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", borderBottom: "1px solid #1e293b", paddingBottom: "12px" }}>
+                  <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#ffffff", margin: 0 }}>
+                    Edit Pricing Package: {editingService.title}
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => setEditingService(null)}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: "#94a3b8",
+                      fontSize: "20px",
+                      cursor: "pointer",
+                      padding: "0 4px",
+                    }}
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <form onSubmit={handleSaveServiceEdit}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "14px" }}>
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Service Title *</label>
+                      <input
+                        required
+                        value={editingService.title}
+                        onChange={(e) => setEditingService({ ...editingService, title: e.target.value })}
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>URL Slug *</label>
+                      <input
+                        required
+                        value={editingService.slug}
+                        onChange={(e) => setEditingService({ ...editingService, slug: e.target.value })}
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Pricing Model *</label>
+                      <select
+                        value={editingService.pricingType}
+                        onChange={(e) => setEditingService({ ...editingService, pricingType: e.target.value as any })}
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      >
+                        <option value="fixed">Fixed-Scope Milestone</option>
+                        <option value="retainer">Monthly Retainer</option>
+                        <option value="hourly">Hourly Advisory</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Price Display *</label>
+                      <input
+                        required
+                        value={editingService.priceDisplay}
+                        onChange={(e) => setEditingService({ ...editingService, priceDisplay: e.target.value })}
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ marginBottom: "14px" }}>
+                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Timeline / Capacity *</label>
+                    <input
+                      required
+                      value={editingService.timeline}
+                      onChange={(e) => setEditingService({ ...editingService, timeline: e.target.value })}
+                      style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                    />
+                  </div>
+
+                  <div style={{ display: "flex", gap: "24px", marginBottom: "14px", padding: "10px 12px", backgroundColor: "#071324", borderRadius: "4px", border: "1px solid #1e293b" }}>
+                    <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "#e2e8f0", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        checked={editingService.isActive}
+                        onChange={(e) => setEditingService({ ...editingService, isActive: e.target.checked })}
+                      />
+                      <span>Active on public website</span>
+                    </label>
+                    <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "#e2e8f0", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        checked={editingService.isPopular}
+                        onChange={(e) => setEditingService({ ...editingService, isPopular: e.target.checked })}
+                      />
+                      <span>Mark as &ldquo;Most Popular&rdquo; highlight badge</span>
+                    </label>
+                  </div>
+
+                  <div style={{ marginBottom: "14px" }}>
+                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Key Deliverables (comma separated) *</label>
+                    <textarea
+                      required
+                      rows={3}
+                      value={editingService.deliverables.join(", ")}
+                      onChange={(e) =>
+                        setEditingService({
+                          ...editingService,
+                          deliverables: e.target.value.split(",").map((s) => s.trim()).filter(Boolean),
+                        })
+                      }
+                      style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: "20px" }}>
+                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Scope Description *</label>
+                    <textarea
+                      required
+                      rows={3}
+                      value={editingService.description}
+                      onChange={(e) => setEditingService({ ...editingService, description: e.target.value })}
+                      style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                    />
+                  </div>
+
+                  <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", borderTop: "1px solid #1e293b", paddingTop: "16px" }}>
+                    <button
+                      type="button"
+                      onClick={() => setEditingService(null)}
+                      style={{
+                        padding: "8px 18px",
+                        backgroundColor: "#334155",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "4px",
+                        fontSize: "13px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      style={{
+                        padding: "8px 22px",
+                        backgroundColor: "#2563eb",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "4px",
+                        fontSize: "13px",
+                        fontWeight: "700",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Save Package Changes
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* DELETE SERVICE CONFIRMATION MODAL */}
+          {serviceToDelete && (
+            <div
+              style={{
+                position: "fixed",
+                inset: 0,
+                backgroundColor: "rgba(0, 0, 0, 0.75)",
+                zIndex: 9999,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "20px",
+              }}
+            >
+              <div
+                style={{
+                  backgroundColor: "#0a192f",
+                  border: "1px solid #7f1d1d",
+                  borderRadius: "8px",
+                  maxWidth: "480px",
+                  width: "100%",
+                  padding: "24px",
+                  boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.5)",
+                }}
+              >
+                <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#f87171", margin: "0 0 12px 0" }}>
+                  Confirm Package Deletion
+                </h3>
+                <p style={{ fontSize: "14px", color: "#cbd5e1", lineHeight: "1.5", margin: "0 0 20px 0" }}>
+                  Are you sure you want to permanently delete the pricing package <strong style={{ color: "#ffffff" }}>{serviceToDelete.title}</strong> ({serviceToDelete.priceDisplay})?
+                  <br /><br />
+                  This will remove the package from the public pricing page and the Supabase database.
+                </p>
+                <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+                  <button
+                    type="button"
+                    onClick={() => setServiceToDelete(null)}
+                    style={{
+                      padding: "8px 16px",
+                      backgroundColor: "#334155",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "4px",
+                      fontSize: "13px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleConfirmDeleteService}
                     style={{
                       padding: "8px 18px",
                       backgroundColor: "#dc2626",

@@ -78,7 +78,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                     <li className="priority_3"><a href="/#about">About Abu Hanif</a></li>
                     <li className="priority_4"><a href="/#competencies">Engineering Focus</a></li>
                     <li className="selected priority_2"><a href="/projects">Work Showcase</a></li>
-                    <li className="priority_4"><a href="/#pricing">Work Prices</a></li>
+                    <li className="priority_4"><a href="/pricing">Work Prices</a></li>
                     <li className="priority_5"><a href="/blog">Technical Blog</a></li>
                     <li className="priority_6"><a href="/#feedback">Client Feedback</a></li>
                     <li className="category_141"><a href="/admin">Admin Panel</a></li>
@@ -437,7 +437,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                   <ul>
                     <li><a href="/">Home</a></li>
                     <li><a href="/projects">Work Showcase</a></li>
-                    <li><a href="/#pricing">Services &amp; Pricing</a></li>
+                    <li><a href="/pricing">Services &amp; Pricing</a></li>
                     <li><a href="/blog">Technical Blog</a></li>
                     <li><a href="/admin" style={{ fontWeight: "bold", color: "#053056" }}>Admin Panel</a></li>
                     <li><a href="/#contactform">Contact</a></li>

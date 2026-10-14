@@ -34,7 +34,7 @@ export function getEngineerHomepage(): SourcePageRecord {
                 <li class="attorney_34 priority_3"><a href="#about">About Abu Hanif</a></li>
                 <li class="section_10 priority_4"><a href="#competencies">Engineering Focus</a></li>
                 <li class="practiceareasub_11 priority_2"><a href="/projects">Work Showcase</a></li>
-                <li class="section_29 priority_4"><a href="#pricing">Work Prices</a></li>
+                <li class="section_29 priority_4"><a href="/pricing">Work Prices</a></li>
                 <li class="section_83 priority_5"><a href="/blog">Technical Blog</a></li>
                 <li class="section_28 priority_6"><a href="#feedback">Client Feedback</a></li>
                 <li class="category_141"><a href="/admin">Admin Panel</a></li>
@@ -66,7 +66,7 @@ export function getEngineerHomepage(): SourcePageRecord {
                 <div class="wrapper">
                   <a class="pabttn pa1" href="/projects">Distributed <br/> Systems</a>
                   <a class="pabttn pa2" href="/projects">Full-Stack <br/> Engineering</a>
-                  <a class="pabttn pa3" href="#pricing">Architecture <br/> &amp; Pricing</a>
+                  <a class="pabttn pa3" href="/pricing">Architecture <br/> &amp; Pricing</a>
                 </div>
               </div>
             </div>
@@ -178,9 +178,14 @@ export function getEngineerHomepage(): SourcePageRecord {
                   </div>
 
                   <!-- WORK PRICES & SERVICES SECTION -->
-                  <h2 id="pricing" style="font-size:1.5em;margin:1.4em 0 0.5em 0;color:#053056;border-bottom:2px solid #9CBE41;padding-bottom:6px;">
-                    Services &amp; Transparent Work Pricing
-                  </h2>
+                  <div style="display:flex;justify-content:space-between;align-items:flex-end;margin:1.4em 0 0.5em 0;border-bottom:2px solid #9CBE41;padding-bottom:6px;">
+                    <h2 id="pricing" style="font-size:1.5em;margin:0;color:#053056;border-bottom:none;padding-bottom:0;">
+                      Services &amp; Transparent Work Pricing
+                    </h2>
+                    <a href="/pricing" style="font-size:12px;font-weight:bold;color:#053056;text-decoration:none;">
+                      View Full Pricing &amp; Comparison Matrix &rsaquo;
+                    </a>
+                  </div>
                   <p>
                     All engineering engagements are scoped transparently with defined deliverables, clear milestone schedules, and zero hidden overages:
                   </p>
@@ -503,8 +508,8 @@ export function getEngineerHomepage(): SourcePageRecord {
             <div id="footernav">
               <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="#work">Work Showcase</a></li>
-                <li><a href="#pricing">Services &amp; Pricing</a></li>
+                <li><a href="/projects">Work Showcase</a></li>
+                <li><a href="/pricing">Services &amp; Pricing</a></li>
                 <li><a href="/blog">Technical Blog</a></li>
                 <li><a href="/admin" style="font-weight:bold;color:#053056;">Admin Panel</a></li>
                 <li><a href="#contactform">Contact</a></li>
