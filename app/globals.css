@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./reference-source.css";
+@import "./portfolio-theme.css";
 
 :root {
   --navy: #062f50;

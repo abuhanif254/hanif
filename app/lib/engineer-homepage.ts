@@ -490,7 +490,7 @@ export function getEngineerHomepage(): SourcePageRecord {
         <div id="footer" class="global-site-footer">
           <!-- Tier 1: Consultation Ribbon -->
           <div class="global-footer-ribbon">
-            <div class="wrapper global-footer-ribbon-content">
+            <div class="global-footer-container global-footer-ribbon-content">
               <div class="global-footer-ribbon-text">
                 <span class="global-footer-ribbon-kicker">
                   Available for Strategic Engineering Contracts &amp; Advisory
@@ -517,7 +517,7 @@ export function getEngineerHomepage(): SourcePageRecord {
           </div>
 
           <!-- Tier 2: 5-Column High-Density Directory -->
-          <div class="wrapper">
+          <div class="global-footer-container">
             <div class="global-footer-grid">
               <!-- Col 1: Identity -->
               <div class="global-footer-col col-profile">
@@ -702,7 +702,7 @@ export function getEngineerHomepage(): SourcePageRecord {
             </div>
 
             <!-- Tier 4: Navigation Bar -->
-            <div id="footernav" class="global-footer-nav">
+            <div id="global-footernav" class="global-footer-nav">
               <ul>
                 <li class="first"><a href="/">Home</a></li>
                 <li><a href="#about">About Abu Hanif</a></li>

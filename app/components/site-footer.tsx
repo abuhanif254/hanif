@@ -9,7 +9,7 @@ export default function SiteFooter() {
           TIER 1: Pre-Footer Consultation & Timezone Availability Ribbon
           ========================================================================= */}
       <div className="global-footer-ribbon">
-        <div className="wrapper global-footer-ribbon-content">
+        <div className="global-footer-container global-footer-ribbon-content">
           <div className="global-footer-ribbon-text">
             <span className="global-footer-ribbon-kicker">
               Available for Strategic Engineering Contracts &amp; Advisory
@@ -38,7 +38,7 @@ export default function SiteFooter() {
       {/* =========================================================================
           TIER 2: 5-Column High-Density Engineering Directory
           ========================================================================= */}
-      <div className="wrapper">
+      <div className="global-footer-container">
         <div className="global-footer-grid">
           {/* Column 1: Identity & Authority Profile */}
           <div className="global-footer-col col-profile">
@@ -250,7 +250,7 @@ export default function SiteFooter() {
         {/* =========================================================================
             TIER 4: Global Primary Navigation Bar
             ========================================================================= */}
-        <div id="footernav" className="global-footer-nav">
+        <div id="global-footernav" className="global-footer-nav">
           <ul>
             <li className="first">
               <Link href="/">Home</Link>
