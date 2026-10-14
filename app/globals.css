@@ -1,0 +1,118 @@
+@import "tailwindcss";
+@import "./reference-source.css";
+
+:root {
+  --navy: #062f50;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+html { scroll-behavior: smooth; }
+#source-page-root { display: contents; }
+
+/* Purge button gradient overlays to enforce solid colors */
+.widget button:after,
+.widget #Submit:after,
+.detailedform button:after,
+.detailedform #Submit:after,
+button:after,
+.btn:after {
+  background-image: none !important;
+}
+
+/* Tagline header right CTA */
+#tagline a {
+  background-image: url("/images/abuhanif-tagline-v3.svg") !important;
+}
+
+/* Hero Banner: Abu Hanif 1:1 replacement matching original Justia Oak theme */
+#index .imgwrap #img1 {
+  background: #083155 url("/images/main_image_abuhanif.jpg") no-repeat center top !important;
+  background-size: 1200px 379px !important;
+}
+
+#index #img1:after,
+#index .imgwrap #img1:after {
+  display: none !important;
+}
+
+#img1:after {
+  background-image: url("/images/clean_hero_bg.jpg") !important;
+}
+
+.cookie-banner {
+  position: fixed;
+  z-index: 9999;
+  left: max(20px, calc((100vw - 1220px) / 2));
+  bottom: 20px;
+  width: min(740px, calc(100vw - 340px));
+  min-width: 500px;
+  padding: 22px 25px 20px;
+  border: 1px solid #e4e6e8;
+  border-radius: 6px;
+  background: #fff;
+  color: #1d232a;
+  box-shadow: 0 8px 32px rgba(17, 31, 44, .16);
+  font: 16px/1.48 Arial, Helvetica, sans-serif;
+}
+.cookie-banner > p { margin: 0 22px 14px 0; }
+.cookie-banner > p a { color: #2e5385; font-weight: 700; }
+.cookie-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  border: 0;
+  padding: 0 3px;
+  color: #333;
+  background: transparent;
+  font: 23px/1 Arial, sans-serif;
+}
+.cookie-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 9px 11px; }
+.cookie-actions button {
+  min-height: 43px;
+  padding: 7px 14px;
+  border: 1px solid #283443;
+  border-radius: 4px;
+  color: #17283a;
+  background: #fff;
+  font: 700 14px Arial, Helvetica, sans-serif;
+  transition: background 140ms var(--ease-out), transform 140ms var(--ease-out);
+}
+.cookie-actions button:hover { background: #f2f5f7; }
+.cookie-actions button:active { transform: scale(.98); }
+.cookie-actions .text-action { border-color: transparent; padding-inline: 3px; color: #2d5183; }
+.cookie-toggle { display: flex; gap: 8px; align-items: center; margin: 9px 0 16px; font-size: 14px; }
+.cookie-toggle input { accent-color: var(--navy); }
+.source-form-status {
+  margin: 10px 0 0 !important;
+  padding: 9px 11px !important;
+  border: 1px solid #d9c986 !important;
+  background: #fff8dc !important;
+  color: #403b26 !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+}
+
+@media (max-width: 720px) {
+  .cookie-banner {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    width: auto;
+    min-width: 0;
+    padding: 19px 15px 15px;
+    font-size: 14px;
+  }
+  .cookie-banner > p { margin-bottom: 12px; }
+  .cookie-actions { gap: 7px; }
+  .cookie-actions button { min-height: 39px; padding: 6px 10px; font-size: 12px; }
+  .cookie-actions .text-action { padding-inline: 4px; }
+}
+@media (max-width: 420px) {
+  .cookie-actions { align-items: stretch; }
+  .cookie-actions button { flex: 1 1 auto; }
+  .cookie-actions .text-action { flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}

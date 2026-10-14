@@ -1,0 +1,749 @@
+/* =============================================================================
+   Software Engineer Portfolio: Solid Color Palette & Zero-Gradient Design Theme
+   Strictly preserves 1:1 layout geometry, typography, and component structure.
+   ============================================================================= */
+
+:root {
+  --tech-dark: #0a192f;
+  --tech-dark-header: #071324;
+  --tech-nav: #0d223f;
+  --tech-nav-hover: #163660;
+  --tech-nav-active: #2563eb;
+  --tech-blue: #2563eb;
+  --tech-blue-hover: #1d4ed8;
+  --tech-green: #16a34a;
+  --tech-green-hover: #15803d;
+  --tech-surface: #f8fafc;
+  --tech-border: #e2e8f0;
+  --tech-text-primary: #0f172a;
+  --tech-text-secondary: #334155;
+  --tech-text-muted: #64748b;
+  --tech-white: #ffffff;
+}
+
+/* -----------------------------------------------------------------------------
+   Strict Gradient Elimination: Replace all gradients with solid flat colors
+   ----------------------------------------------------------------------------- */
+.widget button:after,
+.widget #Submit:after,
+.detailedform button:after,
+.detailedform #Submit:after,
+button:after,
+.btn:after {
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* -----------------------------------------------------------------------------
+   Header & Sticky Top Availability Bar
+   ----------------------------------------------------------------------------- */
+#top-numbers-v3 {
+  background-color: var(--tech-dark-header) !important;
+  color: var(--tech-white) !important;
+  border-bottom: 1px solid #1e293b !important;
+}
+
+#top-numbers-v3 ul li {
+  color: #94a3b8 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+#top-numbers-v3 ul li strong {
+  color: #38bdf8 !important;
+  font-weight: 600 !important;
+  margin-left: 8px !important;
+}
+
+#top-numbers-v3 .tnv3-button {
+  background-color: var(--tech-green) !important;
+  color: var(--tech-white) !important;
+  border: 1px solid var(--tech-green-hover) !important;
+  border-radius: 4px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  transition: background-color 0.15s ease !important;
+}
+
+#top-numbers-v3 .tnv3-button:hover {
+  background-color: var(--tech-green-hover) !important;
+}
+
+#header {
+  background-color: var(--tech-dark) !important;
+  border-bottom: 4px solid var(--tech-dark-header) !important;
+}
+
+#head {
+  background-color: var(--tech-dark) !important;
+}
+
+/* -----------------------------------------------------------------------------
+   Logo & Wordmark
+   ----------------------------------------------------------------------------- */
+.engineer-wordmark {
+  display: block;
+  text-decoration: none !important;
+  color: var(--tech-white) !important;
+  text-align: left;
+}
+
+.engineer-wordmark .wordmark-kicker {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  color: #38bdf8;
+  margin-bottom: 2px;
+}
+
+.engineer-wordmark strong {
+  display: block;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--tech-white);
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+}
+
+.engineer-wordmark .wordmark-sub {
+  display: block;
+  font-size: 13px;
+  color: #94a3b8;
+  font-weight: 500;
+  margin-top: 3px;
+}
+
+.engineer-tagline-cta {
+  float: right;
+  margin: 36px 25px 0 0;
+  text-align: right;
+}
+
+.engineer-tagline-cta a.cta-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: var(--tech-blue);
+  color: var(--tech-white);
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  border: 1px solid #1d4ed8;
+  transition: background-color 0.15s ease;
+}
+
+.engineer-tagline-cta a.cta-badge:hover {
+  background-color: var(--tech-blue-hover);
+  text-decoration: none;
+}
+
+/* -----------------------------------------------------------------------------
+   Top Navigation
+   ----------------------------------------------------------------------------- */
+#topnav {
+  background-color: var(--tech-nav) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+#topnav #tnav-toplevel > li > a {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.8px !important;
+  color: #cbd5e1 !important;
+  padding: 0 16px !important;
+}
+
+#topnav #tnav-toplevel > li:hover > a,
+#topnav #tnav-toplevel > li.selected > a {
+  border-bottom: 5px solid var(--tech-blue) !important;
+  color: var(--tech-white) !important;
+}
+
+#topnav #tnav-toplevel > li:hover {
+  background-color: var(--tech-nav-hover) !important;
+}
+
+#topnav #tnav-toplevel ul {
+  background-color: var(--tech-nav-hover) !important;
+  border-bottom: 4px solid var(--tech-dark-header) !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+#topnav #tnav-toplevel ul li:hover {
+  background-color: #1e293b !important;
+  border-left: 4px solid var(--tech-blue) !important;
+}
+
+/* -----------------------------------------------------------------------------
+   Hero Section: Solid Tech Slate (No Gradients)
+   ----------------------------------------------------------------------------- */
+#index .imgwrap {
+  border-bottom: 0 !important;
+  background-color: var(--tech-dark) !important;
+}
+
+#index .imgwrap #img1 {
+  background: var(--tech-dark) !important;
+  padding: 80px 40px !important;
+  color: var(--tech-white) !important;
+  border-bottom: 1px solid #1e293b !important;
+}
+
+.hero-content-wrapper {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.hero-text-col {
+  flex: 1;
+  text-align: left;
+}
+
+.hero-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  color: #38bdf8;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+}
+
+.hero-badge-pill .pulse-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--tech-green);
+  border-radius: 50%;
+}
+
+.hero-main-title {
+  font-size: 38px !important;
+  font-weight: 800 !important;
+  line-height: 1.18 !important;
+  color: var(--tech-white) !important;
+  margin: 0 0 16px 0 !important;
+  letter-spacing: -0.5px !important;
+}
+
+.hero-subtitle {
+  font-size: 18px !important;
+  line-height: 1.55 !important;
+  color: #94a3b8 !important;
+  margin: 0 0 24px 0 !important;
+  max-width: 640px !important;
+}
+
+.hero-actions-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.hero-btn-primary {
+  display: inline-block;
+  background-color: var(--tech-blue);
+  color: var(--tech-white);
+  font-weight: 700;
+  font-size: 15px;
+  padding: 12px 24px;
+  border-radius: 4px;
+  border: 1px solid #1d4ed8;
+  text-decoration: none !important;
+  transition: background-color 0.15s ease;
+}
+
+.hero-btn-primary:hover {
+  background-color: var(--tech-blue-hover);
+  color: var(--tech-white);
+}
+
+.hero-btn-secondary {
+  display: inline-block;
+  background-color: #1e293b;
+  color: var(--tech-white);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 12px 22px;
+  border-radius: 4px;
+  border: 1px solid #334155;
+  text-decoration: none !important;
+  transition: background-color 0.15s ease;
+}
+
+.hero-btn-secondary:hover {
+  background-color: #334155;
+  color: var(--tech-white);
+}
+
+.hero-code-card {
+  width: 440px;
+  background-color: #071324;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.code-card-header {
+  background-color: #0d1e34;
+  padding: 10px 16px;
+  border-bottom: 1px solid #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.code-card-header .dots {
+  display: flex;
+  gap: 6px;
+}
+
+.code-card-header .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.dot.red { background: #ef4444; }
+.dot.yellow { background: #eab308; }
+.dot.green { background: #22c55e; }
+
+.code-card-header .title {
+  color: #64748b;
+  font-size: 12px;
+  margin-left: auto;
+}
+
+.code-card-body {
+  padding: 18px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #e2e8f0;
+}
+
+/* -----------------------------------------------------------------------------
+   3 Core Action Buttons (#img2): Solid Green/Teal (No Gradients)
+   ----------------------------------------------------------------------------- */
+#index .imgwrap #img2 .wrapper {
+  background-color: var(--tech-blue) !important;
+}
+
+#index .imgwrap #img2 .pabttn {
+  background-color: var(--tech-blue) !important;
+  color: var(--tech-white) !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.15) !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+}
+
+#index .imgwrap #img2 .pabttn:hover {
+  background-color: var(--tech-blue-hover) !important;
+  color: var(--tech-white) !important;
+}
+
+/* -----------------------------------------------------------------------------
+   Engineering Competencies Grid (Replacing Practice Areas)
+   ----------------------------------------------------------------------------- */
+.competencies-section {
+  padding: 40px 0 20px 0;
+}
+
+.competencies-section h2.section-heading {
+  font-size: 26px !important;
+  font-weight: 800 !important;
+  color: var(--tech-text-primary) !important;
+  margin-bottom: 8px !important;
+  letter-spacing: -0.5px !important;
+}
+
+.competencies-section p.section-subheading {
+  font-size: 15px !important;
+  color: var(--tech-text-muted) !important;
+  margin-bottom: 28px !important;
+}
+
+.competencies-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.competency-card {
+  background-color: var(--tech-white);
+  border: 1px solid var(--tech-border);
+  border-radius: 6px;
+  padding: 22px 20px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.competency-card:hover {
+  border-color: var(--tech-blue);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.08);
+}
+
+.competency-card h3.card-title {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: var(--tech-text-primary) !important;
+  margin: 0 0 8px 0 !important;
+}
+
+.competency-card p.card-tagline {
+  font-size: 13px !important;
+  color: var(--tech-blue) !important;
+  font-weight: 600 !important;
+  margin: 0 0 10px 0 !important;
+}
+
+.competency-card p.card-desc {
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  color: var(--tech-text-secondary) !important;
+  margin: 0 0 14px 0 !important;
+}
+
+.competency-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.skill-pill {
+  background-color: var(--tech-surface);
+  border: 1px solid var(--tech-border);
+  color: var(--tech-text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 3px;
+}
+
+/* -----------------------------------------------------------------------------
+   Work Showcase & Pricing Section
+   ----------------------------------------------------------------------------- */
+.pricing-section-container {
+  margin: 40px 0;
+  padding: 32px 28px;
+  background-color: var(--tech-surface);
+  border: 1px solid var(--tech-border);
+  border-radius: 6px;
+}
+
+.pricing-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.pricing-tier-card {
+  background-color: var(--tech-white);
+  border: 1px solid var(--tech-border);
+  border-radius: 6px;
+  padding: 26px 22px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.pricing-tier-card.popular-tier {
+  border: 2px solid var(--tech-blue);
+}
+
+.popular-badge-pill {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  background-color: var(--tech-blue);
+  color: var(--tech-white);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.5px;
+}
+
+.pricing-tier-card h3.tier-title {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: var(--tech-text-primary) !important;
+  margin: 0 0 10px 0 !important;
+}
+
+.pricing-tier-card .tier-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.pricing-tier-card .tier-price {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--tech-dark);
+}
+
+.pricing-tier-card .tier-timeline {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--tech-blue);
+  margin-bottom: 14px;
+}
+
+.pricing-tier-card p.tier-desc {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--tech-text-muted);
+  margin-bottom: 20px;
+}
+
+.pricing-tier-card ul.deliverables-list {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 0 24px 0 !important;
+  flex: 1;
+}
+
+.pricing-tier-card ul.deliverables-list li {
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+  color: var(--tech-text-secondary) !important;
+  padding: 6px 0 6px 20px !important;
+  position: relative !important;
+}
+
+.pricing-tier-card ul.deliverables-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--tech-green);
+  font-weight: bold;
+}
+
+.pricing-tier-card a.tier-cta-btn {
+  display: block;
+  text-align: center;
+  padding: 10px 0;
+  background-color: var(--tech-blue);
+  color: var(--tech-white);
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 4px;
+  text-decoration: none !important;
+  transition: background-color 0.15s ease;
+}
+
+.pricing-tier-card a.tier-cta-btn:hover {
+  background-color: var(--tech-blue-hover);
+}
+
+/* -----------------------------------------------------------------------------
+   Featured Projects Showcase
+   ----------------------------------------------------------------------------- */
+.projects-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.project-showcase-card {
+  background-color: var(--tech-white);
+  border: 1px solid var(--tech-border);
+  border-radius: 6px;
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.project-showcase-card:hover {
+  border-color: var(--tech-blue);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.project-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.project-price-tag {
+  background-color: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.project-impact-badge {
+  color: var(--tech-blue);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.project-showcase-card h3.project-title {
+  font-size: 19px !important;
+  font-weight: 700 !important;
+  color: var(--tech-text-primary) !important;
+  margin: 0 0 10px 0 !important;
+}
+
+.project-showcase-card p.project-summary {
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  color: var(--tech-text-secondary) !important;
+  margin: 0 0 16px 0 !important;
+  flex: 1;
+}
+
+.project-tech-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.project-links-row {
+  display: flex;
+  gap: 12px;
+  border-top: 1px solid var(--tech-border);
+  padding-top: 14px;
+}
+
+.project-link-action {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--tech-blue);
+  text-decoration: none !important;
+}
+
+.project-link-action:hover {
+  color: var(--tech-blue-hover);
+  text-decoration: underline !important;
+}
+
+/* -----------------------------------------------------------------------------
+   Sidebar: Engineer Inquiry Form & Social Proof
+   ----------------------------------------------------------------------------- */
+#contactform.widget {
+  background-color: var(--tech-dark) !important;
+  border: 1px solid #1e293b !important;
+  border-radius: 6px !important;
+}
+
+#contactform.widget .heading4 {
+  background-color: var(--tech-blue) !important;
+  color: var(--tech-white) !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+#contactform.widget input,
+#contactform.widget select,
+#contactform.widget textarea {
+  background-color: #071324 !important;
+  color: var(--tech-white) !important;
+  border: 1px solid #1e293b !important;
+  border-radius: 4px !important;
+}
+
+#contactform.widget input:focus,
+#contactform.widget select:focus,
+#contactform.widget textarea:focus {
+  border-color: var(--tech-blue) !important;
+}
+
+#contactform.widget button {
+  background-color: var(--tech-green) !important;
+  border: 1px solid var(--tech-green-hover) !important;
+  color: var(--tech-white) !important;
+  font-weight: 700 !important;
+  border-radius: 4px !important;
+}
+
+#contactform.widget button:hover {
+  background-color: var(--tech-green-hover) !important;
+}
+
+/* -----------------------------------------------------------------------------
+   Footer
+   ----------------------------------------------------------------------------- */
+#footer {
+  background-color: var(--tech-dark) !important;
+  border-top: 4px solid var(--tech-blue) !important;
+  color: #94a3b8 !important;
+}
+
+#footer:before {
+  background-color: var(--tech-dark-header) !important;
+}
+
+#footer a {
+  color: #cbd5e1 !important;
+}
+
+#footer a:hover {
+  color: #38bdf8 !important;
+}
+
+#footer #footernav {
+  background-color: #0d1e34 !important;
+  border-bottom: 1px solid #1e293b !important;
+}
+
+#footer #footernav li a {
+  color: #94a3b8 !important;
+  font-weight: 600 !important;
+}
+
+#footer #footernav li a:hover {
+  background-color: #1e293b !important;
+  color: var(--tech-white) !important;
+}
+
+/* -----------------------------------------------------------------------------
+   Responsive adjustments
+   ----------------------------------------------------------------------------- */
+@media screen and (max-width: 900px) {
+  .competencies-grid,
+  .pricing-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .projects-showcase-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-content-wrapper {
+    flex-direction: column;
+  }
+  .hero-code-card {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .competencies-grid,
+  .pricing-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
