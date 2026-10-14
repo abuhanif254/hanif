@@ -101,6 +101,147 @@ export default function AdminPage() {
     setTimeout(() => setStatusMessage(null), 3500);
   }
 
+  // Load live data from Supabase or localStorage on mount
+  useEffect(() => {
+    // 1. Load local inquiries from window.localStorage if available
+    if (typeof window !== "undefined") {
+      const savedInquiries = window.localStorage.getItem("abuhanif-inquiries");
+      if (savedInquiries) {
+        try {
+          const parsed = JSON.parse(savedInquiries);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setInquiries((prev) => [
+              ...parsed,
+              ...prev.filter((p) => !parsed.some((x: any) => x.id === p.id)),
+            ]);
+          }
+        } catch {}
+      }
+    }
+
+    // 2. Fetch from Supabase if configured
+    if (isSupabaseConfigured && supabase) {
+      // Inquiries
+      supabase
+        .from("inquiries")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .then(({ data, error }) => {
+          if (!error && data && data.length > 0) {
+            const mapped: InquiryRecord[] = data.map((d: any) => ({
+              id: d.id,
+              name: d.name,
+              email: d.email,
+              phone: d.phone,
+              projectType: d.project_type,
+              budgetRange: d.budget_range,
+              message: d.message,
+              status: d.status,
+              createdAt: d.created_at,
+            }));
+            setInquiries(mapped);
+          }
+        });
+
+      // Projects
+      supabase
+        .from("projects")
+        .select("*")
+        .order("sort_order", { ascending: true })
+        .then(({ data, error }) => {
+          if (!error && data && data.length > 0) {
+            setProjects(
+              data.map((d: any) => ({
+                id: d.id,
+                title: d.title,
+                slug: d.slug,
+                summary: d.summary,
+                descriptionMarkdown: d.description_markdown,
+                clientName: d.client_name,
+                demoUrl: d.demo_url,
+                githubUrl: d.github_url,
+                priceTag: d.price_tag,
+                impactMetric: d.impact_metric,
+                techStack: d.tech_stack || [],
+                isFeatured: d.is_featured,
+                published: d.is_published,
+              }))
+            );
+          }
+        });
+
+      // Services
+      supabase
+        .from("services")
+        .select("*")
+        .order("sort_order", { ascending: true })
+        .then(({ data, error }) => {
+          if (!error && data && data.length > 0) {
+            setServices(
+              data.map((d: any) => ({
+                id: d.id,
+                title: d.title,
+                slug: d.slug,
+                description: d.description,
+                pricingType: d.pricing_type,
+                priceDisplay: d.price_display,
+                timeline: d.timeline,
+                deliverables: d.deliverables || [],
+                isPopular: d.is_popular,
+                isActive: d.is_active,
+              }))
+            );
+          }
+        });
+
+      // Blog posts
+      supabase
+        .from("blog_posts")
+        .select("*")
+        .order("published_at", { ascending: false })
+        .then(({ data, error }) => {
+          if (!error && data && data.length > 0) {
+            setBlogPosts(
+              data.map((d: any) => ({
+                id: d.id,
+                title: d.title,
+                slug: d.slug,
+                excerpt: d.excerpt,
+                contentMarkdown: d.content_markdown,
+                tags: d.tags || [],
+                readingTimeMinutes: d.reading_time_minutes,
+                publishedAt: d.published_at,
+                isPublished: d.is_published,
+              }))
+            );
+          }
+        });
+
+      // Profile
+      supabase
+        .from("profiles")
+        .select("*")
+        .limit(1)
+        .single()
+        .then(({ data, error }) => {
+          if (!error && data) {
+            setProfile({
+              fullName: data.full_name,
+              kicker: data.kicker,
+              headline: data.headline,
+              bio: data.bio,
+              email: data.email,
+              phone: data.phone,
+              location: data.location,
+              availabilityStatus: data.availability_status,
+              isAvailable: data.is_available,
+              socialLinks: data.social_links || initialProfile.socialLinks,
+            });
+          }
+        });
+    }
+  }, []);
+
   // Add project handler
   function handleAddProject(e: React.FormEvent) {
     e.preventDefault();
@@ -120,6 +261,24 @@ export default function AdminPage() {
       published: true,
     };
     setProjects([item, ...projects]);
+
+    if (isSupabaseConfigured && supabase) {
+      supabase.from("projects").insert([{
+        title: item.title,
+        slug: item.slug,
+        summary: item.summary,
+        description_markdown: item.descriptionMarkdown,
+        client_name: item.clientName,
+        price_tag: item.priceTag,
+        impact_metric: item.impactMetric,
+        tech_stack: item.techStack,
+        demo_url: item.demoUrl,
+        github_url: item.githubUrl,
+        is_featured: true,
+        is_published: true,
+      }]).then();
+    }
+
     setNewProject({
       title: "",
       slug: "",
@@ -150,6 +309,21 @@ export default function AdminPage() {
       isActive: true,
     };
     setServices([...services, item]);
+
+    if (isSupabaseConfigured && supabase) {
+      supabase.from("services").insert([{
+        title: item.title,
+        slug: item.slug,
+        description: item.description,
+        pricing_type: item.pricingType,
+        price_display: item.priceDisplay,
+        timeline: item.timeline,
+        deliverables: item.deliverables,
+        is_popular: item.isPopular,
+        is_active: true,
+      }]).then();
+    }
+
     setNewService({
       title: "",
       slug: "",
@@ -178,6 +352,20 @@ export default function AdminPage() {
       isPublished: true,
     };
     setBlogPosts([item, ...blogPosts]);
+
+    if (isSupabaseConfigured && supabase) {
+      supabase.from("blog_posts").insert([{
+        title: item.title,
+        slug: item.slug,
+        excerpt: item.excerpt,
+        content_markdown: item.contentMarkdown,
+        tags: item.tags,
+        reading_time_minutes: item.readingTimeMinutes,
+        published_at: item.publishedAt,
+        is_published: true,
+      }]).then();
+    }
+
     setNewPost({
       title: "",
       slug: "",
@@ -194,6 +382,11 @@ export default function AdminPage() {
     setInquiries(
       inquiries.map((inq) => (inq.id === id ? { ...inq, status } : inq))
     );
+
+    if (isSupabaseConfigured && supabase) {
+      supabase.from("inquiries").update({ status }).eq("id", id).then();
+    }
+
     showNotification(`Inquiry status updated to ${status}`);
   }
 
