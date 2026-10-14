@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @import "./reference-source.css";
-@import "./portfolio-theme.css";
+@import "./site-footer.css";
 
 :root {
   --navy: #062f50;
