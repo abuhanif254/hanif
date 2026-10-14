@@ -63,6 +63,7 @@ export interface BlogPost {
   readingTimeMinutes: number;
   publishedAt: string;
   isPublished: boolean;
+  coverImageUrl?: string;
 }
 
 export interface Testimonial {
@@ -638,13 +639,13 @@ Never guess—always measure with \`EXPLAIN ANALYZE\`.`,
 
 export const initialTestimonials: Testimonial[] = [
   {
-    quote: "Alex transformed our core API architecture in just three weeks. Our P99 latency dropped by 75% and our infrastructure bill was cut in half. He is one of the rarest engineers who pairs deep systems knowledge with rapid execution velocity.",
+    quote: "Abu Hanif transformed our core API architecture in just three weeks. Our P99 latency dropped by 75% and our infrastructure bill was cut in half. He is one of the rarest engineers who pairs deep systems knowledge with rapid execution velocity.",
     author: "David Vance",
     role: "VP of Engineering",
     company: "Apex Telemetry Labs",
   },
   {
-    quote: "Working with Alex felt like having a Principal Architect and a full delivery team rolled into one. Clear technical communication, pristine documentation, and zero fluff. He delivered our Next.js edge platform ahead of schedule.",
+    quote: "Working with Abu Hanif felt like having a Principal Architect and a full delivery team rolled into one. Clear technical communication, pristine documentation, and zero fluff. He delivered our Next.js edge platform ahead of schedule.",
     author: "Elena Rostova",
     role: "Founder & CEO",
     company: "Synthetix Cloud",

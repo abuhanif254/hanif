@@ -73,6 +73,11 @@ export default function AdminPage() {
   const [serviceToDelete, setServiceToDelete] = useState<ServicePricing | null>(null);
   const [serviceSearch, setServiceSearch] = useState("");
 
+  // Blog editing & modal states
+  const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
+  const [postToDelete, setPostToDelete] = useState<BlogPost | null>(null);
+  const [blogSearch, setBlogSearch] = useState("");
+
   // Forms state
   const [newProject, setNewProject] = useState({
     title: "",
@@ -540,6 +545,64 @@ export default function AdminPage() {
       contentMarkdown: "",
     });
     showNotification("Article published to technical blog!");
+  }
+
+  // Save Blog Post Edit
+  function handleSavePostEdit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!editingPost) return;
+
+    setBlogPosts(blogPosts.map((p) => (p.id === editingPost.id ? editingPost : p)));
+
+    if (isSupabaseConfigured && supabase) {
+      supabase
+        .from("blog_posts")
+        .update({
+          title: editingPost.title,
+          slug: editingPost.slug,
+          excerpt: editingPost.excerpt,
+          content_markdown: editingPost.contentMarkdown,
+          tags: editingPost.tags,
+          reading_time_minutes: editingPost.readingTimeMinutes,
+          cover_image_url: editingPost.coverImageUrl || null,
+          is_published: editingPost.isPublished,
+        })
+        .eq("id", editingPost.id)
+        .then();
+    }
+
+    setEditingPost(null);
+    showNotification("Article successfully updated in database!");
+  }
+
+  // Confirm Delete Blog Post
+  function handleConfirmDeletePost() {
+    if (!postToDelete) return;
+
+    setBlogPosts(blogPosts.filter((p) => p.id !== postToDelete.id));
+
+    if (isSupabaseConfigured && supabase) {
+      supabase.from("blog_posts").delete().eq("id", postToDelete.id).then();
+    }
+
+    setPostToDelete(null);
+    showNotification("Article deleted from technical blog and database.");
+  }
+
+  // Toggle Post Published status
+  function togglePostPublished(id: string) {
+    const updated = blogPosts.map((p) => {
+      if (p.id === id) {
+        const nextPub = !p.isPublished;
+        if (isSupabaseConfigured && supabase) {
+          supabase.from("blog_posts").update({ is_published: nextPub }).eq("id", id).then();
+        }
+        return { ...p, isPublished: nextPub };
+      }
+      return p;
+    });
+    setBlogPosts(updated);
+    showNotification("Article publication status updated.");
   }
 
   // Update inquiry status
@@ -1546,66 +1609,169 @@ export default function AdminPage() {
           {/* TAB 4: BLOG */}
           {activeTab === "blog" && (
             <div>
-              <h2 style={{ fontSize: "24px", fontWeight: "800", margin: "0 0 16px 0" }}>
-                Technical Blog &amp; Publishing Manager
-              </h2>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "12px" }}>
+                <div>
+                  <h2 style={{ fontSize: "24px", fontWeight: "800", margin: "0 0 4px 0" }}>
+                    Technical Blog &amp; Publishing Manager ({blogPosts.length})
+                  </h2>
+                  <p style={{ margin: 0, fontSize: "13px", color: "#94a3b8" }}>
+                    Manage engineering articles, markdown content, tags, and publication statuses.
+                  </p>
+                </div>
+                <Link
+                  href="/blog"
+                  target="_blank"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    padding: "8px 16px",
+                    backgroundColor: "#0a192f",
+                    border: "1px solid #1e3a8a",
+                    color: "#38bdf8",
+                    borderRadius: "4px",
+                    fontSize: "13px",
+                    fontWeight: "700",
+                    textDecoration: "none",
+                  }}
+                >
+                  ↗ Open Live Technical Blog
+                </Link>
+              </div>
 
+              {/* Metrics Summary Strip */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+                  gap: "14px",
+                  marginBottom: "24px",
+                }}
+              >
+                <div style={{ backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "6px", padding: "14px 16px" }}>
+                  <div style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase", fontWeight: "700", letterSpacing: "0.5px" }}>
+                    Total Articles
+                  </div>
+                  <div style={{ fontSize: "24px", fontWeight: "800", color: "#ffffff", marginTop: "4px" }}>
+                    {blogPosts.length}
+                  </div>
+                </div>
+                <div style={{ backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "6px", padding: "14px 16px" }}>
+                  <div style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase", fontWeight: "700", letterSpacing: "0.5px" }}>
+                    Published Live
+                  </div>
+                  <div style={{ fontSize: "24px", fontWeight: "800", color: "#4ade80", marginTop: "4px" }}>
+                    {blogPosts.filter((p) => p.isPublished).length}
+                  </div>
+                </div>
+                <div style={{ backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "6px", padding: "14px 16px" }}>
+                  <div style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase", fontWeight: "700", letterSpacing: "0.5px" }}>
+                    Draft / Unpublished
+                  </div>
+                  <div style={{ fontSize: "24px", fontWeight: "800", color: "#f59e0b", marginTop: "4px" }}>
+                    {blogPosts.filter((p) => !p.isPublished).length}
+                  </div>
+                </div>
+                <div style={{ backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "6px", padding: "14px 16px" }}>
+                  <div style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase", fontWeight: "700", letterSpacing: "0.5px" }}>
+                    Avg Reading Time
+                  </div>
+                  <div style={{ fontSize: "24px", fontWeight: "800", color: "#38bdf8", marginTop: "4px" }}>
+                    {Math.round(blogPosts.reduce((acc, p) => acc + (p.readingTimeMinutes || 5), 0) / (blogPosts.length || 1))} min
+                  </div>
+                </div>
+              </div>
+
+              {/* Add New Article Form */}
               <div style={{ backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "6px", padding: "24px", marginBottom: "30px" }}>
                 <h3 style={{ fontSize: "16px", fontWeight: "700", margin: "0 0 16px 0", color: "#38bdf8" }}>
                   + Publish New Technical Article
                 </h3>
                 <form onSubmit={handleAddPost}>
-                  <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "16px", marginBottom: "14px" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: "14px", marginBottom: "14px" }}>
                     <div>
                       <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Article Title *</label>
                       <input
                         required
                         value={newPost.title}
-                        onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-                        placeholder="e.g. Mastering Database Indexing for High Concurrency"
-                        style={{ width: "100%", padding: "8px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px" }}
+                        onChange={(e) => {
+                          const title = e.target.value;
+                          const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+                          setNewPost({ ...newPost, title, slug: newPost.slug ? newPost.slug : slug });
+                        }}
+                        placeholder="e.g. Architecting Distributed Cache Invalidation with Redis & PostgreSQL"
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
                       />
                     </div>
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>URL Slug (optional)</label>
+                      <input
+                        value={newPost.slug}
+                        onChange={(e) => setNewPost({ ...newPost, slug: e.target.value })}
+                        placeholder="auto-generated-slug"
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Read Time (Minutes)</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="60"
+                        value={newPost.readingTimeMinutes}
+                        onChange={(e) => setNewPost({ ...newPost, readingTimeMinutes: parseInt(e.target.value) || 5 })}
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "14px", marginBottom: "14px" }}>
                     <div>
                       <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Tags (comma separated)</label>
                       <input
                         value={newPost.tags}
                         onChange={(e) => setNewPost({ ...newPost, tags: e.target.value })}
                         placeholder="PostgreSQL, Next.js, Architecture"
-                        style={{ width: "100%", padding: "8px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px" }}
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Excerpt / Summary *</label>
+                      <input
+                        required
+                        value={newPost.excerpt}
+                        onChange={(e) => setNewPost({ ...newPost, excerpt: e.target.value })}
+                        placeholder="Executive synopsis shown on blog archive cards and meta tags..."
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
                       />
                     </div>
                   </div>
-                  <div style={{ marginBottom: "14px" }}>
-                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Excerpt / Summary *</label>
-                    <input
-                      required
-                      value={newPost.excerpt}
-                      onChange={(e) => setNewPost({ ...newPost, excerpt: e.target.value })}
-                      placeholder="Short synopsis shown on the blog archive and search results..."
-                      style={{ width: "100%", padding: "8px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px" }}
-                    />
-                  </div>
+
                   <div style={{ marginBottom: "16px" }}>
-                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Full Content (Markdown format) *</label>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
+                      <label style={{ fontSize: "12px", color: "#94a3b8" }}>Full Article Content (Markdown format) *</label>
+                      <span style={{ fontSize: "11px", color: "#64748b" }}>Supports ## Headings, ```lang code fences, lists, blockquotes</span>
+                    </div>
                     <textarea
                       required
                       rows={8}
                       value={newPost.contentMarkdown}
                       onChange={(e) => setNewPost({ ...newPost, contentMarkdown: e.target.value })}
-                      placeholder="Write your technical article in Markdown with headers, code blocks (```typescript), and lists..."
-                      style={{ width: "100%", padding: "10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontFamily: "monospace" }}
+                      placeholder="## Introduction&#10;&#10;In high-throughput environments, optimizing data flow is critical...&#10;&#10;```typescript&#10;const config = { timeoutMs: 250 };&#10;```"
+                      style={{ width: "100%", padding: "10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontFamily: "monospace", fontSize: "13px", lineHeight: "1.5" }}
                     />
                   </div>
+
                   <button
                     type="submit"
                     style={{
-                      padding: "10px 20px",
+                      padding: "10px 22px",
                       backgroundColor: "#2563eb",
                       color: "#fff",
                       border: "none",
                       borderRadius: "4px",
                       fontWeight: "700",
+                      fontSize: "13px",
                       cursor: "pointer",
                     }}
                   >
@@ -1614,47 +1780,239 @@ export default function AdminPage() {
                 </form>
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                {blogPosts.map((post) => (
-                  <div
-                    key={post.id}
+              {/* Search & Filter Bar */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  backgroundColor: "#0a192f",
+                  border: "1px solid #1e293b",
+                  borderRadius: "6px",
+                  padding: "14px 18px",
+                  marginBottom: "20px",
+                  flexWrap: "wrap",
+                  gap: "12px",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", flex: 1, minWidth: "260px" }}>
+                  <span style={{ color: "#94a3b8", fontSize: "14px" }}>🔍</span>
+                  <input
+                    value={blogSearch}
+                    onChange={(e) => setBlogSearch(e.target.value)}
+                    placeholder="Search articles by title, slug, excerpt, or tags..."
                     style={{
-                      padding: "16px",
-                      backgroundColor: "#0a192f",
+                      width: "100%",
+                      backgroundColor: "#071324",
                       border: "1px solid #1e293b",
-                      borderRadius: "6px",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
+                      padding: "8px 12px",
+                      color: "#fff",
+                      borderRadius: "4px",
+                      fontSize: "13px",
                     }}
-                  >
-                    <div>
-                      <strong style={{ fontSize: "16px", color: "#ffffff" }}>{post.title}</strong>
-                      <span style={{ fontSize: "12px", color: "#38bdf8", marginLeft: "10px" }}>
-                        ⏱ {post.readingTimeMinutes} min read
-                      </span>
-                      <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "#94a3b8" }}>{post.excerpt}</p>
-                    </div>
+                  />
+                  {blogSearch && (
                     <button
-                      onClick={() => {
-                        setBlogPosts(blogPosts.filter((p) => p.id !== post.id));
-                        showNotification("Article deleted.");
-                      }}
+                      type="button"
+                      onClick={() => setBlogSearch("")}
                       style={{
                         padding: "6px 12px",
-                        backgroundColor: "#7f1d1d",
-                        color: "#fecaca",
+                        backgroundColor: "#334155",
+                        color: "#fff",
                         border: "none",
                         borderRadius: "4px",
                         fontSize: "12px",
                         cursor: "pointer",
                       }}
                     >
-                      Delete
+                      Clear
                     </button>
-                  </div>
-                ))}
+                  )}
+                </div>
+                <div style={{ fontSize: "13px", color: "#94a3b8" }}>
+                  Showing{" "}
+                  <strong style={{ color: "#38bdf8" }}>
+                    {
+                      blogPosts.filter((p) => {
+                        if (!blogSearch.trim()) return true;
+                        const q = blogSearch.toLowerCase();
+                        return (
+                          p.title.toLowerCase().includes(q) ||
+                          p.slug.toLowerCase().includes(q) ||
+                          p.excerpt.toLowerCase().includes(q) ||
+                          p.tags.some((t) => t.toLowerCase().includes(q))
+                        );
+                      }).length
+                    }
+                  </strong>{" "}
+                  of {blogPosts.length} articles
+                </div>
               </div>
+
+              {/* Articles Stream */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+                {blogPosts
+                  .filter((post) => {
+                    if (!blogSearch.trim()) return true;
+                    const q = blogSearch.toLowerCase();
+                    return (
+                      post.title.toLowerCase().includes(q) ||
+                      post.slug.toLowerCase().includes(q) ||
+                      post.excerpt.toLowerCase().includes(q) ||
+                      post.tags.some((t) => t.toLowerCase().includes(q))
+                    );
+                  })
+                  .map((post) => (
+                    <div
+                      key={post.id}
+                      style={{
+                        backgroundColor: "#0a192f",
+                        border: "1px solid #1e293b",
+                        borderRadius: "6px",
+                        padding: "20px",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "12px",
+                      }}
+                    >
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "14px", flexWrap: "wrap" }}>
+                        <div>
+                          <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", marginBottom: "4px" }}>
+                            <strong style={{ fontSize: "17px", color: "#ffffff" }}>{post.title}</strong>
+                            <code style={{ fontSize: "11px", backgroundColor: "#071324", padding: "2px 6px", borderRadius: "3px", color: "#94a3b8" }}>
+                              /{post.slug}
+                            </code>
+                          </div>
+                          <div style={{ display: "flex", alignItems: "center", gap: "12px", fontSize: "12px", color: "#94a3b8" }}>
+                            <span>⏱ {post.readingTimeMinutes} min read</span>
+                            <span>•</span>
+                            <span>📅 {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recent"}</span>
+                            <span>•</span>
+                            <span>✍️ MD Abu Hanif Mia</span>
+                          </div>
+                        </div>
+
+                        {/* Status Toggle Button */}
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          <button
+                            type="button"
+                            onClick={() => togglePostPublished(post.id)}
+                            style={{
+                              padding: "4px 10px",
+                              backgroundColor: post.isPublished ? "#064e3b" : "#78350f",
+                              color: post.isPublished ? "#6ee7b7" : "#fcd34d",
+                              border: `1px solid ${post.isPublished ? "#059669" : "#d97706"}`,
+                              borderRadius: "4px",
+                              fontSize: "11px",
+                              fontWeight: "700",
+                              cursor: "pointer",
+                            }}
+                          >
+                            {post.isPublished ? "● Published" : "○ Draft"}
+                          </button>
+                        </div>
+                      </div>
+
+                      <p style={{ margin: 0, fontSize: "13px", color: "#cbd5e1", lineHeight: "1.5" }}>
+                        {post.excerpt}
+                      </p>
+
+                      {/* Tags */}
+                      {post.tags && post.tags.length > 0 && (
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                          {post.tags.map((t, idx) => (
+                            <span
+                              key={idx}
+                              style={{
+                                fontSize: "11px",
+                                backgroundColor: "#071324",
+                                border: "1px solid #1e293b",
+                                color: "#38bdf8",
+                                padding: "2px 8px",
+                                borderRadius: "3px",
+                              }}
+                            >
+                              #{t}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Actions Strip */}
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          borderTop: "1px solid #1e293b",
+                          paddingTop: "12px",
+                          marginTop: "4px",
+                        }}
+                      >
+                        <Link
+                          href={`/blog/${post.slug}`}
+                          target="_blank"
+                          style={{
+                            fontSize: "12px",
+                            color: "#38bdf8",
+                            textDecoration: "none",
+                            fontWeight: "600",
+                          }}
+                        >
+                          ↗ Read Article Page
+                        </Link>
+                        <div style={{ display: "flex", gap: "8px" }}>
+                          <button
+                            type="button"
+                            onClick={() => setEditingPost({ ...post })}
+                            style={{
+                              padding: "5px 12px",
+                              backgroundColor: "#1e3a8a",
+                              color: "#bfdbfe",
+                              border: "1px solid #2563eb",
+                              borderRadius: "4px",
+                              fontSize: "12px",
+                              fontWeight: "600",
+                              cursor: "pointer",
+                            }}
+                          >
+                            ✏️ Edit Article
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setPostToDelete(post)}
+                            style={{
+                              padding: "5px 12px",
+                              backgroundColor: "#7f1d1d",
+                              color: "#fecaca",
+                              border: "none",
+                              borderRadius: "4px",
+                              fontSize: "12px",
+                              cursor: "pointer",
+                            }}
+                          >
+                            🗑️ Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+
+              {blogPosts.filter((p) => {
+                if (!blogSearch.trim()) return true;
+                const q = blogSearch.toLowerCase();
+                return (
+                  p.title.toLowerCase().includes(q) ||
+                  p.slug.toLowerCase().includes(q) ||
+                  p.excerpt.toLowerCase().includes(q) ||
+                  p.tags.some((t) => t.toLowerCase().includes(q))
+                );
+              }).length === 0 && (
+                <div style={{ padding: "40px", textAlign: "center", backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "6px", color: "#94a3b8" }}>
+                  No articles found matching &ldquo;{blogSearch}&rdquo;.
+                </div>
+              )}
             </div>
           )}
 
@@ -2324,6 +2682,255 @@ export default function AdminPage() {
                   <button
                     type="button"
                     onClick={handleConfirmDeleteService}
+                    style={{
+                      padding: "8px 18px",
+                      backgroundColor: "#dc2626",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "4px",
+                      fontSize: "13px",
+                      fontWeight: "700",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Delete Permanently
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* EDIT BLOG POST MODAL */}
+          {editingPost && (
+            <div
+              style={{
+                position: "fixed",
+                inset: 0,
+                backgroundColor: "rgba(0, 0, 0, 0.75)",
+                zIndex: 9999,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "20px",
+              }}
+            >
+              <div
+                style={{
+                  backgroundColor: "#0a192f",
+                  border: "1px solid #334155",
+                  borderRadius: "8px",
+                  maxWidth: "760px",
+                  width: "100%",
+                  maxHeight: "90vh",
+                  overflowY: "auto",
+                  padding: "24px",
+                  boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.5)",
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", borderBottom: "1px solid #1e293b", paddingBottom: "12px" }}>
+                  <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#ffffff", margin: 0 }}>
+                    Edit Technical Article: {editingPost.title}
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => setEditingPost(null)}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: "#94a3b8",
+                      fontSize: "20px",
+                      cursor: "pointer",
+                      padding: "0 4px",
+                    }}
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <form onSubmit={handleSavePostEdit}>
+                  <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: "14px", marginBottom: "14px" }}>
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Article Title *</label>
+                      <input
+                        required
+                        value={editingPost.title}
+                        onChange={(e) => setEditingPost({ ...editingPost, title: e.target.value })}
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>URL Slug *</label>
+                      <input
+                        required
+                        value={editingPost.slug}
+                        onChange={(e) => setEditingPost({ ...editingPost, slug: e.target.value })}
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Read Time (min) *</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="60"
+                        required
+                        value={editingPost.readingTimeMinutes}
+                        onChange={(e) => setEditingPost({ ...editingPost, readingTimeMinutes: parseInt(e.target.value) || 5 })}
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ display: "flex", gap: "24px", marginBottom: "14px", padding: "10px 12px", backgroundColor: "#071324", borderRadius: "4px", border: "1px solid #1e293b" }}>
+                    <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "#e2e8f0", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        checked={editingPost.isPublished}
+                        onChange={(e) => setEditingPost({ ...editingPost, isPublished: e.target.checked })}
+                      />
+                      <span>Published (visible on public technical blog)</span>
+                    </label>
+                  </div>
+
+                  <div style={{ marginBottom: "14px" }}>
+                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Tags (comma separated) *</label>
+                    <input
+                      required
+                      value={editingPost.tags ? editingPost.tags.join(", ") : ""}
+                      onChange={(e) =>
+                        setEditingPost({
+                          ...editingPost,
+                          tags: e.target.value.split(",").map((s) => s.trim()).filter(Boolean),
+                        })
+                      }
+                      style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: "14px" }}>
+                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Excerpt / Summary *</label>
+                    <textarea
+                      required
+                      rows={2}
+                      value={editingPost.excerpt}
+                      onChange={(e) => setEditingPost({ ...editingPost, excerpt: e.target.value })}
+                      style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: "20px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
+                      <label style={{ fontSize: "12px", color: "#94a3b8" }}>Full Article Content (Markdown format) *</label>
+                      <span style={{ fontSize: "11px", color: "#64748b" }}>Supports ## Headings, ```code, - lists, &gt; blockquotes</span>
+                    </div>
+                    <textarea
+                      required
+                      rows={12}
+                      value={editingPost.contentMarkdown}
+                      onChange={(e) => setEditingPost({ ...editingPost, contentMarkdown: e.target.value })}
+                      style={{
+                        width: "100%",
+                        padding: "10px",
+                        backgroundColor: "#071324",
+                        border: "1px solid #1e293b",
+                        color: "#fff",
+                        borderRadius: "4px",
+                        fontSize: "13px",
+                        fontFamily: "monospace",
+                        lineHeight: "1.5",
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", borderTop: "1px solid #1e293b", paddingTop: "16px" }}>
+                    <button
+                      type="button"
+                      onClick={() => setEditingPost(null)}
+                      style={{
+                        padding: "8px 18px",
+                        backgroundColor: "#334155",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "4px",
+                        fontSize: "13px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      style={{
+                        padding: "8px 22px",
+                        backgroundColor: "#2563eb",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "4px",
+                        fontSize: "13px",
+                        fontWeight: "700",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Save Article Changes
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* DELETE BLOG POST CONFIRMATION MODAL */}
+          {postToDelete && (
+            <div
+              style={{
+                position: "fixed",
+                inset: 0,
+                backgroundColor: "rgba(0, 0, 0, 0.75)",
+                zIndex: 9999,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "20px",
+              }}
+            >
+              <div
+                style={{
+                  backgroundColor: "#0a192f",
+                  border: "1px solid #7f1d1d",
+                  borderRadius: "8px",
+                  maxWidth: "480px",
+                  width: "100%",
+                  padding: "24px",
+                  boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.5)",
+                }}
+              >
+                <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#f87171", margin: "0 0 12px 0" }}>
+                  Confirm Article Deletion
+                </h3>
+                <p style={{ fontSize: "14px", color: "#cbd5e1", lineHeight: "1.5", margin: "0 0 20px 0" }}>
+                  Are you sure you want to permanently delete the article <strong style={{ color: "#ffffff" }}>{postToDelete.title}</strong> (<code>/{postToDelete.slug}</code>)?
+                  <br /><br />
+                  This will remove the article from the public blog archive, the reader route, and the Supabase database. This action cannot be undone.
+                </p>
+                <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+                  <button
+                    type="button"
+                    onClick={() => setPostToDelete(null)}
+                    style={{
+                      padding: "8px 16px",
+                      backgroundColor: "#334155",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "4px",
+                      fontSize: "13px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleConfirmDeletePost}
                     style={{
                       padding: "8px 18px",
                       backgroundColor: "#dc2626",

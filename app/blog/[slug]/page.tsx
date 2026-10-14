@@ -19,11 +19,11 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const post = await getBlogPostBySlug(slug);
 
   if (!post) {
-    return { title: "Article Not Found" };
+    return { title: "Article Not Found | Abu Hanif" };
   }
 
   return {
-    title: `${post.title} | Abu Hanif (MD Abu Hanif Mia) Blog`,
+    title: `${post.title} | Abu Hanif (MD Abu Hanif Mia)`,
     description: post.excerpt,
     openGraph: {
       title: post.title,
@@ -42,6 +42,202 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
+  const allPosts = await getBlogPosts();
+  const relatedPosts = allPosts.filter((p) => p.id !== post.id).slice(0, 2);
+
+  // Extract table of contents from markdown headings (lines starting with ## or ###)
+  const headings: { title: string; id: string; level: number }[] = [];
+  const lines = post.contentMarkdown.split("\n");
+  lines.forEach((line) => {
+    if (line.startsWith("## ")) {
+      const text = line.replace("## ", "").trim();
+      const id = text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      headings.push({ title: text, id, level: 2 });
+    } else if (line.startsWith("### ")) {
+      const text = line.replace("### ", "").trim();
+      const id = text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      headings.push({ title: text, id, level: 3 });
+    }
+  });
+
+  // Render markdown chunks with code blocks, headings, blockquotes, and lists
+  function renderMarkdownContent(content: string) {
+    const rawChunks = content.split("```");
+    const elements: React.ReactNode[] = [];
+
+    rawChunks.forEach((chunk, index) => {
+      if (index % 2 === 1) {
+        // Code Block
+        const firstLineBreak = chunk.indexOf("\n");
+        const language = firstLineBreak !== -1 ? chunk.substring(0, firstLineBreak).trim() : "";
+        const code = firstLineBreak !== -1 ? chunk.substring(firstLineBreak + 1) : chunk;
+
+        elements.push(
+          <div
+            key={`code-${index}`}
+            style={{
+              backgroundColor: "#071324",
+              border: "1px solid #1e293b",
+              borderRadius: "6px",
+              margin: "24px 0",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "6px 14px",
+                backgroundColor: "#0b192e",
+                borderBottom: "1px solid #1e293b",
+                fontSize: "11px",
+                color: "#94a3b8",
+                fontFamily: "monospace",
+              }}
+            >
+              <span>{language.toUpperCase() || "SOURCE"}</span>
+              <span style={{ color: "#38bdf8" }}>Abu Hanif Architecture</span>
+            </div>
+            <pre
+              style={{
+                margin: 0,
+                padding: "16px",
+                overflowX: "auto",
+                fontSize: "13px",
+                lineHeight: "1.6",
+                color: "#e2e8f0",
+                fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+              }}
+            >
+              <code>{code.trim()}</code>
+            </pre>
+          </div>
+        );
+      } else {
+        // Text Markdown
+        const paragraphs = chunk.split("\n\n");
+        paragraphs.forEach((p, pIdx) => {
+          const trimmed = p.trim();
+          if (!trimmed) return;
+
+          if (trimmed.startsWith("## ")) {
+            const headingText = trimmed.replace("## ", "").trim();
+            const id = headingText.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+            elements.push(
+              <h2
+                key={`h2-${index}-${pIdx}`}
+                id={id}
+                style={{
+                  fontSize: "22px",
+                  color: "#053056",
+                  margin: "32px 0 12px 0",
+                  borderBottom: "1px solid #e2e8f0",
+                  paddingBottom: "6px",
+                }}
+              >
+                {headingText}
+              </h2>
+            );
+          } else if (trimmed.startsWith("### ")) {
+            const headingText = trimmed.replace("### ", "").trim();
+            const id = headingText.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+            elements.push(
+              <h3
+                key={`h3-${index}-${pIdx}`}
+                id={id}
+                style={{
+                  fontSize: "18px",
+                  color: "#053056",
+                  margin: "24px 0 10px 0",
+                }}
+              >
+                {headingText}
+              </h3>
+            );
+          } else if (trimmed.startsWith("> ")) {
+            const quoteText = trimmed.replace(/^> /gm, "");
+            elements.push(
+              <blockquote
+                key={`quote-${index}-${pIdx}`}
+                style={{
+                  margin: "18px 0",
+                  padding: "12px 18px",
+                  backgroundColor: "#f8fafc",
+                  borderLeft: "4px solid #053056",
+                  borderRadius: "2px",
+                  fontStyle: "italic",
+                  fontSize: "14px",
+                  color: "#334155",
+                  lineHeight: "1.6",
+                }}
+              >
+                {quoteText}
+              </blockquote>
+            );
+          } else if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
+            const items = trimmed.split("\n").map((item) => item.replace(/^[-*] /, "").trim());
+            elements.push(
+              <ul
+                key={`ul-${index}-${pIdx}`}
+                style={{
+                  margin: "14px 0",
+                  paddingLeft: "22px",
+                  fontSize: "14px",
+                  color: "#334155",
+                  lineHeight: "1.7",
+                }}
+              >
+                {items.map((item, itemIdx) => (
+                  <li key={itemIdx} style={{ marginBottom: "6px" }}>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            );
+          } else if (/^\d+\. /.test(trimmed)) {
+            const items = trimmed.split("\n").map((item) => item.replace(/^\d+\. /, "").trim());
+            elements.push(
+              <ol
+                key={`ol-${index}-${pIdx}`}
+                style={{
+                  margin: "14px 0",
+                  paddingLeft: "22px",
+                  fontSize: "14px",
+                  color: "#334155",
+                  lineHeight: "1.7",
+                }}
+              >
+                {items.map((item, itemIdx) => (
+                  <li key={itemIdx} style={{ marginBottom: "6px" }}>
+                    {item}
+                  </li>
+                ))}
+              </ol>
+            );
+          } else {
+            // Regular paragraph with inline formatting
+            elements.push(
+              <p
+                key={`p-${index}-${pIdx}`}
+                style={{
+                  fontSize: "14px",
+                  lineHeight: "1.75",
+                  color: "#334155",
+                  margin: "0 0 16px 0",
+                }}
+              >
+                {trimmed}
+              </p>
+            );
+          }
+        });
+      }
+    });
+
+    return elements;
+  }
+
   return (
     <div id="source-page-root" data-source-path={`/blog/${post.slug}`}>
       <div id="source-page-body" className="source-page-body js l2 section_83 justia-robertjfleming-com">
@@ -49,8 +245,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="top-numbers-v3 tnv3-sticky" id="top-numbers-v3">
           <ul>
             <li>
-              Available for High-Impact Contracts &amp; Consulting: <strong> contact@abuhanif.dev </strong>
-              <a className="tnv3-button" href="/#contactform">Request Project Quote</a>
+              Available for High-Impact Contracts &amp; Consulting: <strong>contact@abuhanif.dev</strong>
+              <a className="tnv3-button" href="/pricing#inquiry">
+                Request Project Quote
+              </a>
             </li>
           </ul>
         </div>
@@ -68,7 +266,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     </a>
                   </div>
                   <div id="tagline">
-                    <a href="/#contactform" title="Discuss an Engineering Project">
+                    <a href="/pricing#inquiry" title="Discuss an Engineering Project">
                       Discuss an Engineering Project with Abu Hanif
                     </a>
                   </div>
@@ -83,7 +281,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     <li className="selected priority_5"><a href="/blog">Technical Blog</a></li>
                     <li className="priority_6"><a href="/#feedback">Client Feedback</a></li>
                     <li className="category_141"><a href="/admin">Admin Panel</a></li>
-                    <li className="contactus priority_1" id="lc"><a href="/#contactform">Contact</a></li>
+                    <li className="contactus priority_1" id="lc"><a href="/pricing#inquiry">Contact</a></li>
                   </ul>
                 </div>
               </div>
@@ -98,13 +296,18 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   <div id="img1">
                     <div className="banner-text-wrapper">
                       <div>
-                        <h1 style={{ margin: 0, fontSize: "28px", lineHeight: "1.3" }}>
+                        <h1 style={{ margin: 0, fontSize: "26px", lineHeight: "1.3" }}>
                           {post.title}
                         </h1>
+                        <p style={{ margin: "8px 0 0 0", fontSize: "14px", fontWeight: "normal", color: "#e2e8f0" }}>
+                          Published on {new Date(post.publishedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })} • {post.readingTimeMinutes} min read • By MD Abu Hanif Mia
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
+
+                <div className="tcfrags"></div>
 
                 <div id="content">
                   <div id="breadcrumbs">
@@ -115,133 +318,316 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
                   <div className="bodytext">
                     <div className="description">
-                      <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "16px", fontSize: "13px", color: "#64748b" }}>
-                        <strong>
-                          {new Date(post.publishedAt).toLocaleDateString("en-US", {
-                            month: "long",
-                            day: "numeric",
-                            year: "numeric",
-                          })}
-                        </strong>
-                        <span>•</span>
-                        <span style={{ color: "#16a34a", fontWeight: "bold" }}>⏱ {post.readingTimeMinutes} min read</span>
-                        <span>•</span>
-                        <span>By MD Abu Hanif Mia</span>
+                      {/* Article Header Metadata Strip */}
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px", marginBottom: "16px", paddingBottom: "12px", borderBottom: "1px solid #e2e8f0" }}>
+                        <div style={{ display: "flex", gap: "10px", alignItems: "center", fontSize: "12px", color: "#64748b" }}>
+                          <strong style={{ color: "#053056" }}>
+                            {new Date(post.publishedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                          </strong>
+                          <span>•</span>
+                          <span style={{ color: "#16a34a", fontWeight: "700" }}>⏱ {post.readingTimeMinutes} min read</span>
+                          <span>•</span>
+                          <span>Author: <strong>MD Abu Hanif Mia</strong></span>
+                        </div>
+                        <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                          {post.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              style={{
+                                fontSize: "11px",
+                                fontWeight: "700",
+                                backgroundColor: "#f1f5f9",
+                                border: "1px solid #cbd5e1",
+                                color: "#475569",
+                                padding: "2px 8px",
+                                borderRadius: "3px",
+                              }}
+                            >
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
                       </div>
 
-                      <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "24px" }}>
-                        {post.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            style={{
-                              fontSize: "11px",
-                              fontWeight: "bold",
-                              backgroundColor: "#f1f5f9",
-                              border: "1px solid #cbd5e1",
-                              color: "#475569",
-                              padding: "2px 8px",
-                              borderRadius: "3px",
-                            }}
-                          >
-                            #{tag}
-                          </span>
-                        ))}
-                      </div>
-
-                      {/* Content Body */}
+                      {/* Executive Abstract / Key Takeaways Box */}
                       <div
                         style={{
-                          fontSize: "15px",
-                          lineHeight: "1.8",
-                          color: "#272727",
-                          whiteSpace: "pre-line",
+                          backgroundColor: "#f8fafc",
+                          border: "1px solid #cbd5e1",
+                          borderLeft: "4px solid #053056",
+                          borderRadius: "4px",
+                          padding: "18px 20px",
+                          marginBottom: "28px",
                         }}
                       >
-                        {post.contentMarkdown}
+                        <span style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "1px", fontWeight: "800", color: "#053056", display: "block", marginBottom: "4px" }}>
+                          Executive Summary &amp; Core Takeaway
+                        </span>
+                        <p style={{ margin: 0, fontSize: "14px", lineHeight: "1.6", color: "#1e293b", fontWeight: "500" }}>
+                          {post.excerpt}
+                        </p>
                       </div>
 
+                      {/* In-Article Table of Contents (if 2+ headings) */}
+                      {headings.length >= 2 && (
+                        <div
+                          style={{
+                            backgroundColor: "#ffffff",
+                            border: "1px solid #e2e8f0",
+                            borderRadius: "4px",
+                            padding: "16px 20px",
+                            marginBottom: "28px",
+                          }}
+                        >
+                          <strong style={{ display: "block", fontSize: "13px", color: "#053056", marginBottom: "8px", textTransform: "uppercase" }}>
+                            Table of Contents
+                          </strong>
+                          <ul style={{ margin: 0, paddingLeft: "18px", fontSize: "13px", lineHeight: "1.8" }}>
+                            {headings.map((h, i) => (
+                              <li key={i} style={{ marginLeft: h.level === 3 ? "14px" : "0" }}>
+                                <a href={`#${h.id}`} style={{ color: "#053056", textDecoration: "none" }}>
+                                  {h.title}
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {/* Structured Technical Content */}
+                      <div className="article-rendered-body" style={{ marginBottom: "40px" }}>
+                        {renderMarkdownContent(post.contentMarkdown)}
+                      </div>
+
+                      {/* Author Credentials Box */}
                       <div
                         style={{
-                          marginTop: "35px",
-                          padding: "20px",
+                          display: "flex",
+                          gap: "18px",
+                          padding: "22px",
+                          backgroundColor: "#053056",
+                          color: "#ffffff",
+                          borderRadius: "6px",
+                          marginBottom: "40px",
+                          alignItems: "center",
+                          flexWrap: "wrap",
+                        }}
+                      >
+                        <img
+                          src="/images/profile.png"
+                          alt="MD Abu Hanif Mia"
+                          style={{
+                            width: "80px",
+                            height: "80px",
+                            borderRadius: "4px",
+                            border: "2px solid #9CBE41",
+                            objectFit: "cover",
+                          }}
+                        />
+                        <div style={{ flex: 1, minWidth: "220px" }}>
+                          <div style={{ fontSize: "16px", fontWeight: "700", color: "#ffffff" }}>
+                            Written by MD Abu Hanif Mia (Abu Hanif)
+                          </div>
+                          <div style={{ fontSize: "12px", color: "#9CBE41", fontWeight: "600", marginBottom: "6px" }}>
+                            Staff Software Engineer &amp; Systems Architect
+                          </div>
+                          <p style={{ margin: 0, fontSize: "12px", color: "#cbd5e1", lineHeight: "1.5" }}>
+                            9+ years shipping high-throughput distributed backends, Supabase real-time pipelines, and low-latency Next.js applications on Cloudflare Pages.
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Related Architecture Articles */}
+                      {relatedPosts.length > 0 && (
+                        <div style={{ marginBottom: "40px" }}>
+                          <h3 style={{ fontSize: "18px", color: "#053056", borderBottom: "2px solid #9CBE41", paddingBottom: "6px", marginBottom: "16px" }}>
+                            Related Technical Publications
+                          </h3>
+                          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "16px" }}>
+                            {relatedPosts.map((rel) => (
+                              <div
+                                key={rel.id}
+                                style={{
+                                  padding: "16px",
+                                  backgroundColor: "#f8fafc",
+                                  border: "1px solid #e2e8f0",
+                                  borderRadius: "4px",
+                                }}
+                              >
+                                <span style={{ fontSize: "11px", color: "#64748b" }}>⏱ {rel.readingTimeMinutes} min read</span>
+                                <h4 style={{ margin: "6px 0 8px 0", fontSize: "15px", lineHeight: "1.3" }}>
+                                  <Link href={`/blog/${rel.slug}`} style={{ color: "#053056", textDecoration: "none" }}>
+                                    {rel.title}
+                                  </Link>
+                                </h4>
+                                <p style={{ fontSize: "12px", color: "#475569", lineHeight: "1.5", margin: "0 0 10px 0" }}>
+                                  {rel.excerpt}
+                                </p>
+                                <Link href={`/blog/${rel.slug}`} style={{ fontSize: "12px", fontWeight: "700", color: "#053056", textDecoration: "none" }}>
+                                  Read Article &rsaquo;
+                                </Link>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Direct Technical Consultation CTA */}
+                      <div
+                        style={{
+                          padding: "24px",
                           backgroundColor: "#f8fafc",
-                          border: "1px solid #e2e8f0",
-                          borderLeft: "4px solid #053056",
+                          border: "1px solid #cbd5e1",
+                          borderLeft: "4px solid #16a34a",
                           borderRadius: "4px",
                         }}
                       >
-                        <h3 style={{ margin: "0 0 8px 0", color: "#053056" }}>
-                          Need an architectural review or custom full-stack execution?
+                        <h3 style={{ margin: "0 0 8px 0", color: "#053056", fontSize: "18px" }}>
+                          Facing a similar architecture or database bottleneck?
                         </h3>
-                        <p style={{ margin: "0 0 12px 0", fontSize: "14px", color: "#475569" }}>
-                          I help startups and engineering teams solve performance bottlenecks, scale databases, and launch Next.js platforms.
+                        <p style={{ margin: "0 0 16px 0", fontSize: "13px", color: "#475569", lineHeight: "1.6" }}>
+                          I partner with engineering teams to conduct comprehensive architecture audits, optimize query performance, and deploy scalable edge platforms.
                         </p>
-                        <a className="btn" href="/#contactform" style={{ display: "inline-block", padding: "8px 18px", fontSize: "13px" }}>
-                          Request Technical Consultation
-                        </a>
+                        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+                          <Link
+                            href="/pricing#inquiry"
+                            style={{
+                              padding: "10px 20px",
+                              backgroundColor: "#053056",
+                              color: "#ffffff",
+                              textDecoration: "none",
+                              borderRadius: "4px",
+                              fontSize: "13px",
+                              fontWeight: "700",
+                            }}
+                          >
+                            Schedule Architecture Consultation &rsaquo;
+                          </Link>
+                          <Link
+                            href="/pricing"
+                            style={{
+                              padding: "10px 20px",
+                              backgroundColor: "#ffffff",
+                              color: "#053056",
+                              border: "1px solid #cbd5e1",
+                              textDecoration: "none",
+                              borderRadius: "4px",
+                              fontSize: "13px",
+                              fontWeight: "700",
+                            }}
+                          >
+                            View Work Prices &amp; Sprints &rsaquo;
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Subpage Sidebar */}
+                {/* Secondary Sidebar */}
                 <div className="sidebar secondary-sidebar">
-                  <div className="widget" id="articles-thumbs">
-                    <div className="description" style={{ textAlign: "center", padding: "10px 0" }}>
-                      <div style={{ background: "#053056", color: "#ffffff", padding: "14px", borderRadius: "3px" }}>
-                        <div style={{ fontSize: "11px", fontWeight: "bold", color: "#9CBE41", textTransform: "uppercase" }}>Production Track Record</div>
-                        <div style={{ fontSize: "22px", fontWeight: "bold", margin: "4px 0" }}>99.99% UPTIME</div>
-                        <div style={{ fontSize: "12px", color: "#d9d9d9" }}>50+ Shipped Deployments</div>
+                  <div className="wrapper">
+                    {/* Table of Contents Widget */}
+                    {headings.length >= 2 && (
+                      <div className="block" style={{ backgroundColor: "#ffffff", border: "1px solid #cbd5e1", padding: "16px", borderRadius: "4px", marginBottom: "20px" }}>
+                        <h4 style={{ margin: "0 0 10px 0", fontSize: "13px", color: "#053056", textTransform: "uppercase" }}>
+                          On This Page
+                        </h4>
+                        <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "12px", lineHeight: "1.7" }}>
+                          {headings.map((h, i) => (
+                            <li key={i} style={{ marginLeft: h.level === 3 ? "10px" : "0", marginBottom: "4px" }}>
+                              <a href={`#${h.id}`} style={{ color: "#053056", textDecoration: "none" }}>
+                                {h.title}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Author Snapshot */}
+                    <div className="block" style={{ backgroundColor: "#f8fafc", padding: "18px", border: "1px solid #e2e8f0", borderRadius: "4px", marginBottom: "20px" }}>
+                      <img
+                        src="/images/profile.png"
+                        alt="MD Abu Hanif Mia"
+                        style={{
+                          width: "100%",
+                          borderRadius: "4px",
+                          marginBottom: "12px",
+                          border: "1px solid #cbd5e1",
+                          display: "block",
+                        }}
+                      />
+                      <h3 style={{ margin: "0 0 4px 0", fontSize: "16px", color: "#053056" }}>
+                        MD Abu Hanif Mia
+                      </h3>
+                      <div style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "8px" }}>
+                        Staff Software Engineer &amp; Systems Architect
+                      </div>
+                      <p style={{ fontSize: "12px", color: "#475569", lineHeight: "1.5", margin: 0 }}>
+                        Experienced software engineer specializing in Next.js, Go, PostgreSQL, Supabase, and Cloudflare Pages.
+                      </p>
+                    </div>
+
+                    {/* Article Details Widget */}
+                    <div className="block" style={{ border: "1px solid #cbd5e1", padding: "16px", borderRadius: "4px", backgroundColor: "#ffffff", marginBottom: "20px" }}>
+                      <h4 style={{ margin: "0 0 10px 0", fontSize: "13px", color: "#053056", textTransform: "uppercase" }}>
+                        Article Metadata
+                      </h4>
+                      <div style={{ fontSize: "12px", color: "#475569", lineHeight: "1.6" }}>
+                        <div><strong>Reading Time:</strong> {post.readingTimeMinutes} Minutes</div>
+                        <div><strong>Published:</strong> {new Date(post.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</div>
+                        <div><strong>Category:</strong> {post.tags[0] || "Architecture"}</div>
+                        <div><strong>Status:</strong> Peer-Verified Production Code</div>
+                      </div>
+                    </div>
+
+                    {/* Quick Links */}
+                    <div className="block" style={{ border: "1px solid #e2e8f0", padding: "14px", borderRadius: "4px", backgroundColor: "#f8fafc" }}>
+                      <strong style={{ display: "block", fontSize: "12px", color: "#053056", marginBottom: "8px" }}>Navigation:</strong>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "12px" }}>
+                        <Link href="/blog" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                          &lsaquo; Back to All Articles
+                        </Link>
+                        <Link href="/projects" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                          &rsaquo; Work Showcase &amp; Projects
+                        </Link>
+                        <Link href="/pricing" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                          &rsaquo; Work Prices &amp; Sprints
+                        </Link>
                       </div>
                     </div>
                   </div>
-
-                  <div className="widget contactform" id="contactform">
-                    <strong className="heading4 widget-title"><a href="/#contactform">Project Inquiry</a></strong>
-                    <div className="formdesc">
-                      <span className="free-consultation">Free Consultation</span>
-                      <span className="phone-numbers">
-                        contact@abuhanif.dev <br/>
-                        +880 1700-000000
-                      </span>
-                    </div>
-                    <div style={{ padding: "0 0 10px 0" }}>
-                      <a className="btn" href="/#contactform" style={{ fontSize: "13px" }}>
-                        Submit Project Inquiry
-                      </a>
-                    </div>
-                  </div>
                 </div>
+                <div className="clr"></div>
               </div>
-              <div className="stpr"></div>
             </div>
 
             {/* Footer */}
             <div id="footer">
-              <div className="fcontainer">
-                <div id="address">
-                  <div className="slocation location_86">
-                    <div><strong>MD Abu Hanif Mia (Abu Hanif)</strong></div>
-                    <div>Staff Software Engineer &amp; Systems Architect</div>
-                    <div itemProp="streetAddress">Dhaka, Bangladesh / Remote Worldwide</div>
-                    <span className="contacts">
-                      <span>Email: <a href="mailto:contact@abuhanif.dev">contact@abuhanif.dev</a></span>
-                      <span>Phone: +880 1700-000000</span>
-                    </span>
-                  </div>
-                </div>
-                <div id="footernav">
+              <div className="wrapper">
+                <div id="fn">
                   <ul>
-                    <li><a href="/">Home</a></li>
+                    <li className="first"><a href="/">Home</a></li>
+                    <li><a href="/#about">About Abu Hanif</a></li>
+                    <li><a href="/#competencies">Engineering Focus</a></li>
                     <li><a href="/projects">Work Showcase</a></li>
-                    <li><a href="/pricing">Services &amp; Pricing</a></li>
+                    <li><a href="/pricing">Work Prices</a></li>
                     <li><a href="/blog">Technical Blog</a></li>
-                    <li><a href="/admin" style={{ fontWeight: "bold", color: "#053056" }}>Admin Panel</a></li>
-                    <li><a href="/#contactform">Contact</a></li>
+                    <li><a href="/admin">Admin Panel</a></li>
+                    <li className="last"><a href="/pricing#inquiry">Contact</a></li>
                   </ul>
                 </div>
-                <div className="copyright">
-                  <p>Copyright © 2026 MD Abu Hanif Mia. All rights reserved. Deployed to Cloudflare Pages.</p>
+                <div id="faddress">
+                  <strong>MD Abu Hanif Mia (Abu Hanif)</strong> • Staff Software Engineer &amp; Systems Architect<br />
+                  Specializing in Next.js, Go, PostgreSQL, Supabase &amp; Cloudflare Pages<br />
+                  Dhaka, Bangladesh • Worldwide Remote Consulting • <a href="mailto:contact@abuhanif.dev" style={{ color: "#9CBE41" }}>contact@abuhanif.dev</a>
+                </div>
+                <div id="fdisclaimer">
+                  All technical guides and code snippets are provided for production reference under MIT license.
+                </div>
+                <div id="copy">
+                  &copy; {new Date().getFullYear()} MD Abu Hanif Mia. All rights reserved.
                 </div>
               </div>
             </div>
