@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getProjectBySlug, getProjects } from "../../lib/portfolio-store";
+import SiteFooter from "../../components/site-footer";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -414,40 +415,8 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
               </div>
             </div>
 
-            {/* Footer */}
-            <div id="footer">
-              <div className="fcontainer">
-                <div id="address">
-                  <div className="slocation location_86">
-                    <div><strong>MD Abu Hanif Mia (Abu Hanif)</strong></div>
-                    <div>Staff Software Engineer &amp; Systems Architect</div>
-                    <div itemProp="streetAddress">Dhaka, Bangladesh / Remote Worldwide</div>
-                    <span className="contacts">
-                      <span>Email: <a href="mailto:contact@abuhanif.dev">contact@abuhanif.dev</a></span>
-                      <span>Phone: +880 1700-000000</span>
-                    </span>
-                  </div>
-                </div>
-                <div className="footerlocalities">
-                  <div className="block">
-                    <span>Available for technical consulting and high-impact software engineering contracts worldwide. Active timezones: US Pacific (UTC-8) to Central European (UTC+2) to Asia/Dhaka (UTC+6).</span>
-                  </div>
-                </div>
-                <div id="footernav">
-                  <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/projects">Work Showcase</a></li>
-                    <li><a href="/pricing">Services &amp; Pricing</a></li>
-                    <li><a href="/blog">Technical Blog</a></li>
-                    <li><a href="/admin" style={{ fontWeight: "bold", color: "#053056" }}>Admin Panel</a></li>
-                    <li><a href="/#contactform">Contact</a></li>
-                  </ul>
-                </div>
-                <div className="copyright">
-                  <p>Copyright © 2026 MD Abu Hanif Mia. All rights reserved. Deployed to Cloudflare Pages.</p>
-                </div>
-              </div>
-            </div>
+            {/* Global Footer */}
+            <SiteFooter />
           </div>
         </div>
       </div>

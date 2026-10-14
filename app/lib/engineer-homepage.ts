@@ -486,43 +486,254 @@ export function getEngineerHomepage(): SourcePageRecord {
           </div>
         </div>
 
-        <!-- Footer -->
-        <div id="footer">
-          <div class="fcontainer">
-            <div id="address">
-              <div class="slocation location_86">
-                <div><strong>MD Abu Hanif Mia (Abu Hanif)</strong></div>
-                <div>Staff Software Engineer &amp; Systems Architect</div>
-                <div itemprop="streetAddress">Dhaka, Bangladesh / Remote Worldwide</div>
-                <span class="contacts">
-                  <span>Email: <a href="mailto:contact@abuhanif.dev">contact@abuhanif.dev</a></span>
-                  <span>Phone: +880 1700-000000</span>
+        <!-- Global 5-Tier High-Density Footer -->
+        <div id="footer" class="global-site-footer">
+          <!-- Tier 1: Consultation Ribbon -->
+          <div class="global-footer-ribbon">
+            <div class="wrapper global-footer-ribbon-content">
+              <div class="global-footer-ribbon-text">
+                <span class="global-footer-ribbon-kicker">
+                  Available for Strategic Engineering Contracts &amp; Advisory
                 </span>
+                <h3 class="global-footer-ribbon-title">
+                  Architecting High-Throughput, Fault-Tolerant Systems for Scale.
+                </h3>
+                <p class="global-footer-ribbon-sub">
+                  Specialized in distributed backend pipelines, database optimization, Next.js 16 edge delivery, and full-stack technical leadership.
+                </p>
+              </div>
+              <div class="global-footer-ribbon-actions">
+                <a href="#contactform" class="global-footer-btn-primary">
+                  Request Project Consultation &rsaquo;
+                </a>
+                <a href="/pricing" class="global-footer-btn-secondary">
+                  View Pricing Matrix &rsaquo;
+                </a>
+                <div class="global-footer-timezone-pill">
+                  <span class="uptime-dot">●</span> Active Timezones: US Pacific (UTC-8) • Central European (UTC+2) • Asia/Dhaka (UTC+6)
+                </div>
               </div>
             </div>
-            <div class="footerlocalities">
-              <div class="block">
-                <span>Available for technical consulting and high-impact software engineering contracts worldwide. Active timezones: US Pacific (UTC-8) to Central European (UTC+2) to Asia/Dhaka (UTC+6).</span>
+          </div>
+
+          <!-- Tier 2: 5-Column High-Density Directory -->
+          <div class="wrapper">
+            <div class="global-footer-grid">
+              <!-- Col 1: Identity -->
+              <div class="global-footer-col col-profile">
+                <div class="footer-brand-header">
+                  <strong class="footer-author-name">MD Abu Hanif Mia</strong>
+                  <span class="footer-author-title">Staff Software Engineer &amp; Systems Architect</span>
+                </div>
+                <p class="footer-bio-text">
+                  Building mission-critical production platforms with high observability, deterministic database throughput, and sub-30ms global edge latency across startups and enterprise ecosystems.
+                </p>
+                <div class="footer-sla-badge">
+                  <span class="badge-bullet">●</span> <strong>99.99% Production Uptime SLA</strong>
+                </div>
+                <div class="footer-contact-details">
+                  <div>
+                    <strong>Direct Email:</strong> <a href="mailto:contact@abuhanif.dev" class="footer-highlight-link">contact@abuhanif.dev</a>
+                  </div>
+                  <div>
+                    <strong>Location:</strong> Dhaka, Bangladesh (Global Remote)
+                  </div>
+                </div>
+                <div class="footer-ecosystem-badges">
+                  <span class="eco-badge">Next.js 16</span>
+                  <span class="eco-badge">Go</span>
+                  <span class="eco-badge">PostgreSQL</span>
+                  <span class="eco-badge">Cloudflare</span>
+                  <span class="eco-badge">Supabase</span>
+                </div>
+              </div>
+
+              <!-- Col 2: Architecture Focus -->
+              <div class="global-footer-col">
+                <h4 class="footer-col-title">Architecture Domains</h4>
+                <ul class="footer-links-list">
+                  <li><a href="#competencies">Distributed Systems &amp; Pipelines</a></li>
+                  <li><a href="#competencies">Next.js 16 App Router &amp; React 19</a></li>
+                  <li><a href="#competencies">PostgreSQL Query &amp; Index Tuning</a></li>
+                  <li><a href="#competencies">Cloudflare Pages &amp; Edge Compute</a></li>
+                  <li><a href="#competencies">Real-Time WebSockets &amp; Telemetry</a></li>
+                  <li><a href="#competencies">AI Document Search &amp; RAG (pgvector)</a></li>
+                  <li><a href="#competencies">Microservices to Modular Monoliths</a></li>
+                </ul>
+              </div>
+
+              <!-- Col 3: Work Showcase -->
+              <div class="global-footer-col">
+                <h4 class="footer-col-title">Work &amp; Case Studies</h4>
+                <ul class="footer-links-list case-studies-list">
+                  <li>
+                    <a href="/projects/financial-telemetry-pipeline" class="footer-project-link">
+                      <strong>Financial Telemetry Pipeline</strong>
+                      <span class="footer-meta-pill">$18,500 Scope • 12M events/s</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/projects/cloudflare-edge-ecommerce" class="footer-project-link">
+                      <strong>Cloudflare Edge E-Commerce</strong>
+                      <span class="footer-meta-pill">$24,000 Scope • 95ms P99</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/projects/enterprise-ai-document-search" class="footer-project-link">
+                      <strong>Enterprise AI Document Search</strong>
+                      <span class="footer-meta-pill">$14,000 Scope • 500k Docs</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/projects/postgres-performance-audit" class="footer-project-link">
+                      <strong>PostgreSQL Performance Audit</strong>
+                      <span class="footer-meta-pill">$4,800 Scope • 10x Throughput</span>
+                    </a>
+                  </li>
+                  <li class="footer-cta-link-item">
+                    <a href="/projects" class="footer-view-all">View All Work Projects &rsaquo;</a>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Col 4: Services & Pricing -->
+              <div class="global-footer-col">
+                <h4 class="footer-col-title">Services &amp; Pricing</h4>
+                <ul class="footer-links-list pricing-list">
+                  <li>
+                    <a href="/pricing" class="footer-price-item">
+                      <span class="service-name">Codebase &amp; Architecture Audit</span>
+                      <span class="price-tag">$3,500</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/pricing" class="footer-price-item">
+                      <span class="service-name">PostgreSQL Performance Tuning</span>
+                      <span class="price-tag">$4,800</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/pricing" class="footer-price-item">
+                      <span class="service-name">Edge Web Platform Build</span>
+                      <span class="price-tag">$8,500</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/pricing" class="footer-price-item">
+                      <span class="service-name">Full-Stack MVP Engineering</span>
+                      <span class="price-tag">$15,000</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/pricing" class="footer-price-item">
+                      <span class="service-name">Fractional Tech Lead Retainer</span>
+                      <span class="price-tag">$6,500/mo</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/pricing" class="footer-price-item">
+                      <span class="service-name">Ad-Hoc Advisory Rate Card</span>
+                      <span class="price-tag">$140/hr</span>
+                    </a>
+                  </li>
+                  <li class="footer-cta-link-item">
+                    <a href="/pricing" class="footer-view-all">View Full Pricing Matrix &rsaquo;</a>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Col 5: Technical Blog -->
+              <div class="global-footer-col">
+                <h4 class="footer-col-title">Technical Blog</h4>
+                <ul class="footer-links-list articles-list">
+                  <li>
+                    <a href="/blog/nextjs-16-cloudflare-pages-architecture" class="footer-article-link">
+                      <span>Next.js 16 on Cloudflare Pages</span>
+                      <span class="read-time">12 min read</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/blog/realtime-telemetry-supabase-postgres-cdc" class="footer-article-link">
+                      <span>Supabase Postgres CDC Telemetry</span>
+                      <span class="read-time">9 min read</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/blog/swapping-microservices-for-modular-monolith" class="footer-article-link">
+                      <span>Microservices to Modular Monolith</span>
+                      <span class="read-time">11 min read</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/blog/mastering-postgres-indexing-query-optimization" class="footer-article-link">
+                      <span>Postgres Indexing for Concurrency</span>
+                      <span class="read-time">8 min read</span>
+                    </a>
+                  </li>
+                  <li class="footer-cta-link-item">
+                    <a href="/blog" class="footer-view-all">View Technical Blog Archive &rsaquo;</a>
+                  </li>
+                </ul>
               </div>
             </div>
-            <div id="footernav">
+
+            <!-- Tier 3: Telemetry Strip -->
+            <div class="global-footer-telemetry">
+              <div class="telemetry-item">
+                <span class="telemetry-label">Framework Engine:</span>
+                <span class="telemetry-value">Next.js 16.3 (Turbopack + SSG)</span>
+              </div>
+              <div class="telemetry-item">
+                <span class="telemetry-label">Edge Network:</span>
+                <span class="telemetry-value">Cloudflare Pages (330+ Cities)</span>
+              </div>
+              <div class="telemetry-item">
+                <span class="telemetry-label">Database Tier:</span>
+                <span class="telemetry-value">Supabase PostgreSQL 16 (RLS)</span>
+              </div>
+              <div class="telemetry-item">
+                <span class="telemetry-label">Delivery SLA:</span>
+                <span class="telemetry-value">99.99% Production Uptime</span>
+              </div>
+              <div class="telemetry-item">
+                <span class="telemetry-label">Latency Metric:</span>
+                <span class="telemetry-value">&lt; 30ms Global P99</span>
+              </div>
+            </div>
+
+            <!-- Tier 4: Navigation Bar -->
+            <div id="footernav" class="global-footer-nav">
               <ul>
-                <li><a href="/">Home</a></li>
+                <li class="first"><a href="/">Home</a></li>
+                <li><a href="#about">About Abu Hanif</a></li>
+                <li><a href="#competencies">Engineering Focus</a></li>
                 <li><a href="/projects">Work Showcase</a></li>
                 <li><a href="/pricing">Services &amp; Pricing</a></li>
                 <li><a href="/blog">Technical Blog</a></li>
-                <li><a href="/admin" style="font-weight:bold;color:#053056;">Admin Panel</a></li>
-                <li><a href="#contactform">Contact</a></li>
+                <li><a href="#contactform">Consultation Inquiry</a></li>
+                <li class="last"><a href="/admin" style="color:#38bdf8;font-weight:700;">Admin Portal</a></li>
               </ul>
             </div>
-            <div class="copyright">
-              <div id="footer-title">
-                <p>Staff Software Engineer | Systems Architecture &amp; Cloud Performance | MD Abu Hanif Mia</p>
+
+            <!-- Tier 5: Legal & Compliance Strip -->
+            <div class="global-footer-legal">
+              <div class="legal-sow-statement">
+                <strong>Professional Engagement Guarantee:</strong> All engineering contracts, architecture blueprints, and codebase implementations are executed under explicit Statement of Work (SOW) agreements with 100% intellectual property assignment and a comprehensive 30-day post-launch warranty.
               </div>
-              <p>Copyright © 2026 MD Abu Hanif Mia. All rights reserved. Deployed to Cloudflare Pages.</p>
-            </div>
-            <div class="credits">
-              <a href="/admin"><span>Admin</span> System Portal</a>
+              <div class="legal-meta-row">
+                <div class="copyright-text">
+                  &copy; 2026 <strong>MD Abu Hanif Mia (Abu Hanif)</strong>. All rights reserved. Deployed statically to Cloudflare Pages edge network.
+                </div>
+                <div class="compliance-links">
+                  <span>MIT License for Open Source Snippets</span>
+                  <span class="divider">•</span>
+                  <span>Mutual NDA Protected</span>
+                  <span class="divider">•</span>
+                  <span>Zero Tracking Pixels</span>
+                  <span class="divider">•</span>
+                  <a href="/admin" class="admin-access-link">Admin Console</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>

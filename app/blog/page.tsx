@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { initialBlogPosts, BlogPost } from "../data/portfolio-data";
+import SiteFooter from "../components/site-footer";
 
 export default function BlogIndexPage() {
   const [posts] = useState<BlogPost[]>(initialBlogPosts);
@@ -493,34 +494,8 @@ export default function BlogIndexPage() {
               </div>
             </div>
 
-            {/* Footer */}
-            <div id="footer">
-              <div className="wrapper">
-                <div id="fn">
-                  <ul>
-                    <li className="first"><a href="/">Home</a></li>
-                    <li><a href="/#about">About Abu Hanif</a></li>
-                    <li><a href="/#competencies">Engineering Focus</a></li>
-                    <li><a href="/projects">Work Showcase</a></li>
-                    <li><a href="/pricing">Work Prices</a></li>
-                    <li><a href="/blog">Technical Blog</a></li>
-                    <li><a href="/admin">Admin Panel</a></li>
-                    <li className="last"><a href="/pricing#inquiry">Contact</a></li>
-                  </ul>
-                </div>
-                <div id="faddress">
-                  <strong>MD Abu Hanif Mia (Abu Hanif)</strong> • Staff Software Engineer &amp; Systems Architect<br />
-                  Specializing in Next.js, Go, PostgreSQL, Supabase &amp; Cloudflare Pages<br />
-                  Dhaka, Bangladesh • Worldwide Remote Consulting • <a href="mailto:contact@abuhanif.dev" style={{ color: "#9CBE41" }}>contact@abuhanif.dev</a>
-                </div>
-                <div id="fdisclaimer">
-                  All engineering publications, architecture deep-dives, and technical benchmarks are based on real-world production systems and measurements.
-                </div>
-                <div id="copy">
-                  &copy; {new Date().getFullYear()} MD Abu Hanif Mia. All rights reserved.
-                </div>
-              </div>
-            </div>
+            {/* Global Footer */}
+            <SiteFooter />
           </div>
         </div>
       </div>
