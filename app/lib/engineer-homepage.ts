@@ -33,7 +33,7 @@ export function getEngineerHomepage(): SourcePageRecord {
                 <li class="index selected priority_1" id="fc"><a href="/">Home</a></li>
                 <li class="attorney_34 priority_3"><a href="#about">About Abu Hanif</a></li>
                 <li class="section_10 priority_4"><a href="#competencies">Engineering Focus</a></li>
-                <li class="practiceareasub_11 priority_2"><a href="#work">Work Showcase</a></li>
+                <li class="practiceareasub_11 priority_2"><a href="/projects">Work Showcase</a></li>
                 <li class="section_29 priority_4"><a href="#pricing">Work Prices</a></li>
                 <li class="section_83 priority_5"><a href="/blog">Technical Blog</a></li>
                 <li class="section_28 priority_6"><a href="#feedback">Client Feedback</a></li>
@@ -64,8 +64,8 @@ export function getEngineerHomepage(): SourcePageRecord {
               </div>
               <div id="img2">
                 <div class="wrapper">
-                  <a class="pabttn pa1" href="#work">Distributed <br/> Systems</a>
-                  <a class="pabttn pa2" href="#work">Full-Stack <br/> Engineering</a>
+                  <a class="pabttn pa1" href="/projects">Distributed <br/> Systems</a>
+                  <a class="pabttn pa2" href="/projects">Full-Stack <br/> Engineering</a>
                   <a class="pabttn pa3" href="#pricing">Architecture <br/> &amp; Pricing</a>
                 </div>
               </div>
@@ -114,9 +114,14 @@ export function getEngineerHomepage(): SourcePageRecord {
                   </p>
 
                   <!-- WORK SHOWCASE SECTION -->
-                  <h2 id="work" style="font-size:1.5em;margin:1.4em 0 0.5em 0;color:#053056;border-bottom:2px solid #9CBE41;padding-bottom:6px;">
-                    Work Showcase &amp; Engineering Case Studies
-                  </h2>
+                  <div style="display:flex;justify-content:space-between;align-items:flex-end;margin:1.4em 0 0.5em 0;border-bottom:2px solid #9CBE41;padding-bottom:6px;">
+                    <h2 id="work" style="font-size:1.5em;margin:0;color:#053056;border-bottom:none;padding-bottom:0;">
+                      Work Showcase &amp; Engineering Case Studies
+                    </h2>
+                    <a href="/projects" style="font-size:13px;color:#053056;font-weight:bold;text-decoration:underline;">
+                      View All Projects &amp; Architectures ›
+                    </a>
+                  </div>
                   <p>
                     Below is a selection of recent production systems delivered, detailing the core architectural challenge, solution, and measurable production outcome:
                   </p>

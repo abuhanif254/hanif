@@ -76,9 +76,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <div id="topnav">
                   <ul id="tnav-toplevel">
                     <li className="priority_1" id="fc"><a href="/">Home</a></li>
-                    <li className="priority_3"><a href="/#about">About Alex</a></li>
+                    <li className="priority_3"><a href="/#about">About Abu Hanif</a></li>
                     <li className="priority_4"><a href="/#competencies">Engineering Focus</a></li>
-                    <li className="priority_2"><a href="/#work">Work Showcase</a></li>
+                    <li className="priority_2"><a href="/projects">Work Showcase</a></li>
                     <li className="priority_4"><a href="/#pricing">Work Prices</a></li>
                     <li className="selected priority_5"><a href="/blog">Technical Blog</a></li>
                     <li className="priority_6"><a href="/#feedback">Client Feedback</a></li>
