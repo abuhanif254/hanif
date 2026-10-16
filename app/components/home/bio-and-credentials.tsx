@@ -127,7 +127,7 @@ export default function BioAndCredentials() {
       <h1 id="about" className="heading-about-desktop" style={{ marginTop: 0 }}>
         MD Abu Hanif Mia (Abu Hanif)
       </h1>
-      <strong className="heading4" style={{ color: "#053056", marginTop: 0, display: "block" }}>
+      <strong className="heading4 heading-title-desktop" style={{ color: "#053056", marginTop: 0, display: "block" }}>
         Staff Software Engineer &amp; Systems Architect
       </strong>
 

@@ -239,9 +239,83 @@ button:after,
   float: none !important;
 }
 
-.site-master-header .top-numbers-v3 {
+/* =========================================================================
+   Top Bar (.top-numbers-v3) - Dark Navy Justia Theme & Action Button
+   ========================================================================= */
+#top-numbers-v3,
+.top-numbers-v3 {
+  display: flex !important;
+  height: 38px !important;
+  line-height: 38px !important;
+  background-color: #042442 !important;
+  color: #cbd5e1 !important;
+  border-bottom: 1px solid #0e4475 !important;
+  box-shadow: none !important;
+  padding: 0 16px !important;
+  font-size: 13px !important;
+  align-items: center !important;
+  justify-content: space-between !important;
   position: relative !important;
   top: auto !important;
+}
+
+#top-numbers-v3 ul,
+.top-numbers-v3 ul {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+#top-numbers-v3 ul li,
+.top-numbers-v3 ul li {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  color: #cbd5e1 !important;
+  font-size: 13px !important;
+}
+
+#top-numbers-v3 ul li strong,
+.top-numbers-v3 ul li strong {
+  color: #38bdf8 !important;
+}
+
+#top-numbers-v3 .tnv3-button,
+.top-numbers-v3 .tnv3-button {
+  background-color: #9CBE41 !important;
+  color: #041f36 !important;
+  border: 1px solid #86a832 !important;
+  border-radius: 4px !important;
+  padding: 4px 12px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  text-decoration: none !important;
+  margin: 0 !important;
+  max-width: none !important;
+  display: inline-block !important;
+  line-height: 1.4 !important;
+  cursor: pointer !important;
+}
+
+#top-numbers-v3 .tnv3-button:hover,
+.top-numbers-v3 .tnv3-button:hover {
+  background-color: #aed14f !important;
+  color: #021627 !important;
+}
+
+/* Fixed Header Offset: Ensures page content never starts underneath the fixed header */
+#container {
+  padding-top: 112px !important;
+}
+
+@media (max-width: 768px) {
+  #container {
+    padding-top: 60px !important;
+  }
 }
 
 .site-master-header.header-hidden {
@@ -434,7 +508,61 @@ a, button, input, select, textarea {
     margin-bottom: 20px !important;
   }
 
-  .heading-about-desktop {
+  /* Clean Native Mobile Header: 56px height, logo left, menu right */
+  #head {
+    height: auto !important;
+    min-height: 56px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 16px !important;
+  }
+
+  #logo {
+    padding: 0 !important;
+    margin: 0 !important;
+    float: none !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  #logo a {
+    width: auto !important;
+    height: auto !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  #logo a img#mainlogo {
+    height: 38px !important;
+    width: auto !important;
+    float: none !important;
+    max-height: 38px !important;
+  }
+
+  #tagline {
+    display: none !important;
+  }
+
+  .mobile-menu-toggle-btn {
+    position: static !important;
+    right: auto !important;
+    top: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    height: 38px !important;
+  }
+
+  /* 1. Eliminate the legacy white top bar on mobile entirely */
+  #top-numbers-v3,
+  .top-numbers-v3,
+  .top-numbers-v3.tnv3-sticky {
+    display: none !important;
+  }
+
+  /* 2. Hide redundant desktop heading lines since mobile-profile-card has them */
+  .heading-about-desktop,
+  .heading-title-desktop {
     display: none !important;
   }
 }
