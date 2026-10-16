@@ -44,8 +44,8 @@ export default function EdgeLatencyBenchmark() {
     <div
       className="edge-benchmark-widget"
       style={{
-        backgroundColor: "#071324",
-        border: "1px solid #1e293b",
+        backgroundColor: "#053056",
+        border: "1px solid #0a365c",
         borderRadius: "6px",
         padding: "16px",
         color: "#ffffff",
@@ -58,7 +58,7 @@ export default function EdgeLatencyBenchmark() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          borderBottom: "1px solid #1e293b",
+          borderBottom: "1px solid #0a365c",
           paddingBottom: "10px",
           marginBottom: "12px",
         }}
@@ -70,8 +70,8 @@ export default function EdgeLatencyBenchmark() {
               width: "8px",
               height: "8px",
               borderRadius: "50%",
-              backgroundColor: "#22c55e",
-              boxShadow: "0 0 6px #22c55e",
+              backgroundColor: "#4ade80",
+              boxShadow: "0 0 6px #4ade80",
             }}
           />
           <strong
@@ -79,13 +79,13 @@ export default function EdgeLatencyBenchmark() {
               fontSize: "12px",
               textTransform: "uppercase",
               letterSpacing: "1px",
-              color: "#38bdf8",
+              color: "#9CBE41",
             }}
           >
             Live Edge Telemetry &amp; Latency
           </strong>
         </div>
-        <span style={{ fontSize: "11px", color: "#64748b" }}>
+        <span style={{ fontSize: "11px", color: "#cbd5e1", fontWeight: "600" }}>
           Next.js 16 • Turbopack
         </span>
       </div>
@@ -93,40 +93,40 @@ export default function EdgeLatencyBenchmark() {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "14px" }}>
         <div
           style={{
-            background: "#0d223f",
+            background: "#042442",
             padding: "10px",
             borderRadius: "4px",
-            border: "1px solid #1e293b",
+            border: "1px solid #0a365c",
             textAlign: "center",
           }}
         >
-          <div style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase" }}>
+          <div style={{ fontSize: "11px", color: "#cbd5e1", textTransform: "uppercase", fontWeight: "700" }}>
             Average RTT
           </div>
           <div style={{ fontSize: "24px", fontWeight: "bold", color: "#4ade80", margin: "2px 0" }}>
             {avgLatency}ms
           </div>
-          <div style={{ fontSize: "10px", color: "#64748b" }}>
+          <div style={{ fontSize: "11px", color: "#cbd5e1" }}>
             Sub-30ms Edge Budget
           </div>
         </div>
 
         <div
           style={{
-            background: "#0d223f",
+            background: "#042442",
             padding: "10px",
             borderRadius: "4px",
-            border: "1px solid #1e293b",
+            border: "1px solid #0a365c",
             textAlign: "center",
           }}
         >
-          <div style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase" }}>
+          <div style={{ fontSize: "11px", color: "#cbd5e1", textTransform: "uppercase", fontWeight: "700" }}>
             P99 Burst Latency
           </div>
-          <div style={{ fontSize: "24px", fontWeight: "bold", color: "#38bdf8", margin: "2px 0" }}>
+          <div style={{ fontSize: "24px", fontWeight: "bold", color: "#9CBE41", margin: "2px 0" }}>
             {p99Latency}ms
           </div>
-          <div style={{ fontSize: "10px", color: "#64748b" }}>
+          <div style={{ fontSize: "11px", color: "#cbd5e1" }}>
             Min: {minLatency}ms
           </div>
         </div>
@@ -138,7 +138,7 @@ export default function EdgeLatencyBenchmark() {
           justifyContent: "space-between",
           alignItems: "center",
           fontSize: "12px",
-          color: "#94a3b8",
+          color: "#cbd5e1",
           paddingTop: "6px",
         }}
       >
@@ -148,15 +148,15 @@ export default function EdgeLatencyBenchmark() {
           onClick={runBenchmark}
           disabled={isRunning}
           style={{
-            background: isRunning ? "#1e293b" : "#0284c7",
-            color: "#ffffff",
+            background: isRunning ? "#083c66" : "#9CBE41",
+            color: isRunning ? "#cbd5e1" : "#041f36",
             border: "none",
             borderRadius: "3px",
-            padding: "5px 12px",
+            padding: "6px 14px",
             fontSize: "12px",
-            fontWeight: "bold",
+            fontWeight: "800",
             cursor: isRunning ? "not-allowed" : "pointer",
-            transition: "background 0.2s",
+            transition: "all 0.15s ease",
           }}
         >
           {isRunning ? "Measuring..." : "⚡ Run Latency Test"}

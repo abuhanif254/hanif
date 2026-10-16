@@ -124,7 +124,7 @@ EDUCATION & CERTIFICATIONS
                         <strong style={{ fontSize: "15px", color: "#ffffff" }}>
                           Verified Engineering Credentials
                         </strong>
-                        <span style={{ fontSize: "13px", color: "#94a3b8", display: "block" }}>
+                        <span style={{ fontSize: "13px", color: "#e2e8f0", display: "block" }}>
                           ATS-Compatible Format • Available for High-Impact Contracts
                         </span>
                       </div>
@@ -134,11 +134,11 @@ EDUCATION & CERTIFICATIONS
                           onClick={handlePrint}
                           style={{
                             background: "#9CBE41",
-                            color: "#ffffff",
+                            color: "#041f36",
                             border: "none",
                             borderRadius: "3px",
                             padding: "8px 16px",
-                            fontWeight: "bold",
+                            fontWeight: "800",
                             fontSize: "13px",
                             cursor: "pointer",
                           }}
@@ -149,9 +149,9 @@ EDUCATION & CERTIFICATIONS
                           type="button"
                           onClick={handleCopyText}
                           style={{
-                            background: "#0d223f",
-                            color: copied ? "#4ade80" : "#38bdf8",
-                            border: "1px solid #1e293b",
+                            background: "#042442",
+                            color: copied ? "#4ade80" : "#9CBE41",
+                            border: "1px solid #0a365c",
                             borderRadius: "3px",
                             padding: "8px 14px",
                             fontWeight: "bold",
@@ -241,7 +241,7 @@ EDUCATION & CERTIFICATIONS
                             <strong style={{ fontSize: "16px", color: "#053056" }}>
                               Staff Software Engineer &amp; Systems Architect
                             </strong>
-                            <span style={{ fontSize: "13px", fontWeight: "bold", color: "#64748b" }}>
+                            <span style={{ fontSize: "13px", fontWeight: "bold", color: "#334155" }}>
                               2022 – Present | Independent Practice
                             </span>
                           </div>
@@ -270,7 +270,7 @@ EDUCATION & CERTIFICATIONS
                             <strong style={{ fontSize: "16px", color: "#053056" }}>
                               Lead Full-Stack Software Engineer
                             </strong>
-                            <span style={{ fontSize: "13px", fontWeight: "bold", color: "#64748b" }}>
+                            <span style={{ fontSize: "13px", fontWeight: "bold", color: "#334155" }}>
                               2019 – 2022 | Distributed Cloud Platforms
                             </span>
                           </div>
@@ -296,7 +296,7 @@ EDUCATION & CERTIFICATIONS
                             <strong style={{ fontSize: "16px", color: "#053056" }}>
                               Senior Backend &amp; Cloud Engineer
                             </strong>
-                            <span style={{ fontSize: "13px", fontWeight: "bold", color: "#64748b" }}>
+                            <span style={{ fontSize: "13px", fontWeight: "bold", color: "#334155" }}>
                               2016 – 2019 | Enterprise Solutions
                             </span>
                           </div>
@@ -356,7 +356,7 @@ EDUCATION & CERTIFICATIONS
                           <div>
                             <strong style={{ color: "#053056" }}>Bachelor of Science in Computer Science &amp; Engineering (B.Sc. in CSE)</strong>
                           </div>
-                          <div style={{ color: "#64748b", fontWeight: "bold" }}>
+                          <div style={{ color: "#334155", fontWeight: "bold" }}>
                             4-Year Formal Engineering Degree
                           </div>
                         </div>

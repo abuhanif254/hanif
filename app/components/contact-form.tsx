@@ -50,7 +50,7 @@ export default function ContactForm() {
         <span>Project Inquiry</span>
       </h4>
       <div className="formdesc" style={{ padding: "0 0 12px 0", color: "#cbd5e1", fontSize: "13px" }}>
-        <span style={{ color: "#38bdf8", fontWeight: "bold" }}>● Fast Response Within 24 Hours</span>
+        <span style={{ color: "#9CBE41", fontWeight: "bold" }}>● Fast Response Within 24 Hours</span>
         <br />
         Direct Email: <a href="mailto:contact@abuhanif.dev" style={{ color: "#ffffff", textDecoration: "underline" }}>contact@abuhanif.dev</a>
       </div>
@@ -160,7 +160,7 @@ export default function ContactForm() {
               style={{ width: "100%", boxSizing: "border-box", marginBottom: "8px" }}
             />
           </div>
-          <div className="disc" style={{ fontSize: "12px", color: "#94a3b8", margin: "6px 0 12px 0" }}>
+          <div className="disc" style={{ fontSize: "12px", color: "#cbd5e1", margin: "6px 0 12px 0" }}>
             <label style={{ display: "flex", gap: "6px", alignItems: "flex-start", cursor: "pointer" }}>
               <input required type="checkbox" style={{ marginTop: "3px" }} />
               <span>I consent to be contacted regarding this technical project.</span>

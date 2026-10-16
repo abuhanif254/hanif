@@ -1262,7 +1262,7 @@ export default function AdminPage() {
                               border: "none",
                               cursor: "pointer",
                               backgroundColor: proj.isFeatured ? "#78350f" : "#1e293b",
-                              color: proj.isFeatured ? "#fde68a" : "#64748b",
+                              color: proj.isFeatured ? "#fde68a" : "#cbd5e1",
                             }}
                           >
                             {proj.isFeatured ? "★ Featured" : "☆ Standard"}
@@ -1649,7 +1649,7 @@ export default function AdminPage() {
                                 border: "none",
                                 cursor: "pointer",
                                 backgroundColor: serv.isPopular ? "#78350f" : "#1e293b",
-                                color: serv.isPopular ? "#fde68a" : "#64748b",
+                                color: serv.isPopular ? "#fde68a" : "#cbd5e1",
                               }}
                             >
                               {serv.isPopular ? "★ Popular" : "☆ Standard"}
@@ -1657,7 +1657,7 @@ export default function AdminPage() {
                           </div>
                         </div>
 
-                        <div style={{ fontSize: "17px", fontWeight: "700", color: "#38bdf8", marginBottom: "4px" }}>
+                        <div style={{ fontSize: "17px", fontWeight: "700", color: "#9CBE41", marginBottom: "4px" }}>
                           {serv.title}
                         </div>
                         <div style={{ fontSize: "12px", color: "#94a3b8", marginBottom: "12px" }}>
@@ -1893,8 +1893,8 @@ export default function AdminPage() {
 
                   <div style={{ marginBottom: "16px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
-                      <label style={{ fontSize: "12px", color: "#94a3b8" }}>Full Article Content (Markdown format) *</label>
-                      <span style={{ fontSize: "11px", color: "#64748b" }}>Supports ## Headings, ```lang code fences, lists, blockquotes</span>
+                      <label style={{ fontSize: "12px", color: "#cbd5e1" }}>Full Article Content (Markdown format) *</label>
+                      <span style={{ fontSize: "11px", color: "#cbd5e1" }}>Supports ## Headings, ```lang code fences, lists, blockquotes</span>
                     </div>
                     <textarea
                       required
@@ -1902,7 +1902,7 @@ export default function AdminPage() {
                       value={newPost.contentMarkdown}
                       onChange={(e) => setNewPost({ ...newPost, contentMarkdown: e.target.value })}
                       placeholder="## Introduction&#10;&#10;In high-throughput environments, optimizing data flow is critical...&#10;&#10;```typescript&#10;const config = { timeoutMs: 250 };&#10;```"
-                      style={{ width: "100%", padding: "10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontFamily: "monospace", fontSize: "13px", lineHeight: "1.5" }}
+                      style={{ width: "100%", padding: "10px", backgroundColor: "#053056", border: "1px solid #0a365c", color: "#fff", borderRadius: "4px", fontFamily: "monospace", fontSize: "13px", lineHeight: "1.5" }}
                     />
                   </div>
 
@@ -2229,7 +2229,7 @@ export default function AdminPage() {
                       </p>
                     </div>
 
-                    <div style={{ fontSize: "11px", color: "#64748b" }}>
+                    <div style={{ fontSize: "11px", color: "#cbd5e1" }}>
                       Received: {new Date(inq.createdAt).toLocaleString()}
                     </div>
                   </div>
@@ -2958,14 +2958,14 @@ export default function AdminPage() {
                       rows={2}
                       value={editingPost.excerpt}
                       onChange={(e) => setEditingPost({ ...editingPost, excerpt: e.target.value })}
-                      style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      style={{ width: "100%", padding: "8px 10px", backgroundColor: "#053056", border: "1px solid #0a365c", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
                     />
                   </div>
 
                   <div style={{ marginBottom: "20px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
-                      <label style={{ fontSize: "12px", color: "#94a3b8" }}>Full Article Content (Markdown format) *</label>
-                      <span style={{ fontSize: "11px", color: "#64748b" }}>Supports ## Headings, ```code, - lists, &gt; blockquotes</span>
+                      <label style={{ fontSize: "12px", color: "#cbd5e1" }}>Full Article Content (Markdown format) *</label>
+                      <span style={{ fontSize: "11px", color: "#cbd5e1" }}>Supports ## Headings, ```code, - lists, &gt; blockquotes</span>
                     </div>
                     <textarea
                       required
@@ -2975,8 +2975,8 @@ export default function AdminPage() {
                       style={{
                         width: "100%",
                         padding: "10px",
-                        backgroundColor: "#071324",
-                        border: "1px solid #1e293b",
+                        backgroundColor: "#053056",
+                        border: "1px solid #0a365c",
                         color: "#fff",
                         borderRadius: "4px",
                         fontSize: "13px",

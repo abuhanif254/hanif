@@ -74,8 +74,8 @@ export default function ArchitectureTopologyExplorer() {
     <div
       className="topology-explorer-card"
       style={{
-        background: "#05182d",
-        border: "1px solid #1e293b",
+        background: "#053056",
+        border: "1px solid #0a365c",
         borderRadius: "6px",
         padding: "20px",
         margin: "24px 0",
@@ -83,16 +83,16 @@ export default function ArchitectureTopologyExplorer() {
         fontFamily: "Arial, Helvetica, sans-serif",
       }}
     >
-      <div style={{ borderBottom: "1px solid #1e293b", paddingBottom: "12px", marginBottom: "16px" }}>
+      <div style={{ borderBottom: "1px solid #0a365c", paddingBottom: "12px", marginBottom: "16px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap" }}>
-          <h3 style={{ margin: 0, fontSize: "16px", color: "#38bdf8", textTransform: "uppercase", letterSpacing: "1px" }}>
+          <h3 style={{ margin: 0, fontSize: "16px", color: "#9CBE41", textTransform: "uppercase", letterSpacing: "1px" }}>
             Interactive Architecture Topology Viewer
           </h3>
           <span style={{ fontSize: "12px", color: "#4ade80", fontWeight: "bold" }}>
             Real-Time Telemetry Pipeline (12M Events/s)
           </span>
         </div>
-        <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "#94a3b8" }}>
+        <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "#cbd5e1" }}>
           Click on any architectural node below to inspect throughput budgets, technology choices, and failover mechanics:
         </p>
       </div>
@@ -114,8 +114,8 @@ export default function ArchitectureTopologyExplorer() {
               type="button"
               onClick={() => setSelectedId(node.id)}
               style={{
-                background: isSelected ? "#0d3257" : "#08213d",
-                border: isSelected ? "2px solid #38bdf8" : "1px solid #1e293b",
+                background: isSelected ? "#042442" : "#031c33",
+                border: isSelected ? "2px solid #9CBE41" : "1px solid #0a365c",
                 borderRadius: "4px",
                 padding: "10px 8px",
                 color: "#ffffff",
@@ -124,13 +124,13 @@ export default function ArchitectureTopologyExplorer() {
                 transition: "all 0.15s ease-in-out",
               }}
             >
-              <div style={{ fontSize: "11px", color: isSelected ? "#38bdf8" : "#94a3b8", fontWeight: "bold" }}>
+              <div style={{ fontSize: "11px", color: isSelected ? "#9CBE41" : "#cbd5e1", fontWeight: "bold" }}>
                 Step 0{index + 1}
               </div>
               <div style={{ fontSize: "13px", fontWeight: "bold", margin: "2px 0" }}>
                 {node.label}
               </div>
-              <div style={{ fontSize: "10px", color: "#64748b" }}>
+              <div style={{ fontSize: "11px", color: "#cbd5e1" }}>
                 {node.sub}
               </div>
             </button>
@@ -141,16 +141,16 @@ export default function ArchitectureTopologyExplorer() {
       {/* Node Detail Box */}
       <div
         style={{
-          background: "#08213d",
-          border: "1px solid #1e3a5f",
+          background: "#042442",
+          border: "1px solid #0a365c",
           borderRadius: "4px",
           padding: "16px 20px",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", borderBottom: "1px solid #1e293b", paddingBottom: "10px", marginBottom: "12px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", borderBottom: "1px solid #0a365c", paddingBottom: "10px", marginBottom: "12px" }}>
           <div>
             <strong style={{ fontSize: "18px", color: "#ffffff" }}>{activeNode.label}</strong>
-            <span style={{ fontSize: "13px", color: "#38bdf8", marginLeft: "10px" }}>({activeNode.tech})</span>
+            <span style={{ fontSize: "13px", color: "#9CBE41", marginLeft: "10px", fontWeight: "600" }}>({activeNode.tech})</span>
           </div>
           <div style={{ display: "flex", gap: "10px", fontSize: "12px" }}>
             <span style={{ background: "#064e3b", color: "#4ade80", padding: "3px 8px", borderRadius: "3px", border: "1px solid #059669" }}>
@@ -164,18 +164,18 @@ export default function ArchitectureTopologyExplorer() {
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", fontSize: "13px" }}>
           <div>
-            <strong style={{ color: "#94a3b8", display: "block", marginBottom: "4px", fontSize: "12px", textTransform: "uppercase" }}>
+            <strong style={{ color: "#cbd5e1", display: "block", marginBottom: "4px", fontSize: "12px", textTransform: "uppercase" }}>
               Architectural Decision Rationale
             </strong>
-            <p style={{ margin: 0, color: "#e2e8f0", lineHeight: "1.5" }}>
+            <p style={{ margin: 0, color: "#f8fafc", lineHeight: "1.5" }}>
               {activeNode.rationale}
             </p>
           </div>
           <div>
-            <strong style={{ color: "#94a3b8", display: "block", marginBottom: "4px", fontSize: "12px", textTransform: "uppercase" }}>
+            <strong style={{ color: "#cbd5e1", display: "block", marginBottom: "4px", fontSize: "12px", textTransform: "uppercase" }}>
               High-Availability &amp; Failure Resiliency
             </strong>
-            <p style={{ margin: 0, color: "#e2e8f0", lineHeight: "1.5" }}>
+            <p style={{ margin: 0, color: "#f8fafc", lineHeight: "1.5" }}>
               {activeNode.resiliency}
             </p>
           </div>

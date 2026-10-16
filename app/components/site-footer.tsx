@@ -277,7 +277,7 @@ export default function SiteFooter() {
               <Link href="/pricing#inquiry">Consultation Inquiry</Link>
             </li>
             <li className="last">
-              <Link href="/admin" style={{ color: "#38bdf8", fontWeight: "700" }}>
+              <Link href="/admin" style={{ color: "#9CBE41", fontWeight: "700" }}>
                 Admin Portal
               </Link>
             </li>

@@ -1,6 +1,7 @@
 /* =============================================================================
-   Dedicated Global 5-Tier Footer Styles
+   Dedicated Global 5-Tier Footer Styles — Harmonized with Justia Oak Theme
    Strictly isolated to #footer.global-site-footer and .global-footer-*
+   Base Navy: #053056 | Accent Lime: #9CBE41 | High-Contrast Text: #ffffff / #f8fafc / #e2e8f0
    Does NOT affect #header, #topnav, #img1, #img2, .pabttn, .widget, or .sidebar.
    ============================================================================= */
 
@@ -11,10 +12,10 @@ footer#footer.global-site-footer {
   clear: both !important;
   display: block !important;
   width: 100% !important;
-  background-color: #071324 !important;
+  background-color: #053056 !important;
   background-image: none !important;
-  color: #94a3b8 !important;
-  border-top: 4px solid #053056 !important;
+  color: #f1f5f9 !important;
+  border-top: 5px solid #9CBE41 !important;
   text-align: left !important;
   text-indent: 0 !important;
   margin: 0 !important;
@@ -43,7 +44,7 @@ footer#footer.global-site-footer * {
 
 #footer.global-site-footer a,
 footer#footer.global-site-footer a {
-  color: #cbd5e1 !important;
+  color: #f8fafc !important;
   text-decoration: none !important;
   float: none !important;
   display: inline;
@@ -51,7 +52,7 @@ footer#footer.global-site-footer a {
 
 #footer.global-site-footer a:hover,
 footer#footer.global-site-footer a:hover {
-  color: #38bdf8 !important;
+  color: #9CBE41 !important;
 }
 
 #footer.global-site-footer a:after,
@@ -72,11 +73,13 @@ footer#footer.global-site-footer a:after {
   width: 100% !important;
 }
 
-/* Tier 1: Pre-Footer Consultation Ribbon */
+/* =============================================================================
+   TIER 1: Pre-Footer Consultation Ribbon
+   ============================================================================= */
 .global-footer-ribbon {
-  background-color: #053056 !important;
-  border-top: 3px solid #9CBE41 !important;
-  border-bottom: 1px solid #1e293b !important;
+  background-color: #042442 !important;
+  border-top: none !important;
+  border-bottom: 2px solid #0a365c !important;
   padding: 32px 0 !important;
   width: 100% !important;
   box-sizing: border-box !important;
@@ -91,33 +94,34 @@ footer#footer.global-site-footer a:after {
 }
 
 .global-footer-ribbon-text {
-  flex: 1 1 320px !important;
+  flex: 1 1 340px !important;
   min-width: 320px !important;
 }
 
 .global-footer-ribbon-kicker {
-  font-size: 11px !important;
-  font-weight: 700 !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
+  letter-spacing: 0.75px !important;
   color: #9CBE41 !important;
   display: block !important;
   margin-bottom: 6px !important;
 }
 
 .global-footer-ribbon-title {
-  font-size: 22px !important;
+  font-size: 23px !important;
   font-weight: 800 !important;
   color: #ffffff !important;
-  margin: 0 0 6px 0 !important;
+  margin: 0 0 8px 0 !important;
   line-height: 1.3 !important;
+  letter-spacing: -0.2px !important;
 }
 
 .global-footer-ribbon-sub {
-  font-size: 13px !important;
-  color: #cbd5e1 !important;
+  font-size: 14px !important;
+  color: #e2e8f0 !important;
   margin: 0 !important;
-  line-height: 1.5 !important;
+  line-height: 1.55 !important;
 }
 
 .global-footer-ribbon-actions {
@@ -125,16 +129,16 @@ footer#footer.global-site-footer a:after {
   flex-direction: column !important;
   gap: 10px !important;
   align-items: flex-start !important;
-  min-width: 270px !important;
+  min-width: 280px !important;
 }
 
 .global-footer-btn-primary {
   display: block !important;
-  padding: 10px 22px !important;
+  padding: 11px 24px !important;
   background-color: #9CBE41 !important;
-  color: #053056 !important;
+  color: #041f36 !important;
   font-weight: 800 !important;
-  font-size: 13px !important;
+  font-size: 14px !important;
   border-radius: 4px !important;
   text-decoration: none !important;
   border: none !important;
@@ -142,21 +146,22 @@ footer#footer.global-site-footer a:after {
   width: 100% !important;
   box-sizing: border-box !important;
   cursor: pointer !important;
-  transition: background-color 0.15s ease !important;
+  transition: background-color 0.15s ease, transform 0.1s ease !important;
 }
 
 .global-footer-btn-primary:hover {
-  background-color: #88a735 !important;
-  color: #053056 !important;
+  background-color: #a7cf3d !important;
+  color: #041f36 !important;
+  transform: translateY(-1px) !important;
 }
 
 .global-footer-btn-secondary {
   display: block !important;
-  padding: 9px 20px !important;
-  background-color: #0a192f !important;
-  color: #38bdf8 !important;
-  border: 1px solid #1e3a8a !important;
-  font-weight: 700 !important;
+  padding: 10px 22px !important;
+  background-color: #073a66 !important;
+  color: #ffffff !important;
+  border: 2px solid #9CBE41 !important;
+  font-weight: 800 !important;
   font-size: 13px !important;
   border-radius: 4px !important;
   text-decoration: none !important;
@@ -164,17 +169,19 @@ footer#footer.global-site-footer a:after {
   width: 100% !important;
   box-sizing: border-box !important;
   cursor: pointer !important;
-  transition: background-color 0.15s ease !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease !important;
 }
 
 .global-footer-btn-secondary:hover {
-  background-color: #1e293b !important;
+  background-color: #09477d !important;
+  border-color: #bbf246 !important;
   color: #ffffff !important;
 }
 
 .global-footer-timezone-pill {
-  font-size: 11px !important;
-  color: #94a3b8 !important;
+  font-size: 12px !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
   display: flex !important;
   align-items: center !important;
   gap: 6px !important;
@@ -183,16 +190,18 @@ footer#footer.global-site-footer a:after {
 
 .global-footer-timezone-pill .uptime-dot {
   color: #4ade80 !important;
-  font-size: 10px !important;
+  font-size: 12px !important;
 }
 
-/* Tier 2: 5-Column High-Density Directory */
+/* =============================================================================
+   TIER 2: 5-Column High-Density Directory (Harmonized Theme Navy: #053056)
+   ============================================================================= */
 .global-footer-grid {
   display: grid !important;
   grid-template-columns: 1.4fr 1.1fr 1.2fr 1.2fr 1.1fr !important;
-  gap: 28px !important;
-  padding: 40px 0 32px 0 !important;
-  border-bottom: 1px solid #1e293b !important;
+  gap: 32px !important;
+  padding: 42px 0 34px 0 !important;
+  border-bottom: 1px solid #0e4471 !important;
 }
 
 .global-footer-col {
@@ -210,60 +219,67 @@ footer#footer.global-site-footer a:after {
 }
 
 .footer-author-name {
-  font-size: 18px !important;
+  font-size: 20px !important;
   font-weight: 800 !important;
   color: #ffffff !important;
   display: block !important;
-  margin-bottom: 2px !important;
+  margin-bottom: 3px !important;
+  letter-spacing: -0.2px !important;
 }
 
 .footer-author-title {
-  font-size: 12px !important;
-  color: #38bdf8 !important;
-  font-weight: 600 !important;
+  font-size: 13px !important;
+  color: #9CBE41 !important;
+  font-weight: 700 !important;
   display: block !important;
+  letter-spacing: 0.2px !important;
 }
 
 .footer-bio-text {
-  font-size: 12px !important;
-  color: #94a3b8 !important;
-  line-height: 1.6 !important;
-  margin: 0 0 14px 0 !important;
+  font-size: 13px !important;
+  color: #e2e8f0 !important;
+  line-height: 1.65 !important;
+  margin: 0 0 16px 0 !important;
 }
 
 .footer-sla-badge {
   display: inline-flex !important;
   align-items: center !important;
   gap: 6px !important;
-  font-size: 11px !important;
+  font-size: 12px !important;
   font-weight: 700 !important;
   color: #4ade80 !important;
   background-color: #064e3b !important;
   border: 1px solid #059669 !important;
-  padding: 4px 10px !important;
-  border-radius: 3px !important;
+  padding: 5px 12px !important;
+  border-radius: 4px !important;
   margin-bottom: 14px !important;
   align-self: flex-start !important;
 }
 
 .footer-sla-badge .badge-bullet {
-  font-size: 9px !important;
+  font-size: 10px !important;
 }
 
 .footer-contact-details {
-  font-size: 12px !important;
-  color: #cbd5e1 !important;
-  line-height: 1.6 !important;
+  font-size: 13px !important;
+  color: #ffffff !important;
+  line-height: 1.65 !important;
   margin-bottom: 14px !important;
 }
 
+.footer-contact-details strong {
+  color: #ffffff !important;
+}
+
 .footer-highlight-link {
-  color: #38bdf8 !important;
+  color: #9CBE41 !important;
+  font-weight: 700 !important;
   text-decoration: underline !important;
 }
 
 .footer-highlight-link:hover {
-  color: #7dd3fc !important;
+  color: #bbf246 !important;
 }
 
 .footer-ecosystem-badges {
@@ -273,24 +289,24 @@ footer#footer.global-site-footer a:after {
 }
 
 .eco-badge {
-  font-size: 10px !important;
+  font-size: 11px !important;
   font-weight: 700 !important;
-  background-color: #0d1e34 !important;
-  border: 1px solid #1e293b !important;
-  color: #94a3b8 !important;
-  padding: 2px 7px !important;
+  background-color: #083c66 !important;
+  border: 1px solid #175a94 !important;
+  color: #ffffff !important;
+  padding: 3px 8px !important;
   border-radius: 3px !important;
 }
 
 .footer-col-title {
-  font-size: 13px !important;
+  font-size: 14px !important;
   font-weight: 800 !important;
   color: #ffffff !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
-  margin: 0 0 14px 0 !important;
+  letter-spacing: 0.75px !important;
+  margin: 0 0 16px 0 !important;
   padding-bottom: 8px !important;
-  border-bottom: 2px solid #053056 !important;
+  border-bottom: 2px solid #9CBE41 !important;
 }
 
 .footer-links-list {
@@ -299,7 +315,7 @@ footer#footer.global-site-footer a:after {
   padding: 0 !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 10px !important;
+  gap: 11px !important;
 }
 
 .footer-links-list li {
@@ -309,33 +325,35 @@ footer#footer.global-site-footer a:after {
 }
 
 .footer-links-list li a {
-  font-size: 12px !important;
-  color: #cbd5e1 !important;
+  font-size: 13px !important;
+  color: #f8fafc !important;
   text-decoration: none !important;
-  line-height: 1.4 !important;
+  line-height: 1.45 !important;
   display: block !important;
+  font-weight: 500 !important;
   transition: color 0.15s ease !important;
 }
 
 .footer-links-list li a:hover {
-  color: #38bdf8 !important;
+  color: #9CBE41 !important;
+  text-decoration: underline !important;
 }
 
 .case-studies-list .footer-project-link strong {
   display: block !important;
-  font-size: 12px !important;
+  font-size: 13px !important;
   color: #ffffff !important;
   margin-bottom: 2px !important;
 }
 
 .case-studies-list .footer-project-link:hover strong {
-  color: #38bdf8 !important;
+  color: #9CBE41 !important;
 }
 
 .footer-meta-pill {
   display: block !important;
-  font-size: 11px !important;
-  color: #94a3b8 !important;
+  font-size: 12px !important;
+  color: #cbd5e1 !important;
 }
 
 .pricing-list .footer-price-item {
@@ -346,17 +364,18 @@ footer#footer.global-site-footer a:after {
 }
 
 .pricing-list .service-name {
-  font-size: 12px !important;
-  color: #cbd5e1 !important;
+  font-size: 13px !important;
+  color: #f8fafc !important;
+  font-weight: 500 !important;
 }
 
 .pricing-list .price-tag {
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  color: #4ade80 !important;
-  background-color: #064e3b !important;
-  border: 1px solid #059669 !important;
-  padding: 1px 6px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  background-color: #15803d !important;
+  border: 1px solid #22c55e !important;
+  padding: 2px 8px !important;
   border-radius: 3px !important;
   white-space: nowrap !important;
 }
@@ -367,74 +386,88 @@ footer#footer.global-site-footer a:after {
   gap: 2px !important;
 }
 
+.articles-list .footer-article-link span:first-child {
+  font-size: 13px !important;
+  color: #f8fafc !important;
+  font-weight: 500 !important;
+}
+
+.articles-list .footer-article-link:hover span:first-child {
+  color: #9CBE41 !important;
+}
+
 .articles-list .read-time {
-  font-size: 10px !important;
-  color: #64748b !important;
+  font-size: 11px !important;
+  color: #cbd5e1 !important;
 }
 
 .footer-cta-link-item {
-  margin-top: 4px !important;
+  margin-top: 6px !important;
 }
 
 .footer-cta-link-item a.footer-view-all {
   color: #9CBE41 !important;
-  font-weight: 700 !important;
-  font-size: 12px !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
   display: inline-block !important;
 }
 
 .footer-cta-link-item a.footer-view-all:hover {
-  color: #b0d453 !important;
+  color: #bbf246 !important;
   text-decoration: underline !important;
 }
 
-/* Tier 3: Telemetry Strip */
+/* =============================================================================
+   TIER 3: Telemetry Strip (Deep Navy: #042442 with #0e4471 Border)
+   ============================================================================= */
 .global-footer-telemetry {
   display: flex !important;
   flex-wrap: wrap !important;
   justify-content: space-between !important;
   align-items: center !important;
-  gap: 16px !important;
-  padding: 16px 20px !important;
-  background-color: #0a192f !important;
-  border: 1px solid #1e293b !important;
+  gap: 18px !important;
+  padding: 18px 24px !important;
+  background-color: #042442 !important;
+  border: 1px solid #0e4471 !important;
   border-radius: 6px !important;
-  margin: 28px 0 !important;
+  margin: 30px 0 !important;
 }
 
 .telemetry-item {
   display: flex !important;
   flex-direction: column !important;
-  gap: 2px !important;
+  gap: 3px !important;
 }
 
 .telemetry-label {
-  font-size: 10px !important;
-  font-weight: 700 !important;
-  color: #64748b !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  color: #cbd5e1 !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
+  letter-spacing: 0.6px !important;
 }
 
 .telemetry-value {
-  font-size: 12px !important;
-  font-weight: 700 !important;
-  color: #38bdf8 !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
   font-family: monospace !important;
 }
 
-/* Tier 4: Navigation Bar */
+/* =============================================================================
+   TIER 4: Global Primary Navigation Bar (Deep Navy: #031c33)
+   ============================================================================= */
 #global-footernav,
 .global-footer-nav {
   position: static !important;
   top: auto !important;
   left: auto !important;
   width: 100% !important;
-  background-color: #0d1e34 !important;
-  border-top: 1px solid #1e293b !important;
-  border-bottom: 1px solid #1e293b !important;
-  padding: 12px 0 !important;
-  margin: 0 0 20px 0 !important;
+  background-color: #031c33 !important;
+  border-top: 1px solid #0e4471 !important;
+  border-bottom: 1px solid #0e4471 !important;
+  padding: 14px 0 !important;
+  margin: 0 0 22px 0 !important;
   text-align: center !important;
 }
 
@@ -444,7 +477,7 @@ footer#footer.global-site-footer a:after {
   flex-wrap: wrap !important;
   justify-content: center !important;
   align-items: center !important;
-  gap: 14px 20px !important;
+  gap: 16px 24px !important;
   list-style: none !important;
   margin: 0 !important;
   padding: 0 !important;
@@ -469,9 +502,9 @@ footer#footer.global-site-footer a:after {
 
 #global-footernav li a,
 .global-footer-nav li a {
-  color: #94a3b8 !important;
-  font-weight: 600 !important;
-  font-size: 12px !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
   text-decoration: none !important;
   transition: color 0.15s ease !important;
   background-color: transparent !important;
@@ -481,28 +514,30 @@ footer#footer.global-site-footer a:after {
 
 #global-footernav li a:hover,
 .global-footer-nav li a:hover {
-  color: #ffffff !important;
+  color: #9CBE41 !important;
   background-color: transparent !important;
 }
 
-/* Tier 5: Legal & Compliance Strip */
+/* =============================================================================
+   TIER 5: Legal & Compliance Strip
+   ============================================================================= */
 .global-footer-legal {
-  padding: 16px 0 32px 0 !important;
-  border-top: 1px solid #1e293b !important;
-  font-size: 12px !important;
-  color: #64748b !important;
-  line-height: 1.6 !important;
+  padding: 18px 0 36px 0 !important;
+  border-top: 1px solid #0e4471 !important;
+  font-size: 13px !important;
+  color: #cbd5e1 !important;
+  line-height: 1.65 !important;
   text-align: left !important;
 }
 
 .legal-sow-statement {
-  margin-bottom: 14px !important;
-  color: #94a3b8 !important;
-  font-size: 12px !important;
+  margin-bottom: 16px !important;
+  color: #e2e8f0 !important;
+  font-size: 13px !important;
 }
 
 .legal-sow-statement strong {
-  color: #cbd5e1 !important;
+  color: #ffffff !important;
 }
 
 .legal-meta-row {
@@ -510,44 +545,48 @@ footer#footer.global-site-footer a:after {
   justify-content: space-between !important;
   align-items: center !important;
   flex-wrap: wrap !important;
-  gap: 12px !important;
-  font-size: 11px !important;
+  gap: 14px !important;
+  font-size: 12px !important;
 }
 
 .copyright-text {
-  color: #64748b !important;
+  color: #cbd5e1 !important;
 }
 
 .copyright-text strong {
-  color: #94a3b8 !important;
+  color: #ffffff !important;
 }
 
 .compliance-links {
   display: flex !important;
   align-items: center !important;
-  gap: 8px !important;
+  gap: 10px !important;
   flex-wrap: wrap !important;
+  color: #cbd5e1 !important;
 }
 
 .compliance-links .divider {
-  color: #334155 !important;
+  color: #175a94 !important;
 }
 
 .admin-access-link {
-  color: #38bdf8 !important;
-  font-weight: 700 !important;
+  color: #9CBE41 !important;
+  font-weight: 800 !important;
   text-decoration: none !important;
 }
 
 .admin-access-link:hover {
+  color: #bbf246 !important;
   text-decoration: underline !important;
 }
 
-/* Responsive Footer Adjustments */
+/* =============================================================================
+   Responsive Footer Adjustments
+   ============================================================================= */
 @media screen and (max-width: 1080px) {
   .global-footer-grid {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 24px !important;
+    gap: 26px !important;
   }
   .global-footer-col.col-profile {
     grid-column: span 2 !important;
@@ -572,7 +611,7 @@ footer#footer.global-site-footer a:after {
   .global-footer-telemetry {
     flex-direction: column !important;
     align-items: flex-start !important;
-    gap: 12px !important;
+    gap: 14px !important;
   }
   .legal-meta-row {
     flex-direction: column !important;

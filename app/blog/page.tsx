@@ -223,7 +223,7 @@ export default function BlogIndexPage() {
                         <h3 style={{ fontSize: "18px", color: "#053056", margin: 0 }}>
                           {selectedTag === "All" ? "All Engineering Publications" : `Articles in #${selectedTag}`}
                         </h3>
-                        <span style={{ fontSize: "12px", color: "#64748b" }}>
+                        <span style={{ fontSize: "12px", color: "#334155", fontWeight: "600" }}>
                           Showing {filteredPosts.length} publication{filteredPosts.length === 1 ? "" : "s"}
                         </span>
                       </div>
@@ -241,7 +241,7 @@ export default function BlogIndexPage() {
                               borderRadius: "4px",
                             }}
                           >
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px", fontSize: "12px", color: "#64748b" }}>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px", fontSize: "12px", color: "#334155" }}>
                               <div>
                                 <strong style={{ color: "#053056" }}>
                                   {new Date(post.publishedAt).toLocaleDateString("en-US", {
@@ -255,7 +255,7 @@ export default function BlogIndexPage() {
                                   ⏱ {post.readingTimeMinutes} min read
                                 </span>
                               </div>
-                              <span style={{ fontSize: "11px", color: "#64748b" }}>
+                              <span style={{ fontSize: "11px", color: "#334155", fontWeight: "600" }}>
                                 By MD Abu Hanif Mia
                               </span>
                             </div>
@@ -305,7 +305,7 @@ export default function BlogIndexPage() {
                         ))}
 
                         {filteredPosts.length === 0 && (
-                          <div style={{ padding: "40px", textAlign: "center", backgroundColor: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "4px", color: "#64748b" }}>
+                          <div style={{ padding: "40px", textAlign: "center", backgroundColor: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "4px", color: "#334155", fontWeight: "600" }}>
                             No technical articles found matching &ldquo;{searchQuery || selectedTag}&rdquo;.
                           </div>
                         )}
@@ -383,7 +383,7 @@ export default function BlogIndexPage() {
                       <h3 style={{ margin: "0 0 4px 0", fontSize: "16px", color: "#053056" }}>
                         MD Abu Hanif Mia
                       </h3>
-                      <div style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "8px" }}>
+                      <div style={{ fontSize: "12px", color: "#334155", fontWeight: "700", marginBottom: "8px" }}>
                         Staff Software Engineer &amp; Systems Architect
                       </div>
                       <p style={{ fontSize: "12px", color: "#475569", lineHeight: "1.5", margin: 0 }}>

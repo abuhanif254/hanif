@@ -84,7 +84,7 @@ export function getEngineerHomepage(): SourcePageRecord {
                 <div class="description">
                   <div id="badges">
                     <span class="badge" title="Full-Stack Senior Engineer">
-                      <strong style="display:inline-block;padding:8px 14px;background:#0d223f;color:#38bdf8;border:1px solid #1e293b;border-radius:4px;font-size:13px;font-weight:bold;">
+                      <strong style="display:inline-block;padding:8px 14px;background:#042442;color:#9CBE41;border:1px solid #0a365c;border-radius:4px;font-size:13px;font-weight:bold;">
                         9+ YRS EXP
                       </strong>
                     </span>
@@ -713,7 +713,7 @@ export function getEngineerHomepage(): SourcePageRecord {
                 <li><a href="/blog">Technical Blog</a></li>
                 <li><a href="/resume">Resume / CV</a></li>
                 <li><a href="#contactform">Consultation Inquiry</a></li>
-                <li class="last"><a href="/admin" style="color:#38bdf8;font-weight:700;">Admin Portal</a></li>
+                <li class="last"><a href="/admin" style="color:#9CBE41;font-weight:700;">Admin Portal</a></li>
               </ul>
             </div>
 

@@ -146,7 +146,7 @@ export default async function ProjectsIndexPage() {
                                 flexWrap: "wrap",
                                 marginBottom: "12px",
                                 fontSize: "12.5px",
-                                color: "#64748b",
+                                color: "#334155",
                               }}
                             >
                               <span>
@@ -290,7 +290,7 @@ export default async function ProjectsIndexPage() {
                           Request Project Quote ›
                         </a>
                       </div>
-                      <div style={{ fontSize: "12px", color: "#64748b", marginTop: "6px" }}>
+                      <div style={{ fontSize: "12px", color: "#334155", marginTop: "6px" }}>
                         Typical response within 24 hours.
                       </div>
                     </div>
@@ -341,7 +341,7 @@ export default async function ProjectsIndexPage() {
                   <div className="widget" id="wdgt-admin">
                     <div style={{ padding: "12px", backgroundColor: "#f1f5f9", borderRadius: "3px", border: "1px solid #cbd5e1", fontSize: "12px" }}>
                       <strong>Project Management Portal</strong>
-                      <p style={{ margin: "4px 0 8px 0", color: "#64748b" }}>
+                      <p style={{ margin: "4px 0 8px 0", color: "#334155" }}>
                         Add, edit, or delete portfolio projects and manage client inquiries.
                       </p>
                       <Link

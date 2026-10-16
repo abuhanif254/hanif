@@ -21,7 +21,7 @@ export default function FormGuard({ route }: { route: string }) {
         form.append(status);
       }
 
-      status.style.color = "#38bdf8";
+      status.style.color = "#053056";
       status.style.fontWeight = "bold";
       status.textContent = "Submitting consultation request...";
 

@@ -216,19 +216,19 @@ export default function PricingPage() {
                       >
                         <div style={{ padding: "14px", backgroundColor: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "4px" }}>
                           <strong style={{ display: "block", color: "#053056", fontSize: "13px" }}>Fixed-Scope Sprints</strong>
-                          <span style={{ fontSize: "12px", color: "#64748b" }}>Guaranteed delivery dates &amp; fixed milestone costs.</span>
+                          <span style={{ fontSize: "12px", color: "#334155" }}>Guaranteed delivery dates &amp; fixed milestone costs.</span>
                         </div>
                         <div style={{ padding: "14px", backgroundColor: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "4px" }}>
                           <strong style={{ display: "block", color: "#053056", fontSize: "13px" }}>100% Client IP</strong>
-                          <span style={{ fontSize: "12px", color: "#64748b" }}>Direct commits to your private Git repo from day one.</span>
+                          <span style={{ fontSize: "12px", color: "#334155" }}>Direct commits to your private Git repo from day one.</span>
                         </div>
                         <div style={{ padding: "14px", backgroundColor: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "4px" }}>
                           <strong style={{ display: "block", color: "#053056", fontSize: "13px" }}>Production SLAs</strong>
-                          <span style={{ fontSize: "12px", color: "#64748b" }}>Sub-30ms P99 latency and 99.99% uptime targets.</span>
+                          <span style={{ fontSize: "12px", color: "#334155" }}>Sub-30ms P99 latency and 99.99% uptime targets.</span>
                         </div>
                         <div style={{ padding: "14px", backgroundColor: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "4px" }}>
                           <strong style={{ display: "block", color: "#053056", fontSize: "13px" }}>30-Day Warranty</strong>
-                          <span style={{ fontSize: "12px", color: "#64748b" }}>Post-deployment bug fixes at zero extra cost.</span>
+                          <span style={{ fontSize: "12px", color: "#334155" }}>Post-deployment bug fixes at zero extra cost.</span>
                         </div>
                       </div>
 
@@ -280,7 +280,7 @@ export default function PricingPage() {
 
                             <div>
                               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "8px" }}>
-                                <span style={{ fontSize: "12px", fontWeight: "700", color: "#64748b", textTransform: "uppercase" }}>
+                                <span style={{ fontSize: "12px", fontWeight: "700", color: "#334155", textTransform: "uppercase" }}>
                                   {serv.pricingType === "retainer" ? "Monthly Retainer" : "Fixed Scope Sprint"}
                                 </span>
                                 <span style={{ fontSize: "12px", color: "#053056", fontWeight: "600" }}>
@@ -356,7 +356,7 @@ export default function PricingPage() {
                             </h3>
                           </div>
                           <div style={{ textAlign: "right" }}>
-                            <div style={{ fontSize: "12px", color: "#94a3b8" }}>Estimated Investment</div>
+                            <div style={{ fontSize: "12px", color: "#e2e8f0" }}>Estimated Investment</div>
                             <div style={{ fontSize: "32px", fontWeight: "800", color: "#9CBE41" }}>
                               ${totalEstimate.toLocaleString()}
                               {currentService.pricingType === "retainer" && <span style={{ fontSize: "14px", color: "#cbd5e1" }}> / mo</span>}
@@ -425,7 +425,7 @@ export default function PricingPage() {
                                     <div style={{ fontSize: "13px", fontWeight: "700", color: "#ffffff" }}>
                                       {addon.title} (+${addon.price.toLocaleString()})
                                     </div>
-                                    <div style={{ fontSize: "11px", color: "#94a3b8", marginTop: "2px" }}>
+                                    <div style={{ fontSize: "11px", color: "#cbd5e1", marginTop: "2px" }}>
                                       {addon.desc}
                                     </div>
                                   </div>
@@ -517,9 +517,9 @@ export default function PricingPage() {
 
                       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px", marginBottom: "40px" }}>
                         <div style={{ padding: "20px", border: "1px solid #cbd5e1", borderRadius: "6px", backgroundColor: "#ffffff" }}>
-                          <span style={{ fontSize: "11px", fontWeight: "700", color: "#64748b", textTransform: "uppercase" }}>Standard Consulting</span>
+                          <span style={{ fontSize: "11px", fontWeight: "700", color: "#334155", textTransform: "uppercase" }}>Standard Consulting</span>
                           <h4 style={{ fontSize: "18px", color: "#053056", margin: "6px 0" }}>Senior Architecture Advisory</h4>
-                          <div style={{ fontSize: "24px", fontWeight: "800", color: "#053056", margin: "8px 0" }}>$140 <span style={{ fontSize: "14px", fontWeight: "normal", color: "#64748b" }}>/ hour</span></div>
+                          <div style={{ fontSize: "24px", fontWeight: "800", color: "#053056", margin: "8px 0" }}>$140 <span style={{ fontSize: "14px", fontWeight: "normal", color: "#334155" }}>/ hour</span></div>
                           <p style={{ fontSize: "12px", color: "#475569", lineHeight: "1.5", margin: 0 }}>
                             1:1 pair programming, architectural design reviews, query plan troubleshooting, and technical strategy calls. Booked in 5-hour or 10-hour blocks.
                           </p>
@@ -805,7 +805,7 @@ export default function PricingPage() {
                       <h3 style={{ margin: "0 0 4px 0", fontSize: "16px", color: "#053056" }}>
                         MD Abu Hanif Mia
                       </h3>
-                      <div style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "8px" }}>
+                      <div style={{ fontSize: "12px", color: "#334155", fontWeight: "700", marginBottom: "8px" }}>
                         Staff Software Engineer &amp; Systems Architect
                       </div>
                       <div style={{ fontSize: "11px", color: "#065f46", fontWeight: "700", marginBottom: "12px" }}>
