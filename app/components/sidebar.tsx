@@ -1,4 +1,5 @@
 import ContactForm from "./contact-form";
+import EdgeLatencyBenchmark from "./edge-latency-benchmark";
 
 const engineeringSpecializations = [
   "Distributed Systems",
@@ -48,6 +49,9 @@ export default function Sidebar() {
           50+ Production Deployments • Sub-50ms P99 Architecture
         </p>
       </div>
+
+      {/* Live Edge Telemetry */}
+      <EdgeLatencyBenchmark />
 
       {/* Embedded Project Inquiry Form */}
       <div id="contact">
@@ -183,7 +187,7 @@ export default function Sidebar() {
           Client Recommendation
         </h2>
         <blockquote style={{ margin: 0, fontStyle: "italic", fontSize: "13px", lineHeight: "1.6", color: "#334155" }}>
-          “Alex transformed our core API architecture in just three weeks. Our P99 latency dropped by 75% and our infrastructure bill was cut in half. Clear technical communication, pristine documentation, and zero fluff.”
+          “Abu Hanif transformed our core API architecture in just three weeks. Our P99 latency dropped by 75% and our infrastructure bill was cut in half. Clear technical communication, pristine documentation, and zero fluff.”
         </blockquote>
         <p className="quote-credit" style={{ marginTop: "12px", marginBottom: "14px", fontSize: "12px", color: "#64748b" }}>
           <strong style={{ color: "#0f172a" }}>David Vance</strong><br />

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { initialServices, ServicePricing } from "../data/portfolio-data";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
 import SiteFooter from "../components/site-footer";
+import SiteHeader from "../components/site-header";
 
 export default function PricingPage() {
   const [services] = useState<ServicePricing[]>(initialServices);
@@ -163,55 +164,10 @@ export default function PricingPage() {
   return (
     <div id="source-page-root" data-source-path="/pricing">
       <div id="source-page-body" className="source-page-body js l2 section_29 justia-robertjfleming-com">
-        {/* Sticky Top Banner */}
-        <div className="top-numbers-v3 tnv3-sticky" id="top-numbers-v3">
-          <ul>
-            <li>
-              Available for Architecture Consulting &amp; High-Impact Sprints:{" "}
-              <strong>contact@abuhanif.dev</strong>
-              <a className="tnv3-button" href="#inquiry">
-                Request Scope Quote
-              </a>
-            </li>
-          </ul>
-        </div>
+        <SiteHeader activePath="/pricing" />
 
         <div className="index" id="container">
           <div className="cwrap">
-            {/* Header */}
-            <div id="header">
-              <div className="wrapper">
-                <div id="head">
-                  <div id="logo">
-                    <a data-title="Abu Hanif - Staff Software Engineer" href="/" title="Back to Home">
-                      <img alt="Abu Hanif - Staff Software Engineer" id="mainlogo" src="/images/abuhanif-logo-v3.svg" />
-                      Abu Hanif Staff Software Engineer Home
-                    </a>
-                  </div>
-                  <div id="tagline">
-                    <a href="#inquiry" title="Discuss an Engineering Project">
-                      Discuss an Engineering Project with Abu Hanif
-                    </a>
-                  </div>
-                </div>
-                <div id="topnav">
-                  <ul id="tnav-toplevel">
-                    <li className="priority_1" id="fc"><a href="/">Home</a></li>
-                    <li className="priority_3"><a href="/#about">About Abu Hanif</a></li>
-                    <li className="priority_4"><a href="/#competencies">Engineering Focus</a></li>
-                    <li className="priority_2"><a href="/projects">Work Showcase</a></li>
-                    <li className="selected priority_4"><a href="/pricing">Work Prices</a></li>
-                    <li className="priority_5"><a href="/blog">Technical Blog</a></li>
-                    <li className="priority_6"><a href="/#feedback">Client Feedback</a></li>
-                    <li className="category_141"><a href="/admin">Admin Panel</a></li>
-                    <li className="contactus priority_1" id="lc"><a href="#inquiry">Contact</a></li>
-                  </ul>
-                </div>
-              </div>
-              <div id="ed"></div>
-              <div className="clr"></div>
-            </div>
-
             {/* Main Content */}
             <div id="main">
               <div className="mwrap">

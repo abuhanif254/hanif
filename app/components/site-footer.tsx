@@ -271,6 +271,9 @@ export default function SiteFooter() {
               <Link href="/blog">Technical Blog</Link>
             </li>
             <li>
+              <Link href="/resume">Resume / CV</Link>
+            </li>
+            <li>
               <Link href="/pricing#inquiry">Consultation Inquiry</Link>
             </li>
             <li className="last">

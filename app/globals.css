@@ -113,7 +113,17 @@ button:after,
   .cookie-actions button { flex: 1 1 auto; }
   .cookie-actions .text-action { flex-basis: 100%; }
 }
+@media (max-width: 768px) {
+  .mobile-menu-toggle-btn {
+    display: inline-block !important;
+  }
+  #topnav #tnav-toplevel {
+    display: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+

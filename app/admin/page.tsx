@@ -63,6 +63,20 @@ export default function AdminPage() {
   const [inquiries, setInquiries] = useState<InquiryRecord[]>(mockInquiries);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
+  // Security Passcode Gate State
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [passcode, setPasscode] = useState("");
+  const [passcodeError, setPasscodeError] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const auth = window.sessionStorage.getItem("abuhanif_admin_auth");
+      if (auth === "true") {
+        setIsAuthenticated(true);
+      }
+    }
+  }, []);
+
   // Project editing & modal states
   const [editingProject, setEditingProject] = useState<ProjectItem | null>(null);
   const [projectToDelete, setProjectToDelete] = useState<ProjectItem | null>(null);
@@ -618,6 +632,120 @@ export default function AdminPage() {
     showNotification(`Inquiry status updated to ${status}`);
   }
 
+  function handlePasscodeSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (passcode.trim() === "2026" || passcode.trim() === "admin2026" || passcode.trim() === "hanif2026") {
+      setIsAuthenticated(true);
+      setPasscodeError(false);
+      if (typeof window !== "undefined") {
+        window.sessionStorage.setItem("abuhanif_admin_auth", "true");
+      }
+    } else {
+      setPasscodeError(true);
+    }
+  }
+
+  function handleLogout() {
+    setIsAuthenticated(false);
+    setPasscode("");
+    if (typeof window !== "undefined") {
+      window.sessionStorage.removeItem("abuhanif_admin_auth");
+    }
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          backgroundColor: "#071324",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "20px",
+          fontFamily: "sans-serif",
+        }}
+      >
+        <div
+          style={{
+            background: "#0a192f",
+            border: "1px solid #1e293b",
+            borderRadius: "8px",
+            padding: "36px 40px",
+            width: "100%",
+            maxWidth: "420px",
+            boxShadow: "0 12px 30px rgba(0,0,0,0.4)",
+            textAlign: "center",
+          }}
+        >
+          <div style={{ fontSize: "42px", marginBottom: "14px" }}>🔒</div>
+          <h1 style={{ margin: "0 0 6px 0", fontSize: "20px", color: "#ffffff", fontWeight: "bold" }}>
+            Admin Portal Authentication
+          </h1>
+          <p style={{ margin: "0 0 24px 0", fontSize: "13px", color: "#94a3b8", lineHeight: "1.5" }}>
+            Enter your authorized administrator security passcode to manage projects, blog articles, services, and live inquiries.
+          </p>
+
+          <form onSubmit={handlePasscodeSubmit}>
+            <div style={{ marginBottom: "16px" }}>
+              <input
+                type="password"
+                placeholder="Enter Passcode"
+                value={passcode}
+                onChange={(e) => {
+                  setPasscode(e.target.value);
+                  setPasscodeError(false);
+                }}
+                autoFocus
+                style={{
+                  width: "100%",
+                  boxSizing: "border-box",
+                  padding: "12px 14px",
+                  background: "#071324",
+                  border: passcodeError ? "1px solid #ef4444" : "1px solid #1e293b",
+                  borderRadius: "4px",
+                  color: "#ffffff",
+                  fontSize: "16px",
+                  textAlign: "center",
+                  letterSpacing: "4px",
+                }}
+              />
+              {passcodeError && (
+                <div style={{ color: "#ef4444", fontSize: "12px", marginTop: "8px" }}>
+                  Invalid security passcode. Please try again.
+                </div>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              style={{
+                width: "100%",
+                padding: "12px",
+                background: "#0284c7",
+                color: "#ffffff",
+                border: "none",
+                borderRadius: "4px",
+                fontWeight: "bold",
+                fontSize: "14px",
+                cursor: "pointer",
+                transition: "background 0.2s",
+              }}
+            >
+              Unlock Control Panel &nbsp;›
+            </button>
+          </form>
+
+          <div style={{ marginTop: "24px", paddingTop: "16px", borderTop: "1px solid #1e293b", fontSize: "13px" }}>
+            <Link href="/" style={{ color: "#38bdf8", textDecoration: "none" }}>
+              ‹ Return to Public Portfolio
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#071324", color: "#ffffff", fontFamily: "sans-serif" }}>
       {/* Top Navbar */}
@@ -653,10 +781,26 @@ export default function AdminPage() {
           </span>
         </div>
 
-        <div>
+        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
           <span style={{ fontSize: "13px", color: "#94a3b8" }}>
             Admin: <strong>{profile.fullName}</strong>
           </span>
+          <button
+            type="button"
+            onClick={handleLogout}
+            style={{
+              background: "#1e293b",
+              color: "#f87171",
+              border: "1px solid #334155",
+              borderRadius: "4px",
+              padding: "4px 10px",
+              fontSize: "12px",
+              fontWeight: "bold",
+              cursor: "pointer",
+            }}
+          >
+            🔒 Lock Console
+          </button>
         </div>
       </header>
 

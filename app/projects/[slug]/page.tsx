@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getProjectBySlug, getProjects } from "../../lib/portfolio-store";
 import SiteFooter from "../../components/site-footer";
+import SiteHeader from "../../components/site-header";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -45,52 +46,10 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   return (
     <div id="source-page-root" data-source-path={`/projects/${project.slug}`}>
       <div id="source-page-body" className="source-page-body js l2 section_10 justia-robertjfleming-com">
-        {/* Sticky Top Bar */}
-        <div className="top-numbers-v3 tnv3-sticky" id="top-numbers-v3">
-          <ul>
-            <li>
-              Available for High-Impact Contracts &amp; Consulting: <strong> contact@abuhanif.dev </strong>
-              <a className="tnv3-button" href="/#contactform">Request Project Quote</a>
-            </li>
-          </ul>
-        </div>
+        <SiteHeader activePath="/projects" />
 
         <div className="index" id="container">
           <div className="cwrap">
-            {/* Header */}
-            <div id="header">
-              <div className="wrapper">
-                <div id="head">
-                  <div id="logo">
-                    <a data-title="Abu Hanif - Staff Software Engineer" href="/" title="Back to Home">
-                      <img alt="Abu Hanif - Staff Software Engineer" id="mainlogo" src="/images/abuhanif-logo-v3.svg" />
-                      Abu Hanif Staff Software Engineer Home
-                    </a>
-                  </div>
-                  <div id="tagline">
-                    <a href="/#contactform" title="Discuss an Engineering Project">
-                      Discuss an Engineering Project with Abu Hanif
-                    </a>
-                  </div>
-                </div>
-                <div id="topnav">
-                  <ul id="tnav-toplevel">
-                    <li className="priority_1" id="fc"><a href="/">Home</a></li>
-                    <li className="priority_3"><a href="/#about">About Abu Hanif</a></li>
-                    <li className="priority_4"><a href="/#competencies">Engineering Focus</a></li>
-                    <li className="selected priority_2"><a href="/projects">Work Showcase</a></li>
-                    <li className="priority_4"><a href="/pricing">Work Prices</a></li>
-                    <li className="priority_5"><a href="/blog">Technical Blog</a></li>
-                    <li className="priority_6"><a href="/#feedback">Client Feedback</a></li>
-                    <li className="category_141"><a href="/admin">Admin Panel</a></li>
-                    <li className="contactus priority_1" id="lc"><a href="/#contactform">Contact</a></li>
-                  </ul>
-                </div>
-              </div>
-              <div id="ed"></div>
-              <div className="clr"></div>
-            </div>
-
             {/* Main Content */}
             <div id="main">
               <div className="mwrap">

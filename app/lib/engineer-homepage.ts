@@ -36,6 +36,7 @@ export function getEngineerHomepage(): SourcePageRecord {
                 <li class="practiceareasub_11 priority_2"><a href="/projects">Work Showcase</a></li>
                 <li class="section_29 priority_4"><a href="/pricing">Work Prices</a></li>
                 <li class="section_83 priority_5"><a href="/blog">Technical Blog</a></li>
+                <li class="section_nav priority_6"><a href="/resume">Resume / CV</a></li>
                 <li class="section_28 priority_6"><a href="#feedback">Client Feedback</a></li>
                 <li class="category_141"><a href="/admin">Admin Panel</a></li>
                 <li class="contactus priority_1" id="lc"><a href="#contactform">Contact</a></li>
@@ -710,6 +711,7 @@ export function getEngineerHomepage(): SourcePageRecord {
                 <li><a href="/projects">Work Showcase</a></li>
                 <li><a href="/pricing">Services &amp; Pricing</a></li>
                 <li><a href="/blog">Technical Blog</a></li>
+                <li><a href="/resume">Resume / CV</a></li>
                 <li><a href="#contactform">Consultation Inquiry</a></li>
                 <li class="last"><a href="/admin" style="color:#38bdf8;font-weight:700;">Admin Portal</a></li>
               </ul>
@@ -743,7 +745,7 @@ export function getEngineerHomepage(): SourcePageRecord {
 
   return {
     path: "/",
-    url: "https://www.robertjfleming.com/",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanif.dev",
     status: 200,
     title: "Abu Hanif (MD Abu Hanif Mia) | Staff Software Engineer & Systems Architect",
     description: "MD Abu Hanif Mia - Staff Software Engineer & Systems Architect. View portfolio work showcase, transparent engineering pricing, and technical blog.",
