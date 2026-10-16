@@ -170,42 +170,90 @@ export default function WorkShowcaseSection() {
         All engineering engagements are scoped transparently with defined deliverables, clear milestone schedules, and zero hidden overages:
       </p>
 
-      <table style={{ width: "100%", borderCollapse: "collapse", margin: "16px 0 24px 0", fontSize: "14px" }}>
-        <thead>
-          <tr style={{ background: "#053056", color: "#ffffff", textAlign: "left" }}>
-            <th style={{ padding: "10px 14px" }}>Service Package</th>
-            <th style={{ padding: "10px 14px" }}>Investment / Rate</th>
-            <th style={{ padding: "10px 14px" }}>Timeline</th>
-            <th style={{ padding: "10px 14px" }}>Core Deliverables</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr style={{ borderBottom: "1px solid #e2e8f0", background: "#ffffff" }}>
-            <td style={{ padding: "12px 14px", fontWeight: "bold", color: "#053056" }}>Architecture &amp; Codebase Audit</td>
-            <td style={{ padding: "12px 14px", fontWeight: "bold", color: "#16a34a" }}>$2,500 Fixed</td>
-            <td style={{ padding: "12px 14px" }}>3–5 Days</td>
-            <td style={{ padding: "12px 14px" }}>
-              25+ page diagnostic report, SQL slow query analysis, security audit, cloud hosting savings plan, 60-min debrief call.
-            </td>
-          </tr>
-          <tr style={{ borderBottom: "1px solid #e2e8f0", background: "#f8fafc" }}>
-            <td style={{ padding: "12px 14px", fontWeight: "bold", color: "#053056" }}>Full-Stack MVP &amp; Feature Sprint</td>
-            <td style={{ padding: "12px 14px", fontWeight: "bold", color: "#16a34a" }}>$8,500 Fixed</td>
-            <td style={{ padding: "12px 14px" }}>2–3 Weeks</td>
-            <td style={{ padding: "12px 14px" }}>
-              Production-grade Next.js 16 + React 19 app, Supabase PostgreSQL schema with RLS, auth, CI/CD, 30-day warranty.
-            </td>
-          </tr>
-          <tr style={{ borderBottom: "1px solid #e2e8f0", background: "#ffffff" }}>
-            <td style={{ padding: "12px 14px", fontWeight: "bold", color: "#053056" }}>Fractional Staff / Principal Eng</td>
-            <td style={{ padding: "12px 14px", fontWeight: "bold", color: "#16a34a" }}>$4,800 / month</td>
-            <td style={{ padding: "12px 14px" }}>Ongoing (15-20h/wk)</td>
-            <td style={{ padding: "12px 14px" }}>
-              Dedicated Slack access, weekly architecture reviews, PR approvals, core subsystem coding, engineering hiring support.
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      {/* Desktop Pricing Table */}
+      <div className="table-responsive-container desktop-pricing-table">
+        <table style={{ width: "100%", borderCollapse: "collapse", margin: "16px 0 24px 0", fontSize: "14px" }}>
+          <thead>
+            <tr style={{ background: "#053056", color: "#ffffff", textAlign: "left" }}>
+              <th style={{ padding: "10px 14px" }}>Service Package</th>
+              <th style={{ padding: "10px 14px" }}>Investment / Rate</th>
+              <th style={{ padding: "10px 14px" }}>Timeline</th>
+              <th style={{ padding: "10px 14px" }}>Core Deliverables</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style={{ borderBottom: "1px solid #e2e8f0", background: "#ffffff" }}>
+              <td style={{ padding: "12px 14px", fontWeight: "bold", color: "#053056" }}>Architecture &amp; Codebase Audit</td>
+              <td style={{ padding: "12px 14px", fontWeight: "bold", color: "#16a34a" }}>$2,500 Fixed</td>
+              <td style={{ padding: "12px 14px" }}>3–5 Days</td>
+              <td style={{ padding: "12px 14px" }}>
+                25+ page diagnostic report, SQL slow query analysis, security audit, cloud hosting savings plan, 60-min debrief call.
+              </td>
+            </tr>
+            <tr style={{ borderBottom: "1px solid #e2e8f0", background: "#f8fafc" }}>
+              <td style={{ padding: "12px 14px", fontWeight: "bold", color: "#053056" }}>Full-Stack MVP &amp; Feature Sprint</td>
+              <td style={{ padding: "12px 14px", fontWeight: "bold", color: "#16a34a" }}>$8,500 Fixed</td>
+              <td style={{ padding: "12px 14px" }}>2–3 Weeks</td>
+              <td style={{ padding: "12px 14px" }}>
+                Production-grade Next.js 16 + React 19 app, Supabase PostgreSQL schema with RLS, auth, CI/CD, 30-day warranty.
+              </td>
+            </tr>
+            <tr style={{ borderBottom: "1px solid #e2e8f0", background: "#ffffff" }}>
+              <td style={{ padding: "12px 14px", fontWeight: "bold", color: "#053056" }}>Fractional Staff / Principal Eng</td>
+              <td style={{ padding: "12px 14px", fontWeight: "bold", color: "#16a34a" }}>$4,800 / month</td>
+              <td style={{ padding: "12px 14px" }}>Ongoing (15-20h/wk)</td>
+              <td style={{ padding: "12px 14px" }}>
+                Dedicated Slack access, weekly architecture reviews, PR approvals, core subsystem coding, engineering hiring support.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* Mobile-Perfect Responsive Pricing Cards Stack (Visible on <= 768px only) */}
+      <div className="mobile-pricing-cards-stack">
+        <div style={{ background: "#ffffff", border: "1px solid #cbd5e1", borderLeft: "4px solid #053056", borderRadius: "6px", padding: "16px", boxShadow: "0 2px 6px rgba(0,0,0,0.04)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "6px" }}>
+            <strong style={{ fontSize: "16px", color: "#053056" }}>Architecture &amp; Codebase Audit</strong>
+            <span style={{ fontSize: "13px", fontWeight: "bold", color: "#16a34a", background: "#ecfdf5", padding: "3px 8px", borderRadius: "3px" }}>$2,500 Fixed</span>
+          </div>
+          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: "bold", marginBottom: "8px" }}>Timeline: 3–5 Days</div>
+          <p style={{ fontSize: "13px", color: "#334155", margin: "0 0 12px 0", lineHeight: "1.4" }}>
+            25+ page diagnostic report, SQL slow query analysis, security audit, cloud hosting savings plan, and 60-min debrief call.
+          </p>
+          <Link href="/pricing#inquiry" style={{ display: "block", width: "100%", padding: "10px", background: "#053056", color: "#ffffff", textAlign: "center", borderRadius: "4px", fontSize: "12px", fontWeight: "700", textDecoration: "none" }}>
+            Book Architecture Audit &rsaquo;
+          </Link>
+        </div>
+
+        <div style={{ background: "#ffffff", border: "2px solid #9CBE41", borderLeft: "5px solid #16a34a", borderRadius: "6px", padding: "16px", boxShadow: "0 4px 12px rgba(156,190,65,0.15)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "6px" }}>
+            <strong style={{ fontSize: "16px", color: "#053056" }}>Full-Stack MVP &amp; Feature Sprint</strong>
+            <span style={{ fontSize: "13px", fontWeight: "bold", color: "#16a34a", background: "#ecfdf5", padding: "3px 8px", borderRadius: "3px" }}>$8,500 Fixed</span>
+          </div>
+          <div style={{ fontSize: "12px", color: "#16a34a", fontWeight: "bold", marginBottom: "8px" }}>Timeline: 2–3 Weeks • Most Popular</div>
+          <p style={{ fontSize: "13px", color: "#334155", margin: "0 0 12px 0", lineHeight: "1.4" }}>
+            Production-grade Next.js 16 + React 19 app, Supabase PostgreSQL schema with RLS, auth, CI/CD deployment, and 30-day warranty.
+          </p>
+          <Link href="/pricing#inquiry" style={{ display: "block", width: "100%", padding: "10px", background: "#16a34a", color: "#ffffff", textAlign: "center", borderRadius: "4px", fontSize: "12px", fontWeight: "800", textDecoration: "none" }}>
+            Book Full MVP Sprint &rsaquo;
+          </Link>
+        </div>
+
+        <div style={{ background: "#ffffff", border: "1px solid #cbd5e1", borderLeft: "4px solid #053056", borderRadius: "6px", padding: "16px", boxShadow: "0 2px 6px rgba(0,0,0,0.04)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "6px" }}>
+            <strong style={{ fontSize: "16px", color: "#053056" }}>Fractional Staff / Principal Eng</strong>
+            <span style={{ fontSize: "13px", fontWeight: "bold", color: "#16a34a", background: "#ecfdf5", padding: "3px 8px", borderRadius: "3px" }}>$4,800 / mo</span>
+          </div>
+          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: "bold", marginBottom: "8px" }}>Timeline: Ongoing Retainer (15–20h/wk)</div>
+          <p style={{ fontSize: "13px", color: "#334155", margin: "0 0 12px 0", lineHeight: "1.4" }}>
+            Dedicated Slack access, weekly architecture reviews, PR approvals, core subsystem coding, and hiring interview support.
+          </p>
+          <Link href="/pricing#inquiry" style={{ display: "block", width: "100%", padding: "10px", background: "#053056", color: "#ffffff", textAlign: "center", borderRadius: "4px", fontSize: "12px", fontWeight: "700", textDecoration: "none" }}>
+            Engage Fractional Staff &rsaquo;
+          </Link>
+        </div>
+      </div>
 
       {/* 12 COMPETENCIES LIST */}
       <h3 id="competencies" style={{ fontSize: "1.25em", margin: "1.4em 0 0.5em 0", color: "#053056" }}>

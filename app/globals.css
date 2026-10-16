@@ -275,4 +275,219 @@ button:after,
   transition: width 0.08s linear;
 }
 
+/* =========================================================================
+   Mobile-First Architecture & Viewport Engine (Like Facebook)
+   ========================================================================= */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+
+body {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  -webkit-tap-highlight-color: transparent;
+  padding-bottom: calc(58px + var(--sab)) !important;
+}
+
+@media (min-width: 769px) {
+  body {
+    padding-bottom: 0 !important;
+  }
+}
+
+/* Eliminate iOS Safari 300ms tap delay & auto-zoom */
+a, button, input, select, textarea {
+  touch-action: manipulation;
+}
+
+@media (max-width: 768px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Hide scrollbar for swipeable horizontal carousels while keeping native momentum scroll */
+.scrollbar-none {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* Responsive Table Pan Container */
+.table-responsive-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+}
+
+/* Mobile Bottom Navigation Dock (Like Facebook) */
+.mobile-bottom-dock {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(58px + var(--sab));
+  padding-bottom: var(--sab);
+  background: #042442;
+  border-top: 2px solid #0a365c;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 9998;
+  box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.45);
+}
+
+@media (min-width: 769px) {
+  .mobile-bottom-dock {
+    display: none !important;
+  }
+}
+
+.dock-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 100%;
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 700;
+  gap: 2px;
+  transition: color 0.15s ease;
+  min-height: 48px;
+}
+
+.dock-item.active {
+  color: #9CBE41;
+}
+
+.dock-item:hover, .dock-item:active {
+  color: #ffffff;
+}
+
+.dock-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* Mobile Hero Banner Adjustments */
+@media (max-width: 768px) {
+  .imgwrap #img1,
+  #index .imgwrap #img1 {
+    min-height: 240px !important;
+    padding: 36px 16px 28px !important;
+    background-size: cover !important;
+  }
+
+  .imgwrap #img1 .text-wrapper,
+  #index .imgwrap #img1 .text-wrapper {
+    width: 100% !important;
+    position: relative !important;
+    padding: 0 !important;
+    text-align: center !important;
+  }
+
+  .imgwrap #img1 #banner-tagline,
+  #index .imgwrap #img1 #banner-tagline {
+    font-size: 14px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .imgwrap #img2 .wrapper,
+  #index .imgwrap #img2 .wrapper {
+    flex-direction: column !important;
+  }
+
+  .imgwrap #img2 .pabttn,
+  #index .imgwrap #img2 .pabttn {
+    width: 100% !important;
+    flex: none !important;
+    height: 48px !important;
+    border-left: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25) !important;
+    font-size: 13px !important;
+  }
+
+  /* Unfloat profile image on mobile for Facebook-style profile card */
+  .profilepic-wrap-desktop {
+    display: none !important;
+  }
+
+  .mobile-profile-card {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 20px 16px !important;
+    background: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .heading-about-desktop {
+    display: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-profile-card {
+    display: none !important;
+  }
+  .mobile-pricing-cards-stack {
+    display: none !important;
+  }
+}
+
+/* =========================================================================
+   Mobile UI Components & Touch Layout Engine (Facebook-Grade Experience)
+   ========================================================================= */
+@media (max-width: 768px) {
+  /* Swipeable horizontal ribbons (Badges, Chips, Quick filters) */
+  .badges-bar-container {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 12px !important;
+    gap: 10px !important;
+  }
+  .badges-bar-container > * {
+    flex-shrink: 0 !important;
+  }
+
+  /* Pricing Table -> Native Touch Cards Stack */
+  .desktop-pricing-table {
+    display: none !important;
+  }
+  .mobile-pricing-cards-stack {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    margin: 16px 0 24px 0 !important;
+  }
+
+  /* Full-width touch buttons on mobile */
+  .mobile-full-width-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Touch active press state */
+  a:active, button:active {
+    opacity: 0.88;
+  }
+}
+
+
+
 

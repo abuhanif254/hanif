@@ -15,6 +15,7 @@ export default function BadgesBar() {
   return (
     <div
       id="badges"
+      className="badges-bar-container scrollbar-none"
       style={{
         display: "flex",
         alignItems: "center",

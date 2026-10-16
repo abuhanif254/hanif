@@ -4,6 +4,7 @@ import "./globals.css";
 import CookieBanner from "./components/cookie-banner";
 import CertificateViewer from "./components/certificate-viewer";
 import CommandPalette from "./components/command-palette";
+import MobileBottomDock from "./components/mobile-bottom-dock";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanif.dev";
 
@@ -162,6 +163,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <CookieBanner />
         <CertificateViewer />
         <CommandPalette />
+        <MobileBottomDock />
       </body>
     </html>
   );

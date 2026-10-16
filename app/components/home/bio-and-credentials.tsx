@@ -13,7 +13,8 @@ export default function BioAndCredentials() {
 
   return (
     <>
-      <div style={{ position: "relative", float: "right", margin: "0 0 20px 24px" }}>
+      {/* Desktop Profile Pic Float */}
+      <div className="profilepic-wrap-desktop" style={{ position: "relative", float: "right", margin: "0 0 20px 24px" }}>
         <Image
           src="/images/profile.png"
           alt="MD Abu Hanif Mia - Staff Software Engineer"
@@ -34,7 +35,96 @@ export default function BioAndCredentials() {
         />
       </div>
 
-      <h1 id="about" style={{ marginTop: 0 }}>
+      {/* Facebook-Style Native Mobile Profile Card (Visible on <= 768px only) */}
+      <div className="mobile-profile-card">
+        <div style={{ position: "relative", width: "96px", height: "96px", marginBottom: "12px" }}>
+          <Image
+            src="/images/profile.png"
+            alt="MD Abu Hanif Mia"
+            width={96}
+            height={96}
+            style={{
+              width: "100%",
+              height: "100%",
+              borderRadius: "50%",
+              objectFit: "cover",
+              border: "3px solid #9CBE41",
+              boxShadow: "0 4px 12px rgba(5,48,86,0.25)",
+            }}
+          />
+          <span
+            style={{
+              position: "absolute",
+              bottom: "2px",
+              right: "2px",
+              backgroundColor: "#9CBE41",
+              color: "#053056",
+              borderRadius: "50%",
+              width: "22px",
+              height: "22px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "12px",
+              fontWeight: "900",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
+            }}
+          >
+            ✓
+          </span>
+        </div>
+        <h2 style={{ fontSize: "20px", margin: "0 0 4px 0", color: "#053056", fontWeight: "800" }}>
+          MD Abu Hanif Mia (Abu Hanif)
+        </h2>
+        <span style={{ fontSize: "12px", fontWeight: "700", color: "#053056", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>
+          Staff Software Engineer &amp; Systems Architect
+        </span>
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "6px", marginBottom: "12px" }}>
+          <span style={{ fontSize: "11px", fontWeight: "700", background: "#ecfdf5", color: "#166534", border: "1px solid #a7f3d0", padding: "3px 8px", borderRadius: "12px" }}>
+            ● Available for Contracts
+          </span>
+          <span style={{ fontSize: "11px", fontWeight: "700", background: "#f1f5f9", color: "#053056", border: "1px solid #cbd5e1", padding: "3px 8px", borderRadius: "12px" }}>
+            Batch-12 • ID: WEB12-3991
+          </span>
+        </div>
+        <div style={{ display: "flex", width: "100%", gap: "8px" }}>
+          <a
+            href="#contactform"
+            style={{
+              flex: 1,
+              padding: "10px",
+              backgroundColor: "#053056",
+              color: "#ffffff",
+              borderRadius: "4px",
+              fontWeight: "700",
+              fontSize: "12px",
+              textDecoration: "none",
+              textAlign: "center",
+            }}
+          >
+            Discuss Project &rsaquo;
+          </a>
+          <button
+            type="button"
+            onClick={handleOpenCertificate}
+            style={{
+              flex: 1,
+              padding: "10px",
+              backgroundColor: "#9CBE41",
+              color: "#053056",
+              border: "none",
+              borderRadius: "4px",
+              fontWeight: "800",
+              fontSize: "12px",
+              cursor: "pointer",
+            }}
+          >
+            Inspect Certificate ↗
+          </button>
+        </div>
+      </div>
+
+      <h1 id="about" className="heading-about-desktop" style={{ marginTop: 0 }}>
         MD Abu Hanif Mia (Abu Hanif)
       </h1>
       <strong className="heading4" style={{ color: "#053056", marginTop: 0, display: "block" }}>

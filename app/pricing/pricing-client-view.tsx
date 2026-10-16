@@ -443,9 +443,10 @@ export default function PricingClientView() {
                           </div>
                           <button
                             type="button"
+                            className="mobile-full-width-btn"
                             onClick={() => handleSelectPackageForBooking(currentService)}
                             style={{
-                              padding: "10px 22px",
+                              padding: "12px 22px",
                               backgroundColor: "#9CBE41",
                               color: "#053056",
                               border: "none",
@@ -475,8 +476,8 @@ export default function PricingClientView() {
                         A detailed breakdown of technical deliverables, guarantees, and collaboration channels across service tiers:
                       </p>
 
-                      <div style={{ overflowX: "auto", marginBottom: "40px" }}>
-                        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "12px", border: "1px solid #cbd5e1" }}>
+                      <div className="table-responsive-container" style={{ overflowX: "auto", marginBottom: "40px" }}>
+                        <table style={{ width: "100%", minWidth: "640px", borderCollapse: "collapse", fontSize: "12px", border: "1px solid #cbd5e1" }}>
                           <thead>
                             <tr style={{ backgroundColor: "#053056", color: "#ffffff" }}>
                               <th style={{ padding: "12px 14px", textAlign: "left", width: "28%" }}>Scope &amp; Engineering Feature</th>

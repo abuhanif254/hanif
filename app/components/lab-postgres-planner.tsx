@@ -206,7 +206,7 @@ export default function LabPostgresPlanner() {
           <span style={{ fontSize: "12.5px", fontWeight: "bold", color: "#053056", minWidth: "120px" }}>
             Database Scale:
           </span>
-          <div style={{ display: "flex", gap: "6px" }}>
+          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
             {(
               [
                 { id: "100k", label: "100,000 Rows" },
@@ -219,14 +219,17 @@ export default function LabPostgresPlanner() {
                 type="button"
                 onClick={() => setScale(s.id)}
                 style={{
-                  padding: "5px 12px",
+                  padding: "8px 14px",
+                  minHeight: "38px",
                   fontSize: "12px",
                   fontWeight: "700",
-                  borderRadius: "3px",
+                  borderRadius: "4px",
                   cursor: "pointer",
                   backgroundColor: scale === s.id ? "#053056" : "#ffffff",
                   color: scale === s.id ? "#ffffff" : "#475569",
                   border: "1px solid " + (scale === s.id ? "#053056" : "#cbd5e1"),
+                  display: "inline-flex",
+                  alignItems: "center",
                 }}
               >
                 {s.label}
@@ -254,14 +257,17 @@ export default function LabPostgresPlanner() {
                 type="button"
                 onClick={() => setStrategy(st.id)}
                 style={{
-                  padding: "5px 12px",
+                  padding: "8px 14px",
+                  minHeight: "38px",
                   fontSize: "12px",
                   fontWeight: "700",
-                  borderRadius: "3px",
+                  borderRadius: "4px",
                   cursor: "pointer",
                   backgroundColor: strategy === st.id ? "#9CBE41" : "#ffffff",
                   color: strategy === st.id ? "#041f36" : "#475569",
                   border: "1px solid " + (strategy === st.id ? "#9CBE41" : "#cbd5e1"),
+                  display: "inline-flex",
+                  alignItems: "center",
                 }}
               >
                 {st.label}

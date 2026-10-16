@@ -81,16 +81,19 @@ export default function BlogClientView() {
 
                       {/* Category Filter Pills Strip */}
                       <div
+                        className="scrollbar-none"
                         style={{
                           display: "flex",
                           gap: "8px",
-                          flexWrap: "wrap",
+                          overflowX: "auto",
+                          flexWrap: "nowrap",
                           margin: "20px 0 16px 0",
                           paddingBottom: "12px",
                           borderBottom: "1px solid #e2e8f0",
+                          WebkitOverflowScrolling: "touch",
                         }}
                       >
-                        <span style={{ fontSize: "12px", fontWeight: "bold", color: "#053056", alignSelf: "center", marginRight: "4px" }}>
+                        <span style={{ fontSize: "12px", fontWeight: "bold", color: "#053056", alignSelf: "center", marginRight: "4px", flexShrink: 0 }}>
                           Filter by Domain:
                         </span>
                         {categories.map((cat) => {
@@ -103,12 +106,16 @@ export default function BlogClientView() {
                               style={{
                                 fontSize: "12px",
                                 fontWeight: "600",
-                                padding: "4px 10px",
+                                padding: "6px 12px",
+                                minHeight: "36px",
                                 border: isActive ? "1px solid #053056" : "1px solid #cbd5e1",
                                 backgroundColor: isActive ? "#053056" : "#ffffff",
                                 color: isActive ? "#ffffff" : "#475569",
-                                borderRadius: "3px",
+                                borderRadius: "4px",
                                 cursor: "pointer",
+                                flexShrink: 0,
+                                display: "inline-flex",
+                                alignItems: "center",
                               }}
                             >
                               {cat}
@@ -202,14 +209,19 @@ export default function BlogClientView() {
                             </div>
                             <Link
                               href={`/blog/${featuredPost.slug}`}
+                              className="mobile-full-width-btn"
                               style={{
-                                padding: "8px 16px",
+                                padding: "10px 18px",
+                                minHeight: "44px",
                                 backgroundColor: "#9CBE41",
                                 color: "#053056",
                                 textDecoration: "none",
                                 fontWeight: "800",
-                                fontSize: "12px",
+                                fontSize: "12.5px",
                                 borderRadius: "4px",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                justifyContent: "center",
                               }}
                             >
                               Read Full Architecture Breakdown &rsaquo;

@@ -65,7 +65,7 @@ export default function CommandPalette() {
         display: "flex",
         alignItems: "flex-start",
         justifyContent: "center",
-        padding: "80px 16px 20px 16px",
+        padding: "min(80px, 8vh) 16px 20px 16px",
       }}
       onClick={(e) => {
         if (e.target === e.currentTarget) setOpen(false);

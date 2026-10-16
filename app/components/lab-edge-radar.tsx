@@ -81,19 +81,22 @@ export default function LabEdgeRadar() {
 
         <button
           type="button"
+          className="mobile-full-width-btn"
           onClick={runClientPing}
           disabled={testing}
           style={{
-            padding: "8px 16px",
+            padding: "10px 18px",
+            minHeight: "44px",
             backgroundColor: testing ? "#64748b" : "#053056",
             color: "#ffffff",
             border: "none",
             borderRadius: "4px",
             fontWeight: "700",
-            fontSize: "12.5px",
+            fontSize: "13px",
             cursor: testing ? "not-allowed" : "pointer",
             display: "inline-flex",
             alignItems: "center",
+            justifyContent: "center",
             gap: "8px",
           }}
         >

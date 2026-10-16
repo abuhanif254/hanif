@@ -85,12 +85,20 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
       setIsVisible(true);
     }
 
+    // Mobile dock menu toggle listener
+    function onToggleMobileMenu() {
+      setMobileMenuOpen((prev) => !prev);
+      setIsVisible(true);
+    }
+
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("open-command-palette", onOpenPalette);
+    window.addEventListener("toggle-mobile-menu", onToggleMobileMenu);
 
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("open-command-palette", onOpenPalette);
+      window.removeEventListener("toggle-mobile-menu", onToggleMobileMenu);
     };
   }, []);
 
@@ -262,42 +270,165 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
             </ul>
           </div>
 
-          {/* Mobile Drawer Navigation (when open) */}
+          {/* Mobile Drawer Navigation (Native App Style) */}
           {mobileMenuOpen && (
             <div
               className="mobile-nav-drawer"
               style={{
-                background: "#05223c",
+                background: "#041f36",
                 borderTop: "2px solid #9CBE41",
-                padding: "12px 16px",
+                padding: "16px",
                 display: "flex",
                 flexDirection: "column",
-                gap: "8px",
+                gap: "10px",
+                maxHeight: "82vh",
+                overflowY: "auto",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
               }}
             >
-              {navLinks.map((link) => {
-                const selected = isSelected(link.key);
-                return (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    onClick={() => setMobileMenuOpen(false)}
+              {/* Profile Card in Drawer */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  paddingBottom: "12px",
+                  borderBottom: "1px solid #0a365c",
+                }}
+              >
+                <div
+                  style={{
+                    position: "relative",
+                    width: "48px",
+                    height: "48px",
+                    borderRadius: "50%",
+                    overflow: "hidden",
+                    border: "2px solid #9CBE41",
+                    flexShrink: 0,
+                    background: "#053056",
+                  }}
+                >
+                  <img
+                    src="/images/profile.png"
+                    alt="Abu Hanif"
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                  <span
                     style={{
-                      color: selected ? "#9CBE41" : "#ffffff",
-                      fontWeight: selected ? "bold" : "normal",
-                      padding: "8px 12px",
-                      borderRadius: "4px",
-                      background: selected
-                        ? "rgba(156, 190, 65, 0.15)"
-                        : "transparent",
-                      textDecoration: "none",
-                      fontSize: "15px",
+                      position: "absolute",
+                      bottom: 0,
+                      right: 0,
+                      background: "#9CBE41",
+                      color: "#041f36",
+                      fontSize: "8px",
+                      fontWeight: 900,
+                      padding: "1px 3px",
+                      borderRadius: "50%",
                     }}
                   >
-                    {link.label}
-                  </Link>
-                );
-              })}
+                    ✓
+                  </span>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <strong style={{ fontSize: "14px", color: "#ffffff", lineHeight: 1.2 }}>
+                    MD Abu Hanif Mia
+                  </strong>
+                  <span style={{ fontSize: "11px", color: "#9CBE41", fontWeight: 700 }}>
+                    Staff Software Engineer
+                  </span>
+                  <span style={{ fontSize: "10px", color: "#94a3b8" }}>
+                    Programming Hero Batch-12 • WEB12-3991
+                  </span>
+                </div>
+              </div>
+
+              {/* Navigation Links Grid with 48px touch targets */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                {navLinks.map((link) => {
+                  const selected = isSelected(link.key);
+                  return (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      style={{
+                        color: selected ? "#9CBE41" : "#ffffff",
+                        fontWeight: selected ? "800" : "600",
+                        padding: "12px 14px",
+                        borderRadius: "6px",
+                        background: selected
+                          ? "rgba(156, 190, 65, 0.18)"
+                          : "rgba(255, 255, 255, 0.03)",
+                        border: selected ? "1px solid #9CBE41" : "1px solid transparent",
+                        textDecoration: "none",
+                        fontSize: "14px",
+                        minHeight: "44px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span>{link.label}</span>
+                      <span style={{ color: selected ? "#9CBE41" : "#64748b", fontSize: "12px" }}>
+                        &rsaquo;
+                      </span>
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {/* Drawer Quick Actions */}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "8px",
+                  paddingTop: "12px",
+                  borderTop: "1px solid #0a365c",
+                }}
+              >
+                <Link
+                  href="/pricing#inquiry"
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{
+                    display: "block",
+                    padding: "12px",
+                    background: "#9CBE41",
+                    color: "#053056",
+                    fontWeight: 800,
+                    fontSize: "13px",
+                    borderRadius: "4px",
+                    textAlign: "center",
+                    textDecoration: "none",
+                  }}
+                >
+                  Request Project Consultation &rsaquo;
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    if (typeof window !== "undefined") {
+                      window.dispatchEvent(new CustomEvent("open-command-palette"));
+                    }
+                  }}
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    padding: "10px",
+                    background: "#072b4c",
+                    color: "#e2e8f0",
+                    border: "1px solid #0e4475",
+                    fontWeight: 700,
+                    fontSize: "12px",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    textAlign: "center",
+                  }}
+                >
+                  🔍 Open Quick Search Palette (Ctrl+K)
+                </button>
+              </div>
             </div>
           )}
         </div>

@@ -303,12 +303,14 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
             </span>
           </div>
 
-          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", width: "100%", maxWidth: "420px" }}>
             <button
               type="button"
+              className="mobile-full-width-btn"
               onClick={handleCopySow}
               style={{
-                padding: "10px 16px",
+                flex: "1 1 180px",
+                padding: "12px 16px",
                 backgroundColor: "#042442",
                 color: copied ? "#4ade80" : "#ffffff",
                 border: "1px solid #0a365c",
@@ -316,6 +318,7 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
                 fontWeight: "700",
                 fontSize: "13px",
                 cursor: "pointer",
+                textAlign: "center",
               }}
             >
               {copied ? "✓ Copied SOW Markdown!" : "📋 Copy SOW Proposal"}
@@ -323,9 +326,11 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
 
             <button
               type="button"
+              className="mobile-full-width-btn"
               onClick={handlePrefillInquiry}
               style={{
-                padding: "10px 18px",
+                flex: "1 1 180px",
+                padding: "12px 18px",
                 backgroundColor: "#9CBE41",
                 color: "#041f36",
                 border: "none",
@@ -333,6 +338,7 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
                 fontWeight: "800",
                 fontSize: "13px",
                 cursor: "pointer",
+                textAlign: "center",
               }}
             >
               Lock In This Scope &rsaquo;

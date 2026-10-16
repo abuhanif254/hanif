@@ -496,10 +496,11 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
 
                       {/* Projects Render: SLA Metrics Matrix View */}
                       {viewMode === "matrix" && (
-                        <div style={{ overflowX: "auto", marginBottom: "24px" }}>
+                        <div className="table-responsive-container" style={{ overflowX: "auto", marginBottom: "24px" }}>
                           <table
                             style={{
                               width: "100%",
+                              minWidth: "680px",
                               borderCollapse: "collapse",
                               fontSize: "13px",
                               backgroundColor: "#ffffff",
