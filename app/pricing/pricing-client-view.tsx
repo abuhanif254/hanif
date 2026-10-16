@@ -6,6 +6,7 @@ import { initialServices, ServicePricing } from "../data/portfolio-data";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
 import SiteFooter from "../components/site-footer";
 import SiteHeader from "../components/site-header";
+import StatementOfWorkGenerator from "../components/sow-generator";
 
 export default function PricingClientView() {
   const [services] = useState<ServicePricing[]>(initialServices);
@@ -457,6 +458,11 @@ export default function PricingClientView() {
                             Lock In This Estimate &amp; Inquire Below &rsaquo;
                           </button>
                         </div>
+                      </div>
+
+                      {/* SECTION 2.5: STATEMENT OF WORK (SOW) BUILDER & EXPORTER */}
+                      <div style={{ marginBottom: "40px" }}>
+                        <StatementOfWorkGenerator />
                       </div>
 
                       {/* SECTION 3: COMPREHENSIVE SCOPE COMPARISON MATRIX */}

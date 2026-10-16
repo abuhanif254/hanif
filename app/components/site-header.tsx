@@ -16,6 +16,7 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
     { label: "Engineering Focus", href: "/#competencies", key: "/#competencies" },
     { label: "Work Showcase", href: "/projects", key: "/projects" },
     { label: "Work Prices", href: "/pricing", key: "/pricing" },
+    { label: "Systems Lab", href: "/lab", key: "/lab" },
     { label: "Technical Blog", href: "/blog", key: "/blog" },
     { label: "Resume / CV", href: "/resume", key: "/resume" },
     { label: "Admin Panel", href: "/admin", key: "/admin" },
@@ -33,12 +34,41 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
       {/* Sticky Top Bar */}
       <div className="top-numbers-v3 tnv3-sticky" id="top-numbers-v3">
         <ul>
-          <li>
-            Available for High-Impact Contracts &amp; Consulting:{" "}
-            <strong>contact@abuhanif.dev</strong>
-            <Link className="tnv3-button" href="/pricing#inquiry">
-              Request Project Quote
-            </Link>
+          <li style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}>
+            <span>
+              Available for High-Impact Contracts &amp; Consulting:{" "}
+              <strong>contact@abuhanif.dev</strong>
+            </span>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <button
+                type="button"
+                onClick={() => {
+                  if (typeof window !== "undefined") {
+                    window.dispatchEvent(new CustomEvent("open-command-palette"));
+                  }
+                }}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  background: "#042442",
+                  color: "#e2e8f0",
+                  border: "1px solid #0e4475",
+                  padding: "4px 10px",
+                  borderRadius: "3px",
+                  fontSize: "12px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
+                title="Press Ctrl+K or Cmd+K to open global search palette"
+              >
+                <span>🔍 Quick Search</span>
+                <kbd style={{ fontSize: "10px", backgroundColor: "#021627", padding: "1px 5px", borderRadius: "2px", border: "1px solid #0e4475", color: "#9CBE41" }}>Ctrl+K</kbd>
+              </button>
+              <Link className="tnv3-button" href="/pricing#inquiry">
+                Request Project Quote
+              </Link>
+            </div>
           </li>
         </ul>
       </div>

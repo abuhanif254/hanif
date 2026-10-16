@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import "./globals.css";
 import CookieBanner from "./components/cookie-banner";
 import CertificateViewer from "./components/certificate-viewer";
+import CommandPalette from "./components/command-palette";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanif.dev";
 
@@ -60,6 +61,13 @@ export const metadata: Metadata = {
   alternates: {
     canonical: siteUrl,
   },
+  manifest: "/manifest.json",
+};
+
+export const viewport = {
+  themeColor: "#053056",
+  width: "device-width",
+  initialScale: 1,
 };
 
 const jsonLd = {
@@ -153,6 +161,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {children}
         <CookieBanner />
         <CertificateViewer />
+        <CommandPalette />
       </body>
     </html>
   );

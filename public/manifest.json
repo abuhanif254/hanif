@@ -1,0 +1,24 @@
+{
+  "name": "Abu Hanif (MD Abu Hanif Mia) | Staff Software Engineer",
+  "short_name": "Abu Hanif",
+  "description": "Portfolio of Staff Software Engineer Abu Hanif specializing in distributed systems, PostgreSQL query tuning, Cloudflare edge compute, and Next.js 16.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#053056",
+  "theme_color": "#053056",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/abuhanif-logo-v3.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/profile.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

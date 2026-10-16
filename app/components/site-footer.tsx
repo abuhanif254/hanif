@@ -271,6 +271,9 @@ export default function SiteFooter() {
               <Link href="/pricing">Services &amp; Pricing</Link>
             </li>
             <li>
+              <Link href="/lab">Systems Lab</Link>
+            </li>
+            <li>
               <Link href="/blog">Technical Blog</Link>
             </li>
             <li>
