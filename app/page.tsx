@@ -105,39 +105,43 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebSite) }}
       />
 
-      <div id="container" className="index">
-        <div className="cwrap">
+      <div id="source-page-root" data-source-path="/">
+        <div id="index" className="source-page-body js justia-robertjfleming-com">
           <SiteHeader activePath="/" />
 
-          <div id="main">
-            <div className="mwrap">
-              <HeroBanner />
-              <div className="tcfrags"></div>
+          <div id="container" className="index">
+            <div className="cwrap">
+              <div id="main">
+                <div className="mwrap">
+                  <HeroBanner />
+                  <div className="tcfrags"></div>
 
-              <div id="content">
-                <div id="breadcrumbs">
-                  <div className="wrapper"></div>
-                </div>
+                  <div id="content">
+                    <div id="breadcrumbs">
+                      <div className="wrapper"></div>
+                    </div>
 
-                <div className="bodytext">
-                  <div className="description">
-                    <BadgesBar />
-                    <BioAndCredentials />
-                    <WorkShowcaseSection />
+                    <div className="bodytext">
+                      <div className="description">
+                        <BadgesBar />
+                        <BioAndCredentials />
+                        <WorkShowcaseSection />
+                      </div>
+                    </div>
+
+                    <div className="sidebar primary-sidebar"></div>
+                    <TechnicalBlogFeed />
                   </div>
-                </div>
 
-                <div className="sidebar primary-sidebar"></div>
-                <TechnicalBlogFeed />
+                  <HomeSidebar />
+                </div>
+                <div className="stpr"></div>
               </div>
 
-              <HomeSidebar />
+              <BottomContactStripe />
+              <SiteFooter />
             </div>
-            <div className="stpr"></div>
           </div>
-
-          <BottomContactStripe />
-          <SiteFooter />
         </div>
       </div>
     </>

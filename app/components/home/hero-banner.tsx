@@ -1,17 +1,48 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
+const slides = [
+  "99.99% Production Uptime for 10M+ Daily Users",
+  "Sub-25ms Global P99 Latency at the Edge",
+  "Reduced Cloud Infrastructure Costs by 64%",
+  "Zero Security Incidents Across 3.5M Identities",
+  "10x PostgreSQL Query Throughput via Index Optimization",
+];
+
 export default function HeroBanner() {
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % slides.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="imgwrap">
       <div id="img1">
         <div className="text-wrapper">
           <div id="banner-tagline">Clean Architecture • High Performance • Scalable Systems</div>
           <div id="slideshow">
-            <div className="slide slide1">99.99% Production Uptime for 10M+ Daily Users</div>
-            <div className="slide slide2">Sub-25ms Global P99 Latency at the Edge</div>
-            <div className="slide slide3">Reduced Cloud Infrastructure Costs by 64%</div>
-            <div className="slide slide4">Zero Security Incidents Across 3.5M Identities</div>
-            <div className="slide slide5">10x PostgreSQL Query Throughput via Index Optimization</div>
+            {slides.map((text, idx) => (
+              <div
+                key={idx}
+                className={`slide slide${idx + 1}`}
+                style={{
+                  display: activeSlide === idx ? "block" : "none",
+                  fontWeight: "bold",
+                  fontSize: "20px",
+                  color: "#ffffff",
+                  textShadow: "0 1px 3px rgba(0,0,0,0.6)",
+                  marginTop: "10px",
+                }}
+              >
+                {text}
+              </div>
+            ))}
           </div>
         </div>
       </div>
