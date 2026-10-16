@@ -39,6 +39,15 @@ export const metadata: Metadata = {
     siteName: "Abu Hanif Engineering Portfolio",
     type: "website",
     locale: "en_US",
+    images: [
+      {
+        url: `${siteUrl}/images/og-card.png`,
+        width: 1200,
+        height: 630,
+        alt: "MD Abu Hanif Mia (Abu Hanif) - Staff Software Engineer & Systems Architect",
+        type: "image/png",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -46,6 +55,7 @@ export const metadata: Metadata = {
     description:
       "Scalable Systems • Distributed Architecture • High-Performance Web Applications. View portfolio work showcase, transparent pricing, and technical blog.",
     creator: "@abuhanif",
+    images: [`${siteUrl}/images/og-card.png`],
   },
   alternates: {
     canonical: siteUrl,
@@ -54,35 +64,79 @@ export const metadata: Metadata = {
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  name: "MD Abu Hanif Mia",
-  alternateName: "Abu Hanif",
-  jobTitle: "Staff Software Engineer & Systems Architect",
-  description:
-    "Staff Software Engineer and Systems Architect with 9+ years experience designing high-throughput distributed applications, edge networks, and developer platforms.",
-  url: siteUrl,
-  email: "contact@abuhanif.dev",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Dhaka",
-    addressCountry: "Bangladesh",
-  },
-  knowsAbout: [
-    "Distributed Systems",
-    "High-Throughput APIs",
-    "Next.js 16",
-    "React 19",
-    "PostgreSQL Optimization",
-    "Cloudflare Pages & Workers",
-    "Supabase",
-    "Go",
-    "TypeScript",
-    "AI & LLM RAG Systems",
-  ],
-  sameAs: [
-    "https://github.com",
-    "https://linkedin.com",
-    "https://x.com",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: "Abu Hanif Engineering Portfolio",
+      description: "Portfolio and technical architecture publications of Staff Software Engineer MD Abu Hanif Mia.",
+      publisher: { "@id": `${siteUrl}/#person` },
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#person`,
+      name: "MD Abu Hanif Mia",
+      alternateName: ["Abu Hanif", "md abu hanif mia"],
+      jobTitle: "Staff Software Engineer & Systems Architect",
+      description:
+        "Staff Software Engineer and Systems Architect with 9+ years experience designing high-throughput distributed applications, edge networks, and developer platforms.",
+      url: siteUrl,
+      email: "contact@abuhanif.dev",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Dhaka",
+        addressCountry: "Bangladesh",
+      },
+      alumniOf: {
+        "@type": "EducationalOrganization",
+        name: "Bachelor of Science in Computer Science & Engineering (B.Sc. in CSE)",
+      },
+      hasCredential: [
+        {
+          "@type": "EducationalOccupationalCredential",
+          name: "Complete Web Development Course with Excellence",
+          credentialCategory: "Certificate of Completion with Excellence",
+          recognizedBy: {
+            "@type": "Organization",
+            name: "Programming Hero",
+            url: "https://programming-hero.com",
+          },
+          identifier: "WEB12-3991",
+          description: "Batch-12 honor distinction certified by CEO Jhankar Mahbub.",
+        },
+        {
+          "@type": "EducationalOccupationalCredential",
+          name: "freeCodeCamp Verified Accreditations (JavaScript, TypeScript, Python)",
+          credentialCategory: "Developer Certification",
+          recognizedBy: {
+            "@type": "Organization",
+            name: "freeCodeCamp",
+            url: "https://www.freecodecamp.org",
+          },
+        },
+      ],
+      knowsAbout: [
+        "Distributed Systems",
+        "High-Throughput APIs",
+        "Rust Systems Architecture",
+        "Tokio Concurrency",
+        "Next.js 16",
+        "React 19",
+        "PostgreSQL 16 Optimization",
+        "Cloudflare Pages & Workers",
+        "Supabase",
+        "Go (Golang)",
+        "TypeScript",
+        "Python",
+        "AI & LLM RAG Systems",
+      ],
+      sameAs: [
+        "https://github.com",
+        "https://linkedin.com",
+        "https://x.com",
+      ],
+    },
   ],
 };
 

@@ -26,6 +26,18 @@ export async function generateMetadata({ params }: SourceRouteProps): Promise<Me
   return {
     title: page.title,
     description: page.description,
+    robots: {
+      index: false,
+      follow: true,
+      nocache: true,
+      googleBot: {
+        index: false,
+        follow: true,
+      },
+    },
+    alternates: {
+      canonical: "https://abuhanif.dev",
+    },
     openGraph: {
       title: page.title,
       description: page.description,

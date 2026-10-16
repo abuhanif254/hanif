@@ -16,6 +16,8 @@ export async function generateStaticParams() {
   }));
 }
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanif.dev";
+
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await getBlogPostBySlug(slug);
@@ -27,11 +29,30 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   return {
     title: `${post.title} | Abu Hanif (MD Abu Hanif Mia)`,
     description: post.excerpt,
+    keywords: [
+      post.title,
+      ...post.tags,
+      "Software Architecture",
+      "Staff Software Engineer",
+      "Abu Hanif",
+      "MD Abu Hanif Mia",
+    ],
+    alternates: {
+      canonical: `${siteUrl}/blog/${post.slug}`,
+    },
     openGraph: {
       title: post.title,
       description: post.excerpt,
       type: "article",
+      url: `${siteUrl}/blog/${post.slug}`,
       publishedTime: post.publishedAt,
+      tags: post.tags,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      creator: "@abuhanif",
     },
   };
 }
@@ -240,8 +261,64 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     return elements;
   }
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: post.title,
+    description: post.excerpt,
+    url: `${siteUrl}/blog/${post.slug}`,
+    datePublished: post.publishedAt,
+    dateModified: post.publishedAt,
+    author: {
+      "@type": "Person",
+      name: "MD Abu Hanif Mia",
+      url: siteUrl,
+      jobTitle: "Staff Software Engineer & Systems Architect",
+    },
+    publisher: {
+      "@type": "Person",
+      name: "MD Abu Hanif Mia",
+      url: siteUrl,
+    },
+    keywords: post.tags.join(", "),
+    articleSection: post.tags[0] || "Software Engineering",
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Technical Blog",
+        item: `${siteUrl}/blog`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: post.title,
+        item: `${siteUrl}/blog/${post.slug}`,
+      },
+    ],
+  };
+
   return (
     <div id="source-page-root" data-source-path={`/blog/${post.slug}`}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <div id="source-page-body" className="source-page-body js l2 section_83 justia-robertjfleming-com">
         <SiteHeader activePath="/blog" />
 

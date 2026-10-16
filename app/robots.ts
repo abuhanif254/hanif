@@ -6,11 +6,18 @@ const siteOrigin =
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-      disallow: ["/admin"],
-    },
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/admin"],
+      },
+      {
+        userAgent: ["Googlebot", "Bingbot", "Applebot", "Twitterbot", "LinkedInBot"],
+        allow: "/",
+        disallow: ["/admin"],
+      },
+    ],
     sitemap: `${siteOrigin}/sitemap.xml`,
     host: siteOrigin,
   };

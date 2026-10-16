@@ -16,6 +16,8 @@ export async function generateStaticParams() {
   }));
 }
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanif.dev";
+
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params;
   const project = await getProjectBySlug(slug);
@@ -27,10 +29,28 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   return {
     title: `${project.title} | Abu Hanif (MD Abu Hanif Mia) Case Studies`,
     description: project.summary,
+    keywords: [
+      project.title,
+      ...project.techStack,
+      "Software Engineering Case Study",
+      "Systems Architecture",
+      "Abu Hanif",
+      "MD Abu Hanif Mia",
+    ],
+    alternates: {
+      canonical: `${siteUrl}/projects/${project.slug}`,
+    },
     openGraph: {
       title: project.title,
       description: project.summary,
+      url: `${siteUrl}/projects/${project.slug}`,
       type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: project.title,
+      description: project.summary,
+      creator: "@abuhanif",
     },
   };
 }
@@ -43,8 +63,56 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
     notFound();
   }
 
+  const projectSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: project.title,
+    description: project.summary,
+    applicationCategory: "DeveloperApplication",
+    operatingSystem: "Cloud / Edge",
+    author: {
+      "@type": "Person",
+      name: "MD Abu Hanif Mia",
+      url: siteUrl,
+      jobTitle: "Staff Software Engineer & Systems Architect",
+    },
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Projects",
+        item: `${siteUrl}/projects`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: project.title,
+        item: `${siteUrl}/projects/${project.slug}`,
+      },
+    ],
+  };
+
   return (
     <div id="source-page-root" data-source-path={`/projects/${project.slug}`}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <div id="source-page-body" className="source-page-body js l2 section_10 justia-robertjfleming-com">
         <SiteHeader activePath="/projects" />
 
