@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import "./globals.css";
 import CookieBanner from "./components/cookie-banner";
+import CertificateViewer from "./components/certificate-viewer";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanif.dev";
 
@@ -97,6 +98,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="min-h-screen antialiased">
         {children}
         <CookieBanner />
+        <CertificateViewer />
       </body>
     </html>
   );

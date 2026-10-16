@@ -25,7 +25,7 @@ EXECUTIVE SUMMARY
 Senior Full-Stack Software Engineer & Systems Architect with 9+ years of production experience architecting high-concurrency distributed systems, edge-computed web applications, and database infrastructure. Battle-tested track record maintaining 99.99% production uptime for 10M+ daily users, cutting global P99 latency below 25ms, and reducing cloud infrastructure costs by up to 64%.
 
 CORE TECHNICAL SKILLS
-- Languages: TypeScript, Go, JavaScript, Python, SQL (PostgreSQL), HTML5, CSS3
+- Languages: Rust (Tokio, Axum, Wasm), Go (Golang), TypeScript, JavaScript (ESNext), Python, SQL (PostgreSQL), HTML5, CSS3
 - Frameworks & Edge: Next.js 16 (App Router, Server Components), React 19, Cloudflare Pages & Workers, Node.js, FastAPI, Tailwind CSS
 - Data & Storage: PostgreSQL, Supabase, TimescaleDB, Redis Cluster, pgvector (AI RAG), Prisma
 - Infrastructure & Cloud: Cloudflare Edge (330+ Cities), AWS (ECS, Lambda, S3), Docker, Terraform, GitHub Actions CI/CD
@@ -48,7 +48,7 @@ Lead Full-Stack Engineer | Distributed Systems & Web Platforms
 
 Senior Software Engineer | Backend & Cloud Infrastructure
 2016 – 2019
-- Developed RESTful APIs, asynchronous job queues, and caching layers with Go and Redis.
+- Developed RESTful APIs, asynchronous job queues, and caching layers with Go, Rust, and Redis.
 - Optimized relational database schemas and automated migration rollbacks for high-availability production clusters.
 - Mentored junior and mid-level software engineers on clean architecture patterns, code reviews, and observability.
 
@@ -58,9 +58,11 @@ SELECTED SHIPPED PRODUCTION ARCHITECTURES
 3. Enterprise AI Document Search & RAG Pipeline (FastAPI, pgvector, Next.js, Hybrid Search) - 500k+ docs, 82% search speedup.
 4. High-Concurrency PostgreSQL Optimization & RLS Hardening - 10x throughput, sub-5ms query latency.
 
-EDUCATION & CERTIFICATIONS
-- Bachelor of Science in Computer Science & Engineering (B.Sc. in CSE)
-- Certified Cloud & Distributed Systems Practitioner
+EDUCATION & ACCREDITATIONS
+- Bachelor of Science in Computer Science & Engineering (B.Sc. in CSE) - 4-Year Formal Engineering Degree
+- Programming Hero: Complete Web Development Course with Excellence (Batch-12 • Credential ID: WEB12-3991 • Issued by Jhankar Mahbub)
+- freeCodeCamp: Verified Full-Stack Accreditations (JavaScript Algorithms & Data Structures, TypeScript Production Engineering, Scientific Computing with Python)
+- Rust Systems Specialization: Concurrency, Zero-Cost Abstractions, Tokio Async Runtime, and WebAssembly Edge Compilation
     `.trim();
 
     if (navigator.clipboard) {
@@ -212,7 +214,7 @@ EDUCATION & CERTIFICATIONS
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", fontSize: "13px" }}>
                           <div style={{ background: "#f8fafc", padding: "10px 14px", border: "1px solid #e2e8f0", borderRadius: "3px" }}>
                             <strong style={{ color: "#053056", display: "block", marginBottom: "4px" }}>Core Languages &amp; Runtimes</strong>
-                            TypeScript, JavaScript (ESNext), Go (Golang), Python, SQL (PostgreSQL/TimescaleDB), HTML5, CSS3
+                            Rust (Tokio, Axum, Wasm), Go (Golang), TypeScript, JavaScript (ESNext), Python, SQL (PostgreSQL/TimescaleDB), HTML5, CSS3
                           </div>
                           <div style={{ background: "#f8fafc", padding: "10px 14px", border: "1px solid #e2e8f0", borderRadius: "3px" }}>
                             <strong style={{ color: "#053056", display: "block", marginBottom: "4px" }}>Frameworks &amp; Edge Delivery</strong>
@@ -347,22 +349,91 @@ EDUCATION & CERTIFICATIONS
                         </div>
                       </div>
 
-                      {/* Formal Education & Certifications */}
+                      {/* Formal Education & Verified Accreditations */}
                       <div>
-                        <h2 style={{ fontSize: "16px", textTransform: "uppercase", letterSpacing: "1px", color: "#053056", borderBottom: "1px solid #cbd5e1", paddingBottom: "4px", margin: "0 0 10px 0" }}>
-                          Education &amp; Credentials
+                        <h2 style={{ fontSize: "16px", textTransform: "uppercase", letterSpacing: "1px", color: "#053056", borderBottom: "1px solid #cbd5e1", paddingBottom: "4px", margin: "0 0 14px 0" }}>
+                          Education &amp; Verified Credentials
                         </h2>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", fontSize: "13.5px" }}>
-                          <div>
-                            <strong style={{ color: "#053056" }}>Bachelor of Science in Computer Science &amp; Engineering (B.Sc. in CSE)</strong>
+
+                        {/* Formal CSE Degree */}
+                        <div style={{ marginBottom: "16px" }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", fontSize: "13.5px" }}>
+                            <div>
+                              <strong style={{ color: "#053056", fontSize: "14px" }}>Bachelor of Science in Computer Science &amp; Engineering (B.Sc. in CSE)</strong>
+                            </div>
+                            <div style={{ color: "#334155", fontWeight: "bold" }}>
+                              4-Year Formal Engineering Degree
+                            </div>
                           </div>
-                          <div style={{ color: "#334155", fontWeight: "bold" }}>
-                            4-Year Formal Engineering Degree
+                          <p style={{ margin: "3px 0 0 0", fontSize: "13px", color: "#475569" }}>
+                            Academic Focus: Distributed Algorithms, Relational Database Internals, Operating Systems, Computer Networks &amp; High-Throughput Software Architecture.
+                          </p>
+                        </div>
+
+                        {/* Programming Hero Certificate Showcase */}
+                        <div style={{ marginBottom: "16px", background: "#f8fafc", border: "1px solid #e2e8f0", borderLeft: "4px solid #9CBE41", padding: "12px 14px", borderRadius: "3px" }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "10px" }}>
+                            <div style={{ flex: 1, minWidth: "260px" }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
+                                <span style={{ background: "#9CBE41", color: "#041f36", padding: "2px 6px", borderRadius: "2px", fontSize: "11px", fontWeight: "900", letterSpacing: "0.5px" }}>VERIFIED HONOR</span>
+                                <strong style={{ color: "#053056", fontSize: "14px" }}>Programming Hero — Complete Web Development with Excellence</strong>
+                              </div>
+                              <p style={{ margin: "2px 0 6px 0", fontSize: "13px", color: "#334155" }}>
+                                <strong>Batch-12 • Credential ID: WEB12-3991</strong> • Certified by CEO Jhankar Mahbub
+                              </p>
+                              <p style={{ margin: 0, fontSize: "12.5px", color: "#64748b", lineHeight: "1.5" }}>
+                                Intensive full-stack engineering track covering Modern JavaScript (ESNext), TypeScript, React 19 architecture, Node.js runtime, REST API design, MongoDB, and production deployment lifecycles.
+                              </p>
+                            </div>
+                            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                              <a
+                                href="#certificate-modal"
+                                data-certificate-trigger="programming-hero"
+                                style={{
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  gap: "6px",
+                                  background: "#053056",
+                                  color: "#ffffff",
+                                  padding: "7px 13px",
+                                  borderRadius: "3px",
+                                  fontSize: "12px",
+                                  fontWeight: "bold",
+                                  textDecoration: "none",
+                                  border: "1px solid #031c33",
+                                }}
+                              >
+                                📜 View Certificate Modal
+                              </a>
+                            </div>
                           </div>
                         </div>
-                        <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "#475569" }}>
-                          Specialization: Distributed Algorithms, Database Systems, Computer Networks &amp; Software Architecture.
-                        </p>
+
+                        {/* freeCodeCamp & Rust Systems Credentials */}
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", fontSize: "13px" }}>
+                          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderLeft: "4px solid #053056", padding: "10px 12px", borderRadius: "3px" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "4px" }}>
+                              <span style={{ background: "#053056", color: "#ffffff", padding: "1px 5px", borderRadius: "2px", fontSize: "10px", fontWeight: "bold" }}>fCC ACCREDITED</span>
+                              <strong style={{ color: "#053056" }}>freeCodeCamp Verified Accreditations</strong>
+                            </div>
+                            <p style={{ margin: "2px 0 0 0", color: "#475569", lineHeight: "1.5", fontSize: "12.5px" }}>
+                              • <strong>JavaScript Algorithms &amp; Data Structures</strong> (ES6+, Functional &amp; OOP)<br />
+                              • <strong>TypeScript Production Engineering</strong> (Strict Type Systems &amp; Generics)<br />
+                              • <strong>Scientific Computing with Python</strong> (Algorithms &amp; Numerical Pipelines)
+                            </p>
+                          </div>
+
+                          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderLeft: "4px solid #053056", padding: "10px 12px", borderRadius: "3px" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "4px" }}>
+                              <span style={{ background: "#053056", color: "#ffffff", padding: "1px 5px", borderRadius: "2px", fontSize: "10px", fontWeight: "bold" }}>SYSTEMS SPECIALIZATION</span>
+                              <strong style={{ color: "#053056" }}>Rust &amp; Go Concurrency</strong>
+                            </div>
+                            <p style={{ margin: "2px 0 0 0", color: "#475569", lineHeight: "1.5", fontSize: "12.5px" }}>
+                              • <strong>Rust Systems</strong>: Zero-cost abstractions, borrow checker memory safety, Tokio async event loops &amp; Axum.<br />
+                              • <strong>WebAssembly (Wasm)</strong>: Compiling high-throughput Rust routines for browser &amp; Cloudflare Workers execution.
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

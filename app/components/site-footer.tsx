@@ -64,11 +64,14 @@ export default function SiteFooter() {
               </div>
             </div>
             <div className="footer-ecosystem-badges">
-              <span className="eco-badge">Next.js 16</span>
+              <span className="eco-badge">Rust</span>
               <span className="eco-badge">Go</span>
+              <span className="eco-badge">TypeScript</span>
+              <span className="eco-badge">Python</span>
+              <span className="eco-badge">Next.js 16</span>
+              <span className="eco-badge">React 19</span>
               <span className="eco-badge">PostgreSQL</span>
               <span className="eco-badge">Cloudflare</span>
-              <span className="eco-badge">Supabase</span>
             </div>
           </div>
 

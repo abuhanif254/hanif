@@ -5,6 +5,7 @@ const engineeringSpecializations = [
   "Distributed Systems",
   "High-Throughput APIs",
   "Next.js & React 19 Apps",
+  "Rust & Wasm Edge Performance",
   "PostgreSQL Query Optimization",
   "Cloudflare Edge Deployments",
   "AI & LLM RAG Integrations",
@@ -17,6 +18,9 @@ const engineeringSpecializations = [
 ];
 
 const secondaryDomains = [
+  "Rust & Tokio Concurrency",
+  "Programming Hero Certified (Web-12)",
+  "freeCodeCamp (JS, TS, Python)",
   "Go Microservices",
   "Redis & Event Caching",
   "TimescaleDB Telemetry",
@@ -34,7 +38,7 @@ export default function Sidebar() {
           border: "1px solid #0a365c",
           borderRadius: "6px",
           padding: "16px",
-          marginBottom: "20px",
+          marginBottom: "14px",
           textAlign: "center",
           color: "#ffffff",
         }}
@@ -48,6 +52,49 @@ export default function Sidebar() {
         <p style={{ margin: 0, fontSize: "12px", color: "#cbd5e1" }}>
           50+ Production Deployments • Sub-50ms P99 Architecture
         </p>
+      </div>
+
+      {/* Verified Certificate Quick Card */}
+      <div
+        style={{
+          backgroundColor: "#f8fafc",
+          border: "1px solid #e2e8f0",
+          borderLeft: "4px solid #9CBE41",
+          borderRadius: "4px",
+          padding: "10px 12px",
+          marginBottom: "20px",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+        }}
+      >
+        <img
+          src="/images/programming-hero-certificate.png"
+          alt="Programming Hero Certificate Thumbnail"
+          style={{
+            width: "50px",
+            height: "36px",
+            objectFit: "cover",
+            borderRadius: "2px",
+            border: "1px solid #cbd5e1",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+          }}
+        />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: "10px", fontWeight: "800", color: "#053056", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+            ✓ Verified Certificate
+          </div>
+          <div style={{ fontSize: "12px", color: "#1e293b", fontWeight: "bold", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            Programming Hero (Web-12)
+          </div>
+          <a
+            href="#certificate-modal"
+            data-certificate-trigger="programming-hero"
+            style={{ fontSize: "11px", color: "#053056", textDecoration: "underline", fontWeight: "700" }}
+          >
+            View Credential (WEB12-3991) ›
+          </a>
+        </div>
       </div>
 
       {/* Live Edge Telemetry */}

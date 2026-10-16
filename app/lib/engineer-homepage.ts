@@ -82,17 +82,49 @@ export function getEngineerHomepage(): SourcePageRecord {
               <!-- Main Content Body -->
               <div class="bodytext">
                 <div class="description">
-                  <div id="badges">
+                  <div id="badges" style="display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:0 0 24px 0;padding-bottom:18px;border-bottom:1px solid #e2e8f0;">
+                    <!-- Red Mark Area: Programming Hero Verified Certificate Badge -->
+                    <a href="#certificate-modal" id="ph-certificate-trigger" data-certificate-trigger="programming-hero" class="badge" title="Click to inspect verified Programming Hero Certificate of Excellence (Batch-12 • ID: WEB12-3991)" style="display:inline-flex;align-items:center;gap:10px;padding:6px 14px;background:#053056;color:#ffffff;border:2px solid #9CBE41;border-radius:4px;text-decoration:none;cursor:pointer;box-shadow:0 2px 8px rgba(5,48,86,0.18);transition:all 0.15s ease;">
+                      <div style="position:relative;width:52px;height:38px;border-radius:3px;overflow:hidden;border:1px solid #9CBE41;flex-shrink:0;background:#ffffff;box-shadow:0 1px 3px rgba(0,0,0,0.3);">
+                        <img src="/images/programming-hero-certificate.png" alt="Programming Hero Certificate Thumbnail" style="width:100%;height:100%;object-fit:cover;display:block;" />
+                        <span style="position:absolute;bottom:0;right:0;background:#9CBE41;color:#041f36;font-size:7.5px;font-weight:900;padding:1px 3px;line-height:1;border-top-left-radius:2px;">✓</span>
+                      </div>
+                      <div style="display:flex;flex-direction:column;text-align:left;line-height:1.2;">
+                        <span style="font-size:10px;font-weight:800;color:#9CBE41;text-transform:uppercase;letter-spacing:0.5px;">PROGRAMMING HERO</span>
+                        <strong style="font-size:12px;font-weight:800;color:#ffffff;letter-spacing:-0.1px;">CERTIFICATE OF EXCELLENCE</strong>
+                        <span style="font-size:10px;color:#cbd5e1;font-weight:600;">Batch-12 • ID: WEB12-3991 <span style="color:#4ade80;">(Inspect ↗)</span></span>
+                      </div>
+                    </a>
+
+                    <!-- freeCodeCamp Verified Badge -->
+                    <span class="badge" title="freeCodeCamp Verified Certifications: JavaScript Algorithms, TypeScript, Python">
+                      <strong style="display:inline-flex;align-items:center;gap:6px;padding:8px 12px;background:#031c33;color:#fde047;border:1px solid #ca8a04;border-radius:4px;font-size:12px;font-weight:bold;">
+                        <span>(fCC)</span> JS • TS • PYTHON
+                      </strong>
+                    </span>
+
+                    <!-- Rust & Go Systems Badge -->
+                    <span class="badge" title="Systems Concurrency in Rust & Go">
+                      <strong style="display:inline-flex;align-items:center;gap:6px;padding:8px 12px;background:#042442;color:#f97316;border:1px solid #ea580c;border-radius:4px;font-size:12px;font-weight:bold;">
+                        <span>🦀</span> RUST &amp; GO SYSTEMS
+                      </strong>
+                    </span>
+
+                    <!-- 9+ YRS EXP Badge -->
                     <span class="badge" title="Full-Stack Senior Engineer">
                       <strong style="display:inline-block;padding:8px 14px;background:#042442;color:#9CBE41;border:1px solid #0a365c;border-radius:4px;font-size:13px;font-weight:bold;">
                         9+ YRS EXP
                       </strong>
                     </span>
+
+                    <!-- 99.99% UPTIME Badge -->
                     <span class="badge" title="99.99% Production Uptime">
                       <strong style="display:inline-block;padding:8px 14px;background:#064e3b;color:#4ade80;border:1px solid #059669;border-radius:4px;font-size:13px;font-weight:bold;">
                         99.99% UPTIME
                       </strong>
                     </span>
+
+                    <!-- 50+ SHIPPED APPS Badge -->
                     <span class="badge" title="50+ Shipped Deployments">
                       <strong style="display:inline-block;padding:8px 14px;background:#1e1b4b;color:#c084fc;border:1px solid #4338ca;border-radius:4px;font-size:13px;font-weight:bold;">
                         50+ SHIPPED APPS
@@ -108,11 +140,103 @@ export function getEngineerHomepage(): SourcePageRecord {
                   </strong>
 
                   <p>
-                    <strong>MD Abu Hanif Mia</strong> (known professionally as <strong>Abu Hanif</strong>) is an experienced software engineer and systems architect whose technical rigor, deep full-stack mastery, and execution velocity have resulted in high-concurrency, fault-tolerant production platforms for startups and enterprise organizations worldwide. Specializing in TypeScript, Next.js, Go, PostgreSQL, and Cloudflare Pages, Abu Hanif operates at the intersection of clean architecture, database performance, and edge network delivery.
+                    <strong>MD Abu Hanif Mia</strong> (known professionally as <strong>Abu Hanif</strong>) is an experienced software engineer and systems architect whose technical rigor, deep full-stack mastery, and execution velocity have resulted in high-concurrency, fault-tolerant production platforms for startups and enterprise organizations worldwide. Formally trained through <strong>Programming Hero</strong> (awarded the <em>Certificate of Completion with Excellence</em> in Complete Web Development) and holding verified <strong>freeCodeCamp</strong> certifications in JavaScript, TypeScript, and Python, Abu Hanif combines modern React 19 and Next.js 16 edge engineering with low-level systems programming in <strong>Rust</strong> and <strong>Go</strong>.
                   </p>
                   <p>
-                    Whether eliminating complex architectural bottlenecks, restructuring legacy codebases, or deploying new greenfield products from technical requirements to production, Abu Hanif brings over 9 years of battle-tested engineering leadership. Every system is built with high observability, rigorous test coverage, and strict performance SLAs.
+                    Specializing in distributed systems, PostgreSQL query tuning, Cloudflare Pages, and memory-safe concurrent backends, Abu Hanif operates at the intersection of clean architecture, database performance, and edge network delivery. Whether eliminating complex architectural bottlenecks, restructuring legacy codebases, or deploying new greenfield products from technical requirements to production, Abu Hanif brings over 9 years of battle-tested engineering leadership. Every system is built with high observability, rigorous test coverage, and strict performance SLAs.
                   </p>
+
+                  <!-- VERIFIED CERTIFICATIONS & ACCREDITATIONS SECTION -->
+                  <div style="margin:2em 0;background:#f8fafc;border:1px solid #cbd5e1;border-top:4px solid #9CBE41;border-radius:6px;padding:22px 24px;">
+                    <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;margin-bottom:14px;border-bottom:1px solid #e2e8f0;padding-bottom:10px;">
+                      <div>
+                        <h3 style="margin:0;font-size:18px;color:#053056;text-transform:uppercase;letter-spacing:0.5px;">
+                          Verified Certifications &amp; Technical Accreditations
+                        </h3>
+                        <p style="margin:4px 0 0 0;font-size:13px;color:#334155;">
+                          Formally accredited training and verified software development credentials:
+                        </p>
+                      </div>
+                      <a href="#certificate-modal" data-certificate-trigger="programming-hero" style="font-size:12px;font-weight:bold;color:#053056;background:#e2e8f0;border:1px solid #cbd5e1;padding:4px 10px;border-radius:3px;text-decoration:none;">
+                        🔍 Expand Certificate Modal
+                      </a>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:16px;">
+                      <!-- Credential 1: Programming Hero -->
+                      <div style="background:#ffffff;border:1px solid #cbd5e1;border-radius:4px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;">
+                        <div>
+                          <div style="position:relative;margin-bottom:10px;border-radius:4px;overflow:hidden;border:1px solid #9CBE41;background:#f1f5f9;cursor:pointer;" data-certificate-trigger="programming-hero">
+                            <img src="/images/programming-hero-certificate.png" alt="Programming Hero Certificate of Completion with Excellence" style="width:100%;height:auto;display:block;transition:transform 0.2s ease;" />
+                            <div style="position:absolute;inset:0;background:rgba(5,48,86,0.3);opacity:0;transition:opacity 0.2s;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:12px;">
+                              🔍 Click to Inspect Full Size
+                            </div>
+                          </div>
+                          <span style="font-size:11px;font-weight:800;color:#053056;text-transform:uppercase;">Programming Hero</span>
+                          <h4 style="margin:2px 0 4px 0;font-size:14px;color:#053056;">
+                            Complete Web Development Course with Excellence
+                          </h4>
+                          <div style="font-size:11.5px;color:#334155;font-weight:700;margin-bottom:6px;">
+                            Batch-12 • Credential ID: <span style="font-family:monospace;color:#053056;">WEB12-3991</span>
+                          </div>
+                          <p style="margin:0;font-size:12px;color:#475569;line-height:1.5;">
+                            Rigorous training across modern JavaScript, React, HTML5/CSS3, asynchronous state handling, and multi-tier production projects under CEO Jhankar Mahbub.
+                          </p>
+                        </div>
+                        <div style="margin-top:12px;padding-top:8px;border-top:1px dotted #e2e8f0;">
+                          <a href="#certificate-modal" data-certificate-trigger="programming-hero" style="font-size:12px;font-weight:bold;color:#053056;text-decoration:underline;">
+                            Verify &amp; View Credential ›
+                          </a>
+                        </div>
+                      </div>
+
+                      <!-- Credential 2: freeCodeCamp -->
+                      <div style="background:#ffffff;border:1px solid #cbd5e1;border-radius:4px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;">
+                        <div>
+                          <div style="display:inline-block;padding:3px 8px;background:#031c33;color:#fde047;font-weight:bold;font-size:11px;border-radius:3px;margin-bottom:8px;">
+                            (fCC) Multi-Track Certified
+                          </div>
+                          <span style="font-size:11px;font-weight:800;color:#053056;text-transform:uppercase;display:block;">freeCodeCamp</span>
+                          <h4 style="margin:2px 0 6px 0;font-size:14px;color:#053056;">
+                            JavaScript, TypeScript &amp; Python Accreditations
+                          </h4>
+                          <ul style="margin:0 0 10px 16px;padding:0;font-size:12px;color:#475569;line-height:1.5;">
+                            <li><strong>JavaScript Algorithms &amp; Data Structures:</strong> Algorithmic problem solving, recursion, OOP &amp; functional programming.</li>
+                            <li><strong>TypeScript Platform Development:</strong> Static typing, generics, strict compiler configs, and interface design.</li>
+                            <li><strong>Scientific Computing with Python:</strong> Data manipulation, automation scripting, algorithms, and backend utilities.</li>
+                          </ul>
+                        </div>
+                        <div style="margin-top:12px;padding-top:8px;border-top:1px dotted #e2e8f0;font-size:12px;font-weight:bold;color:#16a34a;">
+                          ✓ Verified Curriculum Standard
+                        </div>
+                      </div>
+
+                      <!-- Credential 3: Systems Programming in Rust & Go -->
+                      <div style="background:#ffffff;border:1px solid #cbd5e1;border-radius:4px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;">
+                        <div>
+                          <div style="display:inline-block;padding:3px 8px;background:#431407;color:#fb923c;font-weight:bold;font-size:11px;border-radius:3px;margin-bottom:8px;">
+                            🦀 Systems &amp; Concurrency
+                          </div>
+                          <span style="font-size:11px;font-weight:800;color:#053056;text-transform:uppercase;display:block;">Systems Architecture</span>
+                          <h4 style="margin:2px 0 6px 0;font-size:14px;color:#053056;">
+                            Rust &amp; Go Production Pipelines
+                          </h4>
+                          <p style="margin:0 0 8px 0;font-size:12px;color:#475569;line-height:1.5;">
+                            Engineering zero-cost abstractions, fearless memory safety without garbage collection pauses (Rust/Tokio/Axum), and lock-free concurrent workers (Go goroutines) for sub-25ms edge telemetry.
+                          </p>
+                          <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                            <span style="font-size:10px;background:#f1f5f9;border:1px solid #cbd5e1;padding:2px 6px;border-radius:3px;font-weight:bold;color:#053056;">Rust Tokio</span>
+                            <span style="font-size:10px;background:#f1f5f9;border:1px solid #cbd5e1;padding:2px 6px;border-radius:3px;font-weight:bold;color:#053056;">WebAssembly</span>
+                            <span style="font-size:10px;background:#f1f5f9;border:1px solid #cbd5e1;padding:2px 6px;border-radius:3px;font-weight:bold;color:#053056;">Go CSP</span>
+                            <span style="font-size:10px;background:#f1f5f9;border:1px solid #cbd5e1;padding:2px 6px;border-radius:3px;font-weight:bold;color:#053056;">Next.js 16</span>
+                          </div>
+                        </div>
+                        <div style="margin-top:12px;padding-top:8px;border-top:1px dotted #e2e8f0;font-size:12px;font-weight:bold;color:#16a34a;">
+                          ✓ High-Concurrency Production SLA
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
                   <!-- WORK SHOWCASE SECTION -->
                   <div style="display:flex;justify-content:space-between;align-items:flex-end;margin:1.4em 0 0.5em 0;border-bottom:2px solid #9CBE41;padding-bottom:6px;">
@@ -230,18 +354,18 @@ export function getEngineerHomepage(): SourcePageRecord {
                     Abu Hanif provides deep technical expertise across the following core software engineering disciplines:
                   </p>
                   <ul class="no-spacing-list">
+                    <li><a href="#work">Rust &amp; Go Systems Concurrency (Tokio, Axum, Channels)</a></li>
+                    <li><a href="#work">Modern React 19 &amp; Next.js 16 Web Applications</a></li>
                     <li><a href="#work">Distributed Systems Architecture</a></li>
                     <li><a href="#work">High-Throughput API Engineering</a></li>
-                    <li><a href="#work">Next.js 16 &amp; React Applications</a></li>
                     <li><a href="#work">PostgreSQL Query &amp; Index Optimization</a></li>
                     <li><a href="#work">Cloudflare Pages &amp; Edge Infrastructure</a></li>
-                    <li><a href="#work">AI &amp; LLM Semantic Vector Search</a></li>
+                    <li><a href="#work">Python Scientific Computing &amp; Automation</a></li>
+                    <li><a href="#work">AI &amp; LLM Semantic Vector Search (pgvector)</a></li>
                     <li><a href="#work">Zero-Trust Authentication &amp; RBAC</a></li>
                     <li><a href="#work">CI/CD &amp; Infrastructure Automation</a></li>
                     <li><a href="#work">Microservices &amp; Event Sourcing</a></li>
-                    <li><a href="#work">Technical Debt Remediation</a></li>
-                    <li><a href="#work">System Performance &amp; Load Auditing</a></li>
-                    <li><a href="#work">Mobile &amp; Cross-Platform Apps</a></li>
+                    <li><a href="#work">Technical Debt Remediation &amp; Code Auditing</a></li>
                   </ul>
 
                   <strong class="heading4">Email contact@abuhanif.dev Today for Architecture Inquiries</strong>
@@ -541,11 +665,14 @@ export function getEngineerHomepage(): SourcePageRecord {
                   </div>
                 </div>
                 <div class="footer-ecosystem-badges">
-                  <span class="eco-badge">Next.js 16</span>
+                  <span class="eco-badge">Rust</span>
                   <span class="eco-badge">Go</span>
+                  <span class="eco-badge">TypeScript</span>
+                  <span class="eco-badge">Python</span>
+                  <span class="eco-badge">Next.js 16</span>
+                  <span class="eco-badge">React 19</span>
                   <span class="eco-badge">PostgreSQL</span>
                   <span class="eco-badge">Cloudflare</span>
-                  <span class="eco-badge">Supabase</span>
                 </div>
               </div>
 
