@@ -47,6 +47,18 @@ export async function getCompetencies(): Promise<Competency[]> {
   return competencies;
 }
 
+export const PROJECT_SLUG_ALIASES: Record<string, string> = {
+  "edge-ecommerce-platform": "cloudflare-edge-ecommerce",
+  "enterprise-rag-pipeline": "enterprise-ai-document-search",
+};
+
+export const SERVICE_SLUG_ALIASES: Record<string, string> = {
+  "architecture-codebase-audit": "architecture-audit",
+  "database-query-optimization": "database-optimization",
+  "greenfield-mvp": "mvp-feature-sprint",
+  "fractional-staff-architect": "fractional-staff-engineer",
+};
+
 export async function getProjects(): Promise<ProjectItem[]> {
   if (isSupabaseConfigured && supabase) {
     try {
@@ -56,7 +68,7 @@ export async function getProjects(): Promise<ProjectItem[]> {
         .eq("is_published", true)
         .order("sort_order", { ascending: true });
       if (!error && data && data.length > 0) {
-        return data.map((item) => ({
+        const supabaseProjects: ProjectItem[] = data.map((item) => ({
           id: item.id,
           title: item.title,
           slug: item.slug,
@@ -71,6 +83,24 @@ export async function getProjects(): Promise<ProjectItem[]> {
           isFeatured: item.is_featured,
           published: item.is_published,
         }));
+
+        // Merge any initial projects not currently in Supabase by matching slug or aliases
+        const existingSlugs = new Set(
+          supabaseProjects.flatMap((p) => [
+            p.slug,
+            ...Object.entries(PROJECT_SLUG_ALIASES)
+              .filter(([_, canonical]) => canonical === p.slug)
+              .map(([alias]) => alias),
+          ])
+        );
+
+        const merged = [...supabaseProjects];
+        for (const initProj of initialProjects) {
+          if (!existingSlugs.has(initProj.slug)) {
+            merged.push(initProj);
+          }
+        }
+        return merged;
       }
     } catch {
       // Fallback
@@ -80,8 +110,15 @@ export async function getProjects(): Promise<ProjectItem[]> {
 }
 
 export async function getProjectBySlug(slug: string): Promise<ProjectItem | undefined> {
+  const normalizedSlug = PROJECT_SLUG_ALIASES[slug] || slug;
   const all = await getProjects();
-  return all.find((p) => p.slug === slug);
+  return all.find(
+    (p) =>
+      p.slug === normalizedSlug ||
+      p.slug === slug ||
+      PROJECT_SLUG_ALIASES[p.slug] === slug ||
+      PROJECT_SLUG_ALIASES[p.slug] === normalizedSlug
+  );
 }
 
 export async function getServices(): Promise<ServicePricing[]> {
@@ -93,7 +130,7 @@ export async function getServices(): Promise<ServicePricing[]> {
         .eq("is_active", true)
         .order("sort_order", { ascending: true });
       if (!error && data && data.length > 0) {
-        return data.map((item) => ({
+        const supabaseServices: ServicePricing[] = data.map((item) => ({
           id: item.id,
           title: item.title,
           slug: item.slug,
@@ -105,12 +142,40 @@ export async function getServices(): Promise<ServicePricing[]> {
           isPopular: item.is_popular,
           isActive: item.is_active,
         }));
+
+        const existingSlugs = new Set(
+          supabaseServices.flatMap((s) => [
+            s.slug,
+            ...Object.entries(SERVICE_SLUG_ALIASES)
+              .filter(([_, canonical]) => canonical === s.slug)
+              .map(([alias]) => alias),
+          ])
+        );
+
+        const merged = [...supabaseServices];
+        for (const initServ of initialServices) {
+          if (!existingSlugs.has(initServ.slug)) {
+            merged.push(initServ);
+          }
+        }
+        return merged;
       }
     } catch {
       // Fallback
     }
   }
   return initialServices;
+}
+
+export async function getServiceBySlug(slug: string): Promise<ServicePricing | undefined> {
+  const normalizedSlug = SERVICE_SLUG_ALIASES[slug] || slug;
+  const all = await getServices();
+  return all.find(
+    (s) =>
+      s.slug === normalizedSlug ||
+      s.slug === slug ||
+      SERVICE_SLUG_ALIASES[s.slug] === slug
+  );
 }
 
 export async function getBlogPosts(): Promise<BlogPost[]> {
@@ -158,6 +223,41 @@ export async function submitInquiry(formData: {
   budgetRange: string;
   message: string;
 }): Promise<{ success: boolean; message: string }> {
+  // If in browser, dispatch through API route with webhook support
+  if (typeof window !== "undefined") {
+    try {
+      const res = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        // Also save in localStorage for local admin preview
+        try {
+          const stored = window.localStorage.getItem("abuhanif-inquiries");
+          const list = stored ? JSON.parse(stored) : [];
+          list.unshift({
+            id: data.inquiryId || `inq-${Date.now()}`,
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            project_type: formData.projectType,
+            budget_range: formData.budgetRange,
+            message: formData.message,
+            status: "new",
+            created_at: new Date().toISOString(),
+          });
+          window.localStorage.setItem("abuhanif-inquiries", JSON.stringify(list));
+        } catch {}
+
+        return { success: true, message: data.message };
+      }
+    } catch {
+      // Fall through to direct Supabase
+    }
+  }
+
   if (isSupabaseConfigured && supabase) {
     try {
       const { error } = await supabase.from("inquiries").insert([
@@ -178,6 +278,7 @@ export async function submitInquiry(formData: {
       return { success: true, message: "Thank you for reaching out! Your project request has been logged." };
     }
   }
+
   return {
     success: true,
     message: "Thank you! Your project inquiry has been received (running in preview mode).",

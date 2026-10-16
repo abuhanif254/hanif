@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getProjectBySlug, getProjects } from "../../lib/portfolio-store";
+import { getProjectBySlug, getProjects, PROJECT_SLUG_ALIASES } from "../../lib/portfolio-store";
 import SiteFooter from "../../components/site-footer";
 import SiteHeader from "../../components/site-header";
 
@@ -11,8 +11,11 @@ type ProjectPageProps = {
 
 export async function generateStaticParams() {
   const projects = await getProjects();
-  return projects.map((project) => ({
-    slug: project.slug,
+  const slugSet = new Set<string>();
+  projects.forEach((p) => slugSet.add(p.slug));
+  Object.keys(PROJECT_SLUG_ALIASES).forEach((alias) => slugSet.add(alias));
+  return Array.from(slugSet).map((slug) => ({
+    slug,
   }));
 }
 
@@ -237,7 +240,8 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                         }}
                       >
                         {project.descriptionMarkdown.split("\n\n").map((para, i) => {
-                          if (para.startsWith("## ")) {
+                          if (para.startsWith("## ") || para.startsWith("### ")) {
+                            const headingText = para.replace(/^#{2,3}\s+/, "");
                             return (
                               <h3
                                 key={i}
@@ -250,12 +254,12 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                                   paddingBottom: "4px",
                                 }}
                               >
-                                {para.replace("## ", "")}
+                                {headingText}
                               </h3>
                             );
                           }
-                          if (para.startsWith("- ")) {
-                            const items = para.split("\n").map((item) => item.replace("- ", ""));
+                          if (para.startsWith("- ") || para.startsWith("* ")) {
+                            const items = para.split("\n").map((item) => item.replace(/^[-*]\s+/, ""));
                             return (
                               <ul key={i} style={{ margin: "10px 0 16px 20px", paddingLeft: "10px" }}>
                                 {items.map((item, idx) => (

@@ -207,18 +207,18 @@ A high-frequency trading platform needed to aggregate raw order-book events from
   },
   {
     id: "proj-2",
-    title: "Cloudflare Edge Multi-Tenant E-Commerce Core",
-    slug: "edge-ecommerce-platform",
+    title: "Cloudflare Edge Multi-Tenant E-Commerce Platform",
+    slug: "cloudflare-edge-ecommerce",
     summary: "Serverless multi-tenant storefront platform rendering personalized product catalogs at the global edge.",
-    descriptionMarkdown: `### The Challenge
+    descriptionMarkdown: `## The Challenge
 A direct-to-consumer brand aggregator struggled with slow dynamic page loads during global flash sales, resulting in cart abandonment and high server scaling bills.
 
-### Architectural Solution
+## Architectural Solution
 - Re-architected catalog generation onto Cloudflare Pages and Workers Edge with Next.js 16.
 - Implemented Supabase PostgreSQL with read-replicas and regional caching.
 - Built instant checkout flows with optimistic UI state transitions and idempotent order processing.
 
-### Measurable Impact
+## Measurable Impact
 - **Conversion Rate**: Lifted checkout conversion by 28%.
 - **Global Latency**: Average initial page render reduced from 1.8s to 95ms worldwide.
 - **Cost Reduction**: Cut monthly cloud compute costs by 64%.`,
@@ -233,18 +233,18 @@ A direct-to-consumer brand aggregator struggled with slow dynamic page loads dur
   },
   {
     id: "proj-3",
-    title: "Enterprise AI Knowledge Retrieval & RAG Pipeline",
-    slug: "enterprise-rag-pipeline",
+    title: "Enterprise AI Document Search & RAG Pipeline",
+    slug: "enterprise-ai-document-search",
     summary: "Autonomous document ingestion and vector semantic search engine indexing 500,000+ internal technical docs.",
-    descriptionMarkdown: `### The Challenge
+    descriptionMarkdown: `## The Challenge
 Engineering teams spent an average of 4.5 hours per week looking for internal system documentation, API contracts, and architecture design records scattered across Jira, Confluence, and GitHub.
 
-### Architectural Solution
+## Architectural Solution
 - Built an event-driven webhook pipeline indexing markdown, PDF, and source code into pgvector embeddings.
 - Configured hybrid BM25 + dense semantic vector search with re-ranking.
 - Created an interactive AI chat interface with strict citation verification and RBAC permission enforcement.
 
-### Measurable Impact
+## Measurable Impact
 - **Query Resolution**: Search and answer discovery speed reduced by 82%.
 - **Accuracy**: 96.4% verified citation accuracy on internal knowledge evaluations.`,
     clientName: "Enterprise Software Corp",
@@ -257,18 +257,43 @@ Engineering teams spent an average of 4.5 hours per week looking for internal sy
   },
   {
     id: "proj-4",
+    title: "High-Concurrency PostgreSQL Performance Audit",
+    slug: "postgres-performance-audit",
+    summary: "Diagnostic query profiling, connection pool tuning, and index redesign eliminating deadlocks for 3.5M active accounts.",
+    descriptionMarkdown: `## The Challenge
+A high-throughput SaaS platform faced persistent connection pool exhaustion and frequent transaction deadlocks during daily peak traffic spikes.
+
+## Architectural Solution
+- Conducted deep EXPLAIN (ANALYZE, BUFFERS) profiling on the 50 highest-impact query paths.
+- Rebuilt composite B-Tree indexes, partial indexes, and BRIN indexes on large append-only telemetry tables.
+- Installed PgBouncer with transaction-level pooling and tuned max_connections and shared_buffers.
+- Hardened Row Level Security (RLS) policies without introducing query degradation.
+
+## Measurable Impact
+- **CPU Reduction**: Reduced median database CPU utilization from 92% to 28%.
+- **Zero Deadlocks**: 0 connection drops or transaction deadlocks observed over 12 consecutive months.
+- **Query Latency**: Sub-5ms P99 query latency on multi-million row joined tables.`,
+    clientName: "Nexus Cloud Platform",
+    priceTag: "$11,000 Scope",
+    impactMetric: "-68% CPU • 0 Deadlocks Observed",
+    techStack: ["PostgreSQL 16", "PgBouncer", "EXPLAIN ANALYZE", "Linux Performance", "Supabase"],
+    isFeatured: true,
+    published: true,
+  },
+  {
+    id: "proj-5",
     title: "Zero-Trust Distributed Auth & RBAC Microservice",
     slug: "zero-trust-auth-service",
     summary: "Centralized identity provider service supporting multi-organization tenancy, SAML SSO, and Passkeys.",
-    descriptionMarkdown: `### The Challenge
+    descriptionMarkdown: `## The Challenge
 A SaaS company with multiple sub-products needed to consolidate disparate login systems into a unified identity provider meeting enterprise SOC2 Type II requirements.
 
-### Architectural Solution
+## Architectural Solution
 - Developed an RFC 6749 compliant OAuth2/OIDC provider with granular scope delegation.
 - Added WebAuthn passkey registration, biometric sign-in, and instantaneous session revocation via Redis.
 - Implemented audit logging with cryptographic hash chaining for tamper resistance.
 
-### Measurable Impact
+## Measurable Impact
 - **Scale**: Managing 3,500,000+ active enterprise user identities.
 - **Security**: Passed third-party penetration audit with zero critical or high vulnerabilities.`,
     clientName: "B2B SaaS Group",
@@ -279,19 +304,19 @@ A SaaS company with multiple sub-products needed to consolidate disparate login 
     published: true,
   },
   {
-    id: "proj-5",
+    id: "proj-6",
     title: "High-Performance Developer Documentation Engine",
     slug: "developer-docs-engine",
     summary: "Ultra-fast headless documentation portal with full-text search, live API playground, and dark mode.",
-    descriptionMarkdown: `### The Challenge
+    descriptionMarkdown: `## The Challenge
 Developers were bouncing from legacy docs due to sluggish navigation, lack of interactive code execution, and broken mobile formatting.
 
-### Architectural Solution
+## Architectural Solution
 - Designed and built a static-first Next.js portal utilizing Turbopack and MDX compilation.
 - Embedded interactive API request builders with copyable curl/JavaScript/Python snippets.
 - Integrated Algolia DocSearch with instant keyboard navigation (Cmd+K).
 
-### Measurable Impact
+## Measurable Impact
 - **Lighthouse**: Perfect 100/100 across Performance, Accessibility, Best Practices, and SEO.
 - **Engagement**: Increased average developer session duration by 140%.`,
     clientName: "Developer Tooling Startup",
@@ -304,19 +329,19 @@ Developers were bouncing from legacy docs due to sluggish navigation, lack of in
     published: true,
   },
   {
-    id: "proj-6",
+    id: "proj-7",
     title: "Autonomous Data Ingestion & ETL Automation Engine",
     slug: "etl-automation-engine",
     summary: "Fault-tolerant data extraction and pipeline engine processing daily multi-gigabyte client reporting feeds.",
-    descriptionMarkdown: `### The Challenge
+    descriptionMarkdown: `## The Challenge
 Manual data entry and fragile overnight Python scripts caused frequent data corruption and delayed client reporting by up to 36 hours.
 
-### Architectural Solution
+## Architectural Solution
 - Implemented a queue-backed Node.js and BullMQ worker pipeline with automated exponential backoff retries.
 - Integrated schema validation via Zod to quarantine corrupted inputs before database insertion.
 - Created an automated notification webhook for Slack alerts and Prometheus telemetry.
 
-### Measurable Impact
+## Measurable Impact
 - **Cost Savings**: Saved client $48,000 annually in manual developer intervention hours.
 - **Delivery**: Report generation time dropped from 36 hours to under 8 minutes.`,
     clientName: "Logistics Platform",
