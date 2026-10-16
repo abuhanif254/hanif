@@ -383,12 +383,57 @@ export default function BlogClientView() {
                       <h3 style={{ margin: "0 0 4px 0", fontSize: "16px", color: "#053056" }}>
                         MD Abu Hanif Mia
                       </h3>
-                      <div style={{ fontSize: "12px", color: "#334155", fontWeight: "700", marginBottom: "8px" }}>
+                      <div style={{ fontSize: "12px", color: "#9CBE41", fontWeight: "700", marginBottom: "8px" }}>
                         Staff Software Engineer &amp; Systems Architect
                       </div>
-                      <p style={{ fontSize: "12px", color: "#475569", lineHeight: "1.5", margin: 0 }}>
-                        Writing about production systems architecture, PostgreSQL query optimizations, and low-latency edge compute based on 9+ years in production.
-                      </p>
+                      <div style={{ fontSize: "12px", color: "#475569", lineHeight: "1.6", marginBottom: "10px" }}>
+                        • <strong>B.Sc. in CSE</strong> (Formal 4-Year Degree)<br />
+                        • <strong>Programming Hero Honor</strong> (Batch-12 • WEB12-3991)<br />
+                        • <strong>freeCodeCamp Certified</strong> (JS, TS, Python)<br />
+                        • <strong>Rust &amp; Go Concurrency</strong>, Next.js 16, Postgres
+                      </div>
+                      <Link href="/resume" style={{ fontSize: "12px", color: "#053056", fontWeight: "700", textDecoration: "underline" }}>
+                        View Verified Credentials &rsaquo;
+                      </Link>
+                    </div>
+
+                    {/* Topic Pillars Hubs */}
+                    <div className="block" style={{ backgroundColor: "#ffffff", border: "1px solid #cbd5e1", padding: "16px", borderRadius: "4px", marginBottom: "20px" }}>
+                      <h4 style={{ margin: "0 0 10px 0", fontSize: "13px", color: "#053056", textTransform: "uppercase", borderBottom: "2px solid #9CBE41", paddingBottom: "4px" }}>
+                        Topic Pillars
+                      </h4>
+                      <ul style={{ listStyle: "none", padding: 0, margin: 0, fontSize: "12.5px" }}>
+                        <li style={{ padding: "5px 0", borderBottom: "1px dotted #e2e8f0" }}>
+                          <Link href="/blog/category/postgresql" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                            &rsaquo; PostgreSQL &amp; Database Systems
+                          </Link>
+                        </li>
+                        <li style={{ padding: "5px 0", borderBottom: "1px dotted #e2e8f0" }}>
+                          <Link href="/blog/category/nextjs" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                            &rsaquo; Next.js 16 &amp; React 19 Architecture
+                          </Link>
+                        </li>
+                        <li style={{ padding: "5px 0", borderBottom: "1px dotted #e2e8f0" }}>
+                          <Link href="/blog/category/cloudflare" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                            &rsaquo; Cloudflare Pages &amp; Edge Delivery
+                          </Link>
+                        </li>
+                        <li style={{ padding: "5px 0", borderBottom: "1px dotted #e2e8f0" }}>
+                          <Link href="/blog/category/architecture" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                            &rsaquo; Distributed Systems &amp; Modular Monoliths
+                          </Link>
+                        </li>
+                        <li style={{ padding: "5px 0", borderBottom: "1px dotted #e2e8f0" }}>
+                          <Link href="/blog/category/rust" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                            &rsaquo; Rust Systems &amp; Concurrency
+                          </Link>
+                        </li>
+                        <li style={{ padding: "5px 0" }}>
+                          <Link href="/blog/category/performance" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                            &rsaquo; Performance &amp; P99 Latency Tuning
+                          </Link>
+                        </li>
+                      </ul>
                     </div>
 
                     {/* Production Track Record */}

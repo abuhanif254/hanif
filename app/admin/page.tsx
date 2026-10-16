@@ -13,6 +13,7 @@ import {
   BlogPost,
 } from "../data/portfolio-data";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
+import AdminBlogSeoAssistant from "../components/admin-blog-seo-assistant";
 
 interface InquiryRecord {
   id: string;
@@ -1906,6 +1907,15 @@ export default function AdminPage() {
                     />
                   </div>
 
+                  {/* Real-Time Editorial SEO Assistant & SERP Simulator */}
+                  <AdminBlogSeoAssistant
+                    title={newPost.title}
+                    slug={newPost.slug || newPost.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}
+                    excerpt={newPost.excerpt}
+                    contentMarkdown={newPost.contentMarkdown}
+                    tags={newPost.tags}
+                  />
+
                   <button
                     type="submit"
                     style={{
@@ -2985,6 +2995,15 @@ export default function AdminPage() {
                       }}
                     />
                   </div>
+
+                  {/* Real-Time Editorial SEO Assistant & SERP Simulator */}
+                  <AdminBlogSeoAssistant
+                    title={editingPost.title}
+                    slug={editingPost.slug}
+                    excerpt={editingPost.excerpt}
+                    contentMarkdown={editingPost.contentMarkdown}
+                    tags={editingPost.tags.join(", ")}
+                  />
 
                   <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", borderTop: "1px solid #1e293b", paddingTop: "16px" }}>
                     <button

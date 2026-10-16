@@ -4,6 +4,10 @@ import Link from "next/link";
 import { getBlogPostBySlug, getBlogPosts } from "../../lib/portfolio-store";
 import SiteFooter from "../../components/site-footer";
 import SiteHeader from "../../components/site-header";
+import BlogCodeBlock from "../../components/blog-code-block";
+import BlogTableOfContents from "../../components/blog-toc";
+import BlogSocialShare from "../../components/blog-social-share";
+import { blogCategoryPillars } from "../../data/blog-categories";
 
 type BlogPostPageProps = {
   params: Promise<{ slug: string }>;
@@ -96,46 +100,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         const code = firstLineBreak !== -1 ? chunk.substring(firstLineBreak + 1) : chunk;
 
         elements.push(
-          <div
+          <BlogCodeBlock
             key={`code-${index}`}
-            style={{
-              backgroundColor: "#071324",
-              border: "1px solid #1e293b",
-              borderRadius: "6px",
-              margin: "24px 0",
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "6px 14px",
-                backgroundColor: "#0b192e",
-                borderBottom: "1px solid #1e293b",
-                fontSize: "11px",
-                color: "#94a3b8",
-                fontFamily: "monospace",
-              }}
-            >
-              <span>{language.toUpperCase() || "SOURCE"}</span>
-              <span style={{ color: "#38bdf8" }}>Abu Hanif Architecture</span>
-            </div>
-            <pre
-              style={{
-                margin: 0,
-                padding: "16px",
-                overflowX: "auto",
-                fontSize: "13px",
-                lineHeight: "1.6",
-                color: "#e2e8f0",
-                fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-              }}
-            >
-              <code>{code.trim()}</code>
-            </pre>
-          </div>
+            language={language}
+            code={code}
+          />
         );
       } else {
         // Text Markdown
@@ -157,9 +126,25 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   margin: "32px 0 12px 0",
                   borderBottom: "1px solid #e2e8f0",
                   paddingBottom: "6px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                {headingText}
+                <span>{headingText}</span>
+                <a
+                  href={`#${id}`}
+                  style={{
+                    color: "#94a3b8",
+                    textDecoration: "none",
+                    fontSize: "15px",
+                    fontWeight: "normal",
+                    marginLeft: "8px",
+                  }}
+                  title="Permanent link to this section"
+                >
+                  #
+                </a>
               </h2>
             );
           } else if (trimmed.startsWith("### ")) {
@@ -173,9 +158,25 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   fontSize: "18px",
                   color: "#053056",
                   margin: "24px 0 10px 0",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                {headingText}
+                <span>{headingText}</span>
+                <a
+                  href={`#${id}`}
+                  style={{
+                    color: "#94a3b8",
+                    textDecoration: "none",
+                    fontSize: "14px",
+                    fontWeight: "normal",
+                    marginLeft: "8px",
+                  }}
+                  title="Permanent link to this subsection"
+                >
+                  #
+                </a>
               </h3>
             );
           } else if (trimmed.startsWith("> ")) {
@@ -284,6 +285,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     articleSection: post.tags[0] || "Software Engineering",
   };
 
+  const matchingPillar =
+    blogCategoryPillars.find((p) =>
+      p.matchingTags.some((mt) => post.tags.some((t) => t.toLowerCase() === mt.toLowerCase()))
+    ) || blogCategoryPillars[0];
+
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -303,6 +309,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       {
         "@type": "ListItem",
         position: 3,
+        name: matchingPillar.name,
+        item: `${siteUrl}/blog/category/${matchingPillar.slug}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
         name: post.title,
         item: `${siteUrl}/blog/${post.slug}`,
       },
@@ -332,6 +344,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   <div id="img1">
                     <div className="banner-text-wrapper">
                       <div>
+                        <div style={{ fontSize: "11px", fontWeight: "800", color: "#9CBE41", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>
+                          <Link href={`/blog/category/${matchingPillar.slug}`} style={{ color: "#9CBE41", textDecoration: "none" }}>
+                            {matchingPillar.name}
+                          </Link>
+                        </div>
                         <h1 style={{ margin: 0, fontSize: "26px", lineHeight: "1.3" }}>
                           {post.title}
                         </h1>
@@ -348,14 +365,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <div id="content">
                   <div id="breadcrumbs">
                     <div className="wrapper">
-                      <a href="/">Home</a> &gt; <a href="/blog">Technical Blog</a> &gt; <span>{post.title}</span>
+                      <Link href="/">Home</Link> &gt; <Link href="/blog">Technical Blog</Link> &gt; <Link href={`/blog/category/${matchingPillar.slug}`}>{matchingPillar.name}</Link> &gt; <span>{post.title}</span>
                     </div>
                   </div>
 
                   <div className="bodytext">
                     <div className="description">
                       {/* Article Header Metadata Strip */}
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px", marginBottom: "16px", paddingBottom: "12px", borderBottom: "1px solid #e2e8f0" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px", marginBottom: "12px", paddingBottom: "12px", borderBottom: "1px solid #e2e8f0" }}>
                         <div style={{ display: "flex", gap: "10px", alignItems: "center", fontSize: "12px", color: "#64748b" }}>
                           <strong style={{ color: "#053056" }}>
                             {new Date(post.publishedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
@@ -384,6 +401,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                           ))}
                         </div>
                       </div>
+
+                      {/* 1-Click Social Sharing with UTM tracking */}
+                      <BlogSocialShare title={post.title} slug={post.slug} />
 
                       {/* Executive Abstract / Key Takeaways Box */}
                       <div
@@ -508,51 +528,54 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         </div>
                       )}
 
-                      {/* Direct Technical Consultation CTA */}
+                      {/* Direct Contextual Technical Consultation CTA */}
                       <div
                         style={{
                           padding: "24px",
-                          backgroundColor: "#f8fafc",
-                          border: "1px solid #cbd5e1",
-                          borderLeft: "4px solid #16a34a",
-                          borderRadius: "4px",
+                          backgroundColor: "#053056",
+                          border: "1px solid #0a365c",
+                          borderRadius: "6px",
+                          color: "#ffffff",
                         }}
                       >
-                        <h3 style={{ margin: "0 0 8px 0", color: "#053056", fontSize: "18px" }}>
-                          Facing a similar architecture or database bottleneck?
+                        <div style={{ fontSize: "11px", fontWeight: "800", color: "#9CBE41", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>
+                          Targeted Architecture Consultation
+                        </div>
+                        <h3 style={{ margin: "0 0 8px 0", color: "#ffffff", fontSize: "19px" }}>
+                          Need Surgical Engineering on {matchingPillar.name}?
                         </h3>
-                        <p style={{ margin: "0 0 16px 0", fontSize: "13px", color: "#475569", lineHeight: "1.6" }}>
-                          I partner with engineering teams to conduct comprehensive architecture audits, optimize query performance, and deploy scalable edge platforms.
+                        <p style={{ margin: "0 0 16px 0", fontSize: "13px", color: "#cbd5e1", lineHeight: "1.6" }}>
+                          Book the <strong>{matchingPillar.consultingServiceTitle}</strong> ({matchingPillar.consultingPrice} fixed milestone). Direct 1:1 engagement with Staff Software Engineer Abu Hanif with verified production deliverables and zero budget creep.
                         </p>
                         <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
                           <Link
-                            href="/pricing#inquiry"
+                            href={`/pricing#${matchingPillar.consultingServiceSlug}`}
                             style={{
                               padding: "10px 20px",
-                              backgroundColor: "#053056",
-                              color: "#ffffff",
+                              backgroundColor: "#9CBE41",
+                              color: "#041f36",
                               textDecoration: "none",
                               borderRadius: "4px",
                               fontSize: "13px",
-                              fontWeight: "700",
+                              fontWeight: "800",
                             }}
                           >
-                            Schedule Architecture Consultation &rsaquo;
+                            View Milestone Scope ({matchingPillar.consultingPrice}) &rsaquo;
                           </Link>
                           <Link
-                            href="/pricing"
+                            href={`/blog/category/${matchingPillar.slug}`}
                             style={{
-                              padding: "10px 20px",
-                              backgroundColor: "#ffffff",
-                              color: "#053056",
-                              border: "1px solid #cbd5e1",
+                              padding: "10px 18px",
+                              backgroundColor: "#042442",
+                              color: "#cbd5e1",
+                              border: "1px solid #0a365c",
                               textDecoration: "none",
                               borderRadius: "4px",
                               fontSize: "13px",
                               fontWeight: "700",
                             }}
                           >
-                            View Work Prices &amp; Sprints &rsaquo;
+                            Explore More {matchingPillar.name} Guides &rsaquo;
                           </Link>
                         </div>
                       </div>
@@ -563,29 +586,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 {/* Secondary Sidebar */}
                 <div className="sidebar secondary-sidebar">
                   <div className="wrapper">
-                    {/* Table of Contents Widget */}
+                    {/* Dynamic Scroll-Spy Table of Contents */}
                     {headings.length >= 2 && (
-                      <div className="block" style={{ backgroundColor: "#ffffff", border: "1px solid #cbd5e1", padding: "16px", borderRadius: "4px", marginBottom: "20px" }}>
-                        <h4 style={{ margin: "0 0 10px 0", fontSize: "13px", color: "#053056", textTransform: "uppercase" }}>
-                          On This Page
-                        </h4>
-                        <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "12px", lineHeight: "1.7" }}>
-                          {headings.map((h, i) => (
-                            <li key={i} style={{ marginLeft: h.level === 3 ? "10px" : "0", marginBottom: "4px" }}>
-                              <a href={`#${h.id}`} style={{ color: "#053056", textDecoration: "none" }}>
-                                {h.title}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                      <BlogTableOfContents headings={headings} />
                     )}
 
                     {/* Author Snapshot */}
                     <div className="block" style={{ backgroundColor: "#f8fafc", padding: "18px", border: "1px solid #e2e8f0", borderRadius: "4px", marginBottom: "20px" }}>
                       <img
                         src="/images/profile.png"
-                        alt="MD Abu Hanif Mia"
+                        alt="MD Abu Hanif Mia - Staff Software Engineer"
                         style={{
                           width: "100%",
                           borderRadius: "4px",
@@ -597,12 +607,18 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                       <h3 style={{ margin: "0 0 4px 0", fontSize: "16px", color: "#053056" }}>
                         MD Abu Hanif Mia
                       </h3>
-                      <div style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "8px" }}>
+                      <div style={{ fontSize: "12px", color: "#9CBE41", fontWeight: "700", marginBottom: "8px" }}>
                         Staff Software Engineer &amp; Systems Architect
                       </div>
-                      <p style={{ fontSize: "12px", color: "#475569", lineHeight: "1.5", margin: 0 }}>
-                        Experienced software engineer specializing in Next.js, Go, PostgreSQL, Supabase, and Cloudflare Pages.
-                      </p>
+                      <div style={{ fontSize: "12px", color: "#475569", lineHeight: "1.6", marginBottom: "10px" }}>
+                        • <strong>B.Sc. in CSE</strong> (Formal 4-Year Degree)<br />
+                        • <strong>Programming Hero Honor</strong> (Batch-12 • WEB12-3991)<br />
+                        • <strong>freeCodeCamp Certified</strong> (JS, TS, Python)<br />
+                        • <strong>Rust &amp; Go Concurrency</strong>, Next.js 16, Postgres
+                      </div>
+                      <Link href="/resume" style={{ fontSize: "12px", color: "#053056", fontWeight: "700", textDecoration: "underline" }}>
+                        View Verified Credentials &rsaquo;
+                      </Link>
                     </div>
 
                     {/* Article Details Widget */}

@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { initialProjects, initialBlogPosts } from "./data/portfolio-data";
 
+import { blogCategoryPillars } from "./data/blog-categories";
+
 const siteOrigin =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
   "https://abuhanif.dev";
@@ -42,6 +44,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
+  // Topic Category Pillar routes
+  const categoryRoutes: MetadataRoute.Sitemap = blogCategoryPillars.map((cat) => ({
+    url: `${siteOrigin}/blog/category/${cat.slug}`,
+    lastModified: currentDate,
+    changeFrequency: "weekly",
+    priority: 0.85,
+  }));
+
   // Dynamic project case study routes
   const projectRoutes: MetadataRoute.Sitemap = initialProjects
     .filter((p) => p.published)
@@ -62,5 +72,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     }));
 
-  return [...staticRoutes, ...projectRoutes, ...blogRoutes];
+  return [...staticRoutes, ...categoryRoutes, ...projectRoutes, ...blogRoutes];
 }
