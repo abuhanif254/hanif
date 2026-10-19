@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getProjectBySlug, getProjects, PROJECT_SLUG_ALIASES } from "../../lib/portfolio-store";
 import SiteFooter from "../../components/site-footer";
 import SiteHeader from "../../components/site-header";
+import ProjectScreenshotGallery from "../../components/project-screenshot-gallery";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -223,6 +224,13 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                           <div>🛠 <strong>Core Technologies:</strong> {(project.techStack || []).join(" • ")}</div>
                         </div>
                       </div>
+
+                      {/* Project Cover & Interactive Screenshots Lightbox */}
+                      <ProjectScreenshotGallery
+                        title={project.title}
+                        coverImage={project.imageUrl}
+                        screenshots={project.screenshots}
+                      />
 
                       {/* Executive Summary */}
                       <h2 style={{ color: "#053056", fontSize: "20px", marginTop: "10px" }}>Executive Architecture Summary</h2>

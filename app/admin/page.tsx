@@ -14,6 +14,7 @@ import {
 } from "../data/portfolio-data";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
 import AdminBlogSeoAssistant from "../components/admin-blog-seo-assistant";
+import AdminImageUploader from "../components/admin-image-uploader";
 
 interface InquiryRecord {
   id: string;
@@ -105,6 +106,8 @@ export default function AdminPage() {
     githubUrl: "",
     clientName: "",
     descriptionMarkdown: "",
+    imageUrl: "",
+    screenshots: [] as string[],
   });
 
   const [newService, setNewService] = useState({
@@ -196,6 +199,8 @@ export default function AdminPage() {
                 techStack: d.tech_stack || [],
                 isFeatured: d.is_featured,
                 published: d.is_published,
+                imageUrl: d.image_url || d.thumbnail_url || undefined,
+                screenshots: d.screenshots || [],
               }))
             );
           }
@@ -290,6 +295,8 @@ export default function AdminPage() {
       githubUrl: newProject.githubUrl || undefined,
       isFeatured: true,
       published: true,
+      imageUrl: newProject.imageUrl || undefined,
+      screenshots: newProject.screenshots || [],
     };
     setProjects([item, ...projects]);
 
@@ -307,6 +314,8 @@ export default function AdminPage() {
         github_url: item.githubUrl,
         is_featured: true,
         is_published: true,
+        image_url: item.imageUrl,
+        screenshots: item.screenshots,
       }]).then();
     }
 
@@ -321,6 +330,8 @@ export default function AdminPage() {
       githubUrl: "",
       clientName: "",
       descriptionMarkdown: "",
+      imageUrl: "",
+      screenshots: [],
     });
     showNotification("Project successfully added to portfolio!");
   }
@@ -348,6 +359,8 @@ export default function AdminPage() {
           github_url: editingProject.githubUrl || null,
           is_featured: editingProject.isFeatured,
           is_published: editingProject.published,
+          image_url: editingProject.imageUrl || null,
+          screenshots: editingProject.screenshots || [],
         })
         .eq("id", editingProject.id)
         .then();
@@ -1111,6 +1124,26 @@ export default function AdminPage() {
                       style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px", fontFamily: "monospace" }}
                     />
                   </div>
+
+                  {/* Project Images & Screenshots Attachment */}
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "16px", marginBottom: "16px" }}>
+                    <AdminImageUploader
+                      label="Primary Project Cover Image"
+                      helperText="Featured cover image & card thumbnail"
+                      mode="single"
+                      value={newProject.imageUrl}
+                      onChangeSingle={(url) => setNewProject({ ...newProject, imageUrl: url })}
+                      onClearSingle={() => setNewProject({ ...newProject, imageUrl: "" })}
+                    />
+                    <AdminImageUploader
+                      label="Project Screenshots Gallery"
+                      helperText="Add screenshots, architecture diagrams & UI preview images"
+                      mode="multiple"
+                      values={newProject.screenshots}
+                      onChangeMultiple={(urls) => setNewProject({ ...newProject, screenshots: urls })}
+                    />
+                  </div>
+
                   <button
                     type="submit"
                     style={{
@@ -1208,24 +1241,61 @@ export default function AdminPage() {
                         borderRadius: "6px",
                       }}
                     >
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "12px", flexWrap: "wrap", marginBottom: "8px" }}>
-                        <div>
-                          <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
-                            <h3 style={{ fontSize: "17px", fontWeight: "700", color: "#ffffff", margin: 0 }}>
-                              {proj.title}
-                            </h3>
-                            <code style={{ fontSize: "11px", backgroundColor: "#071324", padding: "2px 6px", borderRadius: "3px", color: "#38bdf8", border: "1px solid #1e293b" }}>
-                              /{proj.slug}
-                            </code>
-                            <span style={{ fontSize: "12px", color: "#10b981", fontWeight: "700", backgroundColor: "#064e3b22", padding: "2px 8px", borderRadius: "3px", border: "1px solid #065f46" }}>
-                              {proj.priceTag}
-                            </span>
-                          </div>
-                          <div style={{ fontSize: "12px", color: "#94a3b8", marginTop: "4px" }}>
-                            ⚡ Impact: <strong style={{ color: "#e2e8f0" }}>{proj.impactMetric}</strong>
-                            {proj.clientName && (
-                              <span> • Client: <strong style={{ color: "#cbd5e1" }}>{proj.clientName}</strong></span>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "14px", flexWrap: "wrap", marginBottom: "8px" }}>
+                        <div style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}>
+                          {/* Project Cover Thumbnail Preview */}
+                          <div
+                            style={{
+                              width: "56px",
+                              height: "56px",
+                              borderRadius: "4px",
+                              overflow: "hidden",
+                              backgroundColor: "#071324",
+                              border: "1px solid #1e293b",
+                              flexShrink: 0,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            {proj.imageUrl ? (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img
+                                src={proj.imageUrl}
+                                alt={proj.title}
+                                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).style.display = "none";
+                                }}
+                              />
+                            ) : (
+                              <span style={{ fontSize: "20px", color: "#64748b" }}>📁</span>
                             )}
+                          </div>
+
+                          <div>
+                            <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                              <h3 style={{ fontSize: "17px", fontWeight: "700", color: "#ffffff", margin: 0 }}>
+                                {proj.title}
+                              </h3>
+                              <code style={{ fontSize: "11px", backgroundColor: "#071324", padding: "2px 6px", borderRadius: "3px", color: "#38bdf8", border: "1px solid #1e293b" }}>
+                                /{proj.slug}
+                              </code>
+                              <span style={{ fontSize: "12px", color: "#10b981", fontWeight: "700", backgroundColor: "#064e3b22", padding: "2px 8px", borderRadius: "3px", border: "1px solid #065f46" }}>
+                                {proj.priceTag}
+                              </span>
+                              {proj.screenshots && proj.screenshots.length > 0 && (
+                                <span style={{ fontSize: "11px", color: "#38bdf8", backgroundColor: "#0284c722", padding: "2px 6px", borderRadius: "3px", border: "1px solid #0284c744" }}>
+                                  📷 {proj.screenshots.length} screenshots
+                                </span>
+                              )}
+                            </div>
+                            <div style={{ fontSize: "12px", color: "#94a3b8", marginTop: "4px" }}>
+                              ⚡ Impact: <strong style={{ color: "#e2e8f0" }}>{proj.impactMetric}</strong>
+                              {proj.clientName && (
+                                <span> • Client: <strong style={{ color: "#cbd5e1" }}>{proj.clientName}</strong></span>
+                              )}
+                            </div>
                           </div>
                         </div>
 
@@ -2491,6 +2561,25 @@ export default function AdminPage() {
                       value={editingProject.descriptionMarkdown || ""}
                       onChange={(e) => setEditingProject({ ...editingProject, descriptionMarkdown: e.target.value })}
                       style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px", fontFamily: "monospace" }}
+                    />
+                  </div>
+
+                  {/* Project Images & Screenshots Attachment */}
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px", marginBottom: "16px" }}>
+                    <AdminImageUploader
+                      label="Primary Project Cover Image"
+                      helperText="Featured cover image & card thumbnail"
+                      mode="single"
+                      value={editingProject.imageUrl || ""}
+                      onChangeSingle={(url) => setEditingProject({ ...editingProject, imageUrl: url })}
+                      onClearSingle={() => setEditingProject({ ...editingProject, imageUrl: undefined })}
+                    />
+                    <AdminImageUploader
+                      label="Project Screenshots Gallery"
+                      helperText="Add, delete, or manage screenshots for this project"
+                      mode="multiple"
+                      values={editingProject.screenshots || []}
+                      onChangeMultiple={(urls) => setEditingProject({ ...editingProject, screenshots: urls })}
                     />
                   </div>
 

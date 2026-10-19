@@ -38,6 +38,8 @@ export interface ProjectItem {
   techStack: string[];
   isFeatured: boolean;
   published: boolean;
+  imageUrl?: string;
+  screenshots?: string[];
 }
 
 export interface ServicePricing {
@@ -204,6 +206,11 @@ A high-frequency trading platform needed to aggregate raw order-book events from
     techStack: ["Go", "Next.js", "WebSockets", "TimescaleDB", "Redis", "Docker"],
     isFeatured: true,
     published: true,
+    imageUrl: "/images/clean_hero_bg.jpg",
+    screenshots: [
+      "/images/og-card.png",
+      "/images/programming-hero-certificate.png",
+    ],
   },
   {
     id: "proj-2",
@@ -230,6 +237,10 @@ A direct-to-consumer brand aggregator struggled with slow dynamic page loads dur
     techStack: ["Next.js 16", "Cloudflare Pages", "Supabase", "TypeScript", "Tailwind CSS"],
     isFeatured: true,
     published: true,
+    imageUrl: "/images/og-card.png",
+    screenshots: [
+      "/images/clean_hero_bg.jpg",
+    ],
   },
   {
     id: "proj-3",

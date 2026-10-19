@@ -68,21 +68,30 @@ export async function getProjects(): Promise<ProjectItem[]> {
         .eq("is_published", true)
         .order("sort_order", { ascending: true });
       if (!error && data && data.length > 0) {
-        const supabaseProjects: ProjectItem[] = data.map((item) => ({
-          id: item.id,
-          title: item.title,
-          slug: item.slug,
-          summary: item.summary,
-          descriptionMarkdown: item.description_markdown,
-          clientName: item.client_name,
-          demoUrl: item.demo_url,
-          githubUrl: item.github_url,
-          priceTag: item.price_tag,
-          impactMetric: item.impact_metric,
-          techStack: item.tech_stack || [],
-          isFeatured: item.is_featured,
-          published: item.is_published,
-        }));
+        const initialMap = new Map(initialProjects.map((p) => [p.slug, p]));
+        const supabaseProjects: ProjectItem[] = data.map((item) => {
+          const initMatch = initialMap.get(item.slug);
+          return {
+            id: item.id,
+            title: item.title,
+            slug: item.slug,
+            summary: item.summary,
+            descriptionMarkdown: item.description_markdown,
+            clientName: item.client_name,
+            demoUrl: item.demo_url,
+            githubUrl: item.github_url,
+            priceTag: item.price_tag,
+            impactMetric: item.impact_metric,
+            techStack: item.tech_stack || [],
+            isFeatured: item.is_featured,
+            published: item.is_published,
+            imageUrl: item.image_url || item.thumbnail_url || initMatch?.imageUrl || undefined,
+            screenshots:
+              item.screenshots && item.screenshots.length > 0
+                ? item.screenshots
+                : initMatch?.screenshots || [],
+          };
+        });
 
         // Merge any initial projects not currently in Supabase by matching slug or aliases
         const existingSlugs = new Set(

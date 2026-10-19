@@ -395,10 +395,55 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                                   </span>
                                 </div>
 
-                                {/* Summary */}
-                                <p style={{ margin: "0 0 14px 0", fontSize: "14px", lineHeight: "1.6", color: "#334155" }}>
-                                  {project.summary}
-                                </p>
+                                {/* Summary & Optional Cover Thumbnail */}
+                                <div style={{ display: "flex", gap: "18px", alignItems: "flex-start", flexWrap: "wrap", marginBottom: "14px" }}>
+                                  {project.imageUrl && (
+                                    <div
+                                      style={{
+                                        width: "140px",
+                                        height: "95px",
+                                        borderRadius: "4px",
+                                        overflow: "hidden",
+                                        backgroundColor: "#071324",
+                                        border: "1px solid #cbd5e1",
+                                        flexShrink: 0,
+                                        position: "relative",
+                                      }}
+                                    >
+                                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                                      <img
+                                        src={project.imageUrl}
+                                        alt={project.title}
+                                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                        onError={(e) => {
+                                          (e.target as HTMLImageElement).style.display = "none";
+                                        }}
+                                      />
+                                      {project.screenshots && project.screenshots.length > 0 && (
+                                        <div
+                                          style={{
+                                            position: "absolute",
+                                            bottom: "4px",
+                                            right: "4px",
+                                            backgroundColor: "rgba(5, 48, 86, 0.88)",
+                                            color: "#ffffff",
+                                            fontSize: "10px",
+                                            fontWeight: "700",
+                                            padding: "2px 6px",
+                                            borderRadius: "3px",
+                                          }}
+                                        >
+                                          📷 {project.screenshots.length}
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+                                  <div style={{ flex: 1, minWidth: "260px" }}>
+                                    <p style={{ margin: "0", fontSize: "14px", lineHeight: "1.6", color: "#334155" }}>
+                                      {project.summary}
+                                    </p>
+                                  </div>
+                                </div>
 
                                 {/* Tech Stack Tags */}
                                 <div

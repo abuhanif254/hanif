@@ -41,6 +41,8 @@ create table if not exists public.projects (
   description_markdown text not null,
   client_name text default 'Confidential Client',
   thumbnail_url text,
+  image_url text,
+  screenshots text[] not null default '{}',
   demo_url text,
   github_url text,
   price_tag text,
@@ -353,3 +355,23 @@ values
   now() - interval '20 days'
 )
 on conflict (slug) do nothing;
+
+-- -----------------------------------------------------------------------------
+-- 5. STORAGE BUCKETS (Project Assets & Screenshots)
+-- -----------------------------------------------------------------------------
+insert into storage.buckets (id, name, public)
+values ('project-assets', 'project-assets', true)
+on conflict (id) do update set public = true;
+
+-- Storage Policies
+create policy if not exists "Project Assets Public Access"
+  on storage.objects for select
+  using (bucket_id = 'project-assets');
+
+create policy if not exists "Project Assets Anon Upload"
+  on storage.objects for insert
+  with check (bucket_id = 'project-assets');
+
+create policy if not exists "Project Assets Anon Update"
+  on storage.objects for update
+  with check (bucket_id = 'project-assets');

@@ -67,4 +67,18 @@ describe("Portfolio Store & Slug Unification", () => {
     expect(post).toBeDefined();
     expect(post?.title).toContain("Next.js 16");
   });
+
+  it("should support project imageUrl and screenshots gallery arrays", async () => {
+    const projects = await getProjects();
+    const withImages = projects.filter((p) => p.imageUrl || (p.screenshots && p.screenshots.length > 0));
+    expect(withImages.length).toBeGreaterThan(0);
+    for (const p of withImages) {
+      if (p.imageUrl) {
+        expect(typeof p.imageUrl).toBe("string");
+      }
+      if (p.screenshots) {
+        expect(Array.isArray(p.screenshots)).toBe(true);
+      }
+    }
+  });
 });
