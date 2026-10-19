@@ -54,6 +54,11 @@ create table if not exists public.projects (
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
+-- Ensure image columns exist if projects table was created prior
+alter table public.projects add column if not exists thumbnail_url text;
+alter table public.projects add column if not exists image_url text;
+alter table public.projects add column if not exists screenshots text[] not null default '{}';
+
 -- -----------------------------------------------------------------------------
 -- 3. SERVICES TABLE (Transparent Pricing Matrix)
 -- -----------------------------------------------------------------------------
@@ -363,15 +368,19 @@ insert into storage.buckets (id, name, public)
 values ('project-assets', 'project-assets', true)
 on conflict (id) do update set public = true;
 
--- Storage Policies
-create policy if not exists "Project Assets Public Access"
+-- Storage Policies (Drop first if exists, then create)
+drop policy if exists "Project Assets Public Access" on storage.objects;
+create policy "Project Assets Public Access"
   on storage.objects for select
   using (bucket_id = 'project-assets');
 
-create policy if not exists "Project Assets Anon Upload"
+drop policy if exists "Project Assets Anon Upload" on storage.objects;
+create policy "Project Assets Anon Upload"
   on storage.objects for insert
   with check (bucket_id = 'project-assets');
 
-create policy if not exists "Project Assets Anon Update"
+drop policy if exists "Project Assets Anon Update" on storage.objects;
+create policy "Project Assets Anon Update"
   on storage.objects for update
   with check (bucket_id = 'project-assets');
+
