@@ -60,15 +60,15 @@ describe("Routes, SEO & Topic Pillars Verification", () => {
     const entries = sitemapFn();
 
     const urls = entries.map((e) => e.url);
-    expect(urls).toContain("https://abuhanif.dev/");
-    expect(urls).toContain("https://abuhanif.dev/lab");
-    expect(urls).toContain("https://abuhanif.dev/projects");
-    expect(urls).toContain("https://abuhanif.dev/pricing");
-    expect(urls).toContain("https://abuhanif.dev/blog");
-    expect(urls).toContain("https://abuhanif.dev/resume");
+    expect(urls).toContain("https://abuhanifmia.com/");
+    expect(urls).toContain("https://abuhanifmia.com/lab");
+    expect(urls).toContain("https://abuhanifmia.com/projects");
+    expect(urls).toContain("https://abuhanifmia.com/pricing");
+    expect(urls).toContain("https://abuhanifmia.com/blog");
+    expect(urls).toContain("https://abuhanifmia.com/resume");
 
     for (const cat of blogCategoryPillars) {
-      expect(urls).toContain(`https://abuhanif.dev/blog/category/${cat.slug}`);
+      expect(urls).toContain(`https://abuhanifmia.com/blog/category/${cat.slug}`);
     }
 
     expect(entries.length).toBeGreaterThanOrEqual(20);

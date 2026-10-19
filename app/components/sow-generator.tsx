@@ -97,7 +97,7 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
 - **Payment Structure**: 50% upfront sprint capacity reservation, 50% upon verified production deployment.
 
 ---
-*Generated via Abu Hanif Portfolio SOW Builder (https://abuhanif.dev/pricing)*
+*Generated via Abu Hanif Portfolio SOW Builder (https://abuhanifmia.com/pricing)*
     `.trim();
   }
 

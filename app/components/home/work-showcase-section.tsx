@@ -277,7 +277,7 @@ export default function WorkShowcaseSection() {
         <li><Link href="/pricing">Technical Debt Remediation &amp; Code Auditing</Link></li>
       </ul>
 
-      <strong className="heading4">Email contact@abuhanif.dev Today for Architecture Inquiries</strong>
+      <strong className="heading4">Email abuhanifmain@gmail.com Today for Architecture Inquiries</strong>
       <p>
         Every technical engagement receives the direct, personal attention of Abu Hanif who can quickly evaluate requirements, untangle complex bottlenecks, and ship high-velocity solutions.
       </p>

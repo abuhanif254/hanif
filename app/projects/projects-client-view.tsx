@@ -717,7 +717,7 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                   <div className="formdesc">
                     <span className="free-consultation">Technical Consultation</span>
                     <span className="phone-numbers">
-                      contact@abuhanif.dev <br />
+                      abuhanifmain@gmail.com <br />
                       +880 1700-000000
                     </span>
                   </div>

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import PricingClientView from "./pricing-client-view";
 import { initialServices } from "../data/portfolio-data";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanif.dev";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 export const metadata: Metadata = {
   title: "Engineering Services & Work Pricing | Abu Hanif (MD Abu Hanif Mia)",

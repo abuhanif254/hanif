@@ -9,7 +9,7 @@ import TechnicalBlogFeed from "./components/home/technical-blog-feed";
 import HomeSidebar from "./components/home/home-sidebar";
 import BottomContactStripe from "./components/home/bottom-contact-stripe";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanif.dev";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 export const metadata: Metadata = {
   title: "Abu Hanif (MD Abu Hanif Mia) | Staff Software Engineer & Systems Architect",
@@ -56,7 +56,7 @@ export default function HomePage() {
       "Staff Software Engineer specializing in distributed systems, PostgreSQL performance optimization, Cloudflare edge compute, and full-stack Next.js architecture.",
     url: siteUrl,
     image: `${siteUrl}/images/profile.png`,
-    email: "contact@abuhanif.dev",
+    email: "abuhanifmain@gmail.com",
     alumniOf: [
       {
         "@type": "EducationalOrganization",

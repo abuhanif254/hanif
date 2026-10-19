@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import BlogClientView from "./blog-client-view";
 import { initialBlogPosts } from "../data/portfolio-data";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanif.dev";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 export const metadata: Metadata = {
   title: "Technical Architecture Blog | Abu Hanif (MD Abu Hanif Mia)",

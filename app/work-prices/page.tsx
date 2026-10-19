@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import PricingPage from "../pricing/page";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanif.dev";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 export const metadata: Metadata = {
   title: "Engineering Services & Work Prices | Abu Hanif",

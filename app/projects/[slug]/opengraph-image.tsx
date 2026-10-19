@@ -86,7 +86,7 @@ export default async function Image({ params }: OgProps) {
               textTransform: "uppercase",
             }}
           >
-            abuhanif.dev/projects
+            abuhanifmia.com/projects
           </div>
         </div>
 

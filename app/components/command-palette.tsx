@@ -174,7 +174,7 @@ export default function CommandPalette() {
               }}
             >
               <Command.Item
-                onSelect={() => handleCopy("contact@abuhanif.dev", "Email Address")}
+                onSelect={() => handleCopy("abuhanifmain@gmail.com", "Email Address")}
                 style={{
                   padding: "8px 12px",
                   borderRadius: "4px",
@@ -186,7 +186,7 @@ export default function CommandPalette() {
                   color: "#1e293b",
                 }}
               >
-                <span>✉️ Copy Direct Email (contact@abuhanif.dev)</span>
+                <span>✉️ Copy Direct Email (abuhanifmain@gmail.com)</span>
                 <span style={{ fontSize: "11px", color: "#64748b" }}>Action</span>
               </Command.Item>
 

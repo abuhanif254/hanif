@@ -55,8 +55,8 @@ export default function SiteFooter() {
             <div className="footer-contact-details">
               <div>
                 <strong>Direct Email:</strong>{" "}
-                <a href="mailto:contact@abuhanif.dev" className="footer-highlight-link">
-                  contact@abuhanif.dev
+                <a href="mailto:abuhanifmain@gmail.com" className="footer-highlight-link">
+                  abuhanifmain@gmail.com
                 </a>
               </div>
               <div>

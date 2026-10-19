@@ -6,7 +6,7 @@ import LabEdgeRadar from "../components/lab-edge-radar";
 import LabPostgresPlanner from "../components/lab-postgres-planner";
 import ArchitectureTopologyExplorer from "../components/architecture-topology-explorer";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanif.dev";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 export const metadata: Metadata = {
   title: "Interactive Systems Architecture Lab & Live Benchmarks | Abu Hanif (MD Abu Hanif Mia)",

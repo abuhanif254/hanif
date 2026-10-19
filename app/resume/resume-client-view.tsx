@@ -19,7 +19,7 @@ export default function ResumeClientView() {
 MD ABU HANIF MIA (ABU HANIF)
 Staff Software Engineer & Systems Architect
 Dhaka, Bangladesh | Global Remote (US Pacific, Central European, Asia Timezones)
-Email: contact@abuhanif.dev | Portfolio: https://abuhanif.dev
+Email: abuhanifmain@gmail.com | Portfolio: https://abuhanifmia.com
 
 EXECUTIVE SUMMARY
 Senior Full-Stack Software Engineer & Systems Architect with 9+ years of production experience architecting high-concurrency distributed systems, edge-computed web applications, and database infrastructure. Battle-tested track record maintaining 99.99% production uptime for 10M+ daily users, cutting global P99 latency below 25ms, and reducing cloud infrastructure costs by up to 64%.
@@ -190,8 +190,8 @@ EDUCATION & ACCREDITATIONS
                         </div>
                         <div style={{ display: "flex", flexWrap: "wrap", gap: "14px", fontSize: "13px", color: "#475569" }}>
                           <span>📍 <strong>Location:</strong> Dhaka, Bangladesh (Global Remote)</span>
-                          <span>✉️ <strong>Direct:</strong> <a href="mailto:contact@abuhanif.dev" style={{ color: "#053056", fontWeight: "bold" }}>contact@abuhanif.dev</a></span>
-                          <span>🌐 <strong>Portfolio:</strong> <a href="https://abuhanif.dev" style={{ color: "#053056" }}>https://abuhanif.dev</a></span>
+                          <span>✉️ <strong>Direct:</strong> <a href="mailto:abuhanifmain@gmail.com" style={{ color: "#053056", fontWeight: "bold" }}>abuhanifmain@gmail.com</a></span>
+                          <span>🌐 <strong>Portfolio:</strong> <a href="https://abuhanifmia.com" style={{ color: "#053056" }}>https://abuhanifmia.com</a></span>
                           <span>⏱️ <strong>Timezones:</strong> US Pacific (UTC-8) • Europe (UTC+2) • Asia (UTC+6)</span>
                         </div>
                       </div>

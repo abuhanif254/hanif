@@ -1,6 +1,6 @@
 import { initialBlogPosts } from "../data/portfolio-data";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanif.dev";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 function escapeXml(unsafe: string): string {
   return unsafe
@@ -29,7 +29,7 @@ export async function GET() {
       <guid isPermaLink="true">${postUrl}</guid>
       <description>${escapeXml(post.excerpt)}</description>
       <pubDate>${pubDate}</pubDate>
-      <author>contact@abuhanif.dev (MD Abu Hanif Mia)</author>
+      <author>abuhanifmain@gmail.com (MD Abu Hanif Mia)</author>
       ${categoriesXml}
     </item>`;
     })

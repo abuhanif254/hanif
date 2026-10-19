@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getProjects } from "../lib/portfolio-store";
 import ProjectsClientView from "./projects-client-view";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanif.dev";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 export const metadata: Metadata = {
   title: "Engineering Projects & Systems Showcase | Abu Hanif (MD Abu Hanif Mia)",

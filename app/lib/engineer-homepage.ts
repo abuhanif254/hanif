@@ -5,7 +5,7 @@ export function getEngineerHomepage(): SourcePageRecord {
     <div class="top-numbers-v3 tnv3-sticky" id="top-numbers-v3">
       <ul>
         <li>
-          Available for High-Impact Contracts &amp; Consulting: <strong> contact@abuhanif.dev </strong>
+          Available for High-Impact Contracts &amp; Consulting: <strong> abuhanifmain@gmail.com </strong>
           <a class="tnv3-button" href="#contactform">Request Project Quote</a>
         </li>
       </ul>
@@ -368,7 +368,7 @@ export function getEngineerHomepage(): SourcePageRecord {
                     <li><a href="#work">Technical Debt Remediation &amp; Code Auditing</a></li>
                   </ul>
 
-                  <strong class="heading4">Email contact@abuhanif.dev Today for Architecture Inquiries</strong>
+                  <strong class="heading4">Email abuhanifmain@gmail.com Today for Architecture Inquiries</strong>
                   <p>
                     Every technical engagement receives the direct, personal attention of Abu Hanif who can quickly evaluate requirements, untangle complex bottlenecks, and ship high-velocity solutions.
                   </p>
@@ -443,7 +443,7 @@ export function getEngineerHomepage(): SourcePageRecord {
                   <div class="formdesc">
                     <span class="free-consultation">Free Consultation</span>
                     <span class="phone-numbers">
-                      contact@abuhanif.dev <br/>
+                      abuhanifmain@gmail.com <br/>
                       +880 1700-000000
                     </span>
                   </div>
@@ -658,7 +658,7 @@ export function getEngineerHomepage(): SourcePageRecord {
                 </div>
                 <div class="footer-contact-details">
                   <div>
-                    <strong>Direct Email:</strong> <a href="mailto:contact@abuhanif.dev" class="footer-highlight-link">contact@abuhanif.dev</a>
+                    <strong>Direct Email:</strong> <a href="mailto:abuhanifmain@gmail.com" class="footer-highlight-link">abuhanifmain@gmail.com</a>
                   </div>
                   <div>
                     <strong>Location:</strong> Dhaka, Bangladesh (Global Remote)
@@ -872,7 +872,7 @@ export function getEngineerHomepage(): SourcePageRecord {
 
   return {
     path: "/",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanif.dev",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com",
     status: 200,
     title: "Abu Hanif (MD Abu Hanif Mia) | Staff Software Engineer & Systems Architect",
     description: "MD Abu Hanif Mia - Staff Software Engineer & Systems Architect. View portfolio work showcase, transparent engineering pricing, and technical blog.",

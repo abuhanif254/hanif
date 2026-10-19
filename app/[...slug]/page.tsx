@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: SourceRouteProps): Promise<Me
       },
     },
     alternates: {
-      canonical: "https://abuhanif.dev",
+      canonical: "https://abuhanifmia.com",
     },
     openGraph: {
       title: page.title,

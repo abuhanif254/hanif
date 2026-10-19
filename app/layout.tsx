@@ -6,7 +6,7 @@ import CertificateViewer from "./components/certificate-viewer";
 import CommandPalette from "./components/command-palette";
 import MobileBottomDock from "./components/mobile-bottom-dock";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanif.dev";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -91,7 +91,7 @@ const jsonLd = {
       description:
         "Staff Software Engineer and Systems Architect with 9+ years experience designing high-throughput distributed applications, edge networks, and developer platforms.",
       url: siteUrl,
-      email: "contact@abuhanif.dev",
+      email: "abuhanifmain@gmail.com",
       address: {
         "@type": "PostalAddress",
         addressLocality: "Dhaka",

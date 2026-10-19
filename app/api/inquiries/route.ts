@@ -76,7 +76,7 @@ export async function POST(request: Request) {
                 { name: "Phone / WhatsApp", value: recordToInsert.phone || "Not specified", inline: true },
                 { name: "Project Challenge", value: recordToInsert.message.substring(0, 1000) },
               ],
-              footer: { text: "abuhanif.dev • Lead Dispatch Engine" },
+              footer: { text: "abuhanifmia.com • Lead Dispatch Engine" },
               timestamp: new Date().toISOString(),
             },
           ],
@@ -100,7 +100,7 @@ export async function POST(request: Request) {
   } catch (err: unknown) {
     console.error("Inquiry handler unhandled error:", err);
     return NextResponse.json(
-      { success: false, error: "Internal server error processing inquiry. Please email contact@abuhanif.dev directly." },
+      { success: false, error: "Internal server error processing inquiry. Please email abuhanifmain@gmail.com directly." },
       { status: 500 }
     );
   }

@@ -6,7 +6,7 @@ import { initialBlogPosts } from "../../../data/portfolio-data";
 import SiteHeader from "../../../components/site-header";
 import SiteFooter from "../../../components/site-footer";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanif.dev";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 type CategoryPageProps = {
   params: Promise<{ category: string }>;

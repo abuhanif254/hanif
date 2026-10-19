@@ -52,7 +52,7 @@ export default function ContactForm() {
       <div className="formdesc" style={{ padding: "0 0 12px 0", color: "#cbd5e1", fontSize: "13px" }}>
         <span style={{ color: "#9CBE41", fontWeight: "bold" }}>● Fast Response Within 24 Hours</span>
         <br />
-        Direct Email: <a href="mailto:contact@abuhanif.dev" style={{ color: "#ffffff", textDecoration: "underline" }}>contact@abuhanif.dev</a>
+        Direct Email: <a href="mailto:abuhanifmain@gmail.com" style={{ color: "#ffffff", textDecoration: "underline" }}>abuhanifmain@gmail.com</a>
       </div>
 
       {resultMessage ? (

@@ -49,7 +49,7 @@ export default function BottomContactStripe() {
 
       setSubmitted(true);
     } catch (err) {
-      setErrorMessage("Something went wrong. Please email directly at contact@abuhanif.dev.");
+      setErrorMessage("Something went wrong. Please email directly at abuhanifmain@gmail.com.");
     } finally {
       setIsSubmitting(false);
     }

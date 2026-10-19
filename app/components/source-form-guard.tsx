@@ -33,7 +33,7 @@ export default function FormGuard({ route }: { route: string }) {
       const messageTextarea = form.querySelector<HTMLTextAreaElement>("textarea[name*='Message']");
 
       const name = nameInput?.value || "Website Visitor";
-      const email = emailInput?.value || "contact@abuhanif.dev";
+      const email = emailInput?.value || "abuhanifmain@gmail.com";
       const phone = phoneInput?.value || "";
       const projectType = typeSelect?.value || "Technical Architecture & Consulting";
       const message = messageTextarea?.value || "Request for technical consultation.";
@@ -87,7 +87,7 @@ export default function FormGuard({ route }: { route: string }) {
         console.error("Form submission error:", err);
         status.style.color = "#4ade80";
         status.textContent =
-          "✓ Request received! You can also contact Abu Hanif directly at contact@abuhanif.dev.";
+          "✓ Request received! You can also contact Abu Hanif directly at abuhanifmain@gmail.com.";
       }
     };
 

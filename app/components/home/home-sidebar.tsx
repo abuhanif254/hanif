@@ -52,7 +52,7 @@ export default function HomeSidebar() {
 
       setSubmitted(true);
     } catch (err) {
-      setErrorMessage("Something went wrong. Please email directly at contact@abuhanif.dev.");
+      setErrorMessage("Something went wrong. Please email directly at abuhanifmain@gmail.com.");
     } finally {
       setIsSubmitting(false);
     }
@@ -109,7 +109,7 @@ export default function HomeSidebar() {
             <div className="formdesc">
               <span className="free-consultation">Free Consultation</span>
               <span className="phone-numbers">
-                contact@abuhanif.dev <br />
+                abuhanifmain@gmail.com <br />
                 +880 1700-000000
               </span>
             </div>

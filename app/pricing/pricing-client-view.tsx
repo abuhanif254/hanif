@@ -112,7 +112,7 @@ export default function PricingClientView() {
       });
     } catch (err: any) {
       setErrorMessage(
-        "An unexpected error occurred. You can also email directly at contact@abuhanif.dev."
+        "An unexpected error occurred. You can also email directly at abuhanifmain@gmail.com."
       );
     } finally {
       setIsSubmitting(false);
@@ -158,7 +158,7 @@ export default function PricingClientView() {
     },
     {
       q: "How do we get started?",
-      a: "Submit the project inquiry form below or email contact@abuhanif.dev. We will schedule a free 30-minute technical discovery call to review your architecture, evaluate scope fit, and deliver a formal Statement of Work (SOW).",
+      a: "Submit the project inquiry form below or email abuhanifmain@gmail.com. We will schedule a free 30-minute technical discovery call to review your architecture, evaluate scope fit, and deliver a formal Statement of Work (SOW).",
     },
   ];
 
@@ -856,7 +856,7 @@ export default function PricingClientView() {
                         Direct Contact Info
                       </h4>
                       <div style={{ fontSize: "12px", color: "#475569", lineHeight: "1.6" }}>
-                        <div><strong>Email:</strong> <a href="mailto:contact@abuhanif.dev" style={{ color: "#053056" }}>contact@abuhanif.dev</a></div>
+                        <div><strong>Email:</strong> <a href="mailto:abuhanifmain@gmail.com" style={{ color: "#053056" }}>abuhanifmain@gmail.com</a></div>
                         <div><strong>Location:</strong> Dhaka, Bangladesh / Worldwide Remote</div>
                         <div><strong>GitHub:</strong> <a href="https://github.com/abuhanif254" target="_blank" rel="noopener noreferrer" style={{ color: "#053056" }}>abuhanif254</a></div>
                       </div>

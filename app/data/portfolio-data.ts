@@ -80,7 +80,7 @@ export const initialProfile: ProfileData = {
   kicker: "Staff Software Engineer & Systems Architect",
   headline: "Clean Architecture • High Performance • Scalable Systems",
   bio: "Senior Full-Stack Software Engineer & Systems Architect with 9+ years designing high-throughput distributed applications, edge networks, and developer platforms. Specializing in TypeScript, Next.js, Go, PostgreSQL, and Cloudflare Pages.",
-  email: "contact@abuhanif.dev",
+  email: "abuhanifmain@gmail.com",
   phone: "+880 1700-000000",
   location: "Dhaka, Bangladesh / Remote Worldwide",
   availabilityStatus: "Available for Q4 Contracts & High-Impact Roles",

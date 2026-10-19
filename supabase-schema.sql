@@ -16,7 +16,7 @@ create table if not exists public.profiles (
   kicker text not null default 'Staff Software Engineer & Systems Architect',
   headline text not null default 'Clean Architecture • High Performance • Scalable Systems',
   bio text not null default 'Staff Software Engineer & Systems Architect with 9+ years building high-throughput distributed systems, Next.js applications, Supabase integrations, and Cloudflare Pages deployments.',
-  email text not null default 'contact@abuhanif.dev',
+  email text not null default 'abuhanifmain@gmail.com',
   phone text not null default '+880 1700-000000',
   location text not null default 'Dhaka, Bangladesh / Remote Worldwide',
   availability_status text not null default 'Available for Architecture Consulting & High-Impact Contracts',

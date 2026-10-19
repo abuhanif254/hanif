@@ -261,7 +261,7 @@ export default function AdminBlogSeoAssistant({
             <div style={{ fontSize: "12px", color: "#202124", lineHeight: "1.3" }}>
               <span style={{ fontWeight: "bold" }}>Abu Hanif</span>
               <span style={{ color: "#5f6368", marginLeft: "4px" }}>
-                https://abuhanif.dev &rsaquo; blog &rsaquo; {slug || "article-slug"}
+                https://abuhanifmia.com &rsaquo; blog &rsaquo; {slug || "article-slug"}
               </span>
             </div>
           </div>

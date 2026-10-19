@@ -152,7 +152,7 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
           >
             <span>
               Available for High-Impact Contracts &amp; Consulting:{" "}
-              <strong>contact@abuhanif.dev</strong>
+              <strong>abuhanifmain@gmail.com</strong>
             </span>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <button

@@ -5,7 +5,7 @@ import { blogCategoryPillars } from "./data/blog-categories";
 
 const siteOrigin =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
-  "https://abuhanif.dev";
+  "https://abuhanifmia.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const currentDate = new Date().toISOString().split("T")[0];

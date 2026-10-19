@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import ResumeClientView from "./resume-client-view";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanif.dev";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 export const metadata: Metadata = {
   title: "Technical Resume & Credentials | MD Abu Hanif Mia (Staff Software Engineer)",

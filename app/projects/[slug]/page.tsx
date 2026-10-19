@@ -20,7 +20,7 @@ export async function generateStaticParams() {
   }));
 }
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanif.dev";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params;
@@ -441,7 +441,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                   <div className="formdesc">
                     <span className="free-consultation">Technical Consultation</span>
                     <span className="phone-numbers">
-                      contact@abuhanif.dev <br />
+                      abuhanifmain@gmail.com <br />
                       +880 1700-000000
                     </span>
                   </div>
