@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getProjects, getBlogPosts } from "./lib/portfolio-store";
+import { getProjects, getBlogPosts, getServices } from "./lib/portfolio-store";
 import { blogCategoryPillars } from "./data/blog-categories";
 
 const siteOrigin =
@@ -79,5 +79,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }));
 
-  return [...staticRoutes, ...categoryRoutes, ...projectRoutes, ...blogRoutes];
+  // Fetch dynamic services from unified store
+  const allServices = await getServices();
+  const serviceRoutes: MetadataRoute.Sitemap = allServices
+    .filter((s) => s.isActive)
+    .map((service) => ({
+      url: `${siteOrigin}/services/${service.slug}`,
+      lastModified: currentDate,
+      changeFrequency: "weekly",
+      priority: 0.88,
+    }));
+
+  return [...staticRoutes, ...categoryRoutes, ...projectRoutes, ...blogRoutes, ...serviceRoutes];
 }
