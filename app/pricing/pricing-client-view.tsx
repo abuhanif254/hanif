@@ -8,6 +8,7 @@ import SiteFooter from "../components/site-footer";
 import SiteHeader from "../components/site-header";
 import StatementOfWorkGenerator from "../components/sow-generator";
 import CloudRoiCalculator from "../components/cloud-roi-calculator";
+import { ecosystemRelations } from "../lib/ecosystem-map";
 
 export default function PricingClientView({
   services: propServices,
@@ -341,25 +342,51 @@ export default function PricingClientView({
                               </div>
                             </div>
 
-                            <button
-                              type="button"
-                              onClick={() => handleSelectPackageForBooking(serv)}
-                              style={{
-                                width: "100%",
-                                padding: "12px 16px",
-                                backgroundColor: serv.isPopular ? "#2563eb" : "#0f1d38",
-                                color: "#ffffff",
-                                border: "none",
-                                borderRadius: "4px",
-                                fontWeight: "700",
-                                fontSize: "13px",
-                                cursor: "pointer",
-                                textAlign: "center",
-                                transition: "all 0.15s ease",
-                              }}
-                            >
-                              Select This Scope &amp; Book &rsaquo;
-                            </button>
+                            {(() => {
+                              const relatedCaseStudy = ecosystemRelations.find((e) => e.serviceSlug === serv.slug);
+                              return (
+                                <>
+                                  {relatedCaseStudy && (
+                                    <div style={{ marginBottom: "12px", paddingTop: "8px", borderTop: "1px dashed #e2e8f0" }}>
+                                      <Link
+                                        href={`/projects/${relatedCaseStudy.projectSlug}`}
+                                        style={{
+                                          fontSize: "12px",
+                                          fontWeight: 700,
+                                          color: "#2563eb",
+                                          textDecoration: "none",
+                                          display: "inline-flex",
+                                          alignItems: "center",
+                                          gap: "4px",
+                                        }}
+                                      >
+                                        🏆 Proven in: {relatedCaseStudy.projectTitle} &rsaquo;
+                                      </Link>
+                                    </div>
+                                  )}
+
+                                  <button
+                                    type="button"
+                                    onClick={() => handleSelectPackageForBooking(serv)}
+                                    style={{
+                                      width: "100%",
+                                      padding: "12px 16px",
+                                      backgroundColor: serv.isPopular ? "#2563eb" : "#0f1d38",
+                                      color: "#ffffff",
+                                      border: "none",
+                                      borderRadius: "6px",
+                                      fontWeight: "700",
+                                      fontSize: "13px",
+                                      cursor: "pointer",
+                                      textAlign: "center",
+                                      transition: "all 0.15s ease",
+                                    }}
+                                  >
+                                    Select This Scope &amp; Book &rsaquo;
+                                  </button>
+                                </>
+                              );
+                            })()}
                           </div>
                         ))}
                       </div>

@@ -57,6 +57,7 @@ export default function LabEdgeRadar() {
 
   return (
     <div
+      id="edge-radar"
       style={{
         backgroundColor: "#ffffff",
         border: "1px solid #e2e8f0",

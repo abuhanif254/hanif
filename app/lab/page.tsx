@@ -108,12 +108,80 @@ export default function SystemsLabPage() {
 
                       {/* Tool 1: Live Edge Network Latency Radar */}
                       <LabEdgeRadar />
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          flexWrap: "wrap",
+                          gap: "8px",
+                          padding: "10px 16px",
+                          backgroundColor: "#f8fafc",
+                          border: "1px solid #e2e8f0",
+                          borderRadius: "6px",
+                          margin: "-16px 0 28px 0",
+                          fontSize: "12.5px",
+                        }}
+                      >
+                        <span>
+                          <strong>Proven in Production:</strong>{" "}
+                          <Link href="/projects/cloudflare-edge-ecommerce" style={{ color: "#2563eb", fontWeight: 700 }}>
+                            Cloudflare Edge Platform &rsaquo;
+                          </Link>
+                        </span>
+                        <span>
+                          <strong>Technical Publication:</strong>{" "}
+                          <Link href="/blog/nextjs-16-cloudflare-pages-architecture" style={{ color: "#8b5cf6", fontWeight: 700 }}>
+                            Next.js 16 on Cloudflare Pages &rsaquo;
+                          </Link>
+                        </span>
+                        <span>
+                          <strong>Fixed Sprint:</strong>{" "}
+                          <Link href="/pricing#cloudflare-edge-migration" style={{ color: "#16a34a", fontWeight: 700 }}>
+                            Edge Migration ($6,500) &rsaquo;
+                          </Link>
+                        </span>
+                      </div>
 
                       {/* Tool 2: PostgreSQL EXPLAIN ANALYZE Planner */}
                       <LabPostgresPlanner />
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          flexWrap: "wrap",
+                          gap: "8px",
+                          padding: "10px 16px",
+                          backgroundColor: "#f8fafc",
+                          border: "1px solid #e2e8f0",
+                          borderRadius: "6px",
+                          margin: "-16px 0 28px 0",
+                          fontSize: "12.5px",
+                        }}
+                      >
+                        <span>
+                          <strong>Proven in Production:</strong>{" "}
+                          <Link href="/projects/postgres-performance-audit" style={{ color: "#2563eb", fontWeight: 700 }}>
+                            High-Concurrency PostgreSQL Audit &rsaquo;
+                          </Link>
+                        </span>
+                        <span>
+                          <strong>Technical Publication:</strong>{" "}
+                          <Link href="/blog/mastering-postgres-indexing-query-optimization" style={{ color: "#8b5cf6", fontWeight: 700 }}>
+                            Mastering Database Indexing &rsaquo;
+                          </Link>
+                        </span>
+                        <span>
+                          <strong>Fixed Sprint:</strong>{" "}
+                          <Link href="/pricing#database-optimization" style={{ color: "#16a34a", fontWeight: 700 }}>
+                            Postgres Query Sprint ($4,500) &rsaquo;
+                          </Link>
+                        </span>
+                      </div>
 
                       {/* Tool 3: Distributed Topology Explorer */}
-                      <div style={{ marginTop: "16px", marginBottom: "28px" }}>
+                      <div id="topology-explorer" style={{ marginTop: "16px", marginBottom: "28px" }}>
                         <div style={{ marginBottom: "14px" }}>
                           <span style={{ fontSize: "11px", fontWeight: "800", color: "#2563eb", textTransform: "uppercase", letterSpacing: "1px" }}>
                             Telemetry Tool 03 • Distributed Systems
@@ -123,6 +191,40 @@ export default function SystemsLabPage() {
                           </h3>
                         </div>
                         <ArchitectureTopologyExplorer />
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            flexWrap: "wrap",
+                            gap: "8px",
+                            padding: "10px 16px",
+                            backgroundColor: "#f8fafc",
+                            border: "1px solid #e2e8f0",
+                            borderRadius: "6px",
+                            marginTop: "12px",
+                            fontSize: "12.5px",
+                          }}
+                        >
+                          <span>
+                            <strong>Proven in Production:</strong>{" "}
+                            <Link href="/projects/financial-telemetry-pipeline" style={{ color: "#2563eb", fontWeight: 700 }}>
+                              Financial Telemetry Pipeline &rsaquo;
+                            </Link>
+                          </span>
+                          <span>
+                            <strong>Technical Publication:</strong>{" "}
+                            <Link href="/blog/swapping-microservices-for-modular-monolith" style={{ color: "#8b5cf6", fontWeight: 700 }}>
+                              Modular Monolith Architecture &rsaquo;
+                            </Link>
+                          </span>
+                          <span>
+                            <strong>Fixed Sprint:</strong>{" "}
+                            <Link href="/pricing#distributed-telemetry-engine" style={{ color: "#16a34a", fontWeight: 700 }}>
+                              Telemetry Engine ($14,000) &rsaquo;
+                            </Link>
+                          </span>
+                        </div>
                       </div>
 
                       {/* Consultation Banner */}

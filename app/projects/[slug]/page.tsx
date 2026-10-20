@@ -6,6 +6,7 @@ import SiteFooter from "../../components/site-footer";
 import SiteHeader from "../../components/site-header";
 import ProjectScreenshotGallery from "../../components/project-screenshot-gallery";
 import ProjectCaseStudyActions from "../../components/project-case-study-actions";
+import ProjectEcosystemCard from "../../components/project-ecosystem-card";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -316,6 +317,9 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                         </div>
                       </div>
 
+                      {/* Connected Engineering Ecosystem: Lab, Article, Fixed SOW */}
+                      <ProjectEcosystemCard projectSlug={project.slug} />
+
                       {/* Bottom Back Button & Scoping CTA */}
                       <div
                         style={{
@@ -419,6 +423,34 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                         <li><Link href="/projects#enterprise-ai-document-search" style={{ color: "#2563eb" }}>Enterprise AI Document Search</Link></li>
                         <li><Link href="/projects#postgres-performance-audit" style={{ color: "#2563eb" }}>PostgreSQL Performance Audit</Link></li>
                       </ul>
+                    </div>
+                  </div>
+
+                  <div className="widget" id="wdgt-lab-link">
+                    <strong className="heading4 widget-title">
+                      <a href="/lab">Interactive Systems Lab</a>
+                    </strong>
+                    <div className="description">
+                      <p style={{ margin: "0 0 10px 0", fontSize: "12.5px", color: "#475569", lineHeight: "1.5" }}>
+                        Empirical telemetry tools: Live edge latency radar and PostgreSQL query visualizer.
+                      </p>
+                      <Link
+                        href="/lab"
+                        style={{
+                          display: "block",
+                          textAlign: "center",
+                          padding: "8px 12px",
+                          backgroundColor: "#0b132b",
+                          color: "#38bdf8",
+                          border: "1px solid #1e293b",
+                          borderRadius: "6px",
+                          fontWeight: 700,
+                          fontSize: "12px",
+                          textDecoration: "none",
+                        }}
+                      >
+                        ⚡ Launch Systems Lab &rsaquo;
+                      </Link>
                     </div>
                   </div>
 

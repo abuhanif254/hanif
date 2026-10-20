@@ -166,6 +166,7 @@ export default function LabPostgresPlanner() {
 
   return (
     <div
+      id="postgres-planner"
       style={{
         backgroundColor: "#ffffff",
         border: "1px solid #e2e8f0",

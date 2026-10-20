@@ -7,6 +7,7 @@ import SiteHeader from "../../components/site-header";
 import BlogCodeBlock from "../../components/blog-code-block";
 import BlogTableOfContents from "../../components/blog-toc";
 import BlogSocialShare from "../../components/blog-social-share";
+import BlogEcosystemCard from "../../components/blog-ecosystem-card";
 import { blogCategoryPillars } from "../../data/blog-categories";
 
 type BlogPostPageProps = {
@@ -451,9 +452,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                       )}
 
                       {/* Structured Technical Content */}
-                      <div className="article-rendered-body" style={{ marginBottom: "40px" }}>
+                      <div className="article-rendered-body" style={{ marginBottom: "32px" }}>
                         {renderMarkdownContent(post.contentMarkdown)}
                       </div>
+
+                      {/* Connected Architecture Ecosystem: Production Case Study & Systems Lab Simulator */}
+                      <BlogEcosystemCard blogSlug={post.slug} />
 
                       {/* Author Credentials Box */}
                       <div

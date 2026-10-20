@@ -495,7 +495,7 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                                     borderTop: "1px solid #f1f5f9",
                                   }}
                                 >
-                                  <div style={{ display: "flex", gap: "14px", alignItems: "center" }}>
+                                  <div style={{ display: "flex", gap: "14px", alignItems: "center", flexWrap: "wrap" }}>
                                     {project.demoUrl && (
                                       <a
                                         href={project.demoUrl}
@@ -526,6 +526,18 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                                         GitHub Repository ↗
                                       </a>
                                     )}
+                                    <Link
+                                      href="/lab"
+                                      style={{
+                                        fontSize: "12.5px",
+                                        fontWeight: "bold",
+                                        color: "#0284c7",
+                                        textDecoration: "none",
+                                      }}
+                                      title="Inspect interactive telemetry benchmarks in Systems Lab"
+                                    >
+                                      🔬 Systems Lab ↗
+                                    </Link>
                                   </div>
 
                                   <Link
