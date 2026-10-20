@@ -241,7 +241,11 @@ export default function SiteFooter() {
           </div>
           <div className="telemetry-item">
             <span className="telemetry-label">Delivery SLA:</span>
-            <span className="telemetry-value">99.99% Production Uptime</span>
+            <span className="telemetry-value">
+              <Link href="/status" style={{ color: "inherit", textDecoration: "underline", textUnderlineOffset: "3px" }} title="View Real-Time Edge Health & Latency Dashboard">
+                99.99% Production Uptime (Status ↗)
+              </Link>
+            </span>
           </div>
           <div className="telemetry-item">
             <span className="telemetry-label">Latency Metric:</span>
@@ -273,6 +277,9 @@ export default function SiteFooter() {
               <Link href="/lab">Systems Lab</Link>
             </li>
             <li>
+              <Link href="/status">Systems Status</Link>
+            </li>
+            <li>
               <Link href="/blog">Technical Blog</Link>
             </li>
             <li>
@@ -302,6 +309,10 @@ export default function SiteFooter() {
             </div>
             <div className="compliance-links">
               <span>MIT License for Open Source Snippets</span>
+              <span className="divider">•</span>
+              <Link href="/status" style={{ color: "#38bdf8", textDecoration: "underline" }}>
+                Live Systems Status
+              </Link>
               <span className="divider">•</span>
               <span>Mutual NDA Protected</span>
               <span className="divider">•</span>

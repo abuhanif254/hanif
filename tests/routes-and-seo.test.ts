@@ -62,6 +62,7 @@ describe("Routes, SEO & Topic Pillars Verification", () => {
     const urls = entries.map((e) => e.url);
     expect(urls).toContain("https://abuhanifmia.com/");
     expect(urls).toContain("https://abuhanifmia.com/lab");
+    expect(urls).toContain("https://abuhanifmia.com/status");
     expect(urls).toContain("https://abuhanifmia.com/projects");
     expect(urls).toContain("https://abuhanifmia.com/pricing");
     expect(urls).toContain("https://abuhanifmia.com/blog");
@@ -71,7 +72,30 @@ describe("Routes, SEO & Topic Pillars Verification", () => {
       expect(urls).toContain(`https://abuhanifmia.com/blog/category/${cat.slug}`);
     }
 
-    expect(entries.length).toBeGreaterThanOrEqual(20);
+    for (const s of initialServices) {
+      expect(urls).toContain(`https://abuhanifmia.com/services/${s.slug}`);
+    }
+
+    expect(entries.length).toBeGreaterThanOrEqual(30);
+  });
+
+  it("should return valid operational telemetry from /api/health", async () => {
+    const { GET } = await import("../app/api/health/route");
+    const response = await GET();
+    expect(response.status).toBe(200);
+
+    const data = await response.json();
+    expect(data.status).toBe("all_systems_operational");
+    expect(data.uptime90Days).toBe("99.994%");
+    expect(Array.isArray(data.services)).toBe(true);
+    expect(data.services.length).toBeGreaterThanOrEqual(5);
+
+    const edgePoPs = data.services.find((c: { name: string }) => c.name.includes("Cloudflare"));
+    expect(edgePoPs).toBeDefined();
+    expect(edgePoPs?.status).toBe("operational");
+
+    expect(Array.isArray(data.globalPoPs)).toBe(true);
+    expect(data.globalPoPs.length).toBeGreaterThanOrEqual(6);
   });
 });
 

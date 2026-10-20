@@ -163,7 +163,20 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
                 }}
               />
               <span>
-                Available for Q4 Contracts • 2 Dedicated Slots:{" "}
+                Available for Q4 Contracts • 2 Dedicated Slots •{" "}
+                <Link
+                  href="/status"
+                  style={{
+                    color: "#38bdf8",
+                    fontWeight: "600",
+                    textDecoration: "underline",
+                    textUnderlineOffset: "3px",
+                  }}
+                  title="View Real-Time Edge Health & Latency Dashboard"
+                >
+                  99.99% Production SLA ↗
+                </Link>
+                {" "}• Direct:{" "}
                 <strong style={{ color: "#ffffff" }}>abuhanifmain@gmail.com</strong>
               </span>
             </span>
