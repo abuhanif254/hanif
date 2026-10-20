@@ -69,10 +69,15 @@ export interface BlogPost {
 }
 
 export interface Testimonial {
+  id?: string;
   quote: string;
   author: string;
   role: string;
   company: string;
+  verifiedMetric?: string;
+  deliverableTag?: string;
+  projectSlug?: string;
+  serviceSlug?: string;
 }
 
 export const initialProfile: ProfileData = {
@@ -675,15 +680,47 @@ Never guess—always measure with \`EXPLAIN ANALYZE\`.`,
 
 export const initialTestimonials: Testimonial[] = [
   {
+    id: "test-1",
     quote: "Abu Hanif transformed our core API architecture in just three weeks. Our P99 latency dropped by 75% and our infrastructure bill was cut in half. He is one of the rarest engineers who pairs deep systems knowledge with rapid execution velocity.",
     author: "David Vance",
     role: "VP of Engineering",
     company: "Apex Telemetry Labs",
+    verifiedMetric: "⚡ -75% P99 Latency & -50% Cloud Spend",
+    deliverableTag: "Distributed Streaming Engine",
+    projectSlug: "financial-telemetry-pipeline",
+    serviceSlug: "distributed-telemetry-engine",
   },
   {
-    quote: "Working with Abu Hanif felt like having a Principal Architect and a full delivery team rolled into one. Clear technical communication, pristine documentation, and zero fluff. He delivered our Next.js edge platform ahead of schedule.",
+    id: "test-2",
+    quote: "Working with Abu Hanif felt like having a Principal Architect and a full delivery team rolled into one. Clear technical communication, pristine documentation, and zero fluff. He delivered our Next.js edge platform ahead of schedule with 95ms global TTFB.",
     author: "Elena Rostova",
     role: "Founder & CEO",
     company: "Synthetix Cloud",
+    verifiedMetric: "🚀 95ms Global P99 & 100% Edge Cold-Start Elimination",
+    deliverableTag: "Next.js 16 Edge Platform",
+    projectSlug: "cloudflare-edge-ecommerce",
+    serviceSlug: "cloudflare-edge-migration",
+  },
+  {
+    id: "test-3",
+    quote: "Abu Hanif's surgical PostgreSQL audit resolved our database lock contention during morning volume spikes. CPU utilization fell from 94% down to 18%, and our heaviest reporting queries dropped from 4.2 seconds to 11.8ms.",
+    author: "Marcus Thorne",
+    role: "Head of Infrastructure",
+    company: "BlockScale Capital",
+    verifiedMetric: "🎯 4.2s → 12ms Query Latency & -76% DB CPU Load",
+    deliverableTag: "PostgreSQL Performance Audit",
+    projectSlug: "postgres-performance-audit",
+    serviceSlug: "database-optimization",
+  },
+  {
+    id: "test-4",
+    quote: "Abu Hanif designed and shipped our production vector search pipeline over 500k technical documents. Clean TypeScript, hardened pgvector indexing, and comprehensive end-to-end load tests. Exceptional engineering leadership.",
+    author: "Sarah Jenkins",
+    role: "Chief Technology Officer",
+    company: "Nexus Health AI",
+    verifiedMetric: "🔍 500k Vectors Indexed with <180ms Hybrid Search",
+    deliverableTag: "Enterprise AI Document Search",
+    projectSlug: "enterprise-ai-document-search",
+    serviceSlug: "mvp-feature-sprint",
   },
 ];

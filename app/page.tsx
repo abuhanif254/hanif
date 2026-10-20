@@ -8,7 +8,8 @@ import WorkShowcaseSection from "./components/home/work-showcase-section";
 import TechnicalBlogFeed from "./components/home/technical-blog-feed";
 import HomeSidebar from "./components/home/home-sidebar";
 import BottomContactStripe from "./components/home/bottom-contact-stripe";
-import { getProjects, getBlogPosts } from "./lib/portfolio-store";
+import EnterpriseTestimonialsSection from "./components/enterprise-testimonials-section";
+import { getProjects, getBlogPosts, getTestimonials } from "./lib/portfolio-store";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
@@ -47,9 +48,10 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [projects, blogPosts] = await Promise.all([
+  const [projects, blogPosts, testimonials] = await Promise.all([
     getProjects(),
     getBlogPosts(),
+    getTestimonials(),
   ]);
   const jsonLdPerson = {
     "@context": "https://schema.org",
@@ -144,6 +146,7 @@ export default async function HomePage() {
                         <BadgesBar />
                         <BioAndCredentials />
                         <WorkShowcaseSection projects={projects} />
+                        <EnterpriseTestimonialsSection testimonials={testimonials} />
                       </div>
                     </div>
 

@@ -97,5 +97,42 @@ describe("Routes, SEO & Topic Pillars Verification", () => {
     expect(Array.isArray(data.globalPoPs)).toBe(true);
     expect(data.globalPoPs.length).toBeGreaterThanOrEqual(6);
   });
+
+  it("should verify verified client testimonials have valid structure and metrics", async () => {
+    const { getTestimonials } = await import("../app/lib/portfolio-store");
+    const testimonials = await getTestimonials();
+
+    expect(testimonials.length).toBeGreaterThanOrEqual(4);
+    for (const t of testimonials) {
+      expect(t.author.length).toBeGreaterThan(3);
+      expect(t.role.length).toBeGreaterThan(3);
+      expect(t.company.length).toBeGreaterThan(3);
+      expect(t.quote.length).toBeGreaterThan(40);
+      expect(t.verifiedMetric).toBeDefined();
+      expect(t.deliverableTag).toBeDefined();
+    }
+  });
+
+  it("should verify interactive architecture topologies have valid nodes and cross-links", async () => {
+    const { ARCHITECTURE_TOPOLOGIES } = await import("../app/components/architecture-topology-explorer");
+    expect(ARCHITECTURE_TOPOLOGIES.length).toBe(4);
+
+    for (const top of ARCHITECTURE_TOPOLOGIES) {
+      expect(top.id.length).toBeGreaterThan(0);
+      expect(top.title.length).toBeGreaterThan(10);
+      expect(top.caseStudySlug.length).toBeGreaterThan(0);
+      expect(top.serviceSlug.length).toBeGreaterThan(0);
+      expect(top.nodes.length).toBe(5);
+
+      for (const node of top.nodes) {
+        expect(node.id.length).toBeGreaterThan(0);
+        expect(node.label.length).toBeGreaterThan(0);
+        expect(node.throughput.length).toBeGreaterThan(0);
+        expect(node.latencyBudget.length).toBeGreaterThan(0);
+        expect(node.rationale.length).toBeGreaterThan(20);
+        expect(node.resiliency.length).toBeGreaterThan(20);
+      }
+    }
+  });
 });
 

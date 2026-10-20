@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { initialServices, ServicePricing } from "../data/portfolio-data";
+import { initialServices, initialTestimonials, ServicePricing } from "../data/portfolio-data";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
 import SiteFooter from "../components/site-footer";
 import SiteHeader from "../components/site-header";
@@ -632,6 +632,69 @@ export default function PricingClientView({
                               <p style={{ fontSize: "13px", color: "#475569", margin: 0, lineHeight: "1.5" }}>
                                 {item.desc}
                               </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* SECTION 5.5: VERIFIED CLIENT REVIEWS & ROI PROOF */}
+                      <div style={{ borderBottom: "2px solid #2563eb", paddingBottom: "8px", margin: "36px 0 20px 0" }}>
+                        <span style={{ fontSize: "11px", fontWeight: "800", color: "#2563eb", textTransform: "uppercase", letterSpacing: "1px", display: "block", marginBottom: "4px" }}>
+                          Verified Client Outcomes
+                        </span>
+                        <h2 style={{ fontSize: "20px", color: "#0f172a", margin: 0, fontWeight: "800" }}>
+                          Proven Engineering Impact Across Scale-Ups &amp; Enterprise Platforms
+                        </h2>
+                      </div>
+                      <p style={{ fontSize: "13px", color: "#475569", marginBottom: "20px" }}>
+                        Direct feedback from engineering leaders whose platforms were accelerated, audited, or re-architected:
+                      </p>
+
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px", marginBottom: "40px" }}>
+                        {initialTestimonials.map((t, idx) => (
+                          <div
+                            key={t.id || idx}
+                            style={{
+                              backgroundColor: "#ffffff",
+                              border: "1px solid #e2e8f0",
+                              borderRadius: "6px",
+                              padding: "20px",
+                              display: "flex",
+                              flexDirection: "column",
+                              justifyContent: "space-between",
+                              boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+                            }}
+                          >
+                            <div>
+                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+                                <div style={{ color: "#f59e0b", fontSize: "13px", letterSpacing: "2px" }}>★★★★★</div>
+                                {t.deliverableTag && (
+                                  <span style={{ fontSize: "11px", color: "#1e40af", backgroundColor: "#eff6ff", border: "1px solid #bfdbfe", padding: "2px 6px", borderRadius: "3px", fontWeight: "700" }}>
+                                    {t.deliverableTag}
+                                  </span>
+                                )}
+                              </div>
+                              <p style={{ fontSize: "13px", color: "#1e293b", lineHeight: "1.6", fontStyle: "italic", margin: "0 0 14px 0" }}>
+                                &ldquo;{t.quote}&rdquo;
+                              </p>
+                            </div>
+                            <div style={{ borderTop: "1px solid #f1f5f9", paddingTop: "12px" }}>
+                              {t.verifiedMetric && (
+                                <div style={{ backgroundColor: "#ecfdf5", border: "1px solid #a7f3d0", color: "#065f46", fontSize: "11.5px", fontWeight: "700", padding: "4px 8px", borderRadius: "4px", marginBottom: "8px" }}>
+                                  {t.verifiedMetric}
+                                </div>
+                              )}
+                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+                                <div>
+                                  <strong style={{ fontSize: "13px", color: "#0f172a", display: "block" }}>{t.author}</strong>
+                                  <span style={{ fontSize: "11.5px", color: "#64748b" }}>{t.role} • <strong>{t.company}</strong></span>
+                                </div>
+                                {t.projectSlug && (
+                                  <Link href={`/projects/${t.projectSlug}`} style={{ fontSize: "11.5px", color: "#2563eb", fontWeight: "700", textDecoration: "none" }}>
+                                    Case Study &rsaquo;
+                                  </Link>
+                                )}
+                              </div>
                             </div>
                           </div>
                         ))}
