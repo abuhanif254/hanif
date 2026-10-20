@@ -122,7 +122,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 id={id}
                 style={{
                   fontSize: "22px",
-                  color: "#053056",
+                  color: "#0f172a",
                   margin: "32px 0 12px 0",
                   borderBottom: "1px solid #e2e8f0",
                   paddingBottom: "6px",
@@ -156,7 +156,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 id={id}
                 style={{
                   fontSize: "18px",
-                  color: "#053056",
+                  color: "#0f172a",
                   margin: "24px 0 10px 0",
                   display: "flex",
                   alignItems: "center",
@@ -188,8 +188,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   margin: "18px 0",
                   padding: "12px 18px",
                   backgroundColor: "#f8fafc",
-                  borderLeft: "4px solid #053056",
-                  borderRadius: "2px",
+                  borderLeft: "4px solid #2563eb",
+                  borderRadius: "4px",
                   fontStyle: "italic",
                   fontSize: "14px",
                   color: "#334155",
@@ -344,8 +344,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   <div id="img1">
                     <div className="banner-text-wrapper">
                       <div>
-                        <div style={{ fontSize: "11px", fontWeight: "800", color: "#9CBE41", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>
-                          <Link href={`/blog/category/${matchingPillar.slug}`} style={{ color: "#9CBE41", textDecoration: "none" }}>
+                        <div style={{ fontSize: "11px", fontWeight: "800", color: "#38bdf8", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>
+                          <Link href={`/blog/category/${matchingPillar.slug}`} style={{ color: "#38bdf8", textDecoration: "none" }}>
                             {matchingPillar.name}
                           </Link>
                         </div>
@@ -365,7 +365,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <div id="content">
                   <div id="breadcrumbs">
                     <div className="wrapper">
-                      <Link href="/">Home</Link> &gt; <Link href="/blog">Technical Blog</Link> &gt; <Link href={`/blog/category/${matchingPillar.slug}`}>{matchingPillar.name}</Link> &gt; <span>{post.title}</span>
+                      <Link href="/" style={{ color: "#2563eb" }}>Home</Link> &gt; <Link href="/blog" style={{ color: "#2563eb" }}>Technical Blog</Link> &gt; <Link href={`/blog/category/${matchingPillar.slug}`} style={{ color: "#2563eb" }}>{matchingPillar.name}</Link> &gt; <span>{post.title}</span>
                     </div>
                   </div>
 
@@ -374,11 +374,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                       {/* Article Header Metadata Strip */}
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px", marginBottom: "12px", paddingBottom: "12px", borderBottom: "1px solid #e2e8f0" }}>
                         <div style={{ display: "flex", gap: "10px", alignItems: "center", fontSize: "12px", color: "#64748b" }}>
-                          <strong style={{ color: "#053056" }}>
+                          <strong style={{ color: "#0f172a" }}>
                             {new Date(post.publishedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
                           </strong>
                           <span>•</span>
-                          <span style={{ color: "#16a34a", fontWeight: "700" }}>⏱ {post.readingTimeMinutes} min read</span>
+                          <span style={{ color: "#047857", fontWeight: "700" }}>⏱ {post.readingTimeMinutes} min read</span>
                           <span>•</span>
                           <span>Author: <strong>MD Abu Hanif Mia</strong></span>
                         </div>
@@ -389,11 +389,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                               style={{
                                 fontSize: "11px",
                                 fontWeight: "700",
-                                backgroundColor: "#f1f5f9",
-                                border: "1px solid #cbd5e1",
-                                color: "#475569",
+                                backgroundColor: "#eff6ff",
+                                border: "1px solid #bfdbfe",
+                                color: "#1d4ed8",
                                 padding: "2px 8px",
-                                borderRadius: "3px",
+                                borderRadius: "4px",
                               }}
                             >
                               #{tag}
@@ -410,13 +410,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         style={{
                           backgroundColor: "#f8fafc",
                           border: "1px solid #cbd5e1",
-                          borderLeft: "4px solid #053056",
-                          borderRadius: "4px",
-                          padding: "18px 20px",
+                          borderLeft: "4px solid #2563eb",
+                          borderRadius: "8px",
+                          padding: "20px 24px",
                           marginBottom: "28px",
                         }}
                       >
-                        <span style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "1px", fontWeight: "800", color: "#053056", display: "block", marginBottom: "4px" }}>
+                        <span style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "1px", fontWeight: "800", color: "#0f172a", display: "block", marginBottom: "4px" }}>
                           Executive Summary &amp; Core Takeaway
                         </span>
                         <p style={{ margin: 0, fontSize: "14px", lineHeight: "1.6", color: "#1e293b", fontWeight: "500" }}>
@@ -430,18 +430,18 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                           style={{
                             backgroundColor: "#ffffff",
                             border: "1px solid #e2e8f0",
-                            borderRadius: "4px",
+                            borderRadius: "8px",
                             padding: "16px 20px",
                             marginBottom: "28px",
                           }}
                         >
-                          <strong style={{ display: "block", fontSize: "13px", color: "#053056", marginBottom: "8px", textTransform: "uppercase" }}>
+                          <strong style={{ display: "block", fontSize: "13px", color: "#0f172a", marginBottom: "8px", textTransform: "uppercase" }}>
                             Table of Contents
                           </strong>
                           <ul style={{ margin: 0, paddingLeft: "18px", fontSize: "13px", lineHeight: "1.8" }}>
                             {headings.map((h, i) => (
                               <li key={i} style={{ marginLeft: h.level === 3 ? "14px" : "0" }}>
-                                <a href={`#${h.id}`} style={{ color: "#053056", textDecoration: "none" }}>
+                                <a href={`#${h.id}`} style={{ color: "#2563eb", textDecoration: "none" }}>
                                   {h.title}
                                 </a>
                               </li>
@@ -460,10 +460,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         style={{
                           display: "flex",
                           gap: "18px",
-                          padding: "22px",
-                          backgroundColor: "#053056",
+                          padding: "24px",
+                          backgroundColor: "#0b132b",
+                          border: "1px solid #1e293b",
                           color: "#ffffff",
-                          borderRadius: "6px",
+                          borderRadius: "8px",
                           marginBottom: "40px",
                           alignItems: "center",
                           flexWrap: "wrap",
@@ -475,8 +476,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                           style={{
                             width: "80px",
                             height: "80px",
-                            borderRadius: "4px",
-                            border: "2px solid #9CBE41",
+                            borderRadius: "6px",
+                            border: "2px solid #2563eb",
                             objectFit: "cover",
                           }}
                         />
@@ -484,10 +485,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                           <div style={{ fontSize: "16px", fontWeight: "700", color: "#ffffff" }}>
                             Written by MD Abu Hanif Mia (Abu Hanif)
                           </div>
-                          <div style={{ fontSize: "12px", color: "#9CBE41", fontWeight: "600", marginBottom: "6px" }}>
+                          <div style={{ fontSize: "12px", color: "#38bdf8", fontWeight: "600", marginBottom: "6px" }}>
                             Staff Software Engineer &amp; Systems Architect
                           </div>
-                          <p style={{ margin: 0, fontSize: "12px", color: "#cbd5e1", lineHeight: "1.5" }}>
+                          <p style={{ margin: 0, fontSize: "12.5px", color: "#cbd5e1", lineHeight: "1.5" }}>
                             9+ years shipping high-throughput distributed backends, Supabase real-time pipelines, and low-latency Next.js applications on Cloudflare Pages.
                           </p>
                         </div>
@@ -496,7 +497,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                       {/* Related Architecture Articles */}
                       {relatedPosts.length > 0 && (
                         <div style={{ marginBottom: "40px" }}>
-                          <h3 style={{ fontSize: "18px", color: "#053056", borderBottom: "2px solid #9CBE41", paddingBottom: "6px", marginBottom: "16px" }}>
+                          <h3 style={{ fontSize: "18px", color: "#0f172a", borderBottom: "2px solid #2563eb", paddingBottom: "6px", marginBottom: "16px" }}>
                             Related Technical Publications
                           </h3>
                           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "16px" }}>
@@ -507,19 +508,19 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                                   padding: "16px",
                                   backgroundColor: "#f8fafc",
                                   border: "1px solid #e2e8f0",
-                                  borderRadius: "4px",
+                                  borderRadius: "6px",
                                 }}
                               >
                                 <span style={{ fontSize: "11px", color: "#64748b" }}>⏱ {rel.readingTimeMinutes} min read</span>
                                 <h4 style={{ margin: "6px 0 8px 0", fontSize: "15px", lineHeight: "1.3" }}>
-                                  <Link href={`/blog/${rel.slug}`} style={{ color: "#053056", textDecoration: "none" }}>
+                                  <Link href={`/blog/${rel.slug}`} style={{ color: "#0f172a", textDecoration: "none" }}>
                                     {rel.title}
                                   </Link>
                                 </h4>
                                 <p style={{ fontSize: "12px", color: "#475569", lineHeight: "1.5", margin: "0 0 10px 0" }}>
                                   {rel.excerpt}
                                 </p>
-                                <Link href={`/blog/${rel.slug}`} style={{ fontSize: "12px", fontWeight: "700", color: "#053056", textDecoration: "none" }}>
+                                <Link href={`/blog/${rel.slug}`} style={{ fontSize: "12px", fontWeight: "700", color: "#2563eb", textDecoration: "none" }}>
                                   Read Article &rsaquo;
                                 </Link>
                               </div>
@@ -532,19 +533,19 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                       <div
                         style={{
                           padding: "24px",
-                          backgroundColor: "#053056",
-                          border: "1px solid #0a365c",
-                          borderRadius: "6px",
+                          backgroundColor: "#0b132b",
+                          border: "1px solid #1e293b",
+                          borderRadius: "8px",
                           color: "#ffffff",
                         }}
                       >
-                        <div style={{ fontSize: "11px", fontWeight: "800", color: "#9CBE41", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>
+                        <div style={{ fontSize: "11px", fontWeight: "800", color: "#38bdf8", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>
                           Targeted Architecture Consultation
                         </div>
                         <h3 style={{ margin: "0 0 8px 0", color: "#ffffff", fontSize: "19px" }}>
                           Need Surgical Engineering on {matchingPillar.name}?
                         </h3>
-                        <p style={{ margin: "0 0 16px 0", fontSize: "13px", color: "#cbd5e1", lineHeight: "1.6" }}>
+                        <p style={{ margin: "0 0 16px 0", fontSize: "13.5px", color: "#cbd5e1", lineHeight: "1.6" }}>
                           Book the <strong>{matchingPillar.consultingServiceTitle}</strong> ({matchingPillar.consultingPrice} fixed milestone). Direct 1:1 engagement with Staff Software Engineer Abu Hanif with verified production deliverables and zero budget creep.
                         </p>
                         <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
@@ -552,12 +553,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                             href={`/pricing#${matchingPillar.consultingServiceSlug}`}
                             style={{
                               padding: "10px 20px",
-                              backgroundColor: "#9CBE41",
-                              color: "#041f36",
+                              backgroundColor: "#2563eb",
+                              color: "#ffffff",
                               textDecoration: "none",
-                              borderRadius: "4px",
+                              borderRadius: "6px",
                               fontSize: "13px",
-                              fontWeight: "800",
+                              fontWeight: "700",
+                              transition: "background-color 0.15s ease",
                             }}
                           >
                             View Milestone Scope ({matchingPillar.consultingPrice}) &rsaquo;
@@ -566,11 +568,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                             href={`/blog/category/${matchingPillar.slug}`}
                             style={{
                               padding: "10px 18px",
-                              backgroundColor: "#042442",
+                              backgroundColor: "#111e38",
                               color: "#cbd5e1",
-                              border: "1px solid #0a365c",
+                              border: "1px solid #1e293b",
                               textDecoration: "none",
-                              borderRadius: "4px",
+                              borderRadius: "6px",
                               fontSize: "13px",
                               fontWeight: "700",
                             }}
@@ -592,22 +594,22 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     )}
 
                     {/* Author Snapshot */}
-                    <div className="block" style={{ backgroundColor: "#f8fafc", padding: "18px", border: "1px solid #e2e8f0", borderRadius: "4px", marginBottom: "20px" }}>
+                    <div className="block" style={{ backgroundColor: "#f8fafc", padding: "18px", border: "1px solid #e2e8f0", borderRadius: "8px", marginBottom: "20px" }}>
                       <img
                         src="/images/profile.png"
                         alt="MD Abu Hanif Mia - Staff Software Engineer"
                         style={{
                           width: "100%",
-                          borderRadius: "4px",
+                          borderRadius: "6px",
                           marginBottom: "12px",
                           border: "1px solid #cbd5e1",
                           display: "block",
                         }}
                       />
-                      <h3 style={{ margin: "0 0 4px 0", fontSize: "16px", color: "#053056" }}>
+                      <h3 style={{ margin: "0 0 4px 0", fontSize: "16px", color: "#0f172a" }}>
                         MD Abu Hanif Mia
                       </h3>
-                      <div style={{ fontSize: "12px", color: "#9CBE41", fontWeight: "700", marginBottom: "8px" }}>
+                      <div style={{ fontSize: "12px", color: "#2563eb", fontWeight: "700", marginBottom: "8px" }}>
                         Staff Software Engineer &amp; Systems Architect
                       </div>
                       <div style={{ fontSize: "12px", color: "#475569", lineHeight: "1.6", marginBottom: "10px" }}>
@@ -616,14 +618,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         • <strong>freeCodeCamp Certified</strong> (JS, TS, Python)<br />
                         • <strong>Rust &amp; Go Concurrency</strong>, Next.js 16, Postgres
                       </div>
-                      <Link href="/resume" style={{ fontSize: "12px", color: "#053056", fontWeight: "700", textDecoration: "underline" }}>
+                      <Link href="/resume" style={{ fontSize: "12px", color: "#2563eb", fontWeight: "700", textDecoration: "underline" }}>
                         View Verified Credentials &rsaquo;
                       </Link>
                     </div>
 
                     {/* Article Details Widget */}
-                    <div className="block" style={{ border: "1px solid #cbd5e1", padding: "16px", borderRadius: "4px", backgroundColor: "#ffffff", marginBottom: "20px" }}>
-                      <h4 style={{ margin: "0 0 10px 0", fontSize: "13px", color: "#053056", textTransform: "uppercase" }}>
+                    <div className="block" style={{ border: "1px solid #cbd5e1", padding: "16px", borderRadius: "8px", backgroundColor: "#ffffff", marginBottom: "20px" }}>
+                      <h4 style={{ margin: "0 0 10px 0", fontSize: "13px", color: "#0f172a", textTransform: "uppercase" }}>
                         Article Metadata
                       </h4>
                       <div style={{ fontSize: "12px", color: "#475569", lineHeight: "1.6" }}>
@@ -635,16 +637,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     </div>
 
                     {/* Quick Links */}
-                    <div className="block" style={{ border: "1px solid #e2e8f0", padding: "14px", borderRadius: "4px", backgroundColor: "#f8fafc" }}>
-                      <strong style={{ display: "block", fontSize: "12px", color: "#053056", marginBottom: "8px" }}>Navigation:</strong>
+                    <div className="block" style={{ border: "1px solid #e2e8f0", padding: "14px", borderRadius: "8px", backgroundColor: "#f8fafc" }}>
+                      <strong style={{ display: "block", fontSize: "12px", color: "#0f172a", marginBottom: "8px" }}>Navigation:</strong>
                       <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "12px" }}>
-                        <Link href="/blog" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                        <Link href="/blog" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
                           &lsaquo; Back to All Articles
                         </Link>
-                        <Link href="/projects" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                        <Link href="/projects" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
                           &rsaquo; Work Showcase &amp; Projects
                         </Link>
-                        <Link href="/pricing" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                        <Link href="/pricing" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
                           &rsaquo; Work Prices &amp; Sprints
                         </Link>
                       </div>

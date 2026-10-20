@@ -1,7 +1,7 @@
 /* =============================================================================
-   Dedicated Global 5-Tier Footer Styles — Harmonized with Justia Oak Theme
+   Dedicated Global 5-Tier Footer Styles — Midnight Slate & Cobalt Architecture
    Strictly isolated to #footer.global-site-footer and .global-footer-*
-   Base Navy: #053056 | Accent Lime: #9CBE41 | High-Contrast Text: #ffffff / #f8fafc / #e2e8f0
+   Base Midnight: #0b132b | Accent Cobalt: #2563eb | High-Contrast Text: #ffffff / #f8fafc / #e2e8f0
    Does NOT affect #header, #topnav, #img1, #img2, .pabttn, .widget, or .sidebar.
    ============================================================================= */
 
@@ -12,10 +12,10 @@ footer#footer.global-site-footer {
   clear: both !important;
   display: block !important;
   width: 100% !important;
-  background-color: #053056 !important;
+  background-color: var(--surface-dark-midnight, #0b132b) !important;
   background-image: none !important;
   color: #f1f5f9 !important;
-  border-top: 5px solid #9CBE41 !important;
+  border-top: 2px solid var(--accent-interactive, #2563eb) !important;
   text-align: left !important;
   text-indent: 0 !important;
   margin: 0 !important;
@@ -52,7 +52,7 @@ footer#footer.global-site-footer a {
 
 #footer.global-site-footer a:hover,
 footer#footer.global-site-footer a:hover {
-  color: #9CBE41 !important;
+  color: var(--accent-sky, #38bdf8) !important;
 }
 
 #footer.global-site-footer a:after,
@@ -77,10 +77,10 @@ footer#footer.global-site-footer a:after {
    TIER 1: Pre-Footer Consultation Ribbon
    ============================================================================= */
 .global-footer-ribbon {
-  background-color: #042442 !important;
+  background-color: #070f1e !important;
   border-top: none !important;
-  border-bottom: 2px solid #0a365c !important;
-  padding: 32px 0 !important;
+  border-bottom: 1px solid var(--border-dark, #1e293b) !important;
+  padding: 40px 0 !important;
   width: 100% !important;
   box-sizing: border-box !important;
 }
@@ -103,7 +103,7 @@ footer#footer.global-site-footer a:after {
   font-weight: 800 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.75px !important;
-  color: #9CBE41 !important;
+  color: var(--accent-sky, #38bdf8) !important;
   display: block !important;
   margin-bottom: 6px !important;
 }
@@ -134,14 +134,14 @@ footer#footer.global-site-footer a:after {
 
 .global-footer-btn-primary {
   display: block !important;
-  padding: 11px 24px !important;
-  background-color: #9CBE41 !important;
-  color: #041f36 !important;
-  font-weight: 800 !important;
+  padding: 12px 24px !important;
+  background-color: var(--accent-interactive, #2563eb) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
   font-size: 14px !important;
   border-radius: 4px !important;
   text-decoration: none !important;
-  border: none !important;
+  border: 1px solid var(--accent-interactive-hover, #1d4ed8) !important;
   text-align: center !important;
   width: 100% !important;
   box-sizing: border-box !important;
@@ -150,18 +150,18 @@ footer#footer.global-site-footer a:after {
 }
 
 .global-footer-btn-primary:hover {
-  background-color: #a7cf3d !important;
-  color: #041f36 !important;
+  background-color: var(--accent-interactive-hover, #1d4ed8) !important;
+  color: #ffffff !important;
   transform: translateY(-1px) !important;
 }
 
 .global-footer-btn-secondary {
   display: block !important;
-  padding: 10px 22px !important;
-  background-color: #073a66 !important;
+  padding: 11px 22px !important;
+  background-color: #0d1e3a !important;
   color: #ffffff !important;
-  border: 2px solid #9CBE41 !important;
-  font-weight: 800 !important;
+  border: 1px solid var(--border-dark, #1e293b) !important;
+  font-weight: 700 !important;
   font-size: 13px !important;
   border-radius: 4px !important;
   text-decoration: none !important;
@@ -169,12 +169,12 @@ footer#footer.global-site-footer a:after {
   width: 100% !important;
   box-sizing: border-box !important;
   cursor: pointer !important;
-  transition: background-color 0.15s ease, border-color 0.15s ease !important;
+  transition: all 0.15s ease !important;
 }
 
 .global-footer-btn-secondary:hover {
-  background-color: #09477d !important;
-  border-color: #bbf246 !important;
+  background-color: #162f59 !important;
+  border-color: var(--accent-interactive, #2563eb) !important;
   color: #ffffff !important;
 }
 
@@ -194,14 +194,14 @@ footer#footer.global-site-footer a:after {
 }
 
 /* =============================================================================
-   TIER 2: 5-Column High-Density Directory (Harmonized Theme Navy: #053056)
+   TIER 2: 5-Column High-Density Directory (Harmonized Midnight Slate: #0b132b)
    ============================================================================= */
 .global-footer-grid {
   display: grid !important;
   grid-template-columns: 1.4fr 1.1fr 1.2fr 1.2fr 1.1fr !important;
   gap: 32px !important;
   padding: 42px 0 34px 0 !important;
-  border-bottom: 1px solid #0e4471 !important;
+  border-bottom: 1px solid var(--border-dark, #1e293b) !important;
 }
 
 .global-footer-col {
@@ -229,7 +229,7 @@ footer#footer.global-site-footer a:after {
 
 .footer-author-title {
   font-size: 13px !important;
-  color: #9CBE41 !important;
+  color: var(--accent-sky, #38bdf8) !important;
   font-weight: 700 !important;
   display: block !important;
   letter-spacing: 0.2px !important;
@@ -273,13 +273,13 @@ footer#footer.global-site-footer a:after {
 }
 
 .footer-highlight-link {
-  color: #9CBE41 !important;
+  color: var(--accent-sky, #38bdf8) !important;
   font-weight: 700 !important;
   text-decoration: underline !important;
 }
 
 .footer-highlight-link:hover {
-  color: #bbf246 !important;
+  color: #7dd3fc !important;
 }
 
 .footer-ecosystem-badges {
@@ -291,11 +291,11 @@ footer#footer.global-site-footer a:after {
 .eco-badge {
   font-size: 11px !important;
   font-weight: 700 !important;
-  background-color: #083c66 !important;
-  border: 1px solid #175a94 !important;
+  background-color: #111e38 !important;
+  border: 1px solid #1e293b !important;
   color: #ffffff !important;
   padding: 3px 8px !important;
-  border-radius: 3px !important;
+  border-radius: 4px !important;
 }
 
 .footer-col-title {
@@ -306,7 +306,7 @@ footer#footer.global-site-footer a:after {
   letter-spacing: 0.75px !important;
   margin: 0 0 16px 0 !important;
   padding-bottom: 8px !important;
-  border-bottom: 2px solid #9CBE41 !important;
+  border-bottom: 2px solid var(--accent-interactive, #2563eb) !important;
 }
 
 .footer-links-list {
@@ -335,7 +335,7 @@ footer#footer.global-site-footer a:after {
 }
 
 .footer-links-list li a:hover {
-  color: #9CBE41 !important;
+  color: var(--accent-sky, #38bdf8) !important;
   text-decoration: underline !important;
 }
 
@@ -347,7 +347,7 @@ footer#footer.global-site-footer a:after {
 }
 
 .case-studies-list .footer-project-link:hover strong {
-  color: #9CBE41 !important;
+  color: var(--accent-sky, #38bdf8) !important;
 }
 
 .footer-meta-pill {
@@ -393,7 +393,7 @@ footer#footer.global-site-footer a:after {
 }
 
 .articles-list .footer-article-link:hover span:first-child {
-  color: #9CBE41 !important;
+  color: var(--accent-sky, #38bdf8) !important;
 }
 
 .articles-list .read-time {
@@ -406,19 +406,19 @@ footer#footer.global-site-footer a:after {
 }
 
 .footer-cta-link-item a.footer-view-all {
-  color: #9CBE41 !important;
+  color: var(--accent-sky, #38bdf8) !important;
   font-weight: 800 !important;
   font-size: 13px !important;
   display: inline-block !important;
 }
 
 .footer-cta-link-item a.footer-view-all:hover {
-  color: #bbf246 !important;
+  color: #7dd3fc !important;
   text-decoration: underline !important;
 }
 
 /* =============================================================================
-   TIER 3: Telemetry Strip (Deep Navy: #042442 with #0e4471 Border)
+   TIER 3: Telemetry Strip (Deep Midnight: #070f1e with Border)
    ============================================================================= */
 .global-footer-telemetry {
   display: flex !important;
@@ -426,11 +426,11 @@ footer#footer.global-site-footer a:after {
   justify-content: space-between !important;
   align-items: center !important;
   gap: 18px !important;
-  padding: 18px 24px !important;
-  background-color: #042442 !important;
-  border: 1px solid #0e4471 !important;
+  padding: 20px 24px !important;
+  background-color: #070f1e !important;
+  border: 1px solid var(--border-dark, #1e293b) !important;
   border-radius: 6px !important;
-  margin: 30px 0 !important;
+  margin: 32px 0 !important;
 }
 
 .telemetry-item {
@@ -455,7 +455,7 @@ footer#footer.global-site-footer a:after {
 }
 
 /* =============================================================================
-   TIER 4: Global Primary Navigation Bar (Deep Navy: #031c33)
+   TIER 4: Global Primary Navigation Bar (Deep Midnight: #070f1e)
    ============================================================================= */
 #global-footernav,
 .global-footer-nav {
@@ -463,9 +463,9 @@ footer#footer.global-site-footer a:after {
   top: auto !important;
   left: auto !important;
   width: 100% !important;
-  background-color: #031c33 !important;
-  border-top: 1px solid #0e4471 !important;
-  border-bottom: 1px solid #0e4471 !important;
+  background-color: #070f1e !important;
+  border-top: 1px solid var(--border-dark, #1e293b) !important;
+  border-bottom: 1px solid var(--border-dark, #1e293b) !important;
   padding: 14px 0 !important;
   margin: 0 0 22px 0 !important;
   text-align: center !important;
@@ -514,7 +514,7 @@ footer#footer.global-site-footer a:after {
 
 #global-footernav li a:hover,
 .global-footer-nav li a:hover {
-  color: #9CBE41 !important;
+  color: var(--accent-sky, #38bdf8) !important;
   background-color: transparent !important;
 }
 
@@ -522,8 +522,8 @@ footer#footer.global-site-footer a:after {
    TIER 5: Legal & Compliance Strip
    ============================================================================= */
 .global-footer-legal {
-  padding: 18px 0 36px 0 !important;
-  border-top: 1px solid #0e4471 !important;
+  padding: 20px 0 36px 0 !important;
+  border-top: 1px solid var(--border-dark, #1e293b) !important;
   font-size: 13px !important;
   color: #cbd5e1 !important;
   line-height: 1.65 !important;
@@ -566,17 +566,17 @@ footer#footer.global-site-footer a:after {
 }
 
 .compliance-links .divider {
-  color: #175a94 !important;
+  color: #334155 !important;
 }
 
 .admin-access-link {
-  color: #9CBE41 !important;
-  font-weight: 800 !important;
+  color: var(--accent-sky, #38bdf8) !important;
+  font-weight: 700 !important;
   text-decoration: none !important;
 }
 
 .admin-access-link:hover {
-  color: #bbf246 !important;
+  color: #7dd3fc !important;
   text-decoration: underline !important;
 }
 

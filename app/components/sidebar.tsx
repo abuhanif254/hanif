@@ -34,16 +34,17 @@ export default function Sidebar() {
       {/* Engineering Credentials & Metrics Badge */}
       <div
         style={{
-          backgroundColor: "#053056",
-          border: "1px solid #0a365c",
-          borderRadius: "6px",
+          backgroundColor: "#0b132b",
+          border: "1px solid #1e293b",
+          borderRadius: "8px",
           padding: "16px",
           marginBottom: "14px",
           textAlign: "center",
           color: "#ffffff",
+          boxShadow: "0 4px 16px -2px rgba(11, 19, 43, 0.12)",
         }}
       >
-        <div style={{ fontSize: "11px", fontWeight: "700", color: "#9CBE41", textTransform: "uppercase", letterSpacing: "1.5px" }}>
+        <div style={{ fontSize: "11px", fontWeight: "700", color: "#10b981", textTransform: "uppercase", letterSpacing: "1.5px" }}>
           Production Track Record
         </div>
         <div style={{ fontSize: "24px", fontWeight: "800", margin: "4px 0", color: "#ffffff" }}>
@@ -59,8 +60,8 @@ export default function Sidebar() {
         style={{
           backgroundColor: "#f8fafc",
           border: "1px solid #e2e8f0",
-          borderLeft: "4px solid #9CBE41",
-          borderRadius: "4px",
+          borderLeft: "4px solid #2563eb",
+          borderRadius: "6px",
           padding: "10px 12px",
           marginBottom: "20px",
           display: "flex",
@@ -81,7 +82,7 @@ export default function Sidebar() {
           }}
         />
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: "10px", fontWeight: "800", color: "#053056", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+          <div style={{ fontSize: "10px", fontWeight: "800", color: "#2563eb", textTransform: "uppercase", letterSpacing: "0.5px" }}>
             ✓ Verified Certificate
           </div>
           <div style={{ fontSize: "12px", color: "#1e293b", fontWeight: "bold", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -90,7 +91,7 @@ export default function Sidebar() {
           <a
             href="#certificate-modal"
             data-certificate-trigger="programming-hero"
-            style={{ fontSize: "11px", color: "#053056", textDecoration: "underline", fontWeight: "700" }}
+            style={{ fontSize: "11px", color: "#2563eb", textDecoration: "underline", fontWeight: "700" }}
           >
             View Credential (WEB12-3991) ›
           </a>
@@ -126,12 +127,12 @@ export default function Sidebar() {
             justifyContent: "center",
             width: "38px",
             height: "38px",
-            backgroundColor: "#042442",
+            backgroundColor: "#070f1e",
             color: "#ffffff",
             borderRadius: "4px",
             fontWeight: "bold",
             fontSize: "14px",
-            border: "1px solid #0a365c",
+            border: "1px solid #1e293b",
             textDecoration: "none",
           }}
           title="GitHub Profile"
@@ -192,7 +193,7 @@ export default function Sidebar() {
 
       {/* Engineering Specializations Sidebar */}
       <section className="practice-sidebar" id="practice" style={{ marginTop: "24px" }}>
-        <h2 className="side-title" style={{ fontSize: "16px", textTransform: "uppercase", letterSpacing: "1px", borderBottom: "2px solid #9CBE41", paddingBottom: "6px" }}>
+        <h2 className="side-title" style={{ fontSize: "16px", textTransform: "uppercase", letterSpacing: "1px", borderBottom: "2px solid #2563eb", paddingBottom: "6px" }}>
           Core Competencies
         </h2>
         <div className="practice-group" style={{ margin: "12px 0" }}>

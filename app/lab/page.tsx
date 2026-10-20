@@ -115,10 +115,10 @@ export default function SystemsLabPage() {
                       {/* Tool 3: Distributed Topology Explorer */}
                       <div style={{ marginTop: "16px", marginBottom: "28px" }}>
                         <div style={{ marginBottom: "14px" }}>
-                          <span style={{ fontSize: "11px", fontWeight: "800", color: "#9CBE41", textTransform: "uppercase", letterSpacing: "1px" }}>
+                          <span style={{ fontSize: "11px", fontWeight: "800", color: "#2563eb", textTransform: "uppercase", letterSpacing: "1px" }}>
                             Telemetry Tool 03 • Distributed Systems
                           </span>
-                          <h3 style={{ margin: "4px 0 0 0", fontSize: "20px", color: "#053056" }}>
+                          <h3 style={{ margin: "4px 0 0 0", fontSize: "20px", color: "#0f172a" }}>
                             Interactive Streaming Topology &amp; Failover Architecture
                           </h3>
                         </div>
@@ -128,15 +128,16 @@ export default function SystemsLabPage() {
                       {/* Consultation Banner */}
                       <div
                         style={{
-                          backgroundColor: "#053056",
-                          border: "1px solid #0a365c",
-                          borderRadius: "6px",
+                          backgroundColor: "#0b132b",
+                          border: "1px solid #1e293b",
+                          borderRadius: "8px",
                           padding: "24px",
                           color: "#ffffff",
                           marginTop: "24px",
+                          boxShadow: "0 4px 16px -2px rgba(11, 19, 43, 0.12)",
                         }}
                       >
-                        <div style={{ fontSize: "11px", fontWeight: "800", color: "#9CBE41", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>
+                        <div style={{ fontSize: "11px", fontWeight: "800", color: "#38bdf8", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>
                           Architecture Diagnostic &amp; Tuning Sprints
                         </div>
                         <h3 style={{ margin: "0 0 8px 0", fontSize: "20px", color: "#ffffff" }}>
@@ -150,12 +151,13 @@ export default function SystemsLabPage() {
                             href="/pricing#database-optimization"
                             style={{
                               padding: "10px 20px",
-                              backgroundColor: "#9CBE41",
-                              color: "#041f36",
-                              borderRadius: "4px",
+                              backgroundColor: "#2563eb",
+                              color: "#ffffff",
+                              borderRadius: "6px",
                               fontSize: "13px",
-                              fontWeight: "800",
+                              fontWeight: "700",
                               textDecoration: "none",
+                              transition: "background-color 0.15s ease",
                             }}
                           >
                             Book PostgreSQL Sprint ($4,500) &rsaquo;
@@ -164,10 +166,10 @@ export default function SystemsLabPage() {
                             href="/projects"
                             style={{
                               padding: "10px 18px",
-                              backgroundColor: "#042442",
+                              backgroundColor: "#111e38",
                               color: "#cbd5e1",
-                              border: "1px solid #0a365c",
-                              borderRadius: "4px",
+                              border: "1px solid #1e293b",
+                              borderRadius: "6px",
                               fontSize: "13px",
                               fontWeight: "700",
                               textDecoration: "none",
@@ -195,7 +197,7 @@ export default function SystemsLabPage() {
                       </div>
                       <div style={{ marginBottom: "8px" }}>
                         <strong>Programming Hero Honor</strong><br />
-                        <span style={{ color: "#166534", fontWeight: "bold" }}>Batch-12 • WEB12-3991 (Verified)</span>
+                        <span style={{ color: "#047857", fontWeight: "bold" }}>Batch-12 • WEB12-3991 (Verified)</span>
                       </div>
                       <div style={{ marginBottom: "8px" }}>
                         <strong>freeCodeCamp Certified</strong><br />
@@ -203,7 +205,7 @@ export default function SystemsLabPage() {
                       </div>
                       <div>
                         <strong>Systems Specialization</strong><br />
-                        <span style={{ color: "#053056", fontWeight: "bold" }}>Rust, Go Concurrency, Postgres 16</span>
+                        <span style={{ color: "#2563eb", fontWeight: "bold" }}>Rust, Go Concurrency, Postgres 16</span>
                       </div>
                     </div>
                   </div>
@@ -223,13 +225,14 @@ export default function SystemsLabPage() {
                         style={{
                           display: "block",
                           textAlign: "center",
-                          padding: "10px",
-                          backgroundColor: "#053056",
+                          padding: "10px 16px",
+                          backgroundColor: "#2563eb",
                           color: "#ffffff",
                           fontWeight: "bold",
                           textDecoration: "none",
-                          borderRadius: "3px",
+                          borderRadius: "6px",
                           fontSize: "13px",
+                          transition: "background-color 0.15s ease",
                         }}
                       >
                         Request Project Quote ›

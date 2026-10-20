@@ -52,7 +52,7 @@ export default function BlogCodeBlock({ language, code }: BlogCodeBlockProps) {
           </div>
           <span
             style={{
-              color: "#9CBE41",
+              color: "#38bdf8",
               fontWeight: "700",
               textTransform: "uppercase",
               letterSpacing: "0.5px",
@@ -93,7 +93,7 @@ export default function BlogCodeBlock({ language, code }: BlogCodeBlockProps) {
           color: "#e2e8f0",
           fontSize: "13px",
           lineHeight: "1.6",
-          fontFamily: "'Courier New', Courier, Consolas, monospace",
+          fontFamily: "var(--font-mono), 'JetBrains Mono', Consolas, 'Courier New', monospace",
           overflowX: "auto",
         }}
       >

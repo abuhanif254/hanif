@@ -78,8 +78,8 @@ export default function CommandPalette() {
           backgroundColor: "#ffffff",
           borderRadius: "8px",
           overflow: "hidden",
-          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px #053056",
-          border: "2px solid #053056",
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px #2563eb",
+          border: "2px solid #2563eb",
           display: "flex",
           flexDirection: "column",
           maxHeight: "80vh",
@@ -97,7 +97,7 @@ export default function CommandPalette() {
               gap: "10px",
             }}
           >
-            <span style={{ fontSize: "16px", color: "#053056" }}>🔍</span>
+            <span style={{ fontSize: "16px", color: "#2563eb" }}>🔍</span>
             <Command.Input
               autoFocus
               placeholder="Search projects, technical articles, topic pillars, pricing, or actions..."
@@ -165,7 +165,7 @@ export default function CommandPalette() {
             <Command.Group
               heading="Quick Actions & Direct Contact"
               style={{
-                color: "#053056",
+                color: "#2563eb",
                 fontSize: "11px",
                 fontWeight: "800",
                 textTransform: "uppercase",
@@ -221,7 +221,7 @@ export default function CommandPalette() {
                 }}
               >
                 <span>💼 Request Technical Project Quote / Scope</span>
-                <span style={{ fontSize: "11px", color: "#9CBE41", fontWeight: "bold" }}>/pricing</span>
+                <span style={{ fontSize: "11px", color: "#2563eb", fontWeight: "bold" }}>/pricing</span>
               </Command.Item>
 
               <Command.Item
@@ -246,7 +246,7 @@ export default function CommandPalette() {
             <Command.Group
               heading="Verified Accreditations & Credentials"
               style={{
-                color: "#053056",
+                color: "#2563eb",
                 fontSize: "11px",
                 fontWeight: "800",
                 textTransform: "uppercase",
@@ -268,7 +268,7 @@ export default function CommandPalette() {
                 }}
               >
                 <span>🎓 <strong>Programming Hero Certificate of Excellence</strong> (Batch-12 • WEB12-3991)</span>
-                <span style={{ fontSize: "11px", color: "#9CBE41", fontWeight: "bold" }}>Inspect ↗</span>
+                <span style={{ fontSize: "11px", color: "#2563eb", fontWeight: "bold" }}>Inspect ↗</span>
               </Command.Item>
 
               <Command.Item
@@ -310,7 +310,7 @@ export default function CommandPalette() {
             <Command.Group
               heading="Production Systems & Case Studies"
               style={{
-                color: "#053056",
+                color: "#2563eb",
                 fontSize: "11px",
                 fontWeight: "800",
                 textTransform: "uppercase",
@@ -334,10 +334,10 @@ export default function CommandPalette() {
                   }}
                 >
                   <div style={{ display: "flex", flexDirection: "column" }}>
-                    <span style={{ fontWeight: "600", color: "#053056" }}>⚡ {project.title}</span>
+                    <span style={{ fontWeight: "600", color: "#0f172a" }}>⚡ {project.title}</span>
                     <span style={{ fontSize: "11px", color: "#64748b" }}>{project.impactMetric}</span>
                   </div>
-                  <span style={{ fontSize: "11px", color: "#166534", fontWeight: "bold" }}>
+                  <span style={{ fontSize: "11px", color: "#047857", fontWeight: "bold" }}>
                     {project.priceTag}
                   </span>
                 </Command.Item>
@@ -348,7 +348,7 @@ export default function CommandPalette() {
             <Command.Group
               heading="Topic Category Pillars"
               style={{
-                color: "#053056",
+                color: "#2563eb",
                 fontSize: "11px",
                 fontWeight: "800",
                 textTransform: "uppercase",
@@ -381,7 +381,7 @@ export default function CommandPalette() {
             <Command.Group
               heading="Technical Engineering Articles"
               style={{
-                color: "#053056",
+                color: "#2563eb",
                 fontSize: "11px",
                 fontWeight: "800",
                 textTransform: "uppercase",
@@ -414,7 +414,7 @@ export default function CommandPalette() {
             <Command.Group
               heading="Consulting Services & Sprints"
               style={{
-                color: "#053056",
+                color: "#2563eb",
                 fontSize: "11px",
                 fontWeight: "800",
                 textTransform: "uppercase",
@@ -438,7 +438,7 @@ export default function CommandPalette() {
                   }}
                 >
                   <span>💰 {service.title} ({service.timeline})</span>
-                  <span style={{ fontSize: "11px", color: "#053056", fontWeight: "bold" }}>
+                  <span style={{ fontSize: "11px", color: "#047857", fontWeight: "bold" }}>
                     {service.priceDisplay}
                   </span>
                 </Command.Item>

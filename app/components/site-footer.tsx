@@ -1,4 +1,5 @@
 import Link from "next/link";
+import DhakaTimeBadge from "./dhaka-time-badge";
 
 export default function SiteFooter() {
   const currentYear = new Date().getFullYear();
@@ -28,9 +29,7 @@ export default function SiteFooter() {
             <Link href="/pricing" className="global-footer-btn-secondary">
               View Pricing Matrix &rsaquo;
             </Link>
-            <div className="global-footer-timezone-pill">
-              <span className="uptime-dot">●</span> Active Timezones: US Pacific (UTC-8) • Central European (UTC+2) • Asia/Dhaka (UTC+6)
-            </div>
+            <DhakaTimeBadge />
           </div>
         </div>
       </div>
@@ -283,7 +282,7 @@ export default function SiteFooter() {
               <Link href="/pricing#inquiry">Consultation Inquiry</Link>
             </li>
             <li className="last">
-              <Link href="/admin" style={{ color: "#9CBE41", fontWeight: "700" }}>
+              <Link href="/admin" style={{ color: "#38bdf8", fontWeight: "700" }}>
                 Admin Portal
               </Link>
             </li>

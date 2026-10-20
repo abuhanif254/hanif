@@ -7,9 +7,14 @@ import { isSupabaseConfigured, supabase } from "../lib/supabase";
 import SiteFooter from "../components/site-footer";
 import SiteHeader from "../components/site-header";
 import StatementOfWorkGenerator from "../components/sow-generator";
+import CloudRoiCalculator from "../components/cloud-roi-calculator";
 
-export default function PricingClientView() {
-  const [services] = useState<ServicePricing[]>(initialServices);
+export default function PricingClientView({
+  services: propServices,
+}: {
+  services?: ServicePricing[];
+} = {}) {
+  const services = propServices && propServices.length > 0 ? propServices : initialServices;
   const [selectedServiceId, setSelectedServiceId] = useState<string>("serv-4");
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
@@ -73,30 +78,36 @@ export default function PricingClientView() {
     setSubmittedMessage(null);
 
     const record = {
-      id: `inq-${Date.now()}`,
       name: formState.name,
       email: formState.email,
       phone: formState.phone,
-      project_type: formState.projectType,
-      budget_range: formState.budgetRange,
+      projectType: formState.projectType,
+      budgetRange: formState.budgetRange,
       message: formState.message,
-      status: "new",
-      created_at: new Date().toISOString(),
     };
 
     try {
+      const res = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(record),
+      });
+
+      const result = await res.json();
+      if (!res.ok || !result.success) {
+        throw new Error(result.error || "Failed to submit project inquiry.");
+      }
+
       if (typeof window !== "undefined") {
         const stored = window.localStorage.getItem("abuhanif-inquiries");
         const list = stored ? JSON.parse(stored) : [];
-        list.unshift(record);
+        list.unshift({
+          ...record,
+          id: result.inquiryId || `local-${Date.now()}`,
+          status: "new",
+          createdAt: new Date().toISOString(),
+        });
         window.localStorage.setItem("abuhanif-inquiries", JSON.stringify(list));
-      }
-
-      if (isSupabaseConfigured && supabase) {
-        const { error } = await supabase.from("inquiries").insert([record]);
-        if (error) {
-          console.warn("Supabase inquiry insert error:", error);
-        }
       }
 
       setSubmittedMessage(
@@ -111,9 +122,24 @@ export default function PricingClientView() {
         message: "",
       });
     } catch (err: any) {
-      setErrorMessage(
-        "An unexpected error occurred. You can also email directly at abuhanifmain@gmail.com."
-      );
+      if (typeof window !== "undefined") {
+        const stored = window.localStorage.getItem("abuhanif-inquiries");
+        const list = stored ? JSON.parse(stored) : [];
+        list.unshift({
+          ...record,
+          id: `offline-${Date.now()}`,
+          status: "new",
+          createdAt: new Date().toISOString(),
+        });
+        window.localStorage.setItem("abuhanif-inquiries", JSON.stringify(list));
+        setSubmittedMessage(
+          "Thank you! Your project scope inquiry has been received (offline queue). Abu Hanif will review your technical requirements."
+        );
+      } else {
+        setErrorMessage(
+          err.message || "An unexpected error occurred. You can also email directly at abuhanifmain@gmail.com."
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -215,27 +241,27 @@ export default function PricingClientView() {
                           margin: "24px 0 32px 0",
                         }}
                       >
-                        <div style={{ padding: "14px", backgroundColor: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "4px" }}>
-                          <strong style={{ display: "block", color: "#053056", fontSize: "13px" }}>Fixed-Scope Sprints</strong>
-                          <span style={{ fontSize: "12px", color: "#334155" }}>Guaranteed delivery dates &amp; fixed milestone costs.</span>
+                        <div style={{ padding: "14px", backgroundColor: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "6px", boxShadow: "0 1px 2px rgba(0,0,0,0.03)" }}>
+                          <strong style={{ display: "block", color: "#0f172a", fontSize: "13px" }}>Fixed-Scope Sprints</strong>
+                          <span style={{ fontSize: "12px", color: "#475569" }}>Guaranteed delivery dates &amp; fixed milestone costs.</span>
                         </div>
-                        <div style={{ padding: "14px", backgroundColor: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "4px" }}>
-                          <strong style={{ display: "block", color: "#053056", fontSize: "13px" }}>100% Client IP</strong>
-                          <span style={{ fontSize: "12px", color: "#334155" }}>Direct commits to your private Git repo from day one.</span>
+                        <div style={{ padding: "14px", backgroundColor: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "6px", boxShadow: "0 1px 2px rgba(0,0,0,0.03)" }}>
+                          <strong style={{ display: "block", color: "#0f172a", fontSize: "13px" }}>100% Client IP</strong>
+                          <span style={{ fontSize: "12px", color: "#475569" }}>Direct commits to your private Git repo from day one.</span>
                         </div>
-                        <div style={{ padding: "14px", backgroundColor: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "4px" }}>
-                          <strong style={{ display: "block", color: "#053056", fontSize: "13px" }}>Production SLAs</strong>
-                          <span style={{ fontSize: "12px", color: "#334155" }}>Sub-30ms P99 latency and 99.99% uptime targets.</span>
+                        <div style={{ padding: "14px", backgroundColor: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "6px", boxShadow: "0 1px 2px rgba(0,0,0,0.03)" }}>
+                          <strong style={{ display: "block", color: "#0f172a", fontSize: "13px" }}>Production SLAs</strong>
+                          <span style={{ fontSize: "12px", color: "#475569" }}>Sub-30ms P99 latency and 99.99% uptime targets.</span>
                         </div>
-                        <div style={{ padding: "14px", backgroundColor: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "4px" }}>
-                          <strong style={{ display: "block", color: "#053056", fontSize: "13px" }}>30-Day Warranty</strong>
-                          <span style={{ fontSize: "12px", color: "#334155" }}>Post-deployment bug fixes at zero extra cost.</span>
+                        <div style={{ padding: "14px", backgroundColor: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "6px", boxShadow: "0 1px 2px rgba(0,0,0,0.03)" }}>
+                          <strong style={{ display: "block", color: "#0f172a", fontSize: "13px" }}>30-Day Warranty</strong>
+                          <span style={{ fontSize: "12px", color: "#475569" }}>Post-deployment bug fixes at zero extra cost.</span>
                         </div>
                       </div>
 
                       {/* SECTION 1: THE 6 CORE PACKAGES */}
-                      <div style={{ borderBottom: "2px solid #9CBE41", paddingBottom: "6px", margin: "32px 0 20px 0" }}>
-                        <h2 style={{ fontSize: "20px", color: "#053056", margin: 0 }}>
+                      <div style={{ borderBottom: "2px solid #2563eb", paddingBottom: "8px", margin: "36px 0 20px 0" }}>
+                        <h2 style={{ fontSize: "20px", color: "#0f172a", margin: 0, fontWeight: "800" }}>
                           Standard Production Packages &amp; Sprints
                         </h2>
                       </div>
@@ -248,15 +274,15 @@ export default function PricingClientView() {
                           <div
                             key={serv.id}
                             style={{
-                              backgroundColor: serv.isPopular ? "#f0fdf4" : "#ffffff",
-                              border: serv.isPopular ? "2px solid #16a34a" : "1px solid #cbd5e1",
-                              borderRadius: "6px",
+                              backgroundColor: serv.isPopular ? "#f8faff" : "#ffffff",
+                              border: serv.isPopular ? "2px solid #2563eb" : "1px solid #cbd5e1",
+                              borderRadius: "8px",
                               padding: "24px",
                               display: "flex",
                               flexDirection: "column",
                               justifyContent: "space-between",
                               position: "relative",
-                              boxShadow: serv.isPopular ? "0 4px 12px rgba(22, 163, 74, 0.08)" : "none",
+                              boxShadow: serv.isPopular ? "0 4px 14px rgba(37, 99, 235, 0.12)" : "0 1px 3px rgba(0,0,0,0.04)",
                             }}
                           >
                             {serv.isPopular && (
@@ -265,7 +291,7 @@ export default function PricingClientView() {
                                   position: "absolute",
                                   top: "-12px",
                                   right: "20px",
-                                  backgroundColor: "#16a34a",
+                                  backgroundColor: "#2563eb",
                                   color: "#ffffff",
                                   fontSize: "11px",
                                   fontWeight: "700",
@@ -281,19 +307,19 @@ export default function PricingClientView() {
 
                             <div>
                               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "8px" }}>
-                                <span style={{ fontSize: "12px", fontWeight: "700", color: "#334155", textTransform: "uppercase" }}>
+                                <span style={{ fontSize: "12px", fontWeight: "700", color: "#64748b", textTransform: "uppercase" }}>
                                   {serv.pricingType === "retainer" ? "Monthly Retainer" : "Fixed Scope Sprint"}
                                 </span>
-                                <span style={{ fontSize: "12px", color: "#053056", fontWeight: "600" }}>
+                                <span style={{ fontSize: "12px", color: "#2563eb", fontWeight: "600" }}>
                                   ⏱ {serv.timeline}
                                 </span>
                               </div>
 
-                              <h3 style={{ fontSize: "19px", color: "#053056", margin: "0 0 10px 0", lineHeight: "1.3" }}>
+                              <h3 style={{ fontSize: "19px", color: "#0f172a", margin: "0 0 10px 0", lineHeight: "1.3", fontWeight: "700" }}>
                                 {serv.title}
                               </h3>
 
-                              <div style={{ fontSize: "28px", fontWeight: "800", color: "#053056", marginBottom: "12px" }}>
+                              <div style={{ fontSize: "28px", fontWeight: "800", color: "#2563eb", marginBottom: "12px" }}>
                                 {serv.priceDisplay}
                               </div>
 
@@ -302,7 +328,7 @@ export default function PricingClientView() {
                               </p>
 
                               <div style={{ borderTop: "1px solid #e2e8f0", paddingTop: "14px", marginBottom: "20px" }}>
-                                <strong style={{ fontSize: "12px", color: "#053056", display: "block", marginBottom: "10px", textTransform: "uppercase" }}>
+                                <strong style={{ fontSize: "12px", color: "#0f172a", display: "block", marginBottom: "10px", textTransform: "uppercase" }}>
                                   Key Engineering Deliverables:
                                 </strong>
                                 <ul style={{ margin: 0, paddingLeft: "18px", fontSize: "12px", color: "#334155", lineHeight: "1.6" }}>
@@ -320,8 +346,8 @@ export default function PricingClientView() {
                               onClick={() => handleSelectPackageForBooking(serv)}
                               style={{
                                 width: "100%",
-                                padding: "10px 16px",
-                                backgroundColor: serv.isPopular ? "#16a34a" : "#053056",
+                                padding: "12px 16px",
+                                backgroundColor: serv.isPopular ? "#2563eb" : "#0f1d38",
                                 color: "#ffffff",
                                 border: "none",
                                 borderRadius: "4px",
@@ -329,6 +355,7 @@ export default function PricingClientView() {
                                 fontSize: "13px",
                                 cursor: "pointer",
                                 textAlign: "center",
+                                transition: "all 0.15s ease",
                               }}
                             >
                               Select This Scope &amp; Book &rsaquo;
@@ -337,28 +364,33 @@ export default function PricingClientView() {
                         ))}
                       </div>
 
+                      {/* Interactive Cloud Infrastructure ROI Calculator */}
+                      <CloudRoiCalculator />
+
                       {/* SECTION 2: INTERACTIVE SCOPE & COST ESTIMATOR */}
                       <div
                         style={{
-                          backgroundColor: "#053056",
+                          backgroundColor: "#0b132b",
+                          border: "1px solid #1e293b",
                           color: "#ffffff",
-                          borderRadius: "6px",
+                          borderRadius: "8px",
                           padding: "28px",
                           marginBottom: "40px",
+                          boxShadow: "0 4px 20px rgba(11,25,44,0.3)",
                         }}
                       >
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "12px", marginBottom: "18px" }}>
                           <div>
-                            <span style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "1px", color: "#9CBE41", fontWeight: "700" }}>
+                            <span style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "1px", color: "#38bdf8", fontWeight: "700" }}>
                               Interactive Configuration
                             </span>
-                            <h3 style={{ fontSize: "22px", margin: "4px 0 0 0", color: "#ffffff" }}>
+                            <h3 style={{ fontSize: "22px", margin: "4px 0 0 0", color: "#ffffff", fontWeight: "800" }}>
                               Engineering Scope &amp; Investment Estimator
                             </h3>
                           </div>
                           <div style={{ textAlign: "right" }}>
-                            <div style={{ fontSize: "12px", color: "#e2e8f0" }}>Estimated Investment</div>
-                            <div style={{ fontSize: "32px", fontWeight: "800", color: "#9CBE41" }}>
+                            <div style={{ fontSize: "12px", color: "#cbd5e1" }}>Estimated Investment</div>
+                            <div style={{ fontSize: "32px", fontWeight: "800", color: "#10b981" }}>
                               ${totalEstimate.toLocaleString()}
                               {currentService.pricingType === "retainer" && <span style={{ fontSize: "14px", color: "#cbd5e1" }}> / mo</span>}
                             </div>
@@ -379,8 +411,8 @@ export default function PricingClientView() {
                             style={{
                               width: "100%",
                               padding: "10px 12px",
-                              backgroundColor: "#071c33",
-                              border: "1px solid #1e3a5f",
+                              backgroundColor: "#070f1e",
+                              border: "1px solid #1e293b",
                               color: "#ffffff",
                               borderRadius: "4px",
                               fontSize: "14px",
@@ -407,13 +439,14 @@ export default function PricingClientView() {
                                   onClick={() => toggleAddon(addon.id)}
                                   style={{
                                     padding: "12px",
-                                    backgroundColor: checked ? "#0f2e52" : "#071c33",
-                                    border: checked ? "1px solid #9CBE41" : "1px solid #1e3a5f",
+                                    backgroundColor: checked ? "#16284a" : "#070f1e",
+                                    border: checked ? "1px solid #2563eb" : "1px solid #1e293b",
                                     borderRadius: "4px",
                                     cursor: "pointer",
                                     display: "flex",
                                     alignItems: "flex-start",
                                     gap: "10px",
+                                    transition: "all 0.15s ease",
                                   }}
                                 >
                                   <input
@@ -436,7 +469,7 @@ export default function PricingClientView() {
                           </div>
                         </div>
 
-                        <div style={{ marginTop: "24px", paddingTop: "18px", borderTop: "1px solid #1e3a5f", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px" }}>
+                        <div style={{ marginTop: "24px", paddingTop: "18px", borderTop: "1px solid #1e293b", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px" }}>
                           <div style={{ fontSize: "13px", color: "#cbd5e1" }}>
                             Selected Scope: <strong>{currentService.title}</strong>
                             {selectedAddons.length > 0 && ` + ${selectedAddons.length} specialized add-on(s)`}
@@ -446,14 +479,15 @@ export default function PricingClientView() {
                             className="mobile-full-width-btn"
                             onClick={() => handleSelectPackageForBooking(currentService)}
                             style={{
-                              padding: "12px 22px",
-                              backgroundColor: "#9CBE41",
-                              color: "#053056",
+                              padding: "12px 24px",
+                              backgroundColor: "#2563eb",
+                              color: "#ffffff",
                               border: "none",
                               borderRadius: "4px",
-                              fontWeight: "800",
+                              fontWeight: "700",
                               fontSize: "13px",
                               cursor: "pointer",
+                              transition: "all 0.15s ease",
                             }}
                           >
                             Lock In This Estimate &amp; Inquire Below &rsaquo;
@@ -467,8 +501,8 @@ export default function PricingClientView() {
                       </div>
 
                       {/* SECTION 3: COMPREHENSIVE SCOPE COMPARISON MATRIX */}
-                      <div style={{ borderBottom: "2px solid #9CBE41", paddingBottom: "6px", margin: "36px 0 20px 0" }}>
-                        <h2 style={{ fontSize: "20px", color: "#053056", margin: 0 }}>
+                      <div style={{ borderBottom: "2px solid #2563eb", paddingBottom: "8px", margin: "36px 0 20px 0" }}>
+                        <h2 style={{ fontSize: "20px", color: "#0f172a", margin: 0, fontWeight: "800" }}>
                           Engineering Deliverables Comparison Matrix
                         </h2>
                       </div>
@@ -479,7 +513,7 @@ export default function PricingClientView() {
                       <div className="table-responsive-container" style={{ overflowX: "auto", marginBottom: "40px" }}>
                         <table style={{ width: "100%", minWidth: "640px", borderCollapse: "collapse", fontSize: "12px", border: "1px solid #cbd5e1" }}>
                           <thead>
-                            <tr style={{ backgroundColor: "#053056", color: "#ffffff" }}>
+                            <tr style={{ backgroundColor: "#0b132b", color: "#ffffff" }}>
                               <th style={{ padding: "12px 14px", textAlign: "left", width: "28%" }}>Scope &amp; Engineering Feature</th>
                               <th style={{ padding: "12px 10px", textAlign: "center" }}>Diagnostic Audit</th>
                               <th style={{ padding: "12px 10px", textAlign: "center" }}>Postgres Tuning</th>
@@ -500,11 +534,11 @@ export default function PricingClientView() {
                               { feature: "Candidate Technical Interviewing", audit: "—", pg: "—", edge: "—", mvp: "—", frac: "✓ Included" },
                             ].map((row, i) => (
                               <tr key={i} style={{ backgroundColor: i % 2 === 0 ? "#ffffff" : "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
-                                <td style={{ padding: "10px 14px", fontWeight: "700", color: "#053056" }}>{row.feature}</td>
+                                <td style={{ padding: "10px 14px", fontWeight: "700", color: "#0f172a" }}>{row.feature}</td>
                                 <td style={{ padding: "10px", textAlign: "center", color: "#334155" }}>{row.audit}</td>
                                 <td style={{ padding: "10px", textAlign: "center", color: "#334155" }}>{row.pg}</td>
                                 <td style={{ padding: "10px", textAlign: "center", color: "#334155" }}>{row.edge}</td>
-                                <td style={{ padding: "10px", textAlign: "center", fontWeight: "700", color: "#16a34a", backgroundColor: i % 2 === 0 ? "#f0fdf4" : "#ecfdf5" }}>{row.mvp}</td>
+                                <td style={{ padding: "10px", textAlign: "center", fontWeight: "700", color: "#047857", backgroundColor: i % 2 === 0 ? "#ecfdf5" : "#f0fdf4" }}>{row.mvp}</td>
                                 <td style={{ padding: "10px", textAlign: "center", color: "#334155" }}>{row.frac}</td>
                               </tr>
                             ))}
@@ -513,8 +547,8 @@ export default function PricingClientView() {
                       </div>
 
                       {/* SECTION 4: HOURLY RATE CARD */}
-                      <div style={{ borderBottom: "2px solid #9CBE41", paddingBottom: "6px", margin: "36px 0 20px 0" }}>
-                        <h2 style={{ fontSize: "20px", color: "#053056", margin: 0 }}>
+                      <div style={{ borderBottom: "2px solid #2563eb", paddingBottom: "8px", margin: "36px 0 20px 0" }}>
+                        <h2 style={{ fontSize: "20px", color: "#0f172a", margin: 0, fontWeight: "800" }}>
                           Ad-Hoc Consulting &amp; Incident Rate Card
                         </h2>
                       </div>
@@ -524,9 +558,9 @@ export default function PricingClientView() {
 
                       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px", marginBottom: "40px" }}>
                         <div style={{ padding: "20px", border: "1px solid #cbd5e1", borderRadius: "6px", backgroundColor: "#ffffff" }}>
-                          <span style={{ fontSize: "11px", fontWeight: "700", color: "#334155", textTransform: "uppercase" }}>Standard Consulting</span>
-                          <h4 style={{ fontSize: "18px", color: "#053056", margin: "6px 0" }}>Senior Architecture Advisory</h4>
-                          <div style={{ fontSize: "24px", fontWeight: "800", color: "#053056", margin: "8px 0" }}>$140 <span style={{ fontSize: "14px", fontWeight: "normal", color: "#334155" }}>/ hour</span></div>
+                          <span style={{ fontSize: "11px", fontWeight: "700", color: "#64748b", textTransform: "uppercase" }}>Standard Consulting</span>
+                          <h4 style={{ fontSize: "18px", color: "#0f172a", margin: "6px 0", fontWeight: "700" }}>Senior Architecture Advisory</h4>
+                          <div style={{ fontSize: "24px", fontWeight: "800", color: "#2563eb", margin: "8px 0" }}>$140 <span style={{ fontSize: "14px", fontWeight: "normal", color: "#475569" }}>/ hour</span></div>
                           <p style={{ fontSize: "12px", color: "#475569", lineHeight: "1.5", margin: 0 }}>
                             1:1 pair programming, architectural design reviews, query plan troubleshooting, and technical strategy calls. Booked in 5-hour or 10-hour blocks.
                           </p>
@@ -534,7 +568,7 @@ export default function PricingClientView() {
 
                         <div style={{ padding: "20px", border: "1px solid #b91c1c", borderRadius: "6px", backgroundColor: "#fef2f2" }}>
                           <span style={{ fontSize: "11px", fontWeight: "700", color: "#b91c1c", textTransform: "uppercase" }}>Critical Priority</span>
-                          <h4 style={{ fontSize: "18px", color: "#991b1b", margin: "6px 0" }}>P0 Production Incident Triage</h4>
+                          <h4 style={{ fontSize: "18px", color: "#991b1b", margin: "6px 0", fontWeight: "700" }}>P0 Production Incident Triage</h4>
                           <div style={{ fontSize: "24px", fontWeight: "800", color: "#991b1b", margin: "8px 0" }}>$220 <span style={{ fontSize: "14px", fontWeight: "normal", color: "#7f1d1d" }}>/ hour</span></div>
                           <p style={{ fontSize: "12px", color: "#7f1d1d", lineHeight: "1.5", margin: 0 }}>
                             Immediate response within 2 hours for active database lockups, data corruption emergencies, or critical cloud infrastructure failure.
@@ -543,8 +577,8 @@ export default function PricingClientView() {
                       </div>
 
                       {/* SECTION 5: ENGAGEMENT PROTOCOL */}
-                      <div style={{ borderBottom: "2px solid #9CBE41", paddingBottom: "6px", margin: "36px 0 20px 0" }}>
-                        <h2 style={{ fontSize: "20px", color: "#053056", margin: 0 }}>
+                      <div style={{ borderBottom: "2px solid #2563eb", paddingBottom: "8px", margin: "36px 0 20px 0" }}>
+                        <h2 style={{ fontSize: "20px", color: "#0f172a", margin: 0, fontWeight: "800" }}>
                           The 5-Stage Engineering Engagement Protocol
                         </h2>
                       </div>
@@ -560,12 +594,12 @@ export default function PricingClientView() {
                           { step: "04", title: "Automated Benchmarking & Load Testing", desc: "Prior to sign-off, automated unit test suites, Core Web Vitals checks, and k6 load tests are executed to prove production readiness." },
                           { step: "05", title: "Production Cutover & 30-Day Bug Warranty", desc: "Full ownership handover of all git branches, DNS configuration, and documentation, backed by an unconditional 30-day bug warranty." },
                         ].map((item) => (
-                          <div key={item.step} style={{ display: "flex", gap: "16px", padding: "16px", border: "1px solid #e2e8f0", borderRadius: "4px", backgroundColor: "#ffffff" }}>
-                            <div style={{ fontSize: "20px", fontWeight: "800", color: "#9CBE41", minWidth: "36px" }}>
+                          <div key={item.step} style={{ display: "flex", gap: "16px", padding: "16px 20px", border: "1px solid #e2e8f0", borderRadius: "6px", backgroundColor: "#ffffff", boxShadow: "0 1px 2px rgba(0,0,0,0.03)" }}>
+                            <div style={{ fontSize: "20px", fontWeight: "800", color: "#2563eb", minWidth: "36px" }}>
                               {item.step}
                             </div>
                             <div>
-                              <strong style={{ fontSize: "14px", color: "#053056", display: "block", marginBottom: "4px" }}>
+                              <strong style={{ fontSize: "14px", color: "#0f172a", display: "block", marginBottom: "4px" }}>
                                 {item.title}
                               </strong>
                               <p style={{ fontSize: "13px", color: "#475569", margin: 0, lineHeight: "1.5" }}>
@@ -577,8 +611,8 @@ export default function PricingClientView() {
                       </div>
 
                       {/* SECTION 6: FREQUENTLY ASKED QUESTIONS */}
-                      <div style={{ borderBottom: "2px solid #9CBE41", paddingBottom: "6px", margin: "36px 0 20px 0" }}>
-                        <h2 style={{ fontSize: "20px", color: "#053056", margin: 0 }}>
+                      <div style={{ borderBottom: "2px solid #2563eb", paddingBottom: "8px", margin: "36px 0 20px 0" }}>
+                        <h2 style={{ fontSize: "20px", color: "#0f172a", margin: 0, fontWeight: "800" }}>
                           Engineering Engagement &amp; Contract FAQ
                         </h2>
                       </div>
@@ -611,11 +645,11 @@ export default function PricingClientView() {
                                   alignItems: "center",
                                   fontSize: "14px",
                                   fontWeight: "700",
-                                  color: "#053056",
+                                  color: "#0f172a",
                                 }}
                               >
                                 <span>{faq.q}</span>
-                                <span style={{ fontSize: "16px", color: "#9CBE41", marginLeft: "12px" }}>
+                                <span style={{ fontSize: "16px", color: "#2563eb", marginLeft: "12px", fontWeight: "bold" }}>
                                   {isOpen ? "−" : "+"}
                                 </span>
                               </button>
@@ -633,7 +667,7 @@ export default function PricingClientView() {
                       <div id="inquiry" style={{ margin: "40px 0 20px 0" }}>
                         <div id="stripe-01">
                           <div id="contactform">
-                            <h3 style={{ fontSize: "22px", color: "#053056", margin: "0 0 8px 0" }}>
+                            <h3 style={{ fontSize: "22px", color: "#0f172a", margin: "0 0 8px 0", fontWeight: "800" }}>
                               Book an Engineering Scope or Discovery Call
                             </h3>
                             <p style={{ margin: "0 0 20px 0", fontSize: "14px", color: "#475569" }}>
@@ -675,7 +709,7 @@ export default function PricingClientView() {
 
                             <form onSubmit={handleInquirySubmit}>
                               <div className="form-group" style={{ marginBottom: "14px" }}>
-                                <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#053056", marginBottom: "4px" }}>
+                                <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#0f172a", marginBottom: "4px" }}>
                                   Your Name *
                                 </label>
                                 <input
@@ -690,7 +724,7 @@ export default function PricingClientView() {
 
                               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "14px" }}>
                                 <div className="form-group">
-                                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#053056", marginBottom: "4px" }}>
+                                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#0f172a", marginBottom: "4px" }}>
                                     Work Email *
                                   </label>
                                   <input
@@ -703,7 +737,7 @@ export default function PricingClientView() {
                                   />
                                 </div>
                                 <div className="form-group">
-                                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#053056", marginBottom: "4px" }}>
+                                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#0f172a", marginBottom: "4px" }}>
                                     Phone / WhatsApp (Optional)
                                   </label>
                                   <input
@@ -718,7 +752,7 @@ export default function PricingClientView() {
 
                               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "14px" }}>
                                 <div className="form-group">
-                                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#053056", marginBottom: "4px" }}>
+                                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#0f172a", marginBottom: "4px" }}>
                                     Selected Engineering Scope *
                                   </label>
                                   <select
@@ -737,7 +771,7 @@ export default function PricingClientView() {
                                 </div>
 
                                 <div className="form-group">
-                                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#053056", marginBottom: "4px" }}>
+                                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#0f172a", marginBottom: "4px" }}>
                                     Estimated Project Budget *
                                   </label>
                                   <select
@@ -755,7 +789,7 @@ export default function PricingClientView() {
                               </div>
 
                               <div className="form-group" style={{ marginBottom: "18px" }}>
-                                <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#053056", marginBottom: "4px" }}>
+                                <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#0f172a", marginBottom: "4px" }}>
                                   System Architecture Details &amp; Objectives *
                                 </label>
                                 <textarea
@@ -773,14 +807,16 @@ export default function PricingClientView() {
                                 disabled={isSubmitting}
                                 style={{
                                   padding: "12px 28px",
-                                  backgroundColor: "#053056",
+                                  backgroundColor: "#2563eb",
                                   color: "#ffffff",
                                   border: "none",
                                   borderRadius: "4px",
-                                  fontWeight: "800",
+                                  fontWeight: "700",
                                   fontSize: "14px",
                                   cursor: isSubmitting ? "not-allowed" : "pointer",
                                   opacity: isSubmitting ? 0.7 : 1,
+                                  boxShadow: "0 2px 6px rgba(37,99,235,0.3)",
+                                  transition: "all 0.15s ease",
                                 }}
                               >
                                 {isSubmitting ? "Submitting Scope..." : "Submit Project Scope & Request Discovery Call ›"}
@@ -797,7 +833,7 @@ export default function PricingClientView() {
                 <div className="sidebar secondary-sidebar">
                   <div className="wrapper">
                     {/* Profile Snapshot */}
-                    <div className="block" style={{ backgroundColor: "#f8fafc", padding: "18px", border: "1px solid #e2e8f0", borderRadius: "4px", marginBottom: "20px" }}>
+                    <div className="block" style={{ backgroundColor: "#ffffff", padding: "18px", border: "1px solid #e2e8f0", borderRadius: "6px", marginBottom: "20px", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
                       <img
                         src="/images/profile.png"
                         alt="MD Abu Hanif Mia"
@@ -809,13 +845,13 @@ export default function PricingClientView() {
                           display: "block",
                         }}
                       />
-                      <h3 style={{ margin: "0 0 4px 0", fontSize: "16px", color: "#053056" }}>
+                      <h3 style={{ margin: "0 0 4px 0", fontSize: "16px", color: "#0f172a" }}>
                         MD Abu Hanif Mia
                       </h3>
-                      <div style={{ fontSize: "12px", color: "#334155", fontWeight: "700", marginBottom: "8px" }}>
+                      <div style={{ fontSize: "12px", color: "#2563eb", fontWeight: "700", marginBottom: "8px" }}>
                         Staff Software Engineer &amp; Systems Architect
                       </div>
-                      <div style={{ fontSize: "11px", color: "#065f46", fontWeight: "700", marginBottom: "12px" }}>
+                      <div style={{ fontSize: "11px", color: "#047857", fontWeight: "700", marginBottom: "12px" }}>
                         ● Q4 2026 / Booking Engineering Sprints
                       </div>
                       <p style={{ fontSize: "12px", color: "#475569", lineHeight: "1.5", margin: 0 }}>
@@ -824,8 +860,8 @@ export default function PricingClientView() {
                     </div>
 
                     {/* SLA Guarantees */}
-                    <div className="block" style={{ backgroundColor: "#053056", color: "#ffffff", padding: "18px", borderRadius: "4px", marginBottom: "20px" }}>
-                      <h4 style={{ margin: "0 0 12px 0", fontSize: "14px", color: "#9CBE41", textTransform: "uppercase" }}>
+                    <div className="block" style={{ backgroundColor: "#0b132b", border: "1px solid #1e293b", color: "#ffffff", padding: "20px 18px", borderRadius: "6px", marginBottom: "20px", boxShadow: "0 2px 8px rgba(11,25,44,0.3)" }}>
+                      <h4 style={{ margin: "0 0 12px 0", fontSize: "13px", color: "#38bdf8", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                         Engineering Commitments
                       </h4>
                       <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "12px", lineHeight: "1.6", color: "#e2e8f0" }}>
@@ -838,8 +874,8 @@ export default function PricingClientView() {
                     </div>
 
                     {/* Client Feedback Quote */}
-                    <div className="block" style={{ backgroundColor: "#f0fdf4", border: "1px solid #bbf7d0", padding: "16px", borderRadius: "4px", marginBottom: "20px" }}>
-                      <div style={{ fontSize: "11px", fontWeight: "700", color: "#16a34a", textTransform: "uppercase", marginBottom: "6px" }}>
+                    <div className="block" style={{ backgroundColor: "#f0fdf4", border: "1px solid #bbf7d0", padding: "16px", borderRadius: "6px", marginBottom: "20px" }}>
+                      <div style={{ fontSize: "11px", fontWeight: "700", color: "#047857", textTransform: "uppercase", marginBottom: "6px" }}>
                         Verified Client Review
                       </div>
                       <blockquote style={{ margin: 0, fontSize: "12px", color: "#1e3a5f", fontStyle: "italic", lineHeight: "1.5" }}>
@@ -851,28 +887,28 @@ export default function PricingClientView() {
                     </div>
 
                     {/* Direct Contact Block */}
-                    <div className="block" style={{ border: "1px solid #cbd5e1", padding: "16px", borderRadius: "4px", backgroundColor: "#ffffff", marginBottom: "20px" }}>
-                      <h4 style={{ margin: "0 0 10px 0", fontSize: "14px", color: "#053056" }}>
+                    <div className="block" style={{ border: "1px solid #cbd5e1", padding: "16px", borderRadius: "6px", backgroundColor: "#ffffff", marginBottom: "20px" }}>
+                      <h4 style={{ margin: "0 0 10px 0", fontSize: "14px", color: "#0f172a" }}>
                         Direct Contact Info
                       </h4>
                       <div style={{ fontSize: "12px", color: "#475569", lineHeight: "1.6" }}>
-                        <div><strong>Email:</strong> <a href="mailto:abuhanifmain@gmail.com" style={{ color: "#053056" }}>abuhanifmain@gmail.com</a></div>
+                        <div><strong>Email:</strong> <a href="mailto:abuhanifmain@gmail.com" style={{ color: "#2563eb" }}>abuhanifmain@gmail.com</a></div>
                         <div><strong>Location:</strong> Dhaka, Bangladesh / Worldwide Remote</div>
-                        <div><strong>GitHub:</strong> <a href="https://github.com/abuhanif254" target="_blank" rel="noopener noreferrer" style={{ color: "#053056" }}>abuhanif254</a></div>
+                        <div><strong>GitHub:</strong> <a href="https://github.com/abuhanif254" target="_blank" rel="noopener noreferrer" style={{ color: "#2563eb" }}>abuhanif254</a></div>
                       </div>
                     </div>
 
                     {/* Quick Links */}
-                    <div className="block" style={{ border: "1px solid #e2e8f0", padding: "14px", borderRadius: "4px", backgroundColor: "#f8fafc" }}>
-                      <strong style={{ display: "block", fontSize: "12px", color: "#053056", marginBottom: "8px" }}>Portfolio Links:</strong>
+                    <div className="block" style={{ border: "1px solid #e2e8f0", padding: "14px", borderRadius: "6px", backgroundColor: "#ffffff" }}>
+                      <strong style={{ display: "block", fontSize: "12px", color: "#0f172a", marginBottom: "8px" }}>Portfolio Links:</strong>
                       <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "12px" }}>
-                        <Link href="/projects" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                        <Link href="/projects" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
                           &rsaquo; Work Showcase &amp; Projects
                         </Link>
-                        <Link href="/blog" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                        <Link href="/blog" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
                           &rsaquo; Technical Architecture Blog
                         </Link>
-                        <Link href="/admin" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                        <Link href="/admin" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
                           &rsaquo; Admin Management Portal
                         </Link>
                       </div>

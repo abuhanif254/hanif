@@ -1,4 +1,4 @@
-import { initialBlogPosts } from "../data/portfolio-data";
+import { getBlogPosts } from "../lib/portfolio-store";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
@@ -12,7 +12,8 @@ function escapeXml(unsafe: string): string {
 }
 
 export async function GET() {
-  const publishedPosts = initialBlogPosts.filter((post) => post.isPublished);
+  const allPosts = await getBlogPosts();
+  const publishedPosts = allPosts.filter((post) => post.isPublished);
 
   const itemsXml = publishedPosts
     .map((post) => {
@@ -51,7 +52,7 @@ export async function GET() {
   return new Response(rssFeedXml, {
     headers: {
       "Content-Type": "application/xml; charset=utf-8",
-      "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
+      "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
     },
   });
 }

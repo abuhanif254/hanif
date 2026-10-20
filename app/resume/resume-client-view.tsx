@@ -113,10 +113,11 @@ EDUCATION & ACCREDITATIONS
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
-                        background: "#083155",
+                        background: "#0b132b",
+                        border: "1px solid #1e293b",
                         color: "#ffffff",
-                        padding: "12px 18px",
-                        borderRadius: "4px",
+                        padding: "16px 20px",
+                        borderRadius: "8px",
                         marginBottom: "24px",
                         flexWrap: "wrap",
                         gap: "10px",
@@ -126,7 +127,7 @@ EDUCATION & ACCREDITATIONS
                         <strong style={{ fontSize: "15px", color: "#ffffff" }}>
                           Verified Engineering Credentials
                         </strong>
-                        <span style={{ fontSize: "13px", color: "#e2e8f0", display: "block" }}>
+                        <span style={{ fontSize: "13px", color: "#cbd5e1", display: "block" }}>
                           ATS-Compatible Format • Available for High-Impact Contracts
                         </span>
                       </div>
@@ -135,14 +136,15 @@ EDUCATION & ACCREDITATIONS
                           type="button"
                           onClick={handlePrint}
                           style={{
-                            background: "#9CBE41",
-                            color: "#041f36",
+                            background: "#2563eb",
+                            color: "#ffffff",
                             border: "none",
-                            borderRadius: "3px",
+                            borderRadius: "6px",
                             padding: "8px 16px",
-                            fontWeight: "800",
+                            fontWeight: "700",
                             fontSize: "13px",
                             cursor: "pointer",
+                            transition: "background-color 0.15s ease",
                           }}
                         >
                           🖨️ Print / Save as PDF
@@ -151,14 +153,15 @@ EDUCATION & ACCREDITATIONS
                           type="button"
                           onClick={handleCopyText}
                           style={{
-                            background: "#042442",
-                            color: copied ? "#4ade80" : "#9CBE41",
-                            border: "1px solid #0a365c",
-                            borderRadius: "3px",
+                            background: "#111e38",
+                            color: copied ? "#10b981" : "#38bdf8",
+                            border: "1px solid #1e293b",
+                            borderRadius: "6px",
                             padding: "8px 14px",
-                            fontWeight: "bold",
+                            fontWeight: "700",
                             fontSize: "13px",
                             cursor: "pointer",
+                            transition: "all 0.15s ease",
                           }}
                         >
                           {copied ? "✓ Copied Plain Text!" : "📋 Copy ATS Text"}
@@ -173,32 +176,32 @@ EDUCATION & ACCREDITATIONS
                         background: "#ffffff",
                         border: "1px solid #e2e8f0",
                         padding: "36px 40px",
-                        borderRadius: "4px",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                        borderRadius: "8px",
+                        boxShadow: "0 4px 16px -2px rgba(11, 19, 43, 0.08)",
                         color: "#1e293b",
                         fontFamily: "Arial, Helvetica, sans-serif",
                         lineHeight: "1.6",
                       }}
                     >
                       {/* Paper Header */}
-                      <div style={{ borderBottom: "2px solid #053056", paddingBottom: "18px", marginBottom: "24px" }}>
-                        <h1 style={{ margin: "0 0 4px 0", fontSize: "30px", color: "#053056", fontWeight: "bold" }}>
+                      <div style={{ borderBottom: "2px solid #2563eb", paddingBottom: "18px", marginBottom: "24px" }}>
+                        <h1 style={{ margin: "0 0 4px 0", fontSize: "30px", color: "#0f172a", fontWeight: "bold" }}>
                           MD Abu Hanif Mia
                         </h1>
-                        <div style={{ fontSize: "17px", fontWeight: "bold", color: "#9CBE41", marginBottom: "10px" }}>
+                        <div style={{ fontSize: "17px", fontWeight: "bold", color: "#2563eb", marginBottom: "10px" }}>
                           Staff Software Engineer &amp; Systems Architect
                         </div>
                         <div style={{ display: "flex", flexWrap: "wrap", gap: "14px", fontSize: "13px", color: "#475569" }}>
                           <span>📍 <strong>Location:</strong> Dhaka, Bangladesh (Global Remote)</span>
-                          <span>✉️ <strong>Direct:</strong> <a href="mailto:abuhanifmain@gmail.com" style={{ color: "#053056", fontWeight: "bold" }}>abuhanifmain@gmail.com</a></span>
-                          <span>🌐 <strong>Portfolio:</strong> <a href="https://abuhanifmia.com" style={{ color: "#053056" }}>https://abuhanifmia.com</a></span>
+                          <span>✉️ <strong>Direct:</strong> <a href="mailto:abuhanifmain@gmail.com" style={{ color: "#2563eb", fontWeight: "bold" }}>abuhanifmain@gmail.com</a></span>
+                          <span>🌐 <strong>Portfolio:</strong> <a href="https://abuhanifmia.com" style={{ color: "#2563eb" }}>https://abuhanifmia.com</a></span>
                           <span>⏱️ <strong>Timezones:</strong> US Pacific (UTC-8) • Europe (UTC+2) • Asia (UTC+6)</span>
                         </div>
                       </div>
 
                       {/* Executive Summary */}
                       <div style={{ marginBottom: "26px" }}>
-                        <h2 style={{ fontSize: "16px", textTransform: "uppercase", letterSpacing: "1px", color: "#053056", borderBottom: "1px solid #cbd5e1", paddingBottom: "4px", margin: "0 0 10px 0" }}>
+                        <h2 style={{ fontSize: "16px", textTransform: "uppercase", letterSpacing: "1px", color: "#0f172a", borderBottom: "2px solid #f1f5f9", paddingBottom: "6px", margin: "0 0 10px 0" }}>
                           Executive Summary
                         </h2>
                         <p style={{ margin: 0, fontSize: "14px", color: "#334155" }}>
@@ -208,24 +211,24 @@ EDUCATION & ACCREDITATIONS
 
                       {/* Technical Competencies Matrix */}
                       <div style={{ marginBottom: "26px" }}>
-                        <h2 style={{ fontSize: "16px", textTransform: "uppercase", letterSpacing: "1px", color: "#053056", borderBottom: "1px solid #cbd5e1", paddingBottom: "4px", margin: "0 0 10px 0" }}>
+                        <h2 style={{ fontSize: "16px", textTransform: "uppercase", letterSpacing: "1px", color: "#0f172a", borderBottom: "2px solid #f1f5f9", paddingBottom: "6px", margin: "0 0 10px 0" }}>
                           Technical Competencies Matrix
                         </h2>
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", fontSize: "13px" }}>
-                          <div style={{ background: "#f8fafc", padding: "10px 14px", border: "1px solid #e2e8f0", borderRadius: "3px" }}>
-                            <strong style={{ color: "#053056", display: "block", marginBottom: "4px" }}>Core Languages &amp; Runtimes</strong>
+                          <div style={{ background: "#f8fafc", padding: "12px 14px", border: "1px solid #e2e8f0", borderRadius: "6px" }}>
+                            <strong style={{ color: "#0f172a", display: "block", marginBottom: "4px" }}>Core Languages &amp; Runtimes</strong>
                             Rust (Tokio, Axum, Wasm), Go (Golang), TypeScript, JavaScript (ESNext), Python, SQL (PostgreSQL/TimescaleDB), HTML5, CSS3
                           </div>
-                          <div style={{ background: "#f8fafc", padding: "10px 14px", border: "1px solid #e2e8f0", borderRadius: "3px" }}>
-                            <strong style={{ color: "#053056", display: "block", marginBottom: "4px" }}>Frameworks &amp; Edge Delivery</strong>
+                          <div style={{ background: "#f8fafc", padding: "12px 14px", border: "1px solid #e2e8f0", borderRadius: "6px" }}>
+                            <strong style={{ color: "#0f172a", display: "block", marginBottom: "4px" }}>Frameworks &amp; Edge Delivery</strong>
                             Next.js 16 (App Router, RSC), React 19, Cloudflare Pages &amp; Workers, Node.js, FastAPI, Tailwind CSS
                           </div>
-                          <div style={{ background: "#f8fafc", padding: "10px 14px", border: "1px solid #e2e8f0", borderRadius: "3px" }}>
-                            <strong style={{ color: "#053056", display: "block", marginBottom: "4px" }}>Databases &amp; Vector Search</strong>
+                          <div style={{ background: "#f8fafc", padding: "12px 14px", border: "1px solid #e2e8f0", borderRadius: "6px" }}>
+                            <strong style={{ color: "#0f172a", display: "block", marginBottom: "4px" }}>Databases &amp; Vector Search</strong>
                             PostgreSQL 16, Supabase, TimescaleDB (Time-Series), Redis Cluster, pgvector (Semantic RAG), Prisma
                           </div>
-                          <div style={{ background: "#f8fafc", padding: "10px 14px", border: "1px solid #e2e8f0", borderRadius: "3px" }}>
-                            <strong style={{ color: "#053056", display: "block", marginBottom: "4px" }}>DevOps, Security &amp; Infra</strong>
+                          <div style={{ background: "#f8fafc", padding: "12px 14px", border: "1px solid #e2e8f0", borderRadius: "6px" }}>
+                            <strong style={{ color: "#0f172a", display: "block", marginBottom: "4px" }}>DevOps, Security &amp; Infra</strong>
                             Cloudflare Edge, AWS (ECS, Lambda, S3), Docker, Terraform, GitHub Actions CI/CD, OAuth2/OIDC, RLS
                           </div>
                         </div>
@@ -233,14 +236,14 @@ EDUCATION & ACCREDITATIONS
 
                       {/* Professional Experience */}
                       <div style={{ marginBottom: "26px" }}>
-                        <h2 style={{ fontSize: "16px", textTransform: "uppercase", letterSpacing: "1px", color: "#053056", borderBottom: "1px solid #cbd5e1", paddingBottom: "4px", margin: "0 0 16px 0" }}>
+                        <h2 style={{ fontSize: "16px", textTransform: "uppercase", letterSpacing: "1px", color: "#0f172a", borderBottom: "2px solid #f1f5f9", paddingBottom: "6px", margin: "0 0 16px 0" }}>
                           Professional Experience
                         </h2>
 
                         {/* Experience 1 */}
                         <div style={{ marginBottom: "20px" }}>
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap" }}>
-                            <strong style={{ fontSize: "16px", color: "#053056" }}>
+                            <strong style={{ fontSize: "16px", color: "#0f172a" }}>
                               Staff Software Engineer &amp; Systems Architect
                             </strong>
                             <span style={{ fontSize: "13px", fontWeight: "bold", color: "#334155" }}>
@@ -269,7 +272,7 @@ EDUCATION & ACCREDITATIONS
                         {/* Experience 2 */}
                         <div style={{ marginBottom: "20px" }}>
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap" }}>
-                            <strong style={{ fontSize: "16px", color: "#053056" }}>
+                            <strong style={{ fontSize: "16px", color: "#0f172a" }}>
                               Lead Full-Stack Software Engineer
                             </strong>
                             <span style={{ fontSize: "13px", fontWeight: "bold", color: "#334155" }}>
@@ -295,7 +298,7 @@ EDUCATION & ACCREDITATIONS
                         {/* Experience 3 */}
                         <div style={{ marginBottom: "16px" }}>
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap" }}>
-                            <strong style={{ fontSize: "16px", color: "#053056" }}>
+                            <strong style={{ fontSize: "16px", color: "#0f172a" }}>
                               Senior Backend &amp; Cloud Engineer
                             </strong>
                             <span style={{ fontSize: "13px", fontWeight: "bold", color: "#334155" }}>
@@ -318,30 +321,30 @@ EDUCATION & ACCREDITATIONS
 
                       {/* Selected Case Studies & Production Systems */}
                       <div style={{ marginBottom: "26px" }}>
-                        <h2 style={{ fontSize: "16px", textTransform: "uppercase", letterSpacing: "1px", color: "#053056", borderBottom: "1px solid #cbd5e1", paddingBottom: "4px", margin: "0 0 12px 0" }}>
+                        <h2 style={{ fontSize: "16px", textTransform: "uppercase", letterSpacing: "1px", color: "#0f172a", borderBottom: "2px solid #f1f5f9", paddingBottom: "6px", margin: "0 0 12px 0" }}>
                           Selected Shipped Systems &amp; Measured SLAs
                         </h2>
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", fontSize: "13px" }}>
-                          <div style={{ borderLeft: "3px solid #053056", paddingLeft: "10px" }}>
-                            <strong style={{ color: "#053056" }}>Real-Time Financial Telemetry Pipeline</strong>
+                          <div style={{ borderLeft: "3px solid #2563eb", paddingLeft: "12px" }}>
+                            <strong style={{ color: "#0f172a" }}>Real-Time Financial Telemetry Pipeline</strong>
                             <p style={{ margin: "2px 0 0 0", color: "#475569" }}>
                               Go, Next.js, Redis, TimescaleDB • <strong>12M events/s • &lt;22ms P99</strong>
                             </p>
                           </div>
-                          <div style={{ borderLeft: "3px solid #053056", paddingLeft: "10px" }}>
-                            <strong style={{ color: "#053056" }}>Cloudflare Edge Multi-Tenant E-Commerce</strong>
+                          <div style={{ borderLeft: "3px solid #2563eb", paddingLeft: "12px" }}>
+                            <strong style={{ color: "#0f172a" }}>Cloudflare Edge Multi-Tenant E-Commerce</strong>
                             <p style={{ margin: "2px 0 0 0", color: "#475569" }}>
                               Next.js 16, Cloudflare Pages, Supabase • <strong>95ms P99 • +28% Conversion</strong>
                             </p>
                           </div>
-                          <div style={{ borderLeft: "3px solid #053056", paddingLeft: "10px" }}>
-                            <strong style={{ color: "#053056" }}>Enterprise AI Knowledge Search &amp; RAG</strong>
+                          <div style={{ borderLeft: "3px solid #2563eb", paddingLeft: "12px" }}>
+                            <strong style={{ color: "#0f172a" }}>Enterprise AI Knowledge Search &amp; RAG</strong>
                             <p style={{ margin: "2px 0 0 0", color: "#475569" }}>
                               FastAPI, pgvector, Next.js • <strong>500k+ Docs • 82% Faster Discovery</strong>
                             </p>
                           </div>
-                          <div style={{ borderLeft: "3px solid #053056", paddingLeft: "10px" }}>
-                            <strong style={{ color: "#053056" }}>PostgreSQL Query Tuning &amp; Index Audit</strong>
+                          <div style={{ borderLeft: "3px solid #2563eb", paddingLeft: "12px" }}>
+                            <strong style={{ color: "#0f172a" }}>PostgreSQL Query Tuning &amp; Index Audit</strong>
                             <p style={{ margin: "2px 0 0 0", color: "#475569" }}>
                               Postgres 16, Supabase RLS • <strong>10x Query Speedup • 0 Deadlocks</strong>
                             </p>
@@ -351,7 +354,7 @@ EDUCATION & ACCREDITATIONS
 
                       {/* Formal Education & Verified Accreditations */}
                       <div>
-                        <h2 style={{ fontSize: "16px", textTransform: "uppercase", letterSpacing: "1px", color: "#053056", borderBottom: "1px solid #cbd5e1", paddingBottom: "4px", margin: "0 0 14px 0" }}>
+                        <h2 style={{ fontSize: "16px", textTransform: "uppercase", letterSpacing: "1px", color: "#0f172a", borderBottom: "2px solid #f1f5f9", paddingBottom: "6px", margin: "0 0 14px 0" }}>
                           Education &amp; Verified Credentials
                         </h2>
 
@@ -359,7 +362,7 @@ EDUCATION & ACCREDITATIONS
                         <div style={{ marginBottom: "16px" }}>
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", fontSize: "13.5px" }}>
                             <div>
-                              <strong style={{ color: "#053056", fontSize: "14px" }}>Bachelor of Science in Computer Science &amp; Engineering (B.Sc. in CSE)</strong>
+                              <strong style={{ color: "#0f172a", fontSize: "14px" }}>Bachelor of Science in Computer Science &amp; Engineering (B.Sc. in CSE)</strong>
                             </div>
                             <div style={{ color: "#334155", fontWeight: "bold" }}>
                               4-Year Formal Engineering Degree
@@ -371,12 +374,12 @@ EDUCATION & ACCREDITATIONS
                         </div>
 
                         {/* Programming Hero Certificate Showcase */}
-                        <div style={{ marginBottom: "16px", background: "#f8fafc", border: "1px solid #e2e8f0", borderLeft: "4px solid #9CBE41", padding: "12px 14px", borderRadius: "3px" }}>
+                        <div style={{ marginBottom: "16px", background: "#f8fafc", border: "1px solid #e2e8f0", borderLeft: "4px solid #2563eb", padding: "14px 16px", borderRadius: "6px" }}>
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "10px" }}>
                             <div style={{ flex: 1, minWidth: "260px" }}>
                               <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
-                                <span style={{ background: "#9CBE41", color: "#041f36", padding: "2px 6px", borderRadius: "2px", fontSize: "11px", fontWeight: "900", letterSpacing: "0.5px" }}>VERIFIED HONOR</span>
-                                <strong style={{ color: "#053056", fontSize: "14px" }}>Programming Hero — Complete Web Development with Excellence</strong>
+                                <span style={{ background: "#ecfdf5", color: "#047857", border: "1px solid #a7f3d0", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: "800", letterSpacing: "0.5px" }}>VERIFIED HONOR</span>
+                                <strong style={{ color: "#0f172a", fontSize: "14px" }}>Programming Hero — Complete Web Development with Excellence</strong>
                               </div>
                               <p style={{ margin: "2px 0 6px 0", fontSize: "13px", color: "#334155" }}>
                                 <strong>Batch-12 • Credential ID: WEB12-3991</strong> • Certified by CEO Jhankar Mahbub
@@ -393,14 +396,14 @@ EDUCATION & ACCREDITATIONS
                                   display: "inline-flex",
                                   alignItems: "center",
                                   gap: "6px",
-                                  background: "#053056",
+                                  background: "#2563eb",
                                   color: "#ffffff",
-                                  padding: "7px 13px",
-                                  borderRadius: "3px",
+                                  padding: "8px 14px",
+                                  borderRadius: "6px",
                                   fontSize: "12px",
                                   fontWeight: "bold",
                                   textDecoration: "none",
-                                  border: "1px solid #031c33",
+                                  transition: "background-color 0.15s ease",
                                 }}
                               >
                                 📜 View Certificate Modal
@@ -411,10 +414,10 @@ EDUCATION & ACCREDITATIONS
 
                         {/* freeCodeCamp & Rust Systems Credentials */}
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", fontSize: "13px" }}>
-                          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderLeft: "4px solid #053056", padding: "10px 12px", borderRadius: "3px" }}>
+                          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderLeft: "4px solid #2563eb", padding: "12px 14px", borderRadius: "6px" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "4px" }}>
-                              <span style={{ background: "#053056", color: "#ffffff", padding: "1px 5px", borderRadius: "2px", fontSize: "10px", fontWeight: "bold" }}>fCC ACCREDITED</span>
-                              <strong style={{ color: "#053056" }}>freeCodeCamp Verified Accreditations</strong>
+                              <span style={{ background: "#eff6ff", color: "#1d4ed8", border: "1px solid #bfdbfe", padding: "2px 6px", borderRadius: "4px", fontSize: "10px", fontWeight: "bold" }}>fCC ACCREDITED</span>
+                              <strong style={{ color: "#0f172a" }}>freeCodeCamp Verified Accreditations</strong>
                             </div>
                             <p style={{ margin: "2px 0 0 0", color: "#475569", lineHeight: "1.5", fontSize: "12.5px" }}>
                               • <strong>JavaScript Algorithms &amp; Data Structures</strong> (ES6+, Functional &amp; OOP)<br />
@@ -423,10 +426,10 @@ EDUCATION & ACCREDITATIONS
                             </p>
                           </div>
 
-                          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderLeft: "4px solid #053056", padding: "10px 12px", borderRadius: "3px" }}>
+                          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderLeft: "4px solid #2563eb", padding: "12px 14px", borderRadius: "6px" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "4px" }}>
-                              <span style={{ background: "#053056", color: "#ffffff", padding: "1px 5px", borderRadius: "2px", fontSize: "10px", fontWeight: "bold" }}>SYSTEMS SPECIALIZATION</span>
-                              <strong style={{ color: "#053056" }}>Rust &amp; Go Concurrency</strong>
+                              <span style={{ background: "#eff6ff", color: "#1d4ed8", border: "1px solid #bfdbfe", padding: "2px 6px", borderRadius: "4px", fontSize: "10px", fontWeight: "bold" }}>SYSTEMS SPECIALIZATION</span>
+                              <strong style={{ color: "#0f172a" }}>Rust &amp; Go Concurrency</strong>
                             </div>
                             <p style={{ margin: "2px 0 0 0", color: "#475569", lineHeight: "1.5", fontSize: "12.5px" }}>
                               • <strong>Rust Systems</strong>: Zero-cost abstractions, borrow checker memory safety, Tokio async event loops &amp; Axum.<br />

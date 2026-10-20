@@ -1,13 +1,12 @@
 import type { MetadataRoute } from "next";
-import { initialProjects, initialBlogPosts } from "./data/portfolio-data";
-
+import { getProjects, getBlogPosts } from "./lib/portfolio-store";
 import { blogCategoryPillars } from "./data/blog-categories";
 
 const siteOrigin =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
   "https://abuhanifmia.com";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const currentDate = new Date().toISOString().split("T")[0];
 
   // Core static engineering routes
@@ -58,8 +57,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }));
 
-  // Dynamic project case study routes
-  const projectRoutes: MetadataRoute.Sitemap = initialProjects
+  // Fetch dynamic projects from unified store (Supabase + fallback)
+  const allProjects = await getProjects();
+  const projectRoutes: MetadataRoute.Sitemap = allProjects
     .filter((p) => p.published)
     .map((project) => ({
       url: `${siteOrigin}/projects/${project.slug}`,
@@ -68,8 +68,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.85,
     }));
 
-  // Dynamic technical blog article routes
-  const blogRoutes: MetadataRoute.Sitemap = initialBlogPosts
+  // Fetch dynamic blog posts from unified store (Supabase + fallback)
+  const allPosts = await getBlogPosts();
+  const blogRoutes: MetadataRoute.Sitemap = allPosts
     .filter((b) => b.isPublished)
     .map((post) => ({
       url: `${siteOrigin}/blog/${post.slug}`,

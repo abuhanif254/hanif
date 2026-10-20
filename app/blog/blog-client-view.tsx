@@ -6,8 +6,12 @@ import { initialBlogPosts, BlogPost } from "../data/portfolio-data";
 import SiteFooter from "../components/site-footer";
 import SiteHeader from "../components/site-header";
 
-export default function BlogClientView() {
-  const [posts] = useState<BlogPost[]>(initialBlogPosts);
+export default function BlogClientView({
+  posts: propPosts,
+}: {
+  posts?: BlogPost[];
+} = {}) {
+  const posts = propPosts && propPosts.length > 0 ? propPosts : initialBlogPosts;
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string>("All");
 
@@ -93,7 +97,7 @@ export default function BlogClientView() {
                           WebkitOverflowScrolling: "touch",
                         }}
                       >
-                        <span style={{ fontSize: "12px", fontWeight: "bold", color: "#053056", alignSelf: "center", marginRight: "4px", flexShrink: 0 }}>
+                        <span style={{ fontSize: "12px", fontWeight: "bold", color: "#0f172a", alignSelf: "center", marginRight: "4px", flexShrink: 0 }}>
                           Filter by Domain:
                         </span>
                         {categories.map((cat) => {
@@ -106,16 +110,17 @@ export default function BlogClientView() {
                               style={{
                                 fontSize: "12px",
                                 fontWeight: "600",
-                                padding: "6px 12px",
+                                padding: "6px 14px",
                                 minHeight: "36px",
-                                border: isActive ? "1px solid #053056" : "1px solid #cbd5e1",
-                                backgroundColor: isActive ? "#053056" : "#ffffff",
-                                color: isActive ? "#ffffff" : "#475569",
-                                borderRadius: "4px",
+                                border: isActive ? "1px solid #2563eb" : "1px solid #cbd5e1",
+                                backgroundColor: isActive ? "#2563eb" : "#ffffff",
+                                color: isActive ? "#ffffff" : "#334155",
+                                borderRadius: "6px",
                                 cursor: "pointer",
                                 flexShrink: 0,
                                 display: "inline-flex",
                                 alignItems: "center",
+                                transition: "all 0.15s ease",
                               }}
                             >
                               {cat}
@@ -133,10 +138,11 @@ export default function BlogClientView() {
                           placeholder="Search articles by title, topic, or technical keywords..."
                           style={{
                             flex: 1,
-                            padding: "9px 12px",
+                            padding: "10px 14px",
                             border: "1px solid #cbd5e1",
-                            borderRadius: "4px",
-                            fontSize: "13px",
+                            borderRadius: "6px",
+                            fontSize: "13.5px",
+                            color: "#0f172a",
                           }}
                         />
                         {searchQuery && (
@@ -144,12 +150,13 @@ export default function BlogClientView() {
                             type="button"
                             onClick={() => setSearchQuery("")}
                             style={{
-                              padding: "9px 14px",
-                              backgroundColor: "#334155",
+                              padding: "10px 16px",
+                              backgroundColor: "#1e293b",
                               color: "#ffffff",
                               border: "none",
-                              borderRadius: "4px",
+                              borderRadius: "6px",
                               fontSize: "12px",
+                              fontWeight: "600",
                               cursor: "pointer",
                             }}
                           >
@@ -162,19 +169,20 @@ export default function BlogClientView() {
                       {selectedTag === "All" && !searchQuery && featuredPost && (
                         <div
                           style={{
-                            backgroundColor: "#053056",
+                            backgroundColor: "#0b132b",
                             color: "#ffffff",
-                            borderRadius: "6px",
+                            borderRadius: "8px",
                             padding: "24px",
                             marginBottom: "32px",
-                            border: "1px solid #1e3a5f",
+                            border: "1px solid #1e293b",
+                            boxShadow: "0 4px 12px -2px rgba(11, 19, 43, 0.12)",
                           }}
                         >
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                            <span style={{ fontSize: "11px", fontWeight: "800", color: "#9CBE41", textTransform: "uppercase", letterSpacing: "1px" }}>
+                            <span style={{ fontSize: "11px", fontWeight: "800", color: "#38bdf8", textTransform: "uppercase", letterSpacing: "1px" }}>
                               ★ Featured Technical Publication
                             </span>
-                            <span style={{ fontSize: "12px", color: "#cbd5e1" }}>
+                            <span style={{ fontSize: "12px", color: "#94a3b8" }}>
                               ⏱ {featuredPost.readingTimeMinutes} min read
                             </span>
                           </div>
@@ -185,7 +193,7 @@ export default function BlogClientView() {
                             </Link>
                           </h3>
 
-                          <p style={{ fontSize: "13px", color: "#cbd5e1", lineHeight: "1.6", margin: "0 0 16px 0" }}>
+                          <p style={{ fontSize: "13.5px", color: "#cbd5e1", lineHeight: "1.6", margin: "0 0 16px 0" }}>
                             {featuredPost.excerpt}
                           </p>
 
@@ -196,11 +204,11 @@ export default function BlogClientView() {
                                   key={tag}
                                   style={{
                                     fontSize: "11px",
-                                    backgroundColor: "#071c33",
-                                    border: "1px solid #1e3a5f",
+                                    backgroundColor: "#111e38",
+                                    border: "1px solid #1e293b",
                                     color: "#e2e8f0",
-                                    padding: "2px 8px",
-                                    borderRadius: "3px",
+                                    padding: "3px 9px",
+                                    borderRadius: "4px",
                                   }}
                                 >
                                   #{tag}
@@ -213,15 +221,16 @@ export default function BlogClientView() {
                               style={{
                                 padding: "10px 18px",
                                 minHeight: "44px",
-                                backgroundColor: "#9CBE41",
-                                color: "#053056",
+                                backgroundColor: "#2563eb",
+                                color: "#ffffff",
                                 textDecoration: "none",
-                                fontWeight: "800",
-                                fontSize: "12.5px",
-                                borderRadius: "4px",
+                                fontWeight: "700",
+                                fontSize: "13px",
+                                borderRadius: "6px",
                                 display: "inline-flex",
                                 alignItems: "center",
                                 justifyContent: "center",
+                                transition: "background-color 0.15s ease",
                               }}
                             >
                               Read Full Architecture Breakdown &rsaquo;
@@ -231,8 +240,8 @@ export default function BlogClientView() {
                       )}
 
                       {/* Header for All Articles */}
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderBottom: "2px solid #9CBE41", paddingBottom: "6px", marginBottom: "20px" }}>
-                        <h3 style={{ fontSize: "18px", color: "#053056", margin: 0 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderBottom: "2px solid #2563eb", paddingBottom: "8px", marginBottom: "20px" }}>
+                        <h3 style={{ fontSize: "18px", color: "#0f172a", margin: 0 }}>
                           {selectedTag === "All" ? "All Engineering Publications" : `Articles in #${selectedTag}`}
                         </h3>
                         <span style={{ fontSize: "12px", color: "#334155", fontWeight: "600" }}>
@@ -246,16 +255,17 @@ export default function BlogClientView() {
                           <article
                             key={post.id}
                             style={{
-                              padding: "20px 24px",
+                              padding: "24px",
                               backgroundColor: "#ffffff",
-                              border: "1px solid #cbd5e1",
-                              borderLeft: "4px solid #053056",
-                              borderRadius: "4px",
+                              border: "1px solid #e2e8f0",
+                              borderLeft: "4px solid #2563eb",
+                              borderRadius: "8px",
+                              boxShadow: "0 2px 8px -2px rgba(11, 19, 43, 0.05)",
                             }}
                           >
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px", fontSize: "12px", color: "#334155" }}>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px", fontSize: "12px", color: "#64748b" }}>
                               <div>
-                                <strong style={{ color: "#053056" }}>
+                                <strong style={{ color: "#0f172a" }}>
                                   {new Date(post.publishedAt).toLocaleDateString("en-US", {
                                     month: "long",
                                     day: "numeric",
@@ -263,22 +273,22 @@ export default function BlogClientView() {
                                   })}
                                 </strong>
                                 <span style={{ margin: "0 8px" }}>•</span>
-                                <span style={{ color: "#16a34a", fontWeight: "700" }}>
+                                <span style={{ color: "#047857", fontWeight: "700" }}>
                                   ⏱ {post.readingTimeMinutes} min read
                                 </span>
                               </div>
-                              <span style={{ fontSize: "11px", color: "#334155", fontWeight: "600" }}>
+                              <span style={{ fontSize: "11px", color: "#64748b", fontWeight: "600" }}>
                                 By MD Abu Hanif Mia
                               </span>
                             </div>
 
                             <h3 style={{ margin: "0 0 10px 0", fontSize: "20px", lineHeight: "1.3" }}>
-                              <Link href={`/blog/${post.slug}`} style={{ color: "#053056", textDecoration: "none" }}>
+                              <Link href={`/blog/${post.slug}`} style={{ color: "#0f172a", textDecoration: "none" }}>
                                 {post.title}
                               </Link>
                             </h3>
 
-                            <p style={{ margin: "0 0 14px 0", fontSize: "13px", lineHeight: "1.6", color: "#334155" }}>
+                            <p style={{ margin: "0 0 14px 0", fontSize: "13.5px", lineHeight: "1.6", color: "#334155" }}>
                               {post.excerpt}
                             </p>
 
@@ -293,8 +303,8 @@ export default function BlogClientView() {
                                       backgroundColor: "#f1f5f9",
                                       border: "1px solid #e2e8f0",
                                       color: "#475569",
-                                      padding: "2px 8px",
-                                      borderRadius: "3px",
+                                      padding: "3px 8px",
+                                      borderRadius: "4px",
                                     }}
                                   >
                                     #{tag}
@@ -306,7 +316,7 @@ export default function BlogClientView() {
                                 style={{
                                   fontSize: "13px",
                                   fontWeight: "700",
-                                  color: "#053056",
+                                  color: "#2563eb",
                                   textDecoration: "none",
                                 }}
                               >
@@ -317,7 +327,7 @@ export default function BlogClientView() {
                         ))}
 
                         {filteredPosts.length === 0 && (
-                          <div style={{ padding: "40px", textAlign: "center", backgroundColor: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "4px", color: "#334155", fontWeight: "600" }}>
+                          <div style={{ padding: "40px", textAlign: "center", backgroundColor: "#f8fafc", border: "1px dashed #cbd5e1", borderRadius: "8px", color: "#64748b", fontWeight: "600" }}>
                             No technical articles found matching &ldquo;{searchQuery || selectedTag}&rdquo;.
                           </div>
                         )}
@@ -329,15 +339,15 @@ export default function BlogClientView() {
                           padding: "24px",
                           backgroundColor: "#f8fafc",
                           border: "1px solid #cbd5e1",
-                          borderLeft: "4px solid #16a34a",
-                          borderRadius: "4px",
+                          borderLeft: "4px solid #2563eb",
+                          borderRadius: "8px",
                           marginBottom: "20px",
                         }}
                       >
-                        <h3 style={{ margin: "0 0 8px 0", color: "#053056", fontSize: "18px" }}>
+                        <h3 style={{ margin: "0 0 8px 0", color: "#0f172a", fontSize: "18px" }}>
                           Need an architectural review, database optimization sprint, or MVP platform?
                         </h3>
-                        <p style={{ margin: "0 0 16px 0", fontSize: "13px", color: "#475569", lineHeight: "1.6" }}>
+                        <p style={{ margin: "0 0 16px 0", fontSize: "13.5px", color: "#475569", lineHeight: "1.6" }}>
                           I partner directly with technical founders, CTOs, and engineering leaders to eliminate scaling bottlenecks and ship production platforms with strict SLAs.
                         </p>
                         <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
@@ -345,12 +355,13 @@ export default function BlogClientView() {
                             href="/pricing#inquiry"
                             style={{
                               padding: "10px 20px",
-                              backgroundColor: "#053056",
+                              backgroundColor: "#2563eb",
                               color: "#ffffff",
                               textDecoration: "none",
-                              borderRadius: "4px",
+                              borderRadius: "6px",
                               fontSize: "13px",
                               fontWeight: "700",
+                              transition: "background-color 0.15s ease",
                             }}
                           >
                             Request Architecture Consultation &rsaquo;
@@ -360,10 +371,10 @@ export default function BlogClientView() {
                             style={{
                               padding: "10px 20px",
                               backgroundColor: "#ffffff",
-                              color: "#053056",
+                              color: "#0f172a",
                               border: "1px solid #cbd5e1",
                               textDecoration: "none",
-                              borderRadius: "4px",
+                              borderRadius: "6px",
                               fontSize: "13px",
                               fontWeight: "700",
                             }}
@@ -380,22 +391,22 @@ export default function BlogClientView() {
                 <div className="sidebar secondary-sidebar">
                   <div className="wrapper">
                     {/* Author Snapshot */}
-                    <div className="block" style={{ backgroundColor: "#f8fafc", padding: "18px", border: "1px solid #e2e8f0", borderRadius: "4px", marginBottom: "20px" }}>
+                    <div className="block" style={{ backgroundColor: "#f8fafc", padding: "18px", border: "1px solid #e2e8f0", borderRadius: "8px", marginBottom: "20px" }}>
                       <img
                         src="/images/profile.png"
                         alt="MD Abu Hanif Mia"
                         style={{
                           width: "100%",
-                          borderRadius: "4px",
+                          borderRadius: "6px",
                           marginBottom: "12px",
                           border: "1px solid #cbd5e1",
                           display: "block",
                         }}
                       />
-                      <h3 style={{ margin: "0 0 4px 0", fontSize: "16px", color: "#053056" }}>
+                      <h3 style={{ margin: "0 0 4px 0", fontSize: "16px", color: "#0f172a" }}>
                         MD Abu Hanif Mia
                       </h3>
-                      <div style={{ fontSize: "12px", color: "#9CBE41", fontWeight: "700", marginBottom: "8px" }}>
+                      <div style={{ fontSize: "12px", color: "#2563eb", fontWeight: "700", marginBottom: "8px" }}>
                         Staff Software Engineer &amp; Systems Architect
                       </div>
                       <div style={{ fontSize: "12px", color: "#475569", lineHeight: "1.6", marginBottom: "10px" }}>
@@ -404,44 +415,44 @@ export default function BlogClientView() {
                         • <strong>freeCodeCamp Certified</strong> (JS, TS, Python)<br />
                         • <strong>Rust &amp; Go Concurrency</strong>, Next.js 16, Postgres
                       </div>
-                      <Link href="/resume" style={{ fontSize: "12px", color: "#053056", fontWeight: "700", textDecoration: "underline" }}>
+                      <Link href="/resume" style={{ fontSize: "12px", color: "#2563eb", fontWeight: "700", textDecoration: "underline" }}>
                         View Verified Credentials &rsaquo;
                       </Link>
                     </div>
 
                     {/* Topic Pillars Hubs */}
-                    <div className="block" style={{ backgroundColor: "#ffffff", border: "1px solid #cbd5e1", padding: "16px", borderRadius: "4px", marginBottom: "20px" }}>
-                      <h4 style={{ margin: "0 0 10px 0", fontSize: "13px", color: "#053056", textTransform: "uppercase", borderBottom: "2px solid #9CBE41", paddingBottom: "4px" }}>
+                    <div className="block" style={{ backgroundColor: "#ffffff", border: "1px solid #cbd5e1", padding: "16px", borderRadius: "8px", marginBottom: "20px" }}>
+                      <h4 style={{ margin: "0 0 10px 0", fontSize: "13px", color: "#0f172a", textTransform: "uppercase", borderBottom: "2px solid #2563eb", paddingBottom: "4px" }}>
                         Topic Pillars
                       </h4>
                       <ul style={{ listStyle: "none", padding: 0, margin: 0, fontSize: "12.5px" }}>
-                        <li style={{ padding: "5px 0", borderBottom: "1px dotted #e2e8f0" }}>
-                          <Link href="/blog/category/postgresql" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                        <li style={{ padding: "6px 0", borderBottom: "1px dotted #e2e8f0" }}>
+                          <Link href="/blog/category/postgresql" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
                             &rsaquo; PostgreSQL &amp; Database Systems
                           </Link>
                         </li>
-                        <li style={{ padding: "5px 0", borderBottom: "1px dotted #e2e8f0" }}>
-                          <Link href="/blog/category/nextjs" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                        <li style={{ padding: "6px 0", borderBottom: "1px dotted #e2e8f0" }}>
+                          <Link href="/blog/category/nextjs" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
                             &rsaquo; Next.js 16 &amp; React 19 Architecture
                           </Link>
                         </li>
-                        <li style={{ padding: "5px 0", borderBottom: "1px dotted #e2e8f0" }}>
-                          <Link href="/blog/category/cloudflare" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                        <li style={{ padding: "6px 0", borderBottom: "1px dotted #e2e8f0" }}>
+                          <Link href="/blog/category/cloudflare" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
                             &rsaquo; Cloudflare Pages &amp; Edge Delivery
                           </Link>
                         </li>
-                        <li style={{ padding: "5px 0", borderBottom: "1px dotted #e2e8f0" }}>
-                          <Link href="/blog/category/architecture" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                        <li style={{ padding: "6px 0", borderBottom: "1px dotted #e2e8f0" }}>
+                          <Link href="/blog/category/architecture" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
                             &rsaquo; Distributed Systems &amp; Modular Monoliths
                           </Link>
                         </li>
-                        <li style={{ padding: "5px 0", borderBottom: "1px dotted #e2e8f0" }}>
-                          <Link href="/blog/category/rust" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                        <li style={{ padding: "6px 0", borderBottom: "1px dotted #e2e8f0" }}>
+                          <Link href="/blog/category/rust" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
                             &rsaquo; Rust Systems &amp; Concurrency
                           </Link>
                         </li>
-                        <li style={{ padding: "5px 0" }}>
-                          <Link href="/blog/category/performance" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                        <li style={{ padding: "6px 0" }}>
+                          <Link href="/blog/category/performance" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
                             &rsaquo; Performance &amp; P99 Latency Tuning
                           </Link>
                         </li>
@@ -449,11 +460,11 @@ export default function BlogClientView() {
                     </div>
 
                     {/* Production Track Record */}
-                    <div className="block" style={{ backgroundColor: "#053056", color: "#ffffff", padding: "18px", borderRadius: "4px", marginBottom: "20px" }}>
-                      <div style={{ fontSize: "11px", fontWeight: "bold", color: "#9CBE41", textTransform: "uppercase" }}>
+                    <div className="block" style={{ backgroundColor: "#0b132b", color: "#ffffff", padding: "18px", borderRadius: "8px", border: "1px solid #1e293b", marginBottom: "20px" }}>
+                      <div style={{ fontSize: "11px", fontWeight: "bold", color: "#10b981", textTransform: "uppercase" }}>
                         Verified Track Record
                       </div>
-                      <div style={{ fontSize: "24px", fontWeight: "800", margin: "4px 0" }}>
+                      <div style={{ fontSize: "24px", fontWeight: "800", margin: "4px 0", color: "#ffffff" }}>
                         99.99% UPTIME
                       </div>
                       <div style={{ fontSize: "12px", color: "#cbd5e1", lineHeight: "1.4" }}>
@@ -462,8 +473,8 @@ export default function BlogClientView() {
                     </div>
 
                     {/* Popular Topics Cloud */}
-                    <div className="block" style={{ border: "1px solid #cbd5e1", padding: "16px", borderRadius: "4px", backgroundColor: "#ffffff", marginBottom: "20px" }}>
-                      <h4 style={{ margin: "0 0 12px 0", fontSize: "14px", color: "#053056", textTransform: "uppercase" }}>
+                    <div className="block" style={{ border: "1px solid #cbd5e1", padding: "16px", borderRadius: "8px", backgroundColor: "#ffffff", marginBottom: "20px" }}>
+                      <h4 style={{ margin: "0 0 12px 0", fontSize: "14px", color: "#0f172a", textTransform: "uppercase" }}>
                         Popular Topics
                       </h4>
                       <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
@@ -474,12 +485,13 @@ export default function BlogClientView() {
                             onClick={() => setSelectedTag(tag)}
                             style={{
                               fontSize: "11px",
-                              backgroundColor: selectedTag === tag ? "#053056" : "#f1f5f9",
+                              backgroundColor: selectedTag === tag ? "#2563eb" : "#f1f5f9",
                               color: selectedTag === tag ? "#ffffff" : "#334155",
-                              border: "1px solid #e2e8f0",
-                              padding: "4px 8px",
-                              borderRadius: "3px",
+                              border: selectedTag === tag ? "1px solid #2563eb" : "1px solid #e2e8f0",
+                              padding: "4px 10px",
+                              borderRadius: "4px",
                               cursor: "pointer",
+                              transition: "all 0.12s ease",
                             }}
                           >
                             #{tag}
@@ -489,16 +501,16 @@ export default function BlogClientView() {
                     </div>
 
                     {/* Quick Links */}
-                    <div className="block" style={{ border: "1px solid #e2e8f0", padding: "14px", borderRadius: "4px", backgroundColor: "#f8fafc" }}>
-                      <strong style={{ display: "block", fontSize: "12px", color: "#053056", marginBottom: "8px" }}>Portfolio Links:</strong>
+                    <div className="block" style={{ border: "1px solid #e2e8f0", padding: "14px", borderRadius: "8px", backgroundColor: "#f8fafc" }}>
+                      <strong style={{ display: "block", fontSize: "12px", color: "#0f172a", marginBottom: "8px" }}>Portfolio Links:</strong>
                       <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "12px" }}>
-                        <Link href="/projects" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                        <Link href="/projects" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
                           &rsaquo; Work Showcase &amp; Projects
                         </Link>
-                        <Link href="/pricing" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                        <Link href="/pricing" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
                           &rsaquo; Work Prices &amp; Sprints
                         </Link>
-                        <Link href="/admin" style={{ color: "#053056", textDecoration: "none", fontWeight: "600" }}>
+                        <Link href="/admin" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
                           &rsaquo; Admin Publishing Portal
                         </Link>
                       </div>

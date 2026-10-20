@@ -116,7 +116,7 @@ export default function ProjectScreenshotGallery({
           >
             <h3
               style={{
-                color: "#053056",
+                color: "#0f172a",
                 fontSize: "18px",
                 margin: 0,
                 borderBottom: "none",
@@ -190,7 +190,7 @@ export default function ProjectScreenshotGallery({
                       padding: "8px 10px",
                       fontSize: "11px",
                       fontWeight: "600",
-                      color: "#053056",
+                      color: "#0f172a",
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
@@ -199,7 +199,7 @@ export default function ProjectScreenshotGallery({
                     }}
                   >
                     <span>View Screenshot #{idx + 1}</span>
-                    <span style={{ color: "#9CBE41", fontSize: "14px" }}>↗</span>
+                    <span style={{ color: "#2563eb", fontSize: "14px" }}>↗</span>
                   </div>
                 </div>
               );

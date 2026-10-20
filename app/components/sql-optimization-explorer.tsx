@@ -9,37 +9,39 @@ export default function SqlOptimizationExplorer() {
     <div
       className="sql-optimization-card"
       style={{
-        background: "#053056",
-        border: "1px solid #0a365c",
-        borderRadius: "6px",
-        padding: "20px",
+        background: "#0b132b",
+        border: "1px solid #1e293b",
+        borderRadius: "8px",
+        padding: "20px 24px",
         margin: "24px 0",
         color: "#ffffff",
         fontFamily: "Arial, Helvetica, sans-serif",
+        boxShadow: "0 4px 16px -2px rgba(11, 19, 43, 0.12)",
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", borderBottom: "1px solid #0a365c", paddingBottom: "12px", marginBottom: "16px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", borderBottom: "1px solid #1e293b", paddingBottom: "12px", marginBottom: "16px" }}>
         <div>
-          <h3 style={{ margin: 0, fontSize: "16px", color: "#9CBE41", textTransform: "uppercase", letterSpacing: "1px" }}>
+          <h3 style={{ margin: 0, fontSize: "16px", color: "#38bdf8", textTransform: "uppercase", letterSpacing: "1px" }}>
             PostgreSQL Query Tuning Case Study Explorer
           </h3>
           <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "#cbd5e1" }}>
             High-Concurrency Production Optimization • 4.2M Records Table
           </p>
         </div>
-        <div style={{ display: "flex", gap: "6px" }}>
+        <div style={{ display: "flex", gap: "8px" }}>
           <button
             type="button"
             onClick={() => setActiveTab("before")}
             style={{
-              background: activeTab === "before" ? "#dc2626" : "#042442",
+              background: activeTab === "before" ? "#dc2626" : "#111e38",
               color: "#ffffff",
-              border: "1px solid #0a365c",
-              borderRadius: "3px",
+              border: "1px solid " + (activeTab === "before" ? "#dc2626" : "#1e293b"),
+              borderRadius: "6px",
               padding: "6px 14px",
               fontSize: "12px",
               fontWeight: "bold",
               cursor: "pointer",
+              transition: "all 0.15s ease",
             }}
           >
             ⚠️ Before (1,240ms)
@@ -48,14 +50,15 @@ export default function SqlOptimizationExplorer() {
             type="button"
             onClick={() => setActiveTab("after")}
             style={{
-              background: activeTab === "after" ? "#15803d" : "#042442",
+              background: activeTab === "after" ? "#16a34a" : "#111e38",
               color: "#ffffff",
-              border: "1px solid #0a365c",
-              borderRadius: "3px",
+              border: "1px solid " + (activeTab === "after" ? "#16a34a" : "#1e293b"),
+              borderRadius: "6px",
               padding: "6px 14px",
               fontSize: "12px",
               fontWeight: "bold",
               cursor: "pointer",
+              transition: "all 0.15s ease",
             }}
           >
             ✓ After (3.8ms)
@@ -65,11 +68,11 @@ export default function SqlOptimizationExplorer() {
 
       {activeTab === "before" ? (
         <div>
-          <div style={{ background: "#450a0a", border: "1px solid #991b1b", padding: "10px 14px", borderRadius: "4px", marginBottom: "14px", fontSize: "13px", color: "#fecaca" }}>
+          <div style={{ background: "#450a0a", border: "1px solid #991b1b", padding: "10px 14px", borderRadius: "6px", marginBottom: "14px", fontSize: "13px", color: "#fecaca" }}>
             <strong>The Problem:</strong> Full table sequential scan caused database CPU spikes up to 92% and connection pool timeouts during morning market opens.
           </div>
 
-          <div style={{ background: "#031c33", border: "1px solid #0a365c", borderRadius: "4px", padding: "14px", fontFamily: "monospace", fontSize: "12.5px", color: "#f8fafc", overflowX: "auto", marginBottom: "14px" }}>
+          <div style={{ background: "#070f1e", border: "1px solid #1e293b", borderRadius: "6px", padding: "14px", fontFamily: "monospace", fontSize: "12.5px", color: "#f8fafc", overflowX: "auto", marginBottom: "14px" }}>
             <span style={{ color: "#cbd5e1" }}>-- Unindexed Query (Spilling to Disk)</span><br />
             <span style={{ color: "#93c5fd", fontWeight: "bold" }}>SELECT</span> user_id, sum(amount), count(*)<br />
             <span style={{ color: "#93c5fd", fontWeight: "bold" }}>FROM</span> orders<br />
@@ -83,15 +86,15 @@ export default function SqlOptimizationExplorer() {
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px", fontSize: "12px", textAlign: "center" }}>
-            <div style={{ background: "#042442", padding: "8px", borderRadius: "4px", border: "1px solid #0a365c" }}>
+            <div style={{ background: "#070f1e", padding: "10px", borderRadius: "6px", border: "1px solid #1e293b" }}>
               <span style={{ color: "#cbd5e1", display: "block" }}>Execution Time</span>
               <strong style={{ color: "#f87171", fontSize: "16px" }}>1,240 ms</strong>
             </div>
-            <div style={{ background: "#042442", padding: "8px", borderRadius: "4px", border: "1px solid #0a365c" }}>
+            <div style={{ background: "#070f1e", padding: "10px", borderRadius: "6px", border: "1px solid #1e293b" }}>
               <span style={{ color: "#cbd5e1", display: "block" }}>Buffer Spill</span>
               <strong style={{ color: "#f87171", fontSize: "16px" }}>41.8 MB to Disk</strong>
             </div>
-            <div style={{ background: "#042442", padding: "8px", borderRadius: "4px", border: "1px solid #0a365c" }}>
+            <div style={{ background: "#070f1e", padding: "10px", borderRadius: "6px", border: "1px solid #1e293b" }}>
               <span style={{ color: "#cbd5e1", display: "block" }}>Connection Pool</span>
               <strong style={{ color: "#f87171", fontSize: "16px" }}>92% Saturation</strong>
             </div>
@@ -99,34 +102,34 @@ export default function SqlOptimizationExplorer() {
         </div>
       ) : (
         <div>
-          <div style={{ background: "#064e3b", border: "1px solid #059669", padding: "10px 14px", borderRadius: "4px", marginBottom: "14px", fontSize: "13px", color: "#ecfdf5" }}>
+          <div style={{ background: "#064e3b", border: "1px solid #059669", padding: "10px 14px", borderRadius: "6px", marginBottom: "14px", fontSize: "13px", color: "#ecfdf5" }}>
             <strong>The Solution:</strong> Designed a concurrent composite partial covering index and rewritten CTE that satisfies the query entirely from RAM without touching the heap.
           </div>
 
-          <div style={{ background: "#031c33", border: "1px solid #0a365c", borderRadius: "4px", padding: "14px", fontFamily: "monospace", fontSize: "12.5px", color: "#f8fafc", overflowX: "auto", marginBottom: "14px" }}>
+          <div style={{ background: "#070f1e", border: "1px solid #1e293b", borderRadius: "6px", padding: "14px", fontFamily: "monospace", fontSize: "12.5px", color: "#f8fafc", overflowX: "auto", marginBottom: "14px" }}>
             <span style={{ color: "#cbd5e1" }}>-- Specialized Composite Partial Covering Index</span><br />
             <span style={{ color: "#93c5fd", fontWeight: "bold" }}>CREATE INDEX CONCURRENTLY</span> idx_orders_settled_recent<br />
             <span style={{ color: "#93c5fd", fontWeight: "bold" }}>ON</span> orders (user_id, created_at <span style={{ color: "#93c5fd", fontWeight: "bold" }}>DESC</span>)<br />
             <span style={{ color: "#93c5fd", fontWeight: "bold" }}>INCLUDE</span> (amount)<br />
             <span style={{ color: "#93c5fd", fontWeight: "bold" }}>WHERE</span> status = <span style={{ color: "#fde047" }}>&apos;settled&apos;</span>;<br /><br />
-            <span style={{ color: "#4ade80", fontWeight: "bold" }}>EXPLAIN ANALYZE:</span><br />
+            <span style={{ color: "#10b981", fontWeight: "bold" }}>EXPLAIN ANALYZE:</span><br />
             -&gt; Index Only Scan using idx_orders_settled_recent (cost=0.43..12.45 rows=482 width=24)<br />
             &nbsp;&nbsp;&nbsp;&nbsp;Buffers: shared hit=42 read=0, temp written=0<br />
             &nbsp;&nbsp;&nbsp;&nbsp;<strong>Execution Time: 3.82 ms (326x faster)</strong>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px", fontSize: "12px", textAlign: "center" }}>
-            <div style={{ background: "#042442", padding: "8px", borderRadius: "4px", border: "1px solid #0a365c" }}>
+            <div style={{ background: "#070f1e", padding: "10px", borderRadius: "6px", border: "1px solid #1e293b" }}>
               <span style={{ color: "#cbd5e1", display: "block" }}>Execution Time</span>
-              <strong style={{ color: "#4ade80", fontSize: "16px" }}>3.8 ms (326x)</strong>
+              <strong style={{ color: "#10b981", fontSize: "16px" }}>3.8 ms (326x)</strong>
             </div>
-            <div style={{ background: "#042442", padding: "8px", borderRadius: "4px", border: "1px solid #0a365c" }}>
+            <div style={{ background: "#070f1e", padding: "10px", borderRadius: "6px", border: "1px solid #1e293b" }}>
               <span style={{ color: "#cbd5e1", display: "block" }}>Disk Temp Spills</span>
-              <strong style={{ color: "#4ade80", fontSize: "16px" }}>0 KB (100% RAM)</strong>
+              <strong style={{ color: "#10b981", fontSize: "16px" }}>0 KB (100% RAM)</strong>
             </div>
-            <div style={{ background: "#042442", padding: "8px", borderRadius: "4px", border: "1px solid #0a365c" }}>
+            <div style={{ background: "#070f1e", padding: "10px", borderRadius: "6px", border: "1px solid #1e293b" }}>
               <span style={{ color: "#cbd5e1", display: "block" }}>Database CPU</span>
-              <strong style={{ color: "#4ade80", fontSize: "16px" }}>&lt; 6% Flat</strong>
+              <strong style={{ color: "#10b981", fontSize: "16px" }}>&lt; 6% Flat</strong>
             </div>
           </div>
         </div>

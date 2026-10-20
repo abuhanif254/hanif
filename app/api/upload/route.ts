@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
 import path from "path";
 import { supabase, isSupabaseConfigured } from "../../lib/supabase";
+import { isRequestAuthorized } from "../../lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -96,6 +97,14 @@ async function processSingleFile(file: File): Promise<{
 
 export async function POST(req: NextRequest) {
   try {
+    const isAuth = await isRequestAuthorized(req);
+    if (!isAuth) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized. Admin authentication required." },
+        { status: 401 }
+      );
+    }
+
     const formData = await req.formData();
 
     // Check for multiple files or single file

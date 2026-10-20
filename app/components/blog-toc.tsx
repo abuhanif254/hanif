@@ -59,8 +59,8 @@ export default function BlogTableOfContents({ headings }: BlogTableOfContentsPro
           fontWeight: "800",
           textTransform: "uppercase",
           letterSpacing: "1px",
-          color: "#053056",
-          borderBottom: "2px solid #9CBE41",
+          color: "#0f172a",
+          borderBottom: "2px solid #2563eb",
           paddingBottom: "6px",
           marginBottom: "12px",
           display: "flex",
@@ -98,12 +98,12 @@ export default function BlogTableOfContents({ headings }: BlogTableOfContentsPro
                   }
                 }}
                 style={{
-                  color: isActive ? "#053056" : "#475569",
+                  color: isActive ? "#2563eb" : "#475569",
                   fontWeight: isActive ? "800" : "500",
                   textDecoration: "none",
                   display: "inline-block",
                   lineHeight: "1.4",
-                  borderLeft: isActive ? "3px solid #9CBE41" : "3px solid transparent",
+                  borderLeft: isActive ? "3px solid #2563eb" : "3px solid transparent",
                   paddingLeft: "6px",
                   transition: "all 0.15s ease",
                 }}

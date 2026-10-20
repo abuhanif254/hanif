@@ -293,3 +293,13 @@ export async function submitInquiry(formData: {
     message: "Thank you! Your project inquiry has been received (running in preview mode).",
   };
 }
+
+export type {
+  ProfileData,
+  Competency,
+  ProjectItem,
+  ProjectItem as Project,
+  ServicePricing,
+  BlogPost,
+  Testimonial,
+};

@@ -27,7 +27,7 @@ export default async function Image({ params }: OgProps) {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          backgroundColor: "#053056",
+          backgroundColor: "#0b132b",
           padding: "60px",
           position: "relative",
         }}
@@ -40,7 +40,7 @@ export default async function Image({ params }: OgProps) {
             left: 0,
             right: 0,
             height: "10px",
-            backgroundColor: "#9CBE41",
+            backgroundColor: "#2563eb",
           }}
         />
 
@@ -49,8 +49,8 @@ export default async function Image({ params }: OgProps) {
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <span
               style={{
-                backgroundColor: "#9CBE41",
-                color: "#041f36",
+                backgroundColor: "#2563eb",
+                color: "#ffffff",
                 fontSize: "16px",
                 fontWeight: 900,
                 padding: "6px 14px",
@@ -99,7 +99,7 @@ export default async function Image({ params }: OgProps) {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            borderTop: "2px solid #0e4475",
+            borderTop: "2px solid #1e293b",
             paddingTop: "24px",
           }}
         >
@@ -107,7 +107,7 @@ export default async function Image({ params }: OgProps) {
             <span style={{ color: "#ffffff", fontSize: "24px", fontWeight: 800 }}>
               MD Abu Hanif Mia (Abu Hanif)
             </span>
-            <span style={{ color: "#9CBE41", fontSize: "16px", fontWeight: 700, marginTop: "4px" }}>
+            <span style={{ color: "#38bdf8", fontSize: "16px", fontWeight: 700, marginTop: "4px" }}>
               Staff Software Engineer &amp; Systems Architect
             </span>
           </div>
@@ -115,7 +115,7 @@ export default async function Image({ params }: OgProps) {
           <div
             style={{
               display: "flex",
-              backgroundColor: "#031a2e",
+              backgroundColor: "#070f1e",
               padding: "10px 18px",
               borderRadius: "4px",
               border: "1px solid #0a365c",

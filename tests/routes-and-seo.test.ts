@@ -57,7 +57,7 @@ describe("Routes, SEO & Topic Pillars Verification", () => {
 
   it("should verify sitemap generates all core routes including /lab and topic pillars", async () => {
     const sitemapFn = (await import("../app/sitemap")).default;
-    const entries = sitemapFn();
+    const entries = await sitemapFn();
 
     const urls = entries.map((e) => e.url);
     expect(urls).toContain("https://abuhanifmia.com/");

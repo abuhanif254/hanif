@@ -104,14 +104,14 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
 
   const navLinks = [
     { label: "Home", href: "/", id: "fc", key: "/" },
-    { label: "About Abu Hanif", href: "/#about", key: "/#about" },
+    { label: "About", href: "/#about", key: "/#about" },
     { label: "Engineering Focus", href: "/#competencies", key: "/#competencies" },
     { label: "Work Showcase", href: "/projects", key: "/projects" },
-    { label: "Work Prices", href: "/pricing", key: "/pricing" },
+    { label: "Pricing & SOW", href: "/pricing", key: "/pricing" },
     { label: "Systems Lab", href: "/lab", key: "/lab" },
     { label: "Technical Blog", href: "/blog", key: "/blog" },
     { label: "Resume / CV", href: "/resume", key: "/resume" },
-    { label: "Admin Panel", href: "/admin", key: "/admin" },
+    { label: "Admin", href: "/admin", key: "/admin" },
     { label: "Contact", href: "/pricing#inquiry", id: "lc", key: "/contact" },
   ];
 
@@ -166,9 +166,9 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "6px",
-                  background: "#042442",
+                  background: "#0b132b",
                   color: "#e2e8f0",
-                  border: "1px solid #0e4475",
+                  border: "1px solid #1e293b",
                   padding: "4px 10px",
                   borderRadius: "3px",
                   fontSize: "12px",
@@ -181,11 +181,11 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
                 <kbd
                   style={{
                     fontSize: "10px",
-                    backgroundColor: "#021627",
+                    backgroundColor: "#050e1d",
                     padding: "1px 5px",
                     borderRadius: "2px",
-                    border: "1px solid #0e4475",
-                    color: "#9CBE41",
+                    border: "1px solid #1e293b",
+                    color: "#38bdf8",
                   }}
                 >
                   Ctrl+K
@@ -237,7 +237,7 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
                 position: "absolute",
                 right: "12px",
                 top: "16px",
-                background: "#083155",
+                background: "#0b132b",
                 color: "#ffffff",
                 border: "1px solid #1e293b",
                 borderRadius: "4px",
@@ -275,8 +275,8 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
             <div
               className="mobile-nav-drawer"
               style={{
-                background: "#041f36",
-                borderTop: "2px solid #9CBE41",
+                background: "#070f1e",
+                borderTop: "2px solid #2563eb",
                 padding: "16px",
                 display: "flex",
                 flexDirection: "column",
@@ -293,7 +293,7 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
                   alignItems: "center",
                   gap: "12px",
                   paddingBottom: "12px",
-                  borderBottom: "1px solid #0a365c",
+                  borderBottom: "1px solid #1e293b",
                 }}
               >
                 <div
@@ -303,9 +303,9 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
                     height: "48px",
                     borderRadius: "50%",
                     overflow: "hidden",
-                    border: "2px solid #9CBE41",
+                    border: "2px solid #2563eb",
                     flexShrink: 0,
-                    background: "#053056",
+                    background: "#0b132b",
                   }}
                 >
                   <img
@@ -318,8 +318,8 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
                       position: "absolute",
                       bottom: 0,
                       right: 0,
-                      background: "#9CBE41",
-                      color: "#041f36",
+                      background: "#10b981",
+                      color: "#050e1d",
                       fontSize: "8px",
                       fontWeight: 900,
                       padding: "1px 3px",
@@ -333,7 +333,7 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
                   <strong style={{ fontSize: "14px", color: "#ffffff", lineHeight: 1.2 }}>
                     MD Abu Hanif Mia
                   </strong>
-                  <span style={{ fontSize: "11px", color: "#9CBE41", fontWeight: 700 }}>
+                  <span style={{ fontSize: "11px", color: "#38bdf8", fontWeight: 700 }}>
                     Staff Software Engineer
                   </span>
                   <span style={{ fontSize: "10px", color: "#94a3b8" }}>
@@ -352,14 +352,14 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
                       href={link.href}
                       onClick={() => setMobileMenuOpen(false)}
                       style={{
-                        color: selected ? "#9CBE41" : "#ffffff",
+                        color: selected ? "#38bdf8" : "#ffffff",
                         fontWeight: selected ? "800" : "600",
                         padding: "12px 14px",
                         borderRadius: "6px",
                         background: selected
-                          ? "rgba(156, 190, 65, 0.18)"
+                          ? "rgba(56, 189, 248, 0.12)"
                           : "rgba(255, 255, 255, 0.03)",
-                        border: selected ? "1px solid #9CBE41" : "1px solid transparent",
+                        border: selected ? "1px solid #0284c7" : "1px solid transparent",
                         textDecoration: "none",
                         fontSize: "14px",
                         minHeight: "44px",
@@ -369,7 +369,7 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
                       }}
                     >
                       <span>{link.label}</span>
-                      <span style={{ color: selected ? "#9CBE41" : "#64748b", fontSize: "12px" }}>
+                      <span style={{ color: selected ? "#38bdf8" : "#64748b", fontSize: "12px" }}>
                         &rsaquo;
                       </span>
                     </Link>
@@ -384,7 +384,7 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
                   flexDirection: "column",
                   gap: "8px",
                   paddingTop: "12px",
-                  borderTop: "1px solid #0a365c",
+                  borderTop: "1px solid #1e293b",
                 }}
               >
                 <Link
@@ -393,9 +393,9 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
                   style={{
                     display: "block",
                     padding: "12px",
-                    background: "#9CBE41",
-                    color: "#053056",
-                    fontWeight: 800,
+                    background: "#2563eb",
+                    color: "#ffffff",
+                    fontWeight: 700,
                     fontSize: "13px",
                     borderRadius: "4px",
                     textAlign: "center",

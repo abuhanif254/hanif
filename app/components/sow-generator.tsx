@@ -101,6 +101,20 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
     `.trim();
   }
 
+  function handleDownloadSow() {
+    if (typeof window === "undefined") return;
+    const markdown = generateSowMarkdown();
+    const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `SOW-${selectedServiceSlug}-${Date.now()}.md`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
   function handleCopySow() {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
       navigator.clipboard.writeText(generateSowMarkdown());
@@ -125,19 +139,20 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
       id="sow-generator"
       style={{
         backgroundColor: "#ffffff",
-        border: "1px solid #053056",
-        borderRadius: "6px",
+        border: "1px solid #cbd5e1",
+        borderRadius: "8px",
         overflow: "hidden",
-        boxShadow: "0 4px 16px rgba(5, 48, 86, 0.08)",
+        boxShadow: "0 4px 16px rgba(11, 25, 44, 0.08)",
         margin: "32px 0",
       }}
     >
       {/* Header Banner */}
       <div
         style={{
-          backgroundColor: "#053056",
+          backgroundColor: "#0b132b",
+          borderBottom: "1px solid #1e293b",
           color: "#ffffff",
-          padding: "18px 24px",
+          padding: "20px 28px",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
@@ -146,10 +161,10 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
         }}
       >
         <div>
-          <span style={{ fontSize: "11px", fontWeight: "800", color: "#9CBE41", textTransform: "uppercase", letterSpacing: "1px" }}>
+          <span style={{ fontSize: "11px", fontWeight: "800", color: "#38bdf8", textTransform: "uppercase", letterSpacing: "1px" }}>
             Self-Service Scoping Engine
           </span>
-          <h3 style={{ margin: "4px 0 0 0", fontSize: "20px", color: "#ffffff" }}>
+          <h3 style={{ margin: "4px 0 0 0", fontSize: "20px", color: "#ffffff", fontWeight: "800" }}>
             Interactive Statement of Work (SOW) &amp; Budget Generator
           </h3>
         </div>
@@ -158,13 +173,13 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
         </span>
       </div>
 
-      <div style={{ padding: "24px" }}>
+      <div style={{ padding: "28px" }}>
         {/* Step 1: Pick Service */}
-        <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", fontSize: "13px", fontWeight: "bold", color: "#053056", marginBottom: "8px" }}>
+        <div style={{ marginBottom: "24px" }}>
+          <label style={{ display: "block", fontSize: "13px", fontWeight: "bold", color: "#0f172a", marginBottom: "8px" }}>
             1. Select Core Technical Engagement:
           </label>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "10px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "12px" }}>
             {initialServices.map((serv) => {
               const isSelected = selectedServiceSlug === serv.slug;
               return (
@@ -172,17 +187,17 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
                   key={serv.slug}
                   onClick={() => setSelectedServiceSlug(serv.slug)}
                   style={{
-                    padding: "12px 14px",
-                    borderRadius: "4px",
-                    border: isSelected ? "2px solid #9CBE41" : "1px solid #cbd5e1",
-                    backgroundColor: isSelected ? "#f0fdf4" : "#ffffff",
+                    padding: "14px",
+                    borderRadius: "6px",
+                    border: isSelected ? "2px solid #2563eb" : "1px solid #cbd5e1",
+                    backgroundColor: isSelected ? "#f8faff" : "#ffffff",
                     cursor: "pointer",
                     transition: "all 0.15s ease",
                   }}
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "4px" }}>
-                    <strong style={{ fontSize: "13px", color: "#053056" }}>{serv.title}</strong>
-                    <span style={{ fontSize: "12px", fontWeight: "bold", color: "#166534" }}>{serv.priceDisplay}</span>
+                    <strong style={{ fontSize: "13px", color: "#0f172a" }}>{serv.title}</strong>
+                    <span style={{ fontSize: "12px", fontWeight: "bold", color: "#047857" }}>{serv.priceDisplay}</span>
                   </div>
                   <span style={{ fontSize: "11.5px", color: "#64748b" }}>⏱ {serv.timeline}</span>
                 </div>
@@ -192,8 +207,8 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
         </div>
 
         {/* Step 2: Pick Add-ons */}
-        <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", fontSize: "13px", fontWeight: "bold", color: "#053056", marginBottom: "8px" }}>
+        <div style={{ marginBottom: "24px" }}>
+          <label style={{ display: "block", fontSize: "13px", fontWeight: "bold", color: "#0f172a", marginBottom: "8px" }}>
             2. Optional Architectural Add-On Modules:
           </label>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "10px" }}>
@@ -206,10 +221,10 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
                     display: "flex",
                     alignItems: "flex-start",
                     gap: "10px",
-                    padding: "10px 14px",
-                    borderRadius: "4px",
-                    border: checked ? "1px solid #16a34a" : "1px solid #e2e8f0",
-                    backgroundColor: checked ? "#f0fdf4" : "#f8fafc",
+                    padding: "12px 14px",
+                    borderRadius: "6px",
+                    border: checked ? "1px solid #2563eb" : "1px solid #e2e8f0",
+                    backgroundColor: checked ? "#f8faff" : "#ffffff",
                     cursor: "pointer",
                   }}
                 >
@@ -221,8 +236,8 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
                   />
                   <div style={{ fontSize: "12px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", gap: "6px" }}>
-                      <strong style={{ color: "#053056" }}>{addon.name}</strong>
-                      <span style={{ fontWeight: "bold", color: "#166534" }}>+${addon.price.toLocaleString()}</span>
+                      <strong style={{ color: "#0f172a" }}>{addon.name}</strong>
+                      <span style={{ fontWeight: "bold", color: "#047857" }}>+${addon.price.toLocaleString()}</span>
                     </div>
                     <span style={{ color: "#64748b", fontSize: "11px", display: "block", marginTop: "2px" }}>
                       {addon.description}
@@ -249,7 +264,7 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
                 width: "100%",
                 padding: "8px 12px",
                 border: "1px solid #cbd5e1",
-                borderRadius: "3px",
+                borderRadius: "4px",
                 fontSize: "13px",
                 boxSizing: "border-box",
               }}
@@ -269,7 +284,7 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
                 width: "100%",
                 padding: "8px 12px",
                 border: "1px solid #cbd5e1",
-                borderRadius: "3px",
+                borderRadius: "4px",
                 fontSize: "13px",
                 boxSizing: "border-box",
               }}
@@ -280,9 +295,10 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
         {/* Live Calculation Bar */}
         <div
           style={{
-            backgroundColor: "#053056",
-            borderRadius: "4px",
-            padding: "18px 24px",
+            backgroundColor: "#0b132b",
+            border: "1px solid #1e293b",
+            borderRadius: "6px",
+            padding: "20px 24px",
             color: "#ffffff",
             display: "flex",
             justifyContent: "space-between",
@@ -295,7 +311,7 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
             <span style={{ fontSize: "11px", color: "#cbd5e1", textTransform: "uppercase", letterSpacing: "1px" }}>
               Total Fixed Investment Estimate
             </span>
-            <div style={{ fontSize: "28px", fontWeight: "900", color: "#9CBE41" }}>
+            <div style={{ fontSize: "28px", fontWeight: "900", color: "#10b981" }}>
               ${totalInvestment.toLocaleString()}
             </div>
             <span style={{ fontSize: "12px", color: "#94a3b8" }}>
@@ -303,25 +319,45 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
             </span>
           </div>
 
-          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", width: "100%", maxWidth: "420px" }}>
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", width: "100%", maxWidth: "540px" }}>
             <button
               type="button"
               className="mobile-full-width-btn"
               onClick={handleCopySow}
               style={{
-                flex: "1 1 180px",
-                padding: "12px 16px",
-                backgroundColor: "#042442",
-                color: copied ? "#4ade80" : "#ffffff",
-                border: "1px solid #0a365c",
+                flex: "1 1 150px",
+                padding: "10px 14px",
+                backgroundColor: "#070f1e",
+                color: copied ? "#10b981" : "#ffffff",
+                border: "1px solid #1e293b",
                 borderRadius: "4px",
                 fontWeight: "700",
-                fontSize: "13px",
+                fontSize: "12px",
                 cursor: "pointer",
                 textAlign: "center",
               }}
             >
-              {copied ? "✓ Copied SOW Markdown!" : "📋 Copy SOW Proposal"}
+              {copied ? "✓ Copied Markdown!" : "📋 Copy SOW"}
+            </button>
+
+            <button
+              type="button"
+              className="mobile-full-width-btn"
+              onClick={handleDownloadSow}
+              style={{
+                flex: "1 1 150px",
+                padding: "10px 14px",
+                backgroundColor: "#070f1e",
+                color: "#e2e8f0",
+                border: "1px solid #1e293b",
+                borderRadius: "4px",
+                fontWeight: "700",
+                fontSize: "12px",
+                cursor: "pointer",
+                textAlign: "center",
+              }}
+            >
+              💾 Download .md
             </button>
 
             <button
@@ -330,18 +366,18 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
               onClick={handlePrefillInquiry}
               style={{
                 flex: "1 1 180px",
-                padding: "12px 18px",
-                backgroundColor: "#9CBE41",
-                color: "#041f36",
+                padding: "10px 16px",
+                backgroundColor: "#2563eb",
+                color: "#ffffff",
                 border: "none",
                 borderRadius: "4px",
-                fontWeight: "800",
+                fontWeight: "700",
                 fontSize: "13px",
                 cursor: "pointer",
                 textAlign: "center",
               }}
             >
-              Lock In This Scope &rsaquo;
+              Lock In Scope &rsaquo;
             </button>
           </div>
         </div>

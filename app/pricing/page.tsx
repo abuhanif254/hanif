@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import PricingClientView from "./pricing-client-view";
-import { initialServices } from "../data/portfolio-data";
+import { getServices } from "../lib/portfolio-store";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
@@ -65,61 +65,63 @@ const pricingFaqs = [
   },
 ];
 
-const offerCatalogSchema = {
-  "@context": "https://schema.org",
-  "@type": "OfferCatalog",
-  name: "Software Engineering & Architecture Consulting Services",
-  itemListElement: initialServices.map((service, index) => ({
-    "@type": "Offer",
-    itemOffered: {
-      "@type": "Service",
-      name: service.title,
-      description: service.description,
-      provider: {
-        "@type": "Person",
-        name: "MD Abu Hanif Mia",
-        url: siteUrl,
+export default async function PricingPage() {
+  const services = await getServices();
+
+  const offerCatalogSchema = {
+    "@context": "https://schema.org",
+    "@type": "OfferCatalog",
+    name: "Software Engineering & Architecture Consulting Services",
+    itemListElement: services.map((service, index) => ({
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        name: service.title,
+        description: service.description,
+        provider: {
+          "@type": "Person",
+          name: "MD Abu Hanif Mia",
+          url: siteUrl,
+        },
       },
-    },
-    price: service.priceDisplay.replace(/[^0-9]/g, ""),
-    priceCurrency: "USD",
-    position: index + 1,
-  })),
-};
+      price: service.priceDisplay.replace(/[^0-9]/g, ""),
+      priceCurrency: "USD",
+      position: index + 1,
+    })),
+  };
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: pricingFaqs.map((faq) => ({
-    "@type": "Question",
-    name: faq.q,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: faq.a,
-    },
-  })),
-};
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: pricingFaqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.a,
+      },
+    })),
+  };
 
-const breadcrumbSchema = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    {
-      "@type": "ListItem",
-      position: 1,
-      name: "Home",
-      item: siteUrl,
-    },
-    {
-      "@type": "ListItem",
-      position: 2,
-      name: "Pricing & Services",
-      item: `${siteUrl}/pricing`,
-    },
-  ],
-};
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Pricing & Services",
+        item: `${siteUrl}/pricing`,
+      },
+    ],
+  };
 
-export default function PricingPage() {
   return (
     <>
       <script
@@ -134,7 +136,7 @@ export default function PricingPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <PricingClientView />
+      <PricingClientView services={services} />
     </>
   );
 }

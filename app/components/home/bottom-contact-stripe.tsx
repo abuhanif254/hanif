@@ -64,10 +64,10 @@ export default function BottomContactStripe() {
               <div
                 style={{
                   padding: "20px",
-                  backgroundColor: "#053056",
-                  color: "#9CBE41",
-                  border: "2px solid #9CBE41",
-                  borderRadius: "6px",
+                  backgroundColor: "#0b132b",
+                  color: "#10b981",
+                  border: "2px solid #10b981",
+                  borderRadius: "8px",
                   textAlign: "center",
                   fontSize: "15px",
                 }}

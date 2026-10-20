@@ -44,13 +44,14 @@ export default function EdgeLatencyBenchmark() {
     <div
       className="edge-benchmark-widget"
       style={{
-        backgroundColor: "#053056",
-        border: "1px solid #0a365c",
-        borderRadius: "6px",
+        backgroundColor: "#0b132b",
+        border: "1px solid #1e293b",
+        borderRadius: "8px",
         padding: "16px",
         color: "#ffffff",
         margin: "20px 0",
         fontFamily: "Arial, Helvetica, sans-serif",
+        boxShadow: "0 4px 16px -2px rgba(11, 19, 43, 0.12)",
       }}
     >
       <div
@@ -58,7 +59,7 @@ export default function EdgeLatencyBenchmark() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          borderBottom: "1px solid #0a365c",
+          borderBottom: "1px solid #1e293b",
           paddingBottom: "10px",
           marginBottom: "12px",
         }}
@@ -70,8 +71,8 @@ export default function EdgeLatencyBenchmark() {
               width: "8px",
               height: "8px",
               borderRadius: "50%",
-              backgroundColor: "#4ade80",
-              boxShadow: "0 0 6px #4ade80",
+              backgroundColor: "#10b981",
+              boxShadow: "0 0 6px #10b981",
             }}
           />
           <strong
@@ -79,7 +80,7 @@ export default function EdgeLatencyBenchmark() {
               fontSize: "12px",
               textTransform: "uppercase",
               letterSpacing: "1px",
-              color: "#9CBE41",
+              color: "#38bdf8",
             }}
           >
             Live Edge Telemetry &amp; Latency
@@ -93,17 +94,17 @@ export default function EdgeLatencyBenchmark() {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "14px" }}>
         <div
           style={{
-            background: "#042442",
+            background: "#070f1e",
             padding: "10px",
-            borderRadius: "4px",
-            border: "1px solid #0a365c",
+            borderRadius: "6px",
+            border: "1px solid #1e293b",
             textAlign: "center",
           }}
         >
           <div style={{ fontSize: "11px", color: "#cbd5e1", textTransform: "uppercase", fontWeight: "700" }}>
             Average RTT
           </div>
-          <div style={{ fontSize: "24px", fontWeight: "bold", color: "#4ade80", margin: "2px 0" }}>
+          <div style={{ fontSize: "24px", fontWeight: "bold", color: "#10b981", margin: "2px 0" }}>
             {avgLatency}ms
           </div>
           <div style={{ fontSize: "11px", color: "#cbd5e1" }}>
@@ -113,17 +114,17 @@ export default function EdgeLatencyBenchmark() {
 
         <div
           style={{
-            background: "#042442",
+            background: "#070f1e",
             padding: "10px",
-            borderRadius: "4px",
-            border: "1px solid #0a365c",
+            borderRadius: "6px",
+            border: "1px solid #1e293b",
             textAlign: "center",
           }}
         >
           <div style={{ fontSize: "11px", color: "#cbd5e1", textTransform: "uppercase", fontWeight: "700" }}>
             P99 Burst Latency
           </div>
-          <div style={{ fontSize: "24px", fontWeight: "bold", color: "#9CBE41", margin: "2px 0" }}>
+          <div style={{ fontSize: "24px", fontWeight: "bold", color: "#38bdf8", margin: "2px 0" }}>
             {p99Latency}ms
           </div>
           <div style={{ fontSize: "11px", color: "#cbd5e1" }}>
@@ -148,13 +149,13 @@ export default function EdgeLatencyBenchmark() {
           onClick={runBenchmark}
           disabled={isRunning}
           style={{
-            background: isRunning ? "#083c66" : "#9CBE41",
-            color: isRunning ? "#cbd5e1" : "#041f36",
+            background: isRunning ? "#111e38" : "#2563eb",
+            color: "#ffffff",
             border: "none",
-            borderRadius: "3px",
+            borderRadius: "6px",
             padding: "6px 14px",
             fontSize: "12px",
-            fontWeight: "800",
+            fontWeight: "700",
             cursor: isRunning ? "not-allowed" : "pointer",
             transition: "all 0.15s ease",
           }}

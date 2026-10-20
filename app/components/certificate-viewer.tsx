@@ -73,8 +73,8 @@ export default function CertificateViewer() {
       <div
         style={{
           position: "relative",
-          backgroundColor: "#053056",
-          border: "2px solid #9CBE41",
+          backgroundColor: "#0b132b",
+          border: "2px solid #2563eb",
           borderRadius: "8px",
           maxWidth: "880px",
           width: "100%",
@@ -94,8 +94,8 @@ export default function CertificateViewer() {
             justifyContent: "space-between",
             alignItems: "center",
             padding: "16px 22px",
-            borderBottom: "1px solid #0a365c",
-            backgroundColor: "#042442",
+            borderBottom: "1px solid #1e293b",
+            backgroundColor: "#070f1e",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -103,11 +103,11 @@ export default function CertificateViewer() {
               style={{
                 display: "inline-block",
                 padding: "3px 8px",
-                backgroundColor: "#9CBE41",
-                color: "#041f36",
-                fontWeight: "900",
+                backgroundColor: "#2563eb",
+                color: "#ffffff",
+                fontWeight: "800",
                 fontSize: "11px",
-                borderRadius: "3px",
+                borderRadius: "4px",
                 textTransform: "uppercase",
               }}
             >
@@ -122,14 +122,14 @@ export default function CertificateViewer() {
             onClick={handleClose}
             aria-label="Close modal"
             style={{
-              background: "#083155",
-              border: "1px solid #0a365c",
+              background: "#111e38",
+              border: "1px solid #1e293b",
               color: "#ffffff",
               fontSize: "16px",
               fontWeight: "bold",
               width: "32px",
               height: "32px",
-              borderRadius: "4px",
+              borderRadius: "6px",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
@@ -149,7 +149,7 @@ export default function CertificateViewer() {
               backgroundColor: "#ffffff",
               padding: "10px",
               borderRadius: "6px",
-              border: "1px solid #9CBE41",
+              border: "1px solid #2563eb",
               boxShadow: "0 8px 24px rgba(0, 0, 0, 0.3)",
               marginBottom: "20px",
               textAlign: "center",
@@ -173,10 +173,10 @@ export default function CertificateViewer() {
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
               gap: "12px",
-              backgroundColor: "#042442",
+              backgroundColor: "#070f1e",
               padding: "16px",
               borderRadius: "6px",
-              border: "1px solid #0a365c",
+              border: "1px solid #1e293b",
               marginBottom: "18px",
               fontSize: "13px",
             }}
@@ -193,7 +193,7 @@ export default function CertificateViewer() {
               <span style={{ fontSize: "11px", color: "#cbd5e1", textTransform: "uppercase", fontWeight: "700" }}>
                 Course Completed:
               </span>
-              <div style={{ fontWeight: "800", color: "#9CBE41", marginTop: "2px" }}>
+              <div style={{ fontWeight: "800", color: "#38bdf8", marginTop: "2px" }}>
                 Complete Web Development Course
               </div>
             </div>
@@ -227,15 +227,16 @@ export default function CertificateViewer() {
               rel="noopener noreferrer"
               style={{
                 padding: "8px 18px",
-                backgroundColor: "#9CBE41",
-                color: "#041f36",
-                fontWeight: "800",
+                backgroundColor: "#2563eb",
+                color: "#ffffff",
+                fontWeight: "700",
                 fontSize: "13px",
-                borderRadius: "4px",
+                borderRadius: "6px",
                 textDecoration: "none",
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "6px",
+                transition: "background-color 0.15s ease",
               }}
             >
               📥 View Full High-Res PNG ↗

@@ -138,16 +138,16 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                       {/* Interactive Controls Bar */}
                       <div
                         style={{
-                          backgroundColor: "#053056",
-                          border: "1px solid #0a365c",
-                          borderRadius: "6px",
-                          padding: "16px 20px",
-                          margin: "24px 0 20px 0",
+                          backgroundColor: "#0b132b",
+                          border: "1px solid #1e293b",
+                          borderRadius: "8px",
+                          padding: "20px 24px",
+                          margin: "24px 0 24px 0",
                           color: "#ffffff",
                         }}
                       >
                         {/* Search Input Row */}
-                        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginBottom: "14px", alignItems: "center" }}>
+                        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginBottom: "16px", alignItems: "center" }}>
                           <div style={{ flex: "1 1 280px", position: "relative" }}>
                             <input
                               type="text"
@@ -160,7 +160,7 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                                 backgroundColor: "#ffffff",
                                 color: "#0f172a",
                                 border: "1px solid #cbd5e1",
-                                borderRadius: "4px",
+                                borderRadius: "6px",
                                 fontSize: "13.5px",
                                 boxSizing: "border-box",
                               }}
@@ -188,19 +188,20 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                           </div>
 
                           {/* View Mode Toggle */}
-                          <div style={{ display: "flex", gap: "4px", backgroundColor: "#042442", padding: "3px", borderRadius: "4px", border: "1px solid #0a365c" }}>
+                          <div style={{ display: "flex", gap: "4px", backgroundColor: "#070f1e", padding: "4px", borderRadius: "6px", border: "1px solid #1e293b" }}>
                             <button
                               type="button"
                               onClick={() => setViewMode("cards")}
                               style={{
-                                padding: "6px 12px",
+                                padding: "6px 14px",
                                 fontSize: "12px",
                                 fontWeight: "700",
                                 border: "none",
-                                borderRadius: "3px",
+                                borderRadius: "4px",
                                 cursor: "pointer",
-                                backgroundColor: viewMode === "cards" ? "#9CBE41" : "transparent",
-                                color: viewMode === "cards" ? "#041f36" : "#cbd5e1",
+                                backgroundColor: viewMode === "cards" ? "#2563eb" : "transparent",
+                                color: viewMode === "cards" ? "#ffffff" : "#94a3b8",
+                                transition: "all 0.15s ease",
                               }}
                             >
                               ▦ Architecture View
@@ -209,14 +210,15 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                               type="button"
                               onClick={() => setViewMode("matrix")}
                               style={{
-                                padding: "6px 12px",
+                                padding: "6px 14px",
                                 fontSize: "12px",
                                 fontWeight: "700",
                                 border: "none",
-                                borderRadius: "3px",
+                                borderRadius: "4px",
                                 cursor: "pointer",
-                                backgroundColor: viewMode === "matrix" ? "#9CBE41" : "transparent",
-                                color: viewMode === "matrix" ? "#041f36" : "#cbd5e1",
+                                backgroundColor: viewMode === "matrix" ? "#2563eb" : "transparent",
+                                color: viewMode === "matrix" ? "#ffffff" : "#94a3b8",
+                                transition: "all 0.15s ease",
                               }}
                             >
                               ▤ SLA Metrics Grid
@@ -226,11 +228,14 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
 
                         {/* Domain Filter Badges Row */}
                         <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", alignItems: "center" }}>
-                          <span style={{ fontSize: "12px", fontWeight: "700", color: "#cbd5e1", marginRight: "4px" }}>
+                          <span style={{ fontSize: "12px", fontWeight: "700", color: "#94a3b8", marginRight: "4px" }}>
                             Filter by Domain:
                           </span>
                           {domainTabs.map((tab) => {
                             const isSelected = activeDomain === tab.id;
+                            const count = tab.id === "all"
+                              ? initialProjects.length
+                              : initialProjects.filter((p) => matchesDomain(p, tab.id)).length;
                             return (
                               <button
                                 key={tab.id}
@@ -239,16 +244,16 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                                 style={{
                                   fontSize: "12px",
                                   fontWeight: "700",
-                                  padding: "5px 12px",
-                                  borderRadius: "3px",
+                                  padding: "6px 14px",
+                                  borderRadius: "6px",
                                   cursor: "pointer",
                                   transition: "all 0.15s ease",
-                                  backgroundColor: isSelected ? "#9CBE41" : "#042442",
-                                  color: isSelected ? "#041f36" : "#ffffff",
-                                  border: isSelected ? "1px solid #9CBE41" : "1px solid #0a365c",
+                                  backgroundColor: isSelected ? "#2563eb" : "#111e38",
+                                  color: isSelected ? "#ffffff" : "#e2e8f0",
+                                  border: isSelected ? "1px solid #2563eb" : "1px solid #1e293b",
                                 }}
                               >
-                                {tab.label}
+                                {tab.label} <span style={{ opacity: 0.8, fontSize: "11px" }}>({count})</span>
                               </button>
                             );
                           })}
@@ -261,8 +266,8 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                                 setSearchQuery("");
                               }}
                               style={{
-                                fontSize: "11.5px",
-                                color: "#93c5fd",
+                                fontSize: "12px",
+                                color: "#38bdf8",
                                 textDecoration: "underline",
                                 background: "none",
                                 border: "none",
@@ -303,7 +308,7 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                               }}
                             >
                               <div style={{ fontSize: "28px", marginBottom: "8px" }}>🔍</div>
-                              <h3 style={{ margin: "0 0 6px 0", color: "#053056" }}>No matching production systems found</h3>
+                              <h3 style={{ margin: "0 0 6px 0", color: "#0f172a" }}>No matching production systems found</h3>
                               <p style={{ margin: "0 0 16px 0", fontSize: "13px" }}>
                                 Try searching for another keyword or clear your active filters.
                               </p>
@@ -314,13 +319,14 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                                   setSearchQuery("");
                                 }}
                                 style={{
-                                  padding: "8px 16px",
-                                  backgroundColor: "#053056",
+                                  padding: "8px 18px",
+                                  backgroundColor: "#2563eb",
                                   color: "#ffffff",
                                   border: "none",
-                                  borderRadius: "4px",
+                                  borderRadius: "6px",
                                   fontWeight: "bold",
                                   cursor: "pointer",
+                                  transition: "background-color 0.15s ease",
                                 }}
                               >
                                 View All 7 Projects
@@ -332,12 +338,12 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                                 key={project.id || project.slug}
                                 id={project.slug}
                                 style={{
-                                  padding: "22px 24px",
-                                  backgroundColor: "#f8fafc",
+                                  padding: "24px",
+                                  backgroundColor: "#ffffff",
                                   border: "1px solid #e2e8f0",
-                                  borderLeft: "5px solid #053056",
-                                  borderRadius: "4px",
-                                  boxShadow: "0 1px 3px rgba(0,0,0,0.02)",
+                                  borderLeft: "4px solid #2563eb",
+                                  borderRadius: "8px",
+                                  boxShadow: "0 2px 8px -2px rgba(11, 19, 43, 0.05)",
                                 }}
                               >
                                 {/* Card Header Row */}
@@ -348,26 +354,26 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                                     alignItems: "baseline",
                                     flexWrap: "wrap",
                                     gap: "8px",
-                                    marginBottom: "8px",
+                                    marginBottom: "10px",
                                   }}
                                 >
-                                  <h3 style={{ margin: 0, fontSize: "21px", color: "#053056" }}>
+                                  <h3 style={{ margin: 0, fontSize: "20px", color: "#0f172a" }}>
                                     <Link
                                       href={`/projects/${project.slug}`}
-                                      style={{ color: "#053056", textDecoration: "none" }}
+                                      style={{ color: "#0f172a", textDecoration: "none" }}
                                     >
                                       {project.title}
                                     </Link>
                                   </h3>
                                   <span
                                     style={{
-                                      fontSize: "13px",
+                                      fontSize: "12.5px",
                                       fontWeight: "bold",
-                                      color: "#053056",
+                                      color: "#047857",
                                       backgroundColor: "#ecfdf5",
-                                      padding: "3px 10px",
-                                      borderRadius: "3px",
-                                      border: "1px solid #9CBE41",
+                                      padding: "4px 10px",
+                                      borderRadius: "6px",
+                                      border: "1px solid #a7f3d0",
                                     }}
                                   >
                                     {project.priceTag || "Scoped Contract"}
@@ -390,19 +396,19 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                                     🏢 Client: <strong>{project.clientName || "Confidential Client"}</strong>
                                   </span>
                                   <span>•</span>
-                                  <span style={{ color: "#053056", fontWeight: "bold" }}>
+                                  <span style={{ color: "#047857", fontWeight: "bold" }}>
                                     ⚡ SLA Impact: {project.impactMetric}
                                   </span>
                                 </div>
 
                                 {/* Summary & Optional Cover Thumbnail */}
-                                <div style={{ display: "flex", gap: "18px", alignItems: "flex-start", flexWrap: "wrap", marginBottom: "14px" }}>
+                                <div style={{ display: "flex", gap: "18px", alignItems: "flex-start", flexWrap: "wrap", marginBottom: "16px" }}>
                                   {project.imageUrl && (
                                     <div
                                       style={{
                                         width: "140px",
                                         height: "95px",
-                                        borderRadius: "4px",
+                                        borderRadius: "6px",
                                         overflow: "hidden",
                                         backgroundColor: "#071324",
                                         border: "1px solid #cbd5e1",
@@ -425,7 +431,7 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                                             position: "absolute",
                                             bottom: "4px",
                                             right: "4px",
-                                            backgroundColor: "rgba(5, 48, 86, 0.88)",
+                                            backgroundColor: "rgba(11, 19, 43, 0.9)",
                                             color: "#ffffff",
                                             fontSize: "10px",
                                             fontWeight: "700",
@@ -455,20 +461,25 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                                   }}
                                 >
                                   {(project.techStack || []).map((tech) => (
-                                    <span
+                                    <button
                                       key={tech}
+                                      type="button"
+                                      onClick={() => setSearchQuery(tech)}
+                                      title={`Filter systems by ${tech}`}
                                       style={{
                                         fontSize: "11px",
                                         fontWeight: "bold",
-                                        backgroundColor: "#ffffff",
-                                        border: "1px solid #cbd5e1",
-                                        color: "#334155",
-                                        padding: "2px 8px",
-                                        borderRadius: "3px",
+                                        backgroundColor: searchQuery.toLowerCase() === tech.toLowerCase() ? "#2563eb" : "#f1f5f9",
+                                        border: searchQuery.toLowerCase() === tech.toLowerCase() ? "1px solid #2563eb" : "1px solid #cbd5e1",
+                                        color: searchQuery.toLowerCase() === tech.toLowerCase() ? "#ffffff" : "#334155",
+                                        padding: "3px 9px",
+                                        borderRadius: "4px",
+                                        cursor: "pointer",
+                                        transition: "all 0.12s ease",
                                       }}
                                     >
-                                      {tech}
-                                    </span>
+                                      #{tech}
+                                    </button>
                                   ))}
                                 </div>
 
@@ -480,8 +491,8 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                                     alignItems: "center",
                                     flexWrap: "wrap",
                                     gap: "12px",
-                                    paddingTop: "12px",
-                                    borderTop: "1px solid #e2e8f0",
+                                    paddingTop: "14px",
+                                    borderTop: "1px solid #f1f5f9",
                                   }}
                                 >
                                   <div style={{ display: "flex", gap: "14px", alignItems: "center" }}>
@@ -493,7 +504,7 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                                         style={{
                                           fontSize: "12.5px",
                                           fontWeight: "bold",
-                                          color: "#053056",
+                                          color: "#2563eb",
                                           textDecoration: "underline",
                                         }}
                                       >
@@ -508,7 +519,7 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                                         style={{
                                           fontSize: "12.5px",
                                           fontWeight: "bold",
-                                          color: "#053056",
+                                          color: "#2563eb",
                                           textDecoration: "underline",
                                         }}
                                       >
@@ -523,11 +534,12 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                                       fontSize: "13px",
                                       fontWeight: "bold",
                                       color: "#ffffff",
-                                      backgroundColor: "#053056",
-                                      padding: "6px 14px",
-                                      borderRadius: "3px",
+                                      backgroundColor: "#2563eb",
+                                      padding: "8px 16px",
+                                      borderRadius: "6px",
                                       textDecoration: "none",
                                       display: "inline-block",
+                                      transition: "background-color 0.15s ease",
                                     }}
                                   >
                                     Read Technical Case Study &nbsp;›
@@ -541,7 +553,7 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
 
                       {/* Projects Render: SLA Metrics Matrix View */}
                       {viewMode === "matrix" && (
-                        <div className="table-responsive-container" style={{ overflowX: "auto", marginBottom: "24px" }}>
+                        <div className="table-responsive-container" style={{ overflowX: "auto", marginBottom: "24px", borderRadius: "8px", border: "1px solid #cbd5e1", boxShadow: "0 2px 8px -2px rgba(11, 19, 43, 0.05)" }}>
                           <table
                             style={{
                               width: "100%",
@@ -549,17 +561,16 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                               borderCollapse: "collapse",
                               fontSize: "13px",
                               backgroundColor: "#ffffff",
-                              border: "1px solid #cbd5e1",
                             }}
                           >
                             <thead>
-                              <tr style={{ backgroundColor: "#053056", color: "#ffffff", textAlign: "left" }}>
-                                <th style={{ padding: "10px 14px", border: "1px solid #0a365c" }}>System Architecture</th>
-                                <th style={{ padding: "10px 14px", border: "1px solid #0a365c" }}>Client / Domain</th>
-                                <th style={{ padding: "10px 14px", border: "1px solid #0a365c" }}>Verified SLA Metric</th>
-                                <th style={{ padding: "10px 14px", border: "1px solid #0a365c" }}>Core Stack</th>
-                                <th style={{ padding: "10px 14px", border: "1px solid #0a365c" }}>Scope Tier</th>
-                                <th style={{ padding: "10px 14px", border: "1px solid #0a365c" }}>Action</th>
+                              <tr style={{ backgroundColor: "#0b132b", color: "#ffffff", textAlign: "left" }}>
+                                <th style={{ padding: "12px 16px", borderBottom: "2px solid #1e293b", fontWeight: "700" }}>System Architecture</th>
+                                <th style={{ padding: "12px 16px", borderBottom: "2px solid #1e293b", fontWeight: "700" }}>Client / Domain</th>
+                                <th style={{ padding: "12px 16px", borderBottom: "2px solid #1e293b", fontWeight: "700" }}>Verified SLA Metric</th>
+                                <th style={{ padding: "12px 16px", borderBottom: "2px solid #1e293b", fontWeight: "700" }}>Core Stack</th>
+                                <th style={{ padding: "12px 16px", borderBottom: "2px solid #1e293b", fontWeight: "700" }}>Scope Tier</th>
+                                <th style={{ padding: "12px 16px", borderBottom: "2px solid #1e293b", fontWeight: "700" }}>Action</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -571,30 +582,32 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                                     borderBottom: "1px solid #e2e8f0",
                                   }}
                                 >
-                                  <td style={{ padding: "12px 14px", fontWeight: "700", color: "#053056" }}>
-                                    <Link href={`/projects/${p.slug}`} style={{ color: "#053056" }}>
+                                  <td style={{ padding: "12px 16px", fontWeight: "700", color: "#0f172a" }}>
+                                    <Link href={`/projects/${p.slug}`} style={{ color: "#0f172a", textDecoration: "none" }}>
                                       {p.title}
                                     </Link>
                                   </td>
-                                  <td style={{ padding: "12px 14px", color: "#475569" }}>
+                                  <td style={{ padding: "12px 16px", color: "#475569" }}>
                                     {p.clientName || "Confidential"}
                                   </td>
-                                  <td style={{ padding: "12px 14px", color: "#053056", fontWeight: "700" }}>
+                                  <td style={{ padding: "12px 16px", color: "#047857", fontWeight: "700" }}>
                                     ⚡ {p.impactMetric}
                                   </td>
-                                  <td style={{ padding: "12px 14px", fontSize: "11.5px", color: "#334155" }}>
+                                  <td style={{ padding: "12px 16px", fontSize: "12px", color: "#334155" }}>
                                     {(p.techStack || []).slice(0, 3).join(", ")}
                                   </td>
-                                  <td style={{ padding: "12px 14px", color: "#166534", fontWeight: "700" }}>
-                                    {p.priceTag}
+                                  <td style={{ padding: "12px 16px", color: "#047857", fontWeight: "700" }}>
+                                    <span style={{ backgroundColor: "#ecfdf5", padding: "3px 8px", borderRadius: "4px", border: "1px solid #a7f3d0" }}>
+                                      {p.priceTag}
+                                    </span>
                                   </td>
-                                  <td style={{ padding: "12px 14px" }}>
+                                  <td style={{ padding: "12px 16px" }}>
                                     <Link
                                       href={`/projects/${p.slug}`}
                                       style={{
-                                        fontSize: "12px",
+                                        fontSize: "12.5px",
                                         fontWeight: "700",
-                                        color: "#053056",
+                                        color: "#2563eb",
                                         textDecoration: "underline",
                                       }}
                                     >
@@ -632,12 +645,13 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                           style={{
                             display: "block",
                             textAlign: "center",
-                            padding: "10px",
-                            backgroundColor: "#053056",
+                            padding: "10px 16px",
+                            backgroundColor: "#2563eb",
                             color: "#ffffff",
                             fontWeight: "bold",
                             textDecoration: "none",
-                            borderRadius: "3px",
+                            borderRadius: "6px",
+                            transition: "background-color 0.15s ease",
                           }}
                         >
                           Request Project Quote ›
@@ -678,13 +692,13 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                           lineHeight: "1.6",
                           color: "#334155",
                           fontStyle: "italic",
-                          borderLeft: "3px solid #9CBE41",
-                          paddingLeft: "10px",
+                          borderLeft: "3px solid #2563eb",
+                          paddingLeft: "12px",
                         }}
                       >
                         &ldquo;Abu Hanif transformed our core telemetry architecture in three weeks. Cut P99 latency by 75% and reduced our infrastructure bill by 64%.&rdquo;
                       </blockquote>
-                      <div style={{ marginTop: "8px", fontSize: "12px", fontWeight: "bold", color: "#053056" }}>
+                      <div style={{ marginTop: "8px", fontSize: "12px", fontWeight: "bold", color: "#0f172a" }}>
                         - VP of Engineering, Apex Telemetry Labs
                       </div>
                     </div>
@@ -692,14 +706,14 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
 
                   {/* Admin Shortcut */}
                   <div className="widget" id="wdgt-admin">
-                    <div style={{ padding: "12px", backgroundColor: "#f1f5f9", borderRadius: "3px", border: "1px solid #cbd5e1", fontSize: "12px" }}>
-                      <strong>Project Management Portal</strong>
+                    <div style={{ padding: "14px", backgroundColor: "#f8fafc", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "12px" }}>
+                      <strong style={{ color: "#0f172a" }}>Project Management Portal</strong>
                       <p style={{ margin: "4px 0 8px 0", color: "#334155" }}>
                         Add, edit, or delete portfolio projects and manage client inquiries.
                       </p>
                       <Link
                         href="/admin"
-                        style={{ color: "#053056", fontWeight: "bold", textDecoration: "underline" }}
+                        style={{ color: "#2563eb", fontWeight: "bold", textDecoration: "underline" }}
                       >
                         Open Admin Panel ›
                       </Link>

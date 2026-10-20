@@ -28,31 +28,56 @@ export default function HomeSidebar() {
       name: formData.name,
       email: formData.email,
       phone: formData.phone || null,
-      project_type: formData.projectType,
-      budget_range: formData.budget,
+      projectType: formData.projectType,
+      budgetRange: formData.budget,
       message: formData.message,
-      status: "new",
-      created_at: new Date().toISOString(),
     };
 
     try {
+      // 1. Submit through validated server API
+      const res = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(record),
+      });
+
+      const result = await res.json();
+      if (!res.ok || !result.success) {
+        throw new Error(result.error || "Failed to submit consultation inquiry.");
+      }
+
+      // 2. Also cache locally for instant offline admin review
       if (typeof window !== "undefined") {
         const stored = window.localStorage.getItem("abuhanif-inquiries");
         const list = stored ? JSON.parse(stored) : [];
-        list.unshift({ ...record, id: `local-${Date.now()}` });
+        list.unshift({
+          ...record,
+          id: result.inquiryId || `local-${Date.now()}`,
+          status: "new",
+          createdAt: new Date().toISOString(),
+        });
         window.localStorage.setItem("abuhanif-inquiries", JSON.stringify(list));
       }
 
-      if (isSupabaseConfigured && supabase) {
-        const { error } = await supabase.from("inquiries").insert([record]);
-        if (error) {
-          console.warn("Supabase insert error:", error);
-        }
-      }
-
       setSubmitted(true);
-    } catch (err) {
-      setErrorMessage("Something went wrong. Please email directly at abuhanifmain@gmail.com.");
+    } catch (err: any) {
+      // Fallback: save to localStorage if network / server fails
+      if (typeof window !== "undefined") {
+        const stored = window.localStorage.getItem("abuhanif-inquiries");
+        const list = stored ? JSON.parse(stored) : [];
+        list.unshift({
+          ...record,
+          id: `offline-${Date.now()}`,
+          status: "new",
+          createdAt: new Date().toISOString(),
+        });
+        window.localStorage.setItem("abuhanif-inquiries", JSON.stringify(list));
+        setSubmitted(true);
+      } else {
+        setErrorMessage(
+          err.message || "Something went wrong. Please email directly at abuhanifmain@gmail.com."
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -63,20 +88,20 @@ export default function HomeSidebar() {
       {/* Production Track Record */}
       <div className="widget" id="articles-thumbs">
         <div className="description" style={{ textAlign: "center", padding: "6px 0" }}>
-          <div style={{ background: "#053056", color: "#ffffff", padding: "14px", borderRadius: "3px" }}>
+          <div style={{ background: "#0b132b", border: "1px solid #1e293b", color: "#ffffff", padding: "18px 16px", borderRadius: "8px", boxShadow: "0 2px 8px rgba(11,25,44,0.3)" }}>
             <div
               style={{
                 fontSize: "11px",
                 fontWeight: "bold",
-                color: "#9CBE41",
+                color: "#38bdf8",
                 textTransform: "uppercase",
                 letterSpacing: "1px",
               }}
             >
               Production Track Record
             </div>
-            <div style={{ fontSize: "22px", fontWeight: "bold", margin: "4px 0" }}>99.99% UPTIME</div>
-            <div style={{ fontSize: "12px", color: "#d9d9d9" }}>50+ Shipped Deployments</div>
+            <div style={{ fontSize: "24px", fontWeight: "800", margin: "6px 0", color: "#10b981", letterSpacing: "0.5px" }}>99.99% UPTIME</div>
+            <div style={{ fontSize: "12px", color: "#cbd5e1" }}>50+ Shipped Deployments</div>
           </div>
         </div>
       </div>

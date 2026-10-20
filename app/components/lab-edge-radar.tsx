@@ -36,9 +36,10 @@ export default function LabEdgeRadar() {
     setTesting(true);
     const start = performance.now();
     try {
-      // Ping current origin with cache-busting
-      await fetch(`/api/inquiries?t=${Date.now()}`, { method: "HEAD", cache: "no-store" });
-      const duration = Math.round(performance.now() - start);
+      // Ping dedicated low-latency health probe
+      const res = await fetch(`/api/ping?t=${Date.now()}`, { method: "HEAD", cache: "no-store" });
+      if (!res.ok) throw new Error("Ping probe failed");
+      const duration = Math.max(1, Math.round(performance.now() - start));
       setClientPing(duration);
 
       // Add local jitter for simulated edge test
@@ -58,20 +59,20 @@ export default function LabEdgeRadar() {
     <div
       style={{
         backgroundColor: "#ffffff",
-        border: "1px solid #cbd5e1",
-        borderLeft: "5px solid #053056",
-        borderRadius: "4px",
+        border: "1px solid #e2e8f0",
+        borderLeft: "4px solid #2563eb",
+        borderRadius: "8px",
         padding: "24px",
         marginBottom: "28px",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+        boxShadow: "0 2px 8px -2px rgba(11, 19, 43, 0.05)",
       }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "12px", marginBottom: "16px" }}>
         <div>
-          <span style={{ fontSize: "11px", fontWeight: "800", color: "#9CBE41", textTransform: "uppercase", letterSpacing: "1px" }}>
+          <span style={{ fontSize: "11px", fontWeight: "800", color: "#2563eb", textTransform: "uppercase", letterSpacing: "1px" }}>
             Telemetry Tool 01 • Edge Network Architecture
           </span>
-          <h3 style={{ margin: "4px 0 0 0", fontSize: "20px", color: "#053056" }}>
+          <h3 style={{ margin: "4px 0 0 0", fontSize: "20px", color: "#0f172a" }}>
             Global Edge P99 Latency vs Traditional Origin
           </h3>
           <p style={{ margin: "6px 0 0 0", fontSize: "13px", color: "#475569" }}>
@@ -87,10 +88,10 @@ export default function LabEdgeRadar() {
           style={{
             padding: "10px 18px",
             minHeight: "44px",
-            backgroundColor: testing ? "#64748b" : "#053056",
+            backgroundColor: testing ? "#64748b" : "#2563eb",
             color: "#ffffff",
             border: "none",
-            borderRadius: "4px",
+            borderRadius: "6px",
             fontWeight: "700",
             fontSize: "13px",
             cursor: testing ? "not-allowed" : "pointer",
@@ -98,6 +99,7 @@ export default function LabEdgeRadar() {
             alignItems: "center",
             justifyContent: "center",
             gap: "8px",
+            transition: "background-color 0.15s ease",
           }}
         >
           {testing ? "Pinging Nodes..." : "⚡ Run Real-Time Ping"}
@@ -110,7 +112,7 @@ export default function LabEdgeRadar() {
             backgroundColor: "#ecfdf5",
             border: "1px solid #a7f3d0",
             padding: "10px 14px",
-            borderRadius: "4px",
+            borderRadius: "6px",
             fontSize: "12.5px",
             color: "#065f46",
             marginBottom: "16px",
@@ -140,20 +142,21 @@ export default function LabEdgeRadar() {
                   return (
                     <div
                       style={{
-                        backgroundColor: "#053056",
+                        backgroundColor: "#0b132b",
+                        border: "1px solid #1e293b",
                         color: "#ffffff",
                         padding: "10px 14px",
-                        borderRadius: "4px",
+                        borderRadius: "6px",
                         fontSize: "12px",
                         boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                       }}
                     >
-                      <strong style={{ color: "#9CBE41", display: "block", marginBottom: "4px" }}>
+                      <strong style={{ color: "#38bdf8", display: "block", marginBottom: "4px" }}>
                         {d.location} ({d.region})
                       </strong>
                       <div>⚡ Edge Delivery: <strong>{d.edgeLatencyMs}ms</strong></div>
                       <div style={{ color: "#cbd5e1" }}>🐢 Centralized Origin: <strong>{d.originLatencyMs}ms</strong></div>
-                      <div style={{ color: "#4ade80", marginTop: "4px", fontWeight: "bold" }}>
+                      <div style={{ color: "#10b981", marginTop: "4px", fontWeight: "bold" }}>
                         Speedup: {Math.round(d.originLatencyMs / d.edgeLatencyMs)}x Faster
                       </div>
                     </div>
@@ -164,7 +167,7 @@ export default function LabEdgeRadar() {
             />
             <Bar dataKey="edgeLatencyMs" name="Edge Latency (ms)" radius={[4, 4, 0, 0]}>
               {data.map((_, index) => (
-                <Cell key={`cell-${index}`} fill="#9CBE41" />
+                <Cell key={`cell-${index}`} fill="#2563eb" />
               ))}
             </Bar>
           </BarChart>
@@ -175,12 +178,12 @@ export default function LabEdgeRadar() {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px", borderTop: "1px solid #e2e8f0", paddingTop: "14px", fontSize: "12px", color: "#64748b" }}>
         <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
           <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-            <span style={{ width: "10px", height: "10px", backgroundColor: "#9CBE41", borderRadius: "2px", display: "inline-block" }} />
+            <span style={{ width: "10px", height: "10px", backgroundColor: "#2563eb", borderRadius: "2px", display: "inline-block" }} />
             <strong>Edge Cache Latency (Target &lt;30ms)</strong>
           </span>
           <span style={{ color: "#475569" }}>Global Average: <strong>~23ms P99</strong></span>
         </div>
-        <span style={{ color: "#053056", fontWeight: "bold" }}>
+        <span style={{ color: "#0f172a", fontWeight: "bold" }}>
           Delivered across 330+ Cloudflare Edge Cities
         </span>
       </div>

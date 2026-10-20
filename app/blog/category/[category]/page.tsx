@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { blogCategoryPillars, getCategoryPillarBySlug } from "../../../data/blog-categories";
-import { initialBlogPosts } from "../../../data/portfolio-data";
+import { getBlogPosts } from "../../../lib/portfolio-store";
 import SiteHeader from "../../../components/site-header";
 import SiteFooter from "../../../components/site-footer";
 
@@ -63,8 +63,9 @@ export default async function BlogCategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
-  // Filter posts matching this category pillar
-  const matchingPosts = initialBlogPosts.filter((post) => {
+  // Fetch posts from unified store
+  const allBlogPosts = await getBlogPosts();
+  const matchingPosts = allBlogPosts.filter((post) => {
     if (!post.isPublished) return false;
     return post.tags.some((tag) =>
       pillar.matchingTags.some((mt) => mt.toLowerCase() === tag.toLowerCase())
@@ -140,7 +141,7 @@ export default async function BlogCategoryPage({ params }: CategoryPageProps) {
                   <div id="img1">
                     <div className="banner-text-wrapper">
                       <div>
-                        <div style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "1.5px", color: "#9CBE41", fontWeight: "700", marginBottom: "4px" }}>
+                        <div style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "1.5px", color: "#38bdf8", fontWeight: "700", marginBottom: "4px" }}>
                           Topic Pillar &bull; Technical Publication Archive
                         </div>
                         <h1 style={{ margin: 0, fontSize: "28px", lineHeight: "1.3", color: "#ffffff" }}>
@@ -158,11 +159,11 @@ export default async function BlogCategoryPage({ params }: CategoryPageProps) {
                   <div id="content">
                     {/* Breadcrumbs */}
                     <nav aria-label="Breadcrumb" style={{ fontSize: "12px", color: "#64748b", margin: "16px 0 20px 0" }}>
-                      <Link href="/" style={{ color: "#053056", textDecoration: "none" }}>Home</Link>
+                      <Link href="/" style={{ color: "#2563eb", textDecoration: "none" }}>Home</Link>
                       {" "}&rsaquo;{" "}
-                      <Link href="/blog" style={{ color: "#053056", textDecoration: "none" }}>Technical Blog</Link>
+                      <Link href="/blog" style={{ color: "#2563eb", textDecoration: "none" }}>Technical Blog</Link>
                       {" "}&rsaquo;{" "}
-                      <span style={{ color: "#334155", fontWeight: "bold" }}>{pillar.name}</span>
+                      <span style={{ color: "#0f172a", fontWeight: "bold" }}>{pillar.name}</span>
                     </nav>
 
                     {/* Topic Pillar Overview Brief */}
@@ -170,13 +171,13 @@ export default async function BlogCategoryPage({ params }: CategoryPageProps) {
                       style={{
                         backgroundColor: "#f8fafc",
                         border: "1px solid #e2e8f0",
-                        borderLeft: "4px solid #9CBE41",
-                        padding: "18px 22px",
-                        borderRadius: "4px",
+                        borderLeft: "4px solid #2563eb",
+                        padding: "20px 24px",
+                        borderRadius: "8px",
                         marginBottom: "28px",
                       }}
                     >
-                      <h2 style={{ fontSize: "16px", color: "#053056", margin: "0 0 8px 0", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                      <h2 style={{ fontSize: "16px", color: "#0f172a", margin: "0 0 8px 0", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                         Architectural Focus: {pillar.name}
                       </h2>
                       <p style={{ margin: 0, fontSize: "14px", color: "#334155", lineHeight: "1.6" }}>
@@ -185,14 +186,14 @@ export default async function BlogCategoryPage({ params }: CategoryPageProps) {
                     </div>
 
                     {/* Published Articles Stream */}
-                    <div style={{ borderBottom: "2px solid #053056", paddingBottom: "6px", marginBottom: "20px" }}>
-                      <h3 style={{ fontSize: "18px", color: "#053056", margin: 0 }}>
+                    <div style={{ borderBottom: "2px solid #2563eb", paddingBottom: "8px", marginBottom: "20px" }}>
+                      <h3 style={{ fontSize: "18px", color: "#0f172a", margin: 0 }}>
                         Published Publications ({matchingPosts.length})
                       </h3>
                     </div>
 
                     {matchingPosts.length === 0 ? (
-                      <div style={{ padding: "30px", textAlign: "center", backgroundColor: "#f8fafc", borderRadius: "4px", border: "1px solid #e2e8f0" }}>
+                      <div style={{ padding: "30px", textAlign: "center", backgroundColor: "#f8fafc", borderRadius: "8px", border: "1px dashed #cbd5e1" }}>
                         <p style={{ margin: 0, color: "#64748b", fontSize: "14px" }}>
                           New deep-dive case studies for <strong>{pillar.name}</strong> are currently being drafted. Explore related articles in the main archive.
                         </p>
@@ -207,10 +208,11 @@ export default async function BlogCategoryPage({ params }: CategoryPageProps) {
                             key={post.id}
                             style={{
                               border: "1px solid #e2e8f0",
-                              borderRadius: "4px",
+                              borderLeft: "4px solid #2563eb",
+                              borderRadius: "8px",
                               backgroundColor: "#ffffff",
-                              padding: "20px",
-                              boxShadow: "0 1px 3px rgba(0,0,0,0.03)",
+                              padding: "24px",
+                              boxShadow: "0 2px 8px -2px rgba(11, 19, 43, 0.05)",
                             }}
                           >
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: "8px", marginBottom: "8px" }}>
@@ -221,11 +223,11 @@ export default async function BlogCategoryPage({ params }: CategoryPageProps) {
                                     style={{
                                       fontSize: "11px",
                                       fontWeight: "700",
-                                      color: "#053056",
-                                      backgroundColor: "#f1f5f9",
-                                      padding: "2px 8px",
-                                      borderRadius: "3px",
-                                      border: "1px solid #cbd5e1",
+                                      color: "#2563eb",
+                                      backgroundColor: "#eff6ff",
+                                      padding: "3px 9px",
+                                      borderRadius: "4px",
+                                      border: "1px solid #bfdbfe",
                                     }}
                                   >
                                     #{t}
@@ -240,7 +242,7 @@ export default async function BlogCategoryPage({ params }: CategoryPageProps) {
                             <h4 style={{ margin: "0 0 10px 0", fontSize: "19px", lineHeight: "1.4" }}>
                               <Link
                                 href={`/blog/${post.slug}`}
-                                style={{ color: "#053056", textDecoration: "none" }}
+                                style={{ color: "#0f172a", textDecoration: "none" }}
                               >
                                 {post.title}
                               </Link>
@@ -253,7 +255,7 @@ export default async function BlogCategoryPage({ params }: CategoryPageProps) {
                             <Link
                               href={`/blog/${post.slug}`}
                               style={{
-                                color: "#053056",
+                                color: "#2563eb",
                                 fontSize: "13px",
                                 fontWeight: "700",
                                 textDecoration: "none",
@@ -272,33 +274,36 @@ export default async function BlogCategoryPage({ params }: CategoryPageProps) {
                     {/* Contextual Consulting CTA Box */}
                     <div
                       style={{
-                        backgroundColor: "#053056",
+                        backgroundColor: "#0b132b",
+                        border: "1px solid #1e293b",
                         color: "#ffffff",
                         padding: "24px",
-                        borderRadius: "6px",
+                        borderRadius: "8px",
                         marginBottom: "36px",
+                        boxShadow: "0 4px 16px -2px rgba(11, 19, 43, 0.12)",
                       }}
                     >
-                      <div style={{ fontSize: "11px", fontWeight: "800", color: "#9CBE41", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>
+                      <div style={{ fontSize: "11px", fontWeight: "800", color: "#38bdf8", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>
                         Targeted Engineering Sprint Available
                       </div>
                       <h3 style={{ margin: "0 0 8px 0", fontSize: "19px", color: "#ffffff" }}>
                         Need Hands-On {pillar.name} Support?
                       </h3>
-                      <p style={{ margin: "0 0 16px 0", fontSize: "13px", color: "#cbd5e1", lineHeight: "1.6" }}>
+                      <p style={{ margin: "0 0 16px 0", fontSize: "13.5px", color: "#cbd5e1", lineHeight: "1.6" }}>
                         Book the <strong>{pillar.consultingServiceTitle}</strong> ({pillar.consultingPrice} fixed milestone). Direct 1:1 engagement with Staff Software Engineer Abu Hanif with verified production deliverables and zero budget creep.
                       </p>
                       <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
                         <Link
                           href={`/pricing#${pillar.consultingServiceSlug}`}
                           style={{
-                            backgroundColor: "#9CBE41",
-                            color: "#041f36",
+                            backgroundColor: "#2563eb",
+                            color: "#ffffff",
                             padding: "9px 18px",
-                            borderRadius: "3px",
-                            fontWeight: "800",
+                            borderRadius: "6px",
+                            fontWeight: "700",
                             fontSize: "13px",
                             textDecoration: "none",
+                            transition: "background-color 0.15s ease",
                           }}
                         >
                           View Sprint Scope &amp; Pricing &rsaquo;
@@ -306,14 +311,14 @@ export default async function BlogCategoryPage({ params }: CategoryPageProps) {
                         <Link
                           href="/blog"
                           style={{
-                            backgroundColor: "#042442",
+                            backgroundColor: "#111e38",
                             color: "#cbd5e1",
                             padding: "9px 16px",
-                            borderRadius: "3px",
+                            borderRadius: "6px",
                             fontWeight: "600",
                             fontSize: "13px",
                             textDecoration: "none",
-                            border: "1px solid #0a365c",
+                            border: "1px solid #1e293b",
                           }}
                         >
                           &larr; Browse All Topics
@@ -325,8 +330,8 @@ export default async function BlogCategoryPage({ params }: CategoryPageProps) {
                   {/* Secondary Sidebar */}
                   <aside className="sidebar secondary-sidebar">
                     {/* Other Topic Pillars */}
-                    <div className="block" style={{ marginBottom: "24px" }}>
-                      <h4 style={{ fontSize: "14px", textTransform: "uppercase", letterSpacing: "1px", color: "#053056", borderBottom: "2px solid #9CBE41", paddingBottom: "6px", margin: "0 0 12px 0" }}>
+                    <div className="block" style={{ marginBottom: "24px", backgroundColor: "#ffffff", border: "1px solid #cbd5e1", borderRadius: "8px", padding: "16px" }}>
+                      <h4 style={{ fontSize: "13px", textTransform: "uppercase", letterSpacing: "1px", color: "#0f172a", borderBottom: "2px solid #2563eb", paddingBottom: "6px", margin: "0 0 12px 0" }}>
                         Topic Pillars
                       </h4>
                       <ul style={{ listStyle: "none", padding: 0, margin: 0, fontSize: "13px" }}>
@@ -337,7 +342,7 @@ export default async function BlogCategoryPage({ params }: CategoryPageProps) {
                               <Link
                                 href={`/blog/category/${cat.slug}`}
                                 style={{
-                                  color: isCurrent ? "#9CBE41" : "#053056",
+                                  color: isCurrent ? "#2563eb" : "#334155",
                                   fontWeight: isCurrent ? "800" : "600",
                                   textDecoration: "none",
                                 }}
@@ -352,8 +357,8 @@ export default async function BlogCategoryPage({ params }: CategoryPageProps) {
                     </div>
 
                     {/* Author Snapshot */}
-                    <div className="block" style={{ backgroundColor: "#f8fafc", border: "1px solid #e2e8f0", padding: "16px", borderRadius: "4px", marginBottom: "24px" }}>
-                      <h4 style={{ fontSize: "13px", textTransform: "uppercase", letterSpacing: "1px", color: "#053056", margin: "0 0 8px 0" }}>
+                    <div className="block" style={{ backgroundColor: "#f8fafc", border: "1px solid #e2e8f0", padding: "16px", borderRadius: "8px", marginBottom: "24px" }}>
+                      <h4 style={{ fontSize: "13px", textTransform: "uppercase", letterSpacing: "1px", color: "#0f172a", margin: "0 0 8px 0" }}>
                         Author Authority
                       </h4>
                       <div style={{ fontSize: "13px", color: "#334155", lineHeight: "1.6" }}>
@@ -363,15 +368,15 @@ export default async function BlogCategoryPage({ params }: CategoryPageProps) {
                           B.Sc. in CSE &bull; Programming Hero Honor (Batch-12 &bull; WEB12-3991) &bull; freeCodeCamp Certified &bull; Rust &amp; Go.
                         </span>
                       </div>
-                      <Link href="/resume" style={{ display: "inline-block", marginTop: "10px", fontSize: "12px", color: "#053056", fontWeight: "700" }}>
+                      <Link href="/resume" style={{ display: "inline-block", marginTop: "10px", fontSize: "12px", color: "#2563eb", fontWeight: "700" }}>
                         View Full Resume &amp; Credentials &rsaquo;
                       </Link>
                     </div>
 
                     {/* Feed Syndication Link */}
-                    <div className="block" style={{ border: "1px solid #e2e8f0", padding: "14px", borderRadius: "4px", textAlign: "center" }}>
+                    <div className="block" style={{ border: "1px solid #e2e8f0", padding: "14px", borderRadius: "8px", textAlign: "center", backgroundColor: "#ffffff" }}>
                       <span style={{ fontSize: "16px" }}>📡</span>
-                      <strong style={{ display: "block", fontSize: "12px", color: "#053056", margin: "4px 0" }}>
+                      <strong style={{ display: "block", fontSize: "12px", color: "#0f172a", margin: "4px 0" }}>
                         Subscribe via RSS Feed
                       </strong>
                       <p style={{ margin: "0 0 10px 0", fontSize: "11.5px", color: "#64748b" }}>

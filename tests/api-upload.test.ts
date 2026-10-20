@@ -2,11 +2,29 @@ import { describe, it, expect } from "vitest";
 import { POST } from "../app/api/upload/route";
 import { NextRequest } from "next/server";
 
+const AUTH_HEADER = { Authorization: "Bearer hanif2026" };
+
 describe("Upload API Route (/api/upload)", () => {
-  it("should reject requests without files with status 400", async () => {
+  it("should reject unauthenticated requests with status 401", async () => {
     const formData = new FormData();
     const req = new NextRequest("http://localhost:3000/api/upload", {
       method: "POST",
+      body: formData,
+    });
+
+    const res = await POST(req);
+    expect(res.status).toBe(401);
+
+    const json = await res.json();
+    expect(json.success).toBe(false);
+    expect(json.error).toContain("Unauthorized");
+  });
+
+  it("should reject authorized requests without files with status 400", async () => {
+    const formData = new FormData();
+    const req = new NextRequest("http://localhost:3000/api/upload", {
+      method: "POST",
+      headers: AUTH_HEADER,
       body: formData,
     });
 
@@ -18,7 +36,7 @@ describe("Upload API Route (/api/upload)", () => {
     expect(json.error).toContain("No valid image files provided");
   });
 
-  it("should successfully process a valid image file and return an asset URL", async () => {
+  it("should successfully process a valid image file and return an asset URL when authorized", async () => {
     const samplePngBytes = new Uint8Array([
       137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 1, 0, 0, 0, 1, 8, 6, 0, 0, 0, 31, 21, 196, 137,
     ]);
@@ -30,6 +48,7 @@ describe("Upload API Route (/api/upload)", () => {
 
     const req = new NextRequest("http://localhost:3000/api/upload", {
       method: "POST",
+      headers: AUTH_HEADER,
       body: formData,
     });
 

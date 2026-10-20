@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import BlogClientView from "./blog-client-view";
-import { initialBlogPosts } from "../data/portfolio-data";
+import { getBlogPosts } from "../lib/portfolio-store";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
@@ -39,62 +39,64 @@ export const metadata: Metadata = {
   },
 };
 
-const blogSchema = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Blog",
-      "@id": `${siteUrl}/blog#blog`,
-      url: `${siteUrl}/blog`,
-      name: "Abu Hanif Technical Engineering Blog",
-      description:
-        "Technical write-ups and architectural deep dives by Staff Software Engineer MD Abu Hanif Mia.",
-      publisher: {
-        "@type": "Person",
-        name: "MD Abu Hanif Mia",
-        url: siteUrl,
-      },
-      blogPost: initialBlogPosts.map((post) => ({
-        "@type": "BlogPosting",
-        headline: post.title,
-        description: post.excerpt,
-        url: `${siteUrl}/blog/${post.slug}`,
-        datePublished: post.publishedAt,
-        author: {
+export default async function BlogIndexPage() {
+  const posts = await getBlogPosts();
+
+  const blogSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Blog",
+        "@id": `${siteUrl}/blog#blog`,
+        url: `${siteUrl}/blog`,
+        name: "Abu Hanif Technical Engineering Blog",
+        description:
+          "Technical write-ups and architectural deep dives by Staff Software Engineer MD Abu Hanif Mia.",
+        publisher: {
           "@type": "Person",
           name: "MD Abu Hanif Mia",
           url: siteUrl,
         },
-      })),
-    },
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: siteUrl,
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "Technical Blog",
-          item: `${siteUrl}/blog`,
-        },
-      ],
-    },
-  ],
-};
+        blogPost: posts.map((post) => ({
+          "@type": "BlogPosting",
+          headline: post.title,
+          description: post.excerpt,
+          url: `${siteUrl}/blog/${post.slug}`,
+          datePublished: post.publishedAt,
+          author: {
+            "@type": "Person",
+            name: "MD Abu Hanif Mia",
+            url: siteUrl,
+          },
+        })),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: siteUrl,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Technical Blog",
+            item: `${siteUrl}/blog`,
+          },
+        ],
+      },
+    ],
+  };
 
-export default function BlogIndexPage() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
       />
-      <BlogClientView />
+      <BlogClientView posts={posts} />
     </>
   );
 }

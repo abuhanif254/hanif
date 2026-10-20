@@ -168,19 +168,19 @@ export default function LabPostgresPlanner() {
     <div
       style={{
         backgroundColor: "#ffffff",
-        border: "1px solid #cbd5e1",
-        borderLeft: "5px solid #053056",
-        borderRadius: "4px",
+        border: "1px solid #e2e8f0",
+        borderLeft: "4px solid #2563eb",
+        borderRadius: "8px",
         padding: "24px",
         marginBottom: "28px",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+        boxShadow: "0 2px 8px -2px rgba(11, 19, 43, 0.05)",
       }}
     >
       <div style={{ marginBottom: "18px" }}>
-        <span style={{ fontSize: "11px", fontWeight: "800", color: "#9CBE41", textTransform: "uppercase", letterSpacing: "1px" }}>
+        <span style={{ fontSize: "11px", fontWeight: "800", color: "#2563eb", textTransform: "uppercase", letterSpacing: "1px" }}>
           Telemetry Tool 02 • PostgreSQL 16 Architecture
         </span>
-        <h3 style={{ margin: "4px 0 0 0", fontSize: "20px", color: "#053056" }}>
+        <h3 style={{ margin: "4px 0 0 0", fontSize: "20px", color: "#0f172a" }}>
           Interactive EXPLAIN (ANALYZE, BUFFERS) Cost &amp; Execution Simulator
         </h3>
         <p style={{ margin: "6px 0 0 0", fontSize: "13px", color: "#475569" }}>
@@ -193,7 +193,7 @@ export default function LabPostgresPlanner() {
         style={{
           backgroundColor: "#f8fafc",
           border: "1px solid #e2e8f0",
-          borderRadius: "4px",
+          borderRadius: "6px",
           padding: "16px",
           marginBottom: "20px",
           display: "flex",
@@ -203,7 +203,7 @@ export default function LabPostgresPlanner() {
       >
         {/* Table Size Toggle */}
         <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
-          <span style={{ fontSize: "12.5px", fontWeight: "bold", color: "#053056", minWidth: "120px" }}>
+          <span style={{ fontSize: "12.5px", fontWeight: "bold", color: "#0f172a", minWidth: "120px" }}>
             Database Scale:
           </span>
           <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
@@ -223,13 +223,14 @@ export default function LabPostgresPlanner() {
                   minHeight: "38px",
                   fontSize: "12px",
                   fontWeight: "700",
-                  borderRadius: "4px",
+                  borderRadius: "6px",
                   cursor: "pointer",
-                  backgroundColor: scale === s.id ? "#053056" : "#ffffff",
+                  backgroundColor: scale === s.id ? "#2563eb" : "#ffffff",
                   color: scale === s.id ? "#ffffff" : "#475569",
-                  border: "1px solid " + (scale === s.id ? "#053056" : "#cbd5e1"),
+                  border: "1px solid " + (scale === s.id ? "#2563eb" : "#cbd5e1"),
                   display: "inline-flex",
                   alignItems: "center",
+                  transition: "all 0.15s ease",
                 }}
               >
                 {s.label}
@@ -240,7 +241,7 @@ export default function LabPostgresPlanner() {
 
         {/* Index Strategy Toggle */}
         <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
-          <span style={{ fontSize: "12.5px", fontWeight: "bold", color: "#053056", minWidth: "120px" }}>
+          <span style={{ fontSize: "12.5px", fontWeight: "bold", color: "#0f172a", minWidth: "120px" }}>
             Index Topology:
           </span>
           <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
@@ -261,13 +262,14 @@ export default function LabPostgresPlanner() {
                   minHeight: "38px",
                   fontSize: "12px",
                   fontWeight: "700",
-                  borderRadius: "4px",
+                  borderRadius: "6px",
                   cursor: "pointer",
-                  backgroundColor: strategy === st.id ? "#9CBE41" : "#ffffff",
-                  color: strategy === st.id ? "#041f36" : "#475569",
-                  border: "1px solid " + (strategy === st.id ? "#9CBE41" : "#cbd5e1"),
+                  backgroundColor: strategy === st.id ? "#2563eb" : "#ffffff",
+                  color: strategy === st.id ? "#ffffff" : "#475569",
+                  border: "1px solid " + (strategy === st.id ? "#2563eb" : "#cbd5e1"),
                   display: "inline-flex",
                   alignItems: "center",
+                  transition: "all 0.15s ease",
                 }}
               >
                 {st.label}
@@ -286,33 +288,33 @@ export default function LabPostgresPlanner() {
           marginBottom: "20px",
         }}
       >
-        <div style={{ backgroundColor: "#041f36", color: "#ffffff", padding: "12px 14px", borderRadius: "4px" }}>
+        <div style={{ backgroundColor: "#0b132b", border: "1px solid #1e293b", color: "#ffffff", padding: "12px 14px", borderRadius: "6px" }}>
           <span style={{ fontSize: "11px", color: "#94a3b8", display: "block" }}>Execution Latency</span>
-          <strong style={{ fontSize: "20px", color: strategy === "none" ? "#f87171" : "#4ade80" }}>
+          <strong style={{ fontSize: "20px", color: strategy === "none" ? "#f87171" : "#10b981" }}>
             {currentOutcome.executionTimeMs} ms
           </strong>
         </div>
 
-        <div style={{ backgroundColor: "#041f36", color: "#ffffff", padding: "12px 14px", borderRadius: "4px" }}>
+        <div style={{ backgroundColor: "#0b132b", border: "1px solid #1e293b", color: "#ffffff", padding: "12px 14px", borderRadius: "6px" }}>
           <span style={{ fontSize: "11px", color: "#94a3b8", display: "block" }}>Planner Total Cost</span>
           <strong style={{ fontSize: "16px", color: "#e2e8f0" }}>{currentOutcome.totalCost}</strong>
         </div>
 
-        <div style={{ backgroundColor: "#041f36", color: "#ffffff", padding: "12px 14px", borderRadius: "4px" }}>
+        <div style={{ backgroundColor: "#0b132b", border: "1px solid #1e293b", color: "#ffffff", padding: "12px 14px", borderRadius: "6px" }}>
           <span style={{ fontSize: "11px", color: "#94a3b8", display: "block" }}>Buffer Memory Hits</span>
           <strong style={{ fontSize: "15px", color: "#cbd5e1" }}>{currentOutcome.bufferHits}</strong>
         </div>
 
-        <div style={{ backgroundColor: "#041f36", color: "#ffffff", padding: "12px 14px", borderRadius: "4px" }}>
+        <div style={{ backgroundColor: "#0b132b", border: "1px solid #1e293b", color: "#ffffff", padding: "12px 14px", borderRadius: "6px" }}>
           <span style={{ fontSize: "11px", color: "#94a3b8", display: "block" }}>Throughput Boost</span>
-          <strong style={{ fontSize: "16px", color: "#9CBE41" }}>{currentOutcome.speedup}</strong>
+          <strong style={{ fontSize: "16px", color: "#10b981" }}>{currentOutcome.speedup}</strong>
         </div>
       </div>
 
       {/* Plan Visual Output */}
       <div style={{ marginBottom: "16px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-          <span style={{ fontSize: "12px", fontWeight: "bold", color: "#053056" }}>
+          <span style={{ fontSize: "12px", fontWeight: "bold", color: "#0f172a" }}>
             PostgreSQL EXPLAIN ANALYZE Output
           </span>
           <span style={{ fontSize: "11px", color: "#64748b" }}>
@@ -321,15 +323,15 @@ export default function LabPostgresPlanner() {
         </div>
         <pre
           style={{
-            backgroundColor: "#031a2e",
+            backgroundColor: "#070f1e",
             color: "#e2e8f0",
             padding: "14px",
-            borderRadius: "4px",
+            borderRadius: "6px",
             fontSize: "12px",
             lineHeight: "1.6",
             overflowX: "auto",
             margin: 0,
-            border: "1px solid #0a365c",
+            border: "1px solid #1e293b",
             fontFamily: "Consolas, Monaco, monospace",
           }}
         >
@@ -339,8 +341,8 @@ export default function LabPostgresPlanner() {
 
       {/* DDL Snippet */}
       {currentOutcome.indexSql !== "-- No index defined" && (
-        <div style={{ backgroundColor: "#f1f5f9", padding: "12px 14px", borderRadius: "4px", border: "1px solid #cbd5e1", fontSize: "12px" }}>
-          <span style={{ fontWeight: "bold", color: "#053056", display: "block", marginBottom: "4px" }}>
+        <div style={{ backgroundColor: "#f8fafc", padding: "12px 14px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "12px" }}>
+          <span style={{ fontWeight: "bold", color: "#0f172a", display: "block", marginBottom: "4px" }}>
             Index DDL Blueprint:
           </span>
           <code style={{ color: "#0f172a", fontFamily: "monospace" }}>{currentOutcome.indexSql}</code>

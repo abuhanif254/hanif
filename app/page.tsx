@@ -8,6 +8,7 @@ import WorkShowcaseSection from "./components/home/work-showcase-section";
 import TechnicalBlogFeed from "./components/home/technical-blog-feed";
 import HomeSidebar from "./components/home/home-sidebar";
 import BottomContactStripe from "./components/home/bottom-contact-stripe";
+import { getProjects, getBlogPosts } from "./lib/portfolio-store";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
@@ -45,7 +46,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [projects, blogPosts] = await Promise.all([
+    getProjects(),
+    getBlogPosts(),
+  ]);
   const jsonLdPerson = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -62,6 +67,19 @@ export default function HomePage() {
         "@type": "EducationalOrganization",
         name: "Programming Hero",
         description: "Complete Web Development Course with Excellence (Batch-12 • WEB12-3991)",
+      },
+    ],
+    hasCredential: [
+      {
+        "@type": "EducationalOccupationalCredential",
+        name: "Complete Web Development Certificate of Excellence",
+        credentialCategory: "Certificate of Excellence",
+        recognizedBy: {
+          "@type": "EducationalOrganization",
+          name: "Programming Hero",
+        },
+        identifier: "WEB12-3991",
+        url: `${siteUrl}/images/programming-hero-certificate.png`,
       },
     ],
     knowsAbout: [
@@ -125,12 +143,12 @@ export default function HomePage() {
                       <div className="description">
                         <BadgesBar />
                         <BioAndCredentials />
-                        <WorkShowcaseSection />
+                        <WorkShowcaseSection projects={projects} />
                       </div>
                     </div>
 
                     <div className="sidebar primary-sidebar"></div>
-                    <TechnicalBlogFeed />
+                    <TechnicalBlogFeed articles={blogPosts} />
                   </div>
 
                   <HomeSidebar />

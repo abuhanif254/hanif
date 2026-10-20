@@ -48,8 +48,8 @@ export default function BioAndCredentials() {
               height: "100%",
               borderRadius: "50%",
               objectFit: "cover",
-              border: "3px solid #9CBE41",
-              boxShadow: "0 4px 12px rgba(5,48,86,0.25)",
+              border: "3px solid #2563eb",
+              boxShadow: "0 4px 12px rgba(11,25,44,0.25)",
             }}
           />
           <span
@@ -57,8 +57,8 @@ export default function BioAndCredentials() {
               position: "absolute",
               bottom: "2px",
               right: "2px",
-              backgroundColor: "#9CBE41",
-              color: "#053056",
+              backgroundColor: "#10b981",
+              color: "#050e1d",
               borderRadius: "50%",
               width: "22px",
               height: "22px",
@@ -73,17 +73,17 @@ export default function BioAndCredentials() {
             ✓
           </span>
         </div>
-        <h2 style={{ fontSize: "20px", margin: "0 0 4px 0", color: "#053056", fontWeight: "800" }}>
+        <h2 style={{ fontSize: "20px", margin: "0 0 4px 0", color: "#0f172a", fontWeight: "800" }}>
           MD Abu Hanif Mia (Abu Hanif)
         </h2>
-        <span style={{ fontSize: "12px", fontWeight: "700", color: "#053056", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>
+        <span style={{ fontSize: "12px", fontWeight: "700", color: "#2563eb", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>
           Staff Software Engineer &amp; Systems Architect
         </span>
         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "6px", marginBottom: "12px" }}>
-          <span style={{ fontSize: "11px", fontWeight: "700", background: "#ecfdf5", color: "#166534", border: "1px solid #a7f3d0", padding: "3px 8px", borderRadius: "12px" }}>
+          <span style={{ fontSize: "11px", fontWeight: "700", background: "#ecfdf5", color: "#047857", border: "1px solid #a7f3d0", padding: "3px 8px", borderRadius: "12px" }}>
             ● Available for Contracts
           </span>
-          <span style={{ fontSize: "11px", fontWeight: "700", background: "#f1f5f9", color: "#053056", border: "1px solid #cbd5e1", padding: "3px 8px", borderRadius: "12px" }}>
+          <span style={{ fontSize: "11px", fontWeight: "700", background: "#f1f5f9", color: "#0f172a", border: "1px solid #cbd5e1", padding: "3px 8px", borderRadius: "12px" }}>
             Batch-12 • ID: WEB12-3991
           </span>
         </div>
@@ -93,7 +93,7 @@ export default function BioAndCredentials() {
             style={{
               flex: 1,
               padding: "10px",
-              backgroundColor: "#053056",
+              backgroundColor: "#2563eb",
               color: "#ffffff",
               borderRadius: "4px",
               fontWeight: "700",
@@ -110,11 +110,11 @@ export default function BioAndCredentials() {
             style={{
               flex: 1,
               padding: "10px",
-              backgroundColor: "#9CBE41",
-              color: "#053056",
-              border: "none",
+              backgroundColor: "#f1f5f9",
+              color: "#0f172a",
+              border: "1px solid #cbd5e1",
               borderRadius: "4px",
-              fontWeight: "800",
+              fontWeight: "700",
               fontSize: "12px",
               cursor: "pointer",
             }}
@@ -124,14 +124,14 @@ export default function BioAndCredentials() {
         </div>
       </div>
 
-      <h1 id="about" className="heading-about-desktop" style={{ marginTop: 0 }}>
+      <h1 id="about" className="heading-about-desktop" style={{ marginTop: 0, color: "#0f172a" }}>
         MD Abu Hanif Mia (Abu Hanif)
       </h1>
-      <strong className="heading4 heading-title-desktop" style={{ color: "#053056", marginTop: 0, display: "block" }}>
+      <strong className="heading4 heading-title-desktop" style={{ color: "#2563eb", marginTop: 0, display: "block" }}>
         Staff Software Engineer &amp; Systems Architect
       </strong>
 
-      <p>
+      <p style={{ lineHeight: "1.7", color: "#334155" }}>
         <strong>MD Abu Hanif Mia</strong> (known professionally as <strong>Abu Hanif</strong>) is an experienced
         software engineer and systems architect whose technical rigor, deep full-stack mastery, and execution
         velocity have resulted in high-concurrency, fault-tolerant production platforms for startups and
@@ -141,7 +141,7 @@ export default function BioAndCredentials() {
         modern React 19 and Next.js 16 edge engineering with low-level systems programming in <strong>Rust</strong>{" "}
         and <strong>Go</strong>.
       </p>
-      <p>
+      <p style={{ lineHeight: "1.7", color: "#334155" }}>
         Specializing in distributed systems, PostgreSQL query tuning, Cloudflare Pages, and memory-safe concurrent
         backends, Abu Hanif operates at the intersection of clean architecture, database performance, and edge network
         delivery. Whether eliminating complex architectural bottlenecks, restructuring legacy codebases, or
@@ -153,12 +153,13 @@ export default function BioAndCredentials() {
       {/* VERIFIED CERTIFICATIONS & ACCREDITATIONS SECTION */}
       <div
         style={{
-          margin: "2em 0",
-          background: "#f8fafc",
-          border: "1px solid #cbd5e1",
-          borderTop: "4px solid #9CBE41",
-          borderRadius: "6px",
-          padding: "22px 24px",
+          margin: "32px 0",
+          background: "#ffffff",
+          border: "1px solid #e2e8f0",
+          borderTop: "4px solid #2563eb",
+          borderRadius: "8px",
+          padding: "24px 28px",
+          boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
         }}
       >
         <div
@@ -178,14 +179,15 @@ export default function BioAndCredentials() {
               style={{
                 margin: 0,
                 fontSize: "18px",
-                color: "#053056",
+                color: "#0f172a",
                 textTransform: "uppercase",
                 letterSpacing: "0.5px",
+                fontWeight: "800",
               }}
             >
               Verified Certifications &amp; Technical Accreditations
             </h3>
-            <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "#334155" }}>
+            <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "#475569" }}>
               Formally accredited training and verified software development credentials:
             </p>
           </div>
@@ -195,11 +197,11 @@ export default function BioAndCredentials() {
             style={{
               fontSize: "12px",
               fontWeight: "bold",
-              color: "#053056",
-              background: "#e2e8f0",
+              color: "#0f172a",
+              background: "#f1f5f9",
               border: "1px solid #cbd5e1",
-              padding: "6px 12px",
-              borderRadius: "3px",
+              padding: "6px 14px",
+              borderRadius: "4px",
               cursor: "pointer",
             }}
           >
@@ -218,9 +220,9 @@ export default function BioAndCredentials() {
           <div
             style={{
               background: "#ffffff",
-              border: "1px solid #cbd5e1",
-              borderRadius: "4px",
-              padding: "14px",
+              border: "1px solid #e2e8f0",
+              borderRadius: "6px",
+              padding: "16px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
@@ -234,7 +236,7 @@ export default function BioAndCredentials() {
                   marginBottom: "10px",
                   borderRadius: "4px",
                   overflow: "hidden",
-                  border: "1px solid #9CBE41",
+                  border: "1px solid #2563eb",
                   background: "#f1f5f9",
                   cursor: "pointer",
                 }}
@@ -250,7 +252,7 @@ export default function BioAndCredentials() {
                   style={{
                     position: "absolute",
                     inset: 0,
-                    background: "rgba(5,48,86,0.35)",
+                    background: "rgba(11,25,44,0.45)",
                     opacity: 0,
                     transition: "opacity 0.2s",
                     display: "flex",
@@ -266,15 +268,15 @@ export default function BioAndCredentials() {
                   🔍 Click to Inspect Full Size
                 </div>
               </div>
-              <span style={{ fontSize: "11px", fontWeight: 800, color: "#053056", textTransform: "uppercase" }}>
+              <span style={{ fontSize: "11px", fontWeight: 800, color: "#2563eb", textTransform: "uppercase" }}>
                 Programming Hero
               </span>
-              <h4 style={{ margin: "2px 0 4px 0", fontSize: "14px", color: "#053056" }}>
+              <h4 style={{ margin: "2px 0 4px 0", fontSize: "14px", color: "#0f172a" }}>
                 Complete Web Development Course with Excellence
               </h4>
               <div style={{ fontSize: "11.5px", color: "#334155", fontWeight: 700, marginBottom: "6px" }}>
                 Batch-12 • Credential ID:{" "}
-                <span style={{ fontFamily: "monospace", color: "#053056" }}>WEB12-3991</span>
+                <span style={{ fontFamily: "monospace", color: "#2563eb" }}>WEB12-3991</span>
               </div>
               <p style={{ margin: 0, fontSize: "12px", color: "#475569", lineHeight: "1.5" }}>
                 Rigorous training across modern JavaScript, React, HTML5/CSS3, asynchronous state handling, and
@@ -291,7 +293,7 @@ export default function BioAndCredentials() {
                   padding: 0,
                   fontSize: "12px",
                   fontWeight: "bold",
-                  color: "#053056",
+                  color: "#2563eb",
                   textDecoration: "underline",
                   cursor: "pointer",
                 }}
@@ -305,9 +307,9 @@ export default function BioAndCredentials() {
           <div
             style={{
               background: "#ffffff",
-              border: "1px solid #cbd5e1",
-              borderRadius: "4px",
-              padding: "14px",
+              border: "1px solid #e2e8f0",
+              borderRadius: "6px",
+              padding: "16px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
@@ -318,7 +320,7 @@ export default function BioAndCredentials() {
                 style={{
                   display: "inline-block",
                   padding: "3px 8px",
-                  background: "#031c33",
+                  background: "#070f1e",
                   color: "#fde047",
                   fontWeight: "bold",
                   fontSize: "11px",
@@ -332,14 +334,14 @@ export default function BioAndCredentials() {
                 style={{
                   fontSize: "11px",
                   fontWeight: 800,
-                  color: "#053056",
+                  color: "#2563eb",
                   textTransform: "uppercase",
                   display: "block",
                 }}
               >
                 freeCodeCamp
               </span>
-              <h4 style={{ margin: "2px 0 6px 0", fontSize: "14px", color: "#053056" }}>
+              <h4 style={{ margin: "2px 0 6px 0", fontSize: "14px", color: "#0f172a" }}>
                 JavaScript, TypeScript &amp; Python Accreditations
               </h4>
               <ul style={{ margin: "0 0 10px 16px", padding: 0, fontSize: "12px", color: "#475569", lineHeight: "1.5" }}>
@@ -364,7 +366,7 @@ export default function BioAndCredentials() {
                 borderTop: "1px dotted #e2e8f0",
                 fontSize: "12px",
                 fontWeight: "bold",
-                color: "#16a34a",
+                color: "#047857",
               }}
             >
               ✓ Verified Curriculum Standard
@@ -375,9 +377,9 @@ export default function BioAndCredentials() {
           <div
             style={{
               background: "#ffffff",
-              border: "1px solid #cbd5e1",
-              borderRadius: "4px",
-              padding: "14px",
+              border: "1px solid #e2e8f0",
+              borderRadius: "6px",
+              padding: "16px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
@@ -402,14 +404,14 @@ export default function BioAndCredentials() {
                 style={{
                   fontSize: "11px",
                   fontWeight: 800,
-                  color: "#053056",
+                  color: "#2563eb",
                   textTransform: "uppercase",
                   display: "block",
                 }}
               >
                 Systems Architecture
               </span>
-              <h4 style={{ margin: "2px 0 6px 0", fontSize: "14px", color: "#053056" }}>
+              <h4 style={{ margin: "2px 0 6px 0", fontSize: "14px", color: "#0f172a" }}>
                 Rust &amp; Go Production Pipelines
               </h4>
               <p style={{ margin: "0 0 8px 0", fontSize: "12px", color: "#475569", lineHeight: "1.5" }}>
@@ -425,7 +427,7 @@ export default function BioAndCredentials() {
                     padding: "2px 6px",
                     borderRadius: "3px",
                     fontWeight: "bold",
-                    color: "#053056",
+                    color: "#0f172a",
                   }}
                 >
                   Rust Tokio
@@ -438,7 +440,7 @@ export default function BioAndCredentials() {
                     padding: "2px 6px",
                     borderRadius: "3px",
                     fontWeight: "bold",
-                    color: "#053056",
+                    color: "#0f172a",
                   }}
                 >
                   WebAssembly
@@ -451,7 +453,7 @@ export default function BioAndCredentials() {
                     padding: "2px 6px",
                     borderRadius: "3px",
                     fontWeight: "bold",
-                    color: "#053056",
+                    color: "#0f172a",
                   }}
                 >
                   Go CSP
@@ -464,7 +466,7 @@ export default function BioAndCredentials() {
                     padding: "2px 6px",
                     borderRadius: "3px",
                     fontWeight: "bold",
-                    color: "#053056",
+                    color: "#0f172a",
                   }}
                 >
                   Next.js 16
@@ -478,7 +480,7 @@ export default function BioAndCredentials() {
                 borderTop: "1px dotted #e2e8f0",
                 fontSize: "12px",
                 fontWeight: "bold",
-                color: "#16a34a",
+                color: "#047857",
               }}
             >
               ✓ High-Concurrency Production SLA

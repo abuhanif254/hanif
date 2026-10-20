@@ -257,7 +257,7 @@ export default function AdminBlogSeoAssistant({
         >
           {/* URL Row */}
           <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
-            <div style={{ width: "16px", height: "16px", borderRadius: "50%", backgroundColor: "#053056", display: "inline-block" }}></div>
+            <div style={{ width: "16px", height: "16px", borderRadius: "50%", backgroundColor: "#2563eb", display: "inline-block" }}></div>
             <div style={{ fontSize: "12px", color: "#202124", lineHeight: "1.3" }}>
               <span style={{ fontWeight: "bold" }}>Abu Hanif</span>
               <span style={{ color: "#5f6368", marginLeft: "4px" }}>

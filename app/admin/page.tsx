@@ -71,12 +71,27 @@ export default function AdminPage() {
   const [passcodeError, setPasscodeError] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const auth = window.sessionStorage.getItem("abuhanif_admin_auth");
-      if (auth === "true") {
-        setIsAuthenticated(true);
-      }
-    }
+    // Check server session cookie first
+    fetch("/api/admin/auth")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.authenticated) {
+          setIsAuthenticated(true);
+        } else if (typeof window !== "undefined") {
+          const auth = window.sessionStorage.getItem("abuhanif_admin_auth");
+          if (auth === "true") {
+            setIsAuthenticated(true);
+          }
+        }
+      })
+      .catch(() => {
+        if (typeof window !== "undefined") {
+          const auth = window.sessionStorage.getItem("abuhanif_admin_auth");
+          if (auth === "true") {
+            setIsAuthenticated(true);
+          }
+        }
+      });
   }, []);
 
   // Project editing & modal states
@@ -646,20 +661,33 @@ export default function AdminPage() {
     showNotification(`Inquiry status updated to ${status}`);
   }
 
-  function handlePasscodeSubmit(e: React.FormEvent) {
+  async function handlePasscodeSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (passcode.trim() === "2026" || passcode.trim() === "admin2026" || passcode.trim() === "hanif2026") {
-      setIsAuthenticated(true);
-      setPasscodeError(false);
-      if (typeof window !== "undefined") {
-        window.sessionStorage.setItem("abuhanif_admin_auth", "true");
+    try {
+      const res = await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ passcode: passcode.trim() }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setIsAuthenticated(true);
+        setPasscodeError(false);
+        if (typeof window !== "undefined") {
+          window.sessionStorage.setItem("abuhanif_admin_auth", "true");
+        }
+      } else {
+        setPasscodeError(true);
       }
-    } else {
+    } catch {
       setPasscodeError(true);
     }
   }
 
-  function handleLogout() {
+  async function handleLogout() {
+    try {
+      await fetch("/api/admin/auth", { method: "DELETE" });
+    } catch {}
     setIsAuthenticated(false);
     setPasscode("");
     if (typeof window !== "undefined") {
@@ -1728,7 +1756,7 @@ export default function AdminPage() {
                           </div>
                         </div>
 
-                        <div style={{ fontSize: "17px", fontWeight: "700", color: "#9CBE41", marginBottom: "4px" }}>
+                        <div style={{ fontSize: "17px", fontWeight: "700", color: "#38bdf8", marginBottom: "4px" }}>
                           {serv.title}
                         </div>
                         <div style={{ fontSize: "12px", color: "#94a3b8", marginBottom: "12px" }}>
@@ -1973,7 +2001,7 @@ export default function AdminPage() {
                       value={newPost.contentMarkdown}
                       onChange={(e) => setNewPost({ ...newPost, contentMarkdown: e.target.value })}
                       placeholder="## Introduction&#10;&#10;In high-throughput environments, optimizing data flow is critical...&#10;&#10;```typescript&#10;const config = { timeoutMs: 250 };&#10;```"
-                      style={{ width: "100%", padding: "10px", backgroundColor: "#053056", border: "1px solid #0a365c", color: "#fff", borderRadius: "4px", fontFamily: "monospace", fontSize: "13px", lineHeight: "1.5" }}
+                      style={{ width: "100%", padding: "10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "6px", fontFamily: "monospace", fontSize: "13px", lineHeight: "1.5" }}
                     />
                   </div>
 
@@ -3057,7 +3085,7 @@ export default function AdminPage() {
                       rows={2}
                       value={editingPost.excerpt}
                       onChange={(e) => setEditingPost({ ...editingPost, excerpt: e.target.value })}
-                      style={{ width: "100%", padding: "8px 10px", backgroundColor: "#053056", border: "1px solid #0a365c", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "6px", fontSize: "13px" }}
                     />
                   </div>
 
@@ -3074,10 +3102,10 @@ export default function AdminPage() {
                       style={{
                         width: "100%",
                         padding: "10px",
-                        backgroundColor: "#053056",
-                        border: "1px solid #0a365c",
+                        backgroundColor: "#071324",
+                        border: "1px solid #1e293b",
                         color: "#fff",
-                        borderRadius: "4px",
+                        borderRadius: "6px",
                         fontSize: "13px",
                         fontFamily: "monospace",
                         lineHeight: "1.5",

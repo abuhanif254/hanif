@@ -1,10 +1,23 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import CookieBanner from "./components/cookie-banner";
 import CertificateViewer from "./components/certificate-viewer";
 import CommandPalette from "./components/command-palette";
 import MobileBottomDock from "./components/mobile-bottom-dock";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
@@ -66,7 +79,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport = {
-  themeColor: "#053056",
+  themeColor: "#0b132b",
   width: "device-width",
   initialScale: 1,
 };
@@ -151,14 +164,14 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-screen antialiased">
+      <body className={`${inter.variable} ${jetbrainsMono.variable} min-h-screen antialiased`}>
         {children}
         <CookieBanner />
         <CertificateViewer />

@@ -74,21 +74,22 @@ export default function ArchitectureTopologyExplorer() {
     <div
       className="topology-explorer-card"
       style={{
-        background: "#053056",
-        border: "1px solid #0a365c",
-        borderRadius: "6px",
-        padding: "20px",
+        background: "#0b132b",
+        border: "1px solid #1e293b",
+        borderRadius: "8px",
+        padding: "20px 24px",
         margin: "24px 0",
         color: "#ffffff",
         fontFamily: "Arial, Helvetica, sans-serif",
+        boxShadow: "0 4px 16px -2px rgba(11, 19, 43, 0.12)",
       }}
     >
-      <div style={{ borderBottom: "1px solid #0a365c", paddingBottom: "12px", marginBottom: "16px" }}>
+      <div style={{ borderBottom: "1px solid #1e293b", paddingBottom: "12px", marginBottom: "16px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap" }}>
-          <h3 style={{ margin: 0, fontSize: "16px", color: "#9CBE41", textTransform: "uppercase", letterSpacing: "1px" }}>
+          <h3 style={{ margin: 0, fontSize: "16px", color: "#38bdf8", textTransform: "uppercase", letterSpacing: "1px" }}>
             Interactive Architecture Topology Viewer
           </h3>
-          <span style={{ fontSize: "12px", color: "#4ade80", fontWeight: "bold" }}>
+          <span style={{ fontSize: "12px", color: "#10b981", fontWeight: "bold" }}>
             Real-Time Telemetry Pipeline (12M Events/s)
           </span>
         </div>
@@ -114,9 +115,9 @@ export default function ArchitectureTopologyExplorer() {
               type="button"
               onClick={() => setSelectedId(node.id)}
               style={{
-                background: isSelected ? "#042442" : "#031c33",
-                border: isSelected ? "2px solid #9CBE41" : "1px solid #0a365c",
-                borderRadius: "4px",
+                background: isSelected ? "#111e38" : "#070f1e",
+                border: isSelected ? "2px solid #2563eb" : "1px solid #1e293b",
+                borderRadius: "6px",
                 padding: "10px 8px",
                 color: "#ffffff",
                 textAlign: "center",
@@ -124,7 +125,7 @@ export default function ArchitectureTopologyExplorer() {
                 transition: "all 0.15s ease-in-out",
               }}
             >
-              <div style={{ fontSize: "11px", color: isSelected ? "#9CBE41" : "#cbd5e1", fontWeight: "bold" }}>
+              <div style={{ fontSize: "11px", color: isSelected ? "#38bdf8" : "#94a3b8", fontWeight: "bold" }}>
                 Step 0{index + 1}
               </div>
               <div style={{ fontSize: "13px", fontWeight: "bold", margin: "2px 0" }}>
@@ -141,16 +142,16 @@ export default function ArchitectureTopologyExplorer() {
       {/* Node Detail Box */}
       <div
         style={{
-          background: "#042442",
-          border: "1px solid #0a365c",
-          borderRadius: "4px",
+          background: "#070f1e",
+          border: "1px solid #1e293b",
+          borderRadius: "6px",
           padding: "16px 20px",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", borderBottom: "1px solid #0a365c", paddingBottom: "10px", marginBottom: "12px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", borderBottom: "1px solid #1e293b", paddingBottom: "10px", marginBottom: "12px" }}>
           <div>
             <strong style={{ fontSize: "18px", color: "#ffffff" }}>{activeNode.label}</strong>
-            <span style={{ fontSize: "13px", color: "#9CBE41", marginLeft: "10px", fontWeight: "600" }}>({activeNode.tech})</span>
+            <span style={{ fontSize: "13px", color: "#38bdf8", marginLeft: "10px", fontWeight: "600" }}>({activeNode.tech})</span>
           </div>
           <div style={{ display: "flex", gap: "10px", fontSize: "12px" }}>
             <span style={{ background: "#064e3b", color: "#4ade80", padding: "3px 8px", borderRadius: "3px", border: "1px solid #059669" }}>
