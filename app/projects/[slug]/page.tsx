@@ -8,6 +8,147 @@ import ProjectScreenshotGallery from "../../components/project-screenshot-galler
 import ProjectCaseStudyActions from "../../components/project-case-study-actions";
 import ProjectEcosystemCard from "../../components/project-ecosystem-card";
 
+function renderInlineFormatting(text: string): React.ReactNode {
+  const tokens = text.split(/(\*\*.*?\*\*|`.*?`)/g);
+  return tokens.map((token, i) => {
+    if (token.startsWith("**") && token.endsWith("**")) {
+      return (
+        <strong key={i} style={{ fontWeight: 600, color: "#0f172a" }}>
+          {token.slice(2, -2)}
+        </strong>
+      );
+    }
+    if (token.startsWith("`") && token.endsWith("`")) {
+      return (
+        <code
+          key={i}
+          style={{
+            backgroundColor: "#f1f5f9",
+            color: "#1e293b",
+            padding: "2px 5px",
+            borderRadius: "4px",
+            fontSize: "13px",
+            fontFamily: "monospace",
+          }}
+        >
+          {token.slice(1, -1)}
+        </code>
+      );
+    }
+    return token;
+  });
+}
+
+function RenderProjectMarkdown({ markdown }: { markdown: string }) {
+  const normalized = (markdown || "")
+    .replace(/\\r\\n/g, "\n")
+    .replace(/\\n/g, "\n")
+    .replace(/\r\n/g, "\n");
+
+  const lines = normalized.split("\n");
+  const blocks: React.ReactNode[] = [];
+  let currentList: string[] = [];
+  let currentParagraph: string[] = [];
+
+  const flushParagraph = (key: string) => {
+    if (currentParagraph.length > 0) {
+      const text = currentParagraph.join(" ").trim();
+      if (text) {
+        blocks.push(
+          <p key={key} style={{ margin: "0 0 16px 0", fontSize: "15px", lineHeight: "1.75", color: "#334155" }}>
+            {renderInlineFormatting(text)}
+          </p>
+        );
+      }
+      currentParagraph = [];
+    }
+  };
+
+  const flushList = (key: string) => {
+    if (currentList.length > 0) {
+      blocks.push(
+        <ul key={key} style={{ margin: "12px 0 20px 24px", paddingLeft: "8px", listStyleType: "disc" }}>
+          {currentList.map((item, idx) => (
+            <li key={idx} style={{ marginBottom: "8px", fontSize: "15px", lineHeight: "1.65", color: "#334155" }}>
+              {renderInlineFormatting(item)}
+            </li>
+          ))}
+        </ul>
+      );
+      currentList = [];
+    }
+  };
+
+  lines.forEach((line, index) => {
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      flushParagraph(`p-${index}`);
+      flushList(`l-${index}`);
+      return;
+    }
+
+    if (trimmed.startsWith("### ")) {
+      flushParagraph(`p-before-h3-${index}`);
+      flushList(`l-before-h3-${index}`);
+      blocks.push(
+        <h3
+          key={`h3-${index}`}
+          style={{
+            fontSize: "19px",
+            fontWeight: 700,
+            color: "#0f172a",
+            marginTop: "28px",
+            marginBottom: "12px",
+            borderBottom: "1px solid #e2e8f0",
+            paddingBottom: "6px",
+          }}
+        >
+          {trimmed.replace("### ", "").trim()}
+        </h3>
+      );
+      return;
+    }
+
+    if (trimmed.startsWith("## ")) {
+      flushParagraph(`p-before-h2-${index}`);
+      flushList(`l-before-h2-${index}`);
+      blocks.push(
+        <h2
+          key={`h2-${index}`}
+          style={{
+            fontSize: "22px",
+            fontWeight: 700,
+            color: "#0f172a",
+            marginTop: "32px",
+            marginBottom: "14px",
+            borderBottom: "2px solid #cbd5e1",
+            paddingBottom: "6px",
+          }}
+        >
+          {trimmed.replace("## ", "").trim()}
+        </h2>
+      );
+      return;
+    }
+
+    if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
+      flushParagraph(`p-before-list-${index}`);
+      currentList.push(trimmed.replace(/^[-*]\s+/, ""));
+      return;
+    }
+
+    // Regular paragraph line
+    flushList(`l-before-p-${index}`);
+    currentParagraph.push(trimmed);
+  });
+
+  flushParagraph("p-final");
+  flushList("l-final");
+
+  return <div className="case-study-markdown-body">{blocks}</div>;
+}
+
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
 };
@@ -253,43 +394,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                           color: "#1e293b",
                         }}
                       >
-                        {project.descriptionMarkdown.split("\n\n").map((para, i) => {
-                          if (para.startsWith("## ") || para.startsWith("### ")) {
-                            const headingText = para.replace(/^#{2,3}\s+/, "");
-                            return (
-                              <h3
-                                key={i}
-                                style={{
-                                  color: "#0f172a",
-                                  fontSize: "18px",
-                                  marginTop: "24px",
-                                  marginBottom: "8px",
-                                  borderBottom: "1px solid #e2e8f0",
-                                  paddingBottom: "4px",
-                                }}
-                              >
-                                {headingText}
-                              </h3>
-                            );
-                          }
-                          if (para.startsWith("- ") || para.startsWith("* ")) {
-                            const items = para.split("\n").map((item) => item.replace(/^[-*]\s+/, ""));
-                            return (
-                              <ul key={i} style={{ margin: "10px 0 16px 20px", paddingLeft: "10px" }}>
-                                {items.map((item, idx) => (
-                                  <li key={idx} style={{ marginBottom: "6px" }}>
-                                    {item}
-                                  </li>
-                                ))}
-                              </ul>
-                            );
-                          }
-                          return (
-                            <p key={i} style={{ margin: "0 0 14px 0" }}>
-                              {para}
-                            </p>
-                          );
-                        })}
+                        <RenderProjectMarkdown markdown={project.descriptionMarkdown} />
                       </div>
 
                       {/* Technology Stack Pills */}

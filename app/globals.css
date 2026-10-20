@@ -163,6 +163,22 @@ button:after,
   color: var(--accent-sky) !important;
 }
 
+/* Eradicate all legacy practice area / dental malpractice sprite overlays */
+.pabttn:after,
+.pabttn:before,
+.pa1:after,
+.pa2:after,
+.pa3:after,
+.imgwrap #img2 .pabttn:after,
+.imgwrap #img2 .pabttn:before,
+.imgwrap #img2 .pa1:after,
+.imgwrap #img2 .pa2:after,
+.imgwrap #img2 .pa3:after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+}
+
 #index #img1:after,
 #index .imgwrap #img1:after {
   display: none !important;
@@ -352,9 +368,13 @@ button:after,
   color: #ffffff !important;
 }
 
-/* Fixed Header Offset: Ensures page content never starts underneath the fixed header */
+/* Fixed Header Offset: Seamless alignment with fixed master header (zero white gaps) */
 #container {
-  padding-top: 104px !important;
+  padding-top: 201px !important;
+}
+
+#main {
+  padding-top: 0 !important;
 }
 
 @media (max-width: 768px) {
@@ -763,7 +783,7 @@ body {
 
 h1, h2, h3, h4,
 .heading1, .heading2, .heading3, .heading4 {
-  color: var(--text-ink-primary) !important;
+  color: var(--text-ink-primary);
   letter-spacing: -0.015em;
 }
 
@@ -802,4 +822,145 @@ h1, h2, h3, h4,
   padding: 24px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
+
+/* Sidebar & In-Page Project Inquiry Widget Overhaul */
+#contactform.widget,
+.widget.contactform {
+  background-color: #0b132b !important;
+  border: 1px solid #1e293b !important;
+  border-radius: 6px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 16px rgba(11, 19, 43, 0.15) !important;
+}
+
+#contactform.widget .heading4,
+.widget.contactform .heading4 {
+  background-color: #111e38 !important;
+  color: #ffffff !important;
+  border-bottom: 2px solid #2563eb !important;
+  padding: 12px 18px !important;
+  margin: 0 !important;
+  text-indent: 0 !important;
+}
+
+#contactform.widget .heading4:before,
+.widget.contactform .heading4:before {
+  display: none !important;
+  content: none !important;
+}
+
+#contactform.widget .heading4 a,
+.widget.contactform .heading4 a {
+  color: #ffffff !important;
+  font-size: 15px !important;
+  letter-spacing: 0.5px !important;
+}
+
+#contactform.widget .formdesc span.free-consultation,
+.widget.contactform .formdesc span.free-consultation {
+  background: none !important;
+  color: #38bdf8 !important;
+  padding-left: 0 !important;
+  font-weight: 700 !important;
+}
+
+#contactform.widget .formdesc span.phone-numbers,
+.widget.contactform .formdesc span.phone-numbers {
+  border-top: 1px solid #1e293b !important;
+  border-bottom: 1px solid #1e293b !important;
+  color: #cbd5e1 !important;
+  font-size: 14px !important;
+  padding: 8px 0 !important;
+}
+
+/* High-Contrast Inner Page Banners & Dark Element Typography */
+.banner-text-wrapper,
+#img1 .banner-text-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  padding: 32px 28px !important;
+  background: linear-gradient(135deg, rgba(11, 19, 43, 0.96) 0%, rgba(17, 30, 56, 0.92) 100%) !important;
+  box-sizing: border-box !important;
+  border-bottom: 2px solid #2563eb !important;
+}
+
+.banner-text-wrapper h1,
+.banner-text-wrapper h2,
+.banner-text-wrapper h3,
+.banner-text-wrapper h4,
+.banner-text-wrapper span.banner-title,
+#img1 .banner-text-wrapper h1,
+#img1 .banner-text-wrapper h2,
+#img1 .banner-text-wrapper h3,
+#img1 .banner-text-wrapper h4,
+#img1 h1,
+#img1 h2,
+#bannerwrap h1 {
+  color: #ffffff !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85) !important;
+}
+
+.banner-text-wrapper p,
+#img1 .banner-text-wrapper p,
+#img1 p,
+#bannerwrap p {
+  color: #e2e8f0 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Breadcrumbs Polish: Eliminate legacy 9001px text-indent overflow scrollbar */
+#breadcrumbs,
+#breadcrumbs .wrapper {
+  text-indent: 0 !important;
+  overflow: visible !important;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+  padding: 10px 0 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  margin-bottom: 18px !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+
+#breadcrumbs .wrapper a,
+#breadcrumbs .wrapper span {
+  text-indent: 0 !important;
+  float: none !important;
+  display: inline !important;
+  color: #64748b !important;
+}
+
+#breadcrumbs .wrapper a {
+  color: #2563eb !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+}
+
+#breadcrumbs .wrapper a:hover {
+  text-decoration: underline !important;
+}
+
+#breadcrumbs .wrapper span {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+#breadcrumbs .wrapper a:after,
+#breadcrumbs a:after {
+  display: none !important;
+  content: "" !important;
+  margin-left: 0 !important;
+}
+
+/* Status Banner Dark Background Override */
+.status-banner-card h2,
+.status-card h2 {
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+
+
 

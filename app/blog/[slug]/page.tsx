@@ -90,7 +90,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   // Render markdown chunks with code blocks, headings, blockquotes, and lists
   function renderMarkdownContent(content: string) {
-    const rawChunks = content.split("```");
+    const normalizedContent = (content || "")
+      .replace(/\\r\\n/g, "\n")
+      .replace(/\\n/g, "\n")
+      .replace(/\r\n/g, "\n");
+    const rawChunks = normalizedContent.split("```");
     const elements: React.ReactNode[] = [];
 
     rawChunks.forEach((chunk, index) => {
@@ -109,7 +113,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         );
       } else {
         // Text Markdown
-        const paragraphs = chunk.split("\n\n");
+        const paragraphs = chunk.split(/\n\s*\n/);
         paragraphs.forEach((p, pIdx) => {
           const trimmed = p.trim();
           if (!trimmed) return;

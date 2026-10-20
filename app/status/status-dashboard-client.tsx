@@ -100,6 +100,7 @@ export default function StatusDashboardClient() {
     <div>
       {/* Top Operational Status Banner */}
       <div
+        className="status-banner-card"
         style={{
           backgroundColor: "#064e3b",
           border: "1px solid #059669",
