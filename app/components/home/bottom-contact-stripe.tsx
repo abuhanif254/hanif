@@ -26,30 +26,52 @@ export default function BottomContactStripe() {
       name: formData.name,
       email: formData.email,
       phone: formData.phone || null,
-      project_type: formData.projectType,
+      projectType: formData.projectType,
       message: formData.message,
-      status: "new",
-      created_at: new Date().toISOString(),
     };
 
     try {
+      const res = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(record),
+      });
+
+      const result = await res.json();
+      if (!res.ok || !result.success) {
+        throw new Error(result.error || "Failed to submit inquiry.");
+      }
+
       if (typeof window !== "undefined") {
         const stored = window.localStorage.getItem("abuhanif-inquiries");
         const list = stored ? JSON.parse(stored) : [];
-        list.unshift({ ...record, id: `local-${Date.now()}` });
+        list.unshift({
+          ...record,
+          id: result.inquiryId || `local-${Date.now()}`,
+          status: "new",
+          createdAt: new Date().toISOString(),
+        });
         window.localStorage.setItem("abuhanif-inquiries", JSON.stringify(list));
       }
 
-      if (isSupabaseConfigured && supabase) {
-        const { error } = await supabase.from("inquiries").insert([record]);
-        if (error) {
-          console.warn("Supabase insert error:", error);
-        }
-      }
-
       setSubmitted(true);
-    } catch (err) {
-      setErrorMessage("Something went wrong. Please email directly at abuhanifmain@gmail.com.");
+    } catch (err: any) {
+      if (typeof window !== "undefined") {
+        const stored = window.localStorage.getItem("abuhanif-inquiries");
+        const list = stored ? JSON.parse(stored) : [];
+        list.unshift({
+          ...record,
+          id: `offline-${Date.now()}`,
+          status: "new",
+          createdAt: new Date().toISOString(),
+        });
+        window.localStorage.setItem("abuhanif-inquiries", JSON.stringify(list));
+        setSubmitted(true);
+      } else {
+        setErrorMessage(
+          err.message || "Something went wrong. Please email directly at abuhanifmain@gmail.com."
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }

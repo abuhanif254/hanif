@@ -123,6 +123,69 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
     }
   }
 
+  function handlePrintSow() {
+    if (typeof window === "undefined") return;
+    const printWindow = window.open("", "_blank", "width=800,height=900");
+    if (!printWindow) return;
+    const chosenAddons = availableAddons.filter((a) => selectedAddons.includes(a.id));
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Statement of Work - ${selectedService.title}</title>
+          <style>
+            body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #0f172a; padding: 40px; max-width: 750px; margin: 0 auto; }
+            h1 { font-size: 24px; color: #0b132b; border-bottom: 2px solid #2563eb; padding-bottom: 8px; }
+            h2 { font-size: 18px; color: #0f172a; margin-top: 24px; }
+            .meta { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 16px; margin: 20px 0; }
+            .meta p { margin: 4px 0; font-size: 14px; }
+            ul { padding-left: 20px; font-size: 14px; }
+            li { margin-bottom: 6px; }
+            .total { background: #ecfdf5; border: 2px solid #10b981; border-radius: 6px; padding: 16px; font-size: 18px; font-weight: bold; color: #047857; margin: 24px 0; }
+            .footer { font-size: 12px; color: #64748b; margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 12px; }
+          </style>
+        </head>
+        <body>
+          <h1>STATEMENT OF WORK (SOW) ESTIMATE</h1>
+          <div class="meta">
+            <p><strong>Client Organization:</strong> ${clientCompany || "Client Organization"}</p>
+            <p><strong>Contact / Sponsor:</strong> ${clientContact || "Technical Sponsor"}</p>
+            <p><strong>Principal Architect:</strong> MD Abu Hanif Mia (Staff Software Engineer &amp; Systems Architect)</p>
+            <p><strong>Date:</strong> ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
+          </div>
+          <h2>1. Selected Engagement: ${selectedService.title}</h2>
+          <p><strong>Pricing Model:</strong> ${selectedService.pricingType.toUpperCase()} &bull; <strong>Estimated Timeline:</strong> ${selectedService.timeline}</p>
+          <h3>Core Deliverables:</h3>
+          <ul>
+            ${selectedService.deliverables.map((d) => `<li>${d}</li>`).join("")}
+          </ul>
+          ${chosenAddons.length > 0 ? `
+            <h2>2. Technical Add-On Modules:</h2>
+            <ul>
+              ${chosenAddons.map((a) => `<li><strong>${a.name}</strong> (+$${a.price.toLocaleString()}): ${a.description}</li>`).join("")}
+            </ul>
+          ` : ""}
+          <div class="total">
+            TOTAL FIXED INVESTMENT: $${totalInvestment.toLocaleString()} USD
+          </div>
+          <h2>3. Intellectual Property &amp; SLA Terms</h2>
+          <ul>
+            <li><strong>100% Client Ownership:</strong> Full IP, source code, schemas, and credentials belong to Client upon invoice settlement.</li>
+            <li><strong>30-Day Production Bug Warranty:</strong> Included at zero additional charge.</li>
+            <li><strong>Payment Terms:</strong> 50% upfront sprint reservation, 50% upon verified staging/production signoff.</li>
+          </ul>
+          <div class="footer">
+            Generated via Abu Hanif Systems Architecture Portfolio &bull; https://abuhanifmia.com/pricing
+          </div>
+          <script>
+            window.onload = function() { window.print(); }
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  }
+
   function handlePrefillInquiry() {
     const el = document.getElementById("inquiry");
     if (el) {
@@ -319,25 +382,47 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
             </span>
           </div>
 
-          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", width: "100%", maxWidth: "540px" }}>
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", width: "100%", maxWidth: "620px" }}>
+            <button
+              type="button"
+              className="mobile-full-width-btn"
+              onClick={handlePrintSow}
+              style={{
+                flex: "1 1 130px",
+                padding: "10px 14px",
+                backgroundColor: "#111e38",
+                color: "#38bdf8",
+                border: "1px solid #1e293b",
+                borderRadius: "6px",
+                fontWeight: "700",
+                fontSize: "12px",
+                cursor: "pointer",
+                textAlign: "center",
+                transition: "all 0.15s ease",
+              }}
+              title="Print formal proposal or save directly as PDF"
+            >
+              🖨️ Print / Save PDF
+            </button>
+
             <button
               type="button"
               className="mobile-full-width-btn"
               onClick={handleCopySow}
               style={{
-                flex: "1 1 150px",
+                flex: "1 1 120px",
                 padding: "10px 14px",
                 backgroundColor: "#070f1e",
                 color: copied ? "#10b981" : "#ffffff",
                 border: "1px solid #1e293b",
-                borderRadius: "4px",
+                borderRadius: "6px",
                 fontWeight: "700",
                 fontSize: "12px",
                 cursor: "pointer",
                 textAlign: "center",
               }}
             >
-              {copied ? "✓ Copied Markdown!" : "📋 Copy SOW"}
+              {copied ? "✓ Copied!" : "📋 Copy SOW"}
             </button>
 
             <button
@@ -345,19 +430,19 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
               className="mobile-full-width-btn"
               onClick={handleDownloadSow}
               style={{
-                flex: "1 1 150px",
+                flex: "1 1 120px",
                 padding: "10px 14px",
                 backgroundColor: "#070f1e",
                 color: "#e2e8f0",
                 border: "1px solid #1e293b",
-                borderRadius: "4px",
+                borderRadius: "6px",
                 fontWeight: "700",
                 fontSize: "12px",
                 cursor: "pointer",
                 textAlign: "center",
               }}
             >
-              💾 Download .md
+              💾 .md File
             </button>
 
             <button
@@ -365,16 +450,17 @@ ${chosenAddons.length > 0 ? `- **Add-On Modules:** +$${addonsTotal.toLocaleStrin
               className="mobile-full-width-btn"
               onClick={handlePrefillInquiry}
               style={{
-                flex: "1 1 180px",
+                flex: "1 1 150px",
                 padding: "10px 16px",
                 backgroundColor: "#2563eb",
                 color: "#ffffff",
                 border: "none",
-                borderRadius: "4px",
+                borderRadius: "6px",
                 fontWeight: "700",
                 fontSize: "13px",
                 cursor: "pointer",
                 textAlign: "center",
+                boxShadow: "0 2px 8px rgba(37,99,235,0.4)",
               }}
             >
               Lock In Scope &rsaquo;

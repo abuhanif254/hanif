@@ -150,9 +150,22 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
               gap: "8px",
             }}
           >
-            <span>
-              Available for High-Impact Contracts &amp; Consulting:{" "}
-              <strong>abuhanifmain@gmail.com</strong>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+              <span
+                style={{
+                  width: "8px",
+                  height: "8px",
+                  borderRadius: "50%",
+                  background: "#10b981",
+                  display: "inline-block",
+                  boxShadow: "0 0 10px #10b981",
+                  flexShrink: 0,
+                }}
+              />
+              <span>
+                Available for Q4 Contracts • 2 Dedicated Slots:{" "}
+                <strong style={{ color: "#ffffff" }}>abuhanifmain@gmail.com</strong>
+              </span>
             </span>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <button
@@ -169,11 +182,12 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
                   background: "#0b132b",
                   color: "#e2e8f0",
                   border: "1px solid #1e293b",
-                  padding: "4px 10px",
-                  borderRadius: "3px",
+                  padding: "6px 12px",
+                  borderRadius: "6px",
                   fontSize: "12px",
                   fontWeight: "bold",
                   cursor: "pointer",
+                  transition: "border-color 0.15s ease",
                 }}
                 title="Press Ctrl+K or Cmd+K to open global search palette"
               >
@@ -182,8 +196,8 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
                   style={{
                     fontSize: "10px",
                     backgroundColor: "#050e1d",
-                    padding: "1px 5px",
-                    borderRadius: "2px",
+                    padding: "2px 6px",
+                    borderRadius: "4px",
                     border: "1px solid #1e293b",
                     color: "#38bdf8",
                   }}

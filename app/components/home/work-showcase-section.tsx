@@ -68,22 +68,74 @@ export default function WorkShowcaseSection({ projects }: WorkShowcaseSectionPro
             </span>
           </div>
 
-          <p style={{ margin: "0 0 10px 0", fontSize: "14px", color: "#334155", lineHeight: "1.6" }}>
+          <p style={{ margin: "0 0 12px 0", fontSize: "14px", color: "#334155", lineHeight: "1.6" }}>
             <strong style={{ color: "#0f172a" }}>System Summary:</strong> {project.summary}
           </p>
 
-          <p style={{ margin: "0 0 12px 0", fontSize: "13.5px", color: "#475569", lineHeight: "1.5" }}>
-            <strong style={{ color: "#0f172a" }}>Core Architecture:</strong> {project.techStack.join(" • ")}
-          </p>
+          <div style={{ margin: "0 0 14px 0", display: "flex", alignItems: "center", flexWrap: "wrap", gap: "6px" }}>
+            <strong style={{ fontSize: "13px", color: "#0f172a", marginRight: "4px" }}>Core Architecture:</strong>
+            {project.techStack.map((tech) => (
+              <span
+                key={tech}
+                style={{
+                  fontSize: "11.5px",
+                  fontWeight: 600,
+                  color: "#334155",
+                  background: "#f1f5f9",
+                  border: "1px solid #e2e8f0",
+                  padding: "2px 8px",
+                  borderRadius: "4px",
+                }}
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
 
-          <div style={{ fontSize: "13px", fontWeight: "600", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px", paddingTop: "8px", borderTop: "1px solid #f1f5f9" }}>
-            <span style={{ color: "#047857" }}>✓ Verified Outcome: {project.impactMetric}</span>
-            <Link
-              href={`/projects/${project.slug}`}
-              style={{ color: "#2563eb", textDecoration: "underline", fontSize: "13px", fontWeight: "700" }}
-            >
-              Read Full Case Study &rsaquo;
-            </Link>
+          <div style={{ fontSize: "13px", fontWeight: "600", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px", paddingTop: "10px", borderTop: "1px solid #f1f5f9" }}>
+            <span style={{ color: "#047857", display: "inline-flex", alignItems: "center", gap: "6px" }}>
+              <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#10b981", display: "inline-block" }} />
+              Verified Outcome: {project.impactMetric}
+            </span>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              {project.demoUrl && (
+                <a
+                  href={project.demoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "#0284c7", fontSize: "12.5px", fontWeight: 700, textDecoration: "none" }}
+                  title="Open live demonstration"
+                >
+                  Live Demo ↗
+                </a>
+              )}
+              {project.githubUrl && (
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "#64748b", fontSize: "12.5px", fontWeight: 700, textDecoration: "none" }}
+                  title="Inspect GitHub repository"
+                >
+                  GitHub ↗
+                </a>
+              )}
+              <Link
+                href={`/projects/${project.slug}`}
+                style={{
+                  color: "#2563eb",
+                  textDecoration: "none",
+                  fontSize: "13px",
+                  fontWeight: "700",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "2px",
+                }}
+              >
+                Read Case Study &rsaquo;
+              </Link>
+            </div>
           </div>
         </div>
       ))}

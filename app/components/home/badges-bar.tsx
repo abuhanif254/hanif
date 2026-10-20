@@ -117,13 +117,14 @@ export default function BadgesBar() {
             display: "inline-flex",
             alignItems: "center",
             gap: "6px",
-            padding: "8px 12px",
+            padding: "8px 14px",
             background: "#070f1e",
             color: "#fde047",
             border: "1px solid #ca8a04",
-            borderRadius: "4px",
+            borderRadius: "6px",
             fontSize: "12px",
             fontWeight: "bold",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
           }}
         >
           <span>(fCC)</span> JS • TS • PYTHON
@@ -137,13 +138,14 @@ export default function BadgesBar() {
             display: "inline-flex",
             alignItems: "center",
             gap: "6px",
-            padding: "8px 12px",
+            padding: "8px 14px",
             background: "#070f1e",
             color: "#f97316",
             border: "1px solid #ea580c",
-            borderRadius: "4px",
+            borderRadius: "6px",
             fontSize: "12px",
             fontWeight: "bold",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
           }}
         >
           <span>🦀</span> RUST &amp; GO SYSTEMS
@@ -159,9 +161,10 @@ export default function BadgesBar() {
             background: "#070f1e",
             color: "#38bdf8",
             border: "1px solid #1e293b",
-            borderRadius: "4px",
+            borderRadius: "6px",
             fontSize: "13px",
             fontWeight: "bold",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
           }}
         >
           9+ YRS EXP
@@ -169,19 +172,32 @@ export default function BadgesBar() {
       </span>
 
       {/* 99.99% UPTIME Badge */}
-      <span className="badge" title="99.99% Production Uptime">
+      <span className="badge" title="99.99% Production Uptime with Live Edge Health">
         <strong
           style={{
-            display: "inline-block",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
             padding: "8px 14px",
             background: "#064e3b",
             color: "#4ade80",
             border: "1px solid #059669",
-            borderRadius: "4px",
+            borderRadius: "6px",
             fontSize: "13px",
             fontWeight: "bold",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
           }}
         >
+          <span
+            style={{
+              width: "6px",
+              height: "6px",
+              borderRadius: "50%",
+              background: "#4ade80",
+              display: "inline-block",
+              boxShadow: "0 0 6px #4ade80",
+            }}
+          />
           99.99% UPTIME
         </strong>
       </span>
@@ -195,9 +211,10 @@ export default function BadgesBar() {
             background: "#1e1b4b",
             color: "#c084fc",
             border: "1px solid #4338ca",
-            borderRadius: "4px",
+            borderRadius: "6px",
             fontSize: "13px",
             fontWeight: "bold",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
           }}
         >
           50+ SHIPPED APPS

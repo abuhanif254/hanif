@@ -671,8 +671,109 @@ export default function PricingClientView({
                               Book an Engineering Scope or Discovery Call
                             </h3>
                             <p style={{ margin: "0 0 20px 0", fontSize: "14px", color: "#475569" }}>
-                              Fill out the technical requirements below. Abu Hanif will review your scope, verify capacity, and schedule a technical discovery call within 24 hours.
+                              Choose your preferred engagement pathway below. Schedule an instant discovery call or submit technical specifications for a formal SOW response within 24 hours.
                             </p>
+
+                            {/* Dual Booking Pathway */}
+                            <div
+                              style={{
+                                display: "grid",
+                                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                                gap: "16px",
+                                marginBottom: "24px",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  background: "#0b132b",
+                                  border: "1px solid #1e293b",
+                                  borderLeft: "4px solid #10b981",
+                                  borderRadius: "8px",
+                                  padding: "20px",
+                                  color: "#ffffff",
+                                  boxShadow: "0 2px 8px rgba(11,25,44,0.3)",
+                                }}
+                              >
+                                <span style={{ fontSize: "11px", fontWeight: 800, color: "#10b981", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                                  ⚡ FASTEST OPTION (15 MINUTES)
+                                </span>
+                                <h4 style={{ margin: "6px 0 8px 0", fontSize: "16px", color: "#ffffff" }}>
+                                  1-on-1 Architecture Discovery Call
+                                </h4>
+                                <p style={{ fontSize: "12.5px", color: "#cbd5e1", lineHeight: 1.5, margin: "0 0 16px 0" }}>
+                                  Direct Google Meet / Zoom review with Abu Hanif to evaluate your technical bottlenecks, target delivery timeline, and architecture feasibility.
+                                </p>
+                                <a
+                                  href="https://cal.com/abuhanif/15min"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    gap: "6px",
+                                    width: "100%",
+                                    padding: "10px",
+                                    background: "#10b981",
+                                    color: "#050e1d",
+                                    borderRadius: "6px",
+                                    fontWeight: 700,
+                                    fontSize: "13px",
+                                    textDecoration: "none",
+                                    textAlign: "center",
+                                    boxShadow: "0 2px 6px rgba(16,185,129,0.3)",
+                                    boxSizing: "border-box",
+                                  }}
+                                >
+                                  📅 Schedule 15-Min Call on Cal.com ↗
+                                </a>
+                              </div>
+
+                              <div
+                                style={{
+                                  background: "#ffffff",
+                                  border: "1px solid #e2e8f0",
+                                  borderLeft: "4px solid #2563eb",
+                                  borderRadius: "8px",
+                                  padding: "20px",
+                                  boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+                                }}
+                              >
+                                <span style={{ fontSize: "11px", fontWeight: 800, color: "#2563eb", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                                  📋 WRITTEN SCOPE SUBMISSION
+                                </span>
+                                <h4 style={{ margin: "6px 0 8px 0", fontSize: "16px", color: "#0f172a" }}>
+                                  Submit Technical Requirements Form
+                                </h4>
+                                <p style={{ fontSize: "12.5px", color: "#475569", lineHeight: 1.5, margin: "0 0 16px 0" }}>
+                                  Submit your project details below. Abu Hanif will review requirements, verify sprint capacity, and reply with a formal Statement of Work within 24 hours.
+                                </p>
+                                <a
+                                  href="#scope-form"
+                                  style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    gap: "6px",
+                                    width: "100%",
+                                    padding: "10px",
+                                    background: "#f1f5f9",
+                                    color: "#0f172a",
+                                    border: "1px solid #cbd5e1",
+                                    borderRadius: "6px",
+                                    fontWeight: 700,
+                                    fontSize: "13px",
+                                    textDecoration: "none",
+                                    textAlign: "center",
+                                    boxSizing: "border-box",
+                                  }}
+                                >
+                                  ↓ Fill Out Requirements Below
+                                </a>
+                              </div>
+                            </div>
+
+                            <div id="scope-form" />
 
                             {submittedMessage && (
                               <div

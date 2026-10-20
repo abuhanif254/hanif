@@ -259,14 +259,67 @@ export default function HomeSidebar() {
         )}
       </div>
 
-      {/* Evaluation / Estimate CTA Button */}
+      {/* High-Conversion Discovery & SOW Widget */}
       <div className="widget amp-include" id="wdgt-evaluation-button">
-        <div className="description">
-          <center>
-            <Link className="btn" href="/pricing#inquiry">
-              Click Here for <br /> Free Project Consultation
-            </Link>
-          </center>
+        <div className="description" style={{ padding: 0 }}>
+          <div
+            style={{
+              background: "#0b132b",
+              border: "1px solid #1e293b",
+              borderTop: "3px solid #2563eb",
+              borderRadius: "8px",
+              padding: "16px",
+              textAlign: "center",
+              boxShadow: "0 2px 8px rgba(11,25,44,0.3)",
+            }}
+          >
+            <div style={{ fontSize: "11px", fontWeight: 800, color: "#38bdf8", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
+              ⚡ Fast-Track Onboarding
+            </div>
+            <strong style={{ display: "block", color: "#ffffff", fontSize: "14px", marginBottom: "6px" }}>
+              Need an Immediate Architecture Review?
+            </strong>
+            <p style={{ margin: "0 0 12px 0", fontSize: "12px", color: "#cbd5e1", lineHeight: 1.5 }}>
+              Book a free 15-minute technical discovery call or build a custom Statement of Work instantly.
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <Link
+                href="/pricing#inquiry"
+                style={{
+                  display: "block",
+                  padding: "10px",
+                  background: "#2563eb",
+                  color: "#ffffff",
+                  borderRadius: "6px",
+                  fontWeight: 700,
+                  fontSize: "12.5px",
+                  textDecoration: "none",
+                  boxShadow: "0 2px 6px rgba(37,99,235,0.4)",
+                }}
+              >
+                📅 Book 15-Min Discovery Call
+              </Link>
+              <Link
+                href="/pricing#sow-builder"
+                style={{
+                  display: "block",
+                  padding: "9px",
+                  background: "#111e38",
+                  color: "#38bdf8",
+                  border: "1px solid #1e293b",
+                  borderRadius: "6px",
+                  fontWeight: 600,
+                  fontSize: "12px",
+                  textDecoration: "none",
+                }}
+              >
+                📋 Open SOW Generator
+              </Link>
+            </div>
+            <div style={{ marginTop: "10px", fontSize: "11px", color: "#4ade80", fontWeight: 600 }}>
+              ● 24-Hour Guaranteed Response SLA
+            </div>
+          </div>
         </div>
       </div>
 
