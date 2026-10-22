@@ -272,6 +272,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     "@type": "TechArticle",
     headline: post.title,
     description: post.excerpt,
+    image: [`${siteUrl}/images/og-card.png`],
     url: `${siteUrl}/blog/${post.slug}`,
     datePublished: post.publishedAt,
     dateModified: post.publishedAt,
@@ -285,6 +286,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       "@type": "Person",
       name: "MD Abu Hanif Mia",
       url: siteUrl,
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteUrl}/images/abuhanif-logo-v3.svg`,
+      },
     },
     keywords: post.tags.join(", "),
     articleSection: post.tags[0] || "Software Engineering",

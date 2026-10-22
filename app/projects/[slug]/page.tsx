@@ -215,8 +215,15 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
     "@type": "SoftwareApplication",
     name: project.title,
     description: project.summary,
+    url: `${siteUrl}/projects/${project.slug}`,
+    image: project.imageUrl ? `${siteUrl}${project.imageUrl}` : `${siteUrl}/images/og-card.png`,
     applicationCategory: "DeveloperApplication",
     operatingSystem: "Cloud / Edge",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
     author: {
       "@type": "Person",
       name: "MD Abu Hanif Mia",

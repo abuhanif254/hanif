@@ -134,5 +134,27 @@ describe("Routes, SEO & Topic Pillars Verification", () => {
       }
     }
   });
+
+  it("should verify ProfilePage schema on /resume satisfies Google Search Console requirements", async () => {
+    const fs = await import("fs");
+    const resumeSource = fs.readFileSync("app/resume/page.tsx", "utf8");
+
+    // Google Search Console ProfilePage requirements:
+    expect(resumeSource).toContain('"@type": "ProfilePage"');
+    expect(resumeSource).toContain("mainEntity:");
+    expect(resumeSource).toContain('"@type": "Person"');
+    expect(resumeSource).toContain('name: "MD Abu Hanif Mia"');
+    expect(resumeSource).toContain("dateCreated:");
+    expect(resumeSource).toContain("dateModified:");
+    expect(resumeSource).toContain("image:");
+    expect(resumeSource).toContain("sameAs:");
+  });
+
+  it("should verify robots.txt allows search crawlers and references sitemap.xml", async () => {
+    const robotsFn = (await import("../app/robots")).default;
+    const robotsConfig = robotsFn();
+    expect(robotsConfig.sitemap).toBe("https://abuhanifmia.com/sitemap.xml");
+    expect(robotsConfig.rules).toBeDefined();
+  });
 });
 
