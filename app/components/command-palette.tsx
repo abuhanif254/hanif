@@ -191,7 +191,7 @@ export default function CommandPalette() {
               </Command.Item>
 
               <Command.Item
-                onSelect={() => handleCopy("+880 1700-000000", "Phone / WhatsApp")}
+                onSelect={() => handleCopy("https://www.linkedin.com/in/abuhanif254", "LinkedIn Profile URL")}
                 style={{
                   padding: "8px 12px",
                   borderRadius: "4px",
@@ -203,7 +203,7 @@ export default function CommandPalette() {
                   color: "#1e293b",
                 }}
               >
-                <span>📱 Copy Phone / WhatsApp (+880 1700-000000)</span>
+                <span>🔗 Copy LinkedIn Profile (linkedin.com/in/abuhanif254)</span>
                 <span style={{ fontSize: "11px", color: "#64748b" }}>Action</span>
               </Command.Item>
 

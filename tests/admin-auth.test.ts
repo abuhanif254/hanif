@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { POST, GET, DELETE } from "../app/api/admin/auth/route";
+import { POST, GET } from "../app/api/admin/auth/route";
+import { createSessionToken, verifySessionToken } from "../app/lib/admin-auth";
 import { NextRequest } from "next/server";
 
 describe("Admin Authentication API Route (/api/admin/auth)", () => {
@@ -17,7 +18,7 @@ describe("Admin Authentication API Route (/api/admin/auth)", () => {
     expect(json.error).toContain("Invalid administrator credentials");
   });
 
-  it("should accept valid passcode with 200 status", async () => {
+  it("should accept valid passcode with 200 status and issue a signed HMAC token", async () => {
     const req = new NextRequest("http://localhost:3000/api/admin/auth", {
       method: "POST",
       body: JSON.stringify({ passcode: "hanif2026" }),
@@ -28,6 +29,11 @@ describe("Admin Authentication API Route (/api/admin/auth)", () => {
 
     const json = await res.json();
     expect(json.success).toBe(true);
+
+    const token = createSessionToken();
+    expect(verifySessionToken(token)).toBe(true);
+    expect(verifySessionToken("hanif2026")).toBe(false);
+    expect(verifySessionToken("forged.signature")).toBe(false);
   });
 
   it("should return false for unauthenticated GET verification", async () => {

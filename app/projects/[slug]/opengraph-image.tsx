@@ -73,7 +73,7 @@ export default async function Image({ params }: OgProps) {
                 borderRadius: "4px",
               }}
             >
-              ⚡ {impactMetric}
+              {impactMetric}
             </span>
           </div>
 

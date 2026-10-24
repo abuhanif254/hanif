@@ -132,10 +132,10 @@ export default function HomeSidebar() {
         ) : (
           <form onSubmit={handleSubmit} id="genericcontactform" name="genericcontactform">
             <div className="formdesc">
-              <span className="free-consultation">Free Consultation</span>
+              <span className="free-consultation">Free Technical Consultation</span>
               <span className="phone-numbers">
                 abuhanifmain@gmail.com <br />
-                +880 1700-000000
+                Dhaka, Bangladesh • Global Remote
               </span>
             </div>
             <div className="col-1">
@@ -199,9 +199,9 @@ export default function HomeSidebar() {
               </select>
             </span>
             <span className="fld">
-              <label htmlFor="malpracticeinput">Budget Range</label>
+              <label htmlFor="budgetRangeInput">Budget Range</label>
               <select
-                id="malpracticeinput"
+                id="budgetRangeInput"
                 name="50_Budget"
                 value={formData.budget}
                 onChange={(e) => setFormData({ ...formData, budget: e.target.value })}

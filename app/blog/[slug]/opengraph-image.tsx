@@ -62,7 +62,7 @@ export default async function Image({ params }: OgProps) {
               {tag}
             </span>
             <span style={{ color: "#94a3b8", fontSize: "18px", marginLeft: "12px" }}>
-              ⏱ {readingTime}
+              {readingTime}
             </span>
           </div>
 

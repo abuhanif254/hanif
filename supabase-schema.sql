@@ -17,14 +17,14 @@ create table if not exists public.profiles (
   headline text not null default 'Clean Architecture • High Performance • Scalable Systems',
   bio text not null default 'Staff Software Engineer & Systems Architect with 9+ years building high-throughput distributed systems, Next.js applications, Supabase integrations, and Cloudflare Pages deployments.',
   email text not null default 'abuhanifmain@gmail.com',
-  phone text not null default '+880 1700-000000',
+  phone text not null default 'Available upon request (Direct Email / Calendly)',
   location text not null default 'Dhaka, Bangladesh / Remote Worldwide',
   availability_status text not null default 'Available for Architecture Consulting & High-Impact Contracts',
   is_available boolean not null default true,
   social_links jsonb not null default '{
     "github": "https://github.com/abuhanif254",
-    "linkedin": "https://linkedin.com",
-    "twitter": "https://x.com",
+    "linkedin": "https://linkedin.com/in/abuhanif",
+    "twitter": "https://x.com/abuhanif",
     "discord": "https://discord.com"
   }'::jsonb,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
@@ -139,32 +139,37 @@ drop policy if exists "Admins have full access to services" on public.services;
 drop policy if exists "Admins have full access to blog posts" on public.blog_posts;
 drop policy if exists "Admins have full access to inquiries" on public.inquiries;
 
--- Public read policies
+-- Public read policies (Strictly read-only for published/active records)
 create policy "Public can view profiles" on public.profiles for select using (true);
 create policy "Public can view published projects" on public.projects for select using (is_published = true);
 create policy "Public can view active services" on public.services for select using (is_active = true);
 create policy "Public can view published blog posts" on public.blog_posts for select using (is_published = true);
 
--- Public inquiry submission
-create policy "Public can insert inquiries" on public.inquiries for insert with check (true);
+-- Public inquiry submission (Insert-only with validation; never readable by anon)
+create policy "Public can insert inquiries" on public.inquiries
+  for insert
+  with check (length(trim(name)) >= 2 and length(trim(email)) >= 5 and length(trim(message)) >= 5);
 
--- Admin & public read/write access for admin panel operations
-create policy "Public can view inquiries" on public.inquiries for select using (true);
-create policy "Public can update inquiries" on public.inquiries for update using (true);
-create policy "Public can insert projects" on public.projects for insert with check (true);
-create policy "Public can update projects" on public.projects for update using (true);
-create policy "Public can insert services" on public.services for insert with check (true);
-create policy "Public can update services" on public.services for update using (true);
-create policy "Public can insert blog posts" on public.blog_posts for insert with check (true);
-create policy "Public can update blog posts" on public.blog_posts for update using (true);
-create policy "Public can update profiles" on public.profiles for update using (true);
+-- Authenticated / Service Role full access (No anonymous read/write on inquiries or portfolio tables)
+create policy "Admins have full access to profiles" on public.profiles
+  for all using (auth.role() in ('authenticated', 'service_role'))
+  with check (auth.role() in ('authenticated', 'service_role'));
 
--- Authenticated full access
-create policy "Admins have full access to profiles" on public.profiles using (auth.role() = 'authenticated');
-create policy "Admins have full access to projects" on public.projects using (auth.role() = 'authenticated');
-create policy "Admins have full access to services" on public.services using (auth.role() = 'authenticated');
-create policy "Admins have full access to blog posts" on public.blog_posts using (auth.role() = 'authenticated');
-create policy "Admins have full access to inquiries" on public.inquiries using (auth.role() = 'authenticated');
+create policy "Admins have full access to projects" on public.projects
+  for all using (auth.role() in ('authenticated', 'service_role'))
+  with check (auth.role() in ('authenticated', 'service_role'));
+
+create policy "Admins have full access to services" on public.services
+  for all using (auth.role() in ('authenticated', 'service_role'))
+  with check (auth.role() in ('authenticated', 'service_role'));
+
+create policy "Admins have full access to blog posts" on public.blog_posts
+  for all using (auth.role() in ('authenticated', 'service_role'))
+  with check (auth.role() in ('authenticated', 'service_role'));
+
+create policy "Admins have full access to inquiries" on public.inquiries
+  for all using (auth.role() in ('authenticated', 'service_role'))
+  with check (auth.role() in ('authenticated', 'service_role'));
 
 -- -----------------------------------------------------------------------------
 -- STORAGE BUCKETS
@@ -184,8 +189,8 @@ drop policy if exists "Admins can upload blog images" on storage.objects;
 
 create policy "Public can view portfolio assets" on storage.objects for select using (bucket_id = 'portfolio-assets');
 create policy "Public can view blog images" on storage.objects for select using (bucket_id = 'blog-images');
-create policy "Admins can upload portfolio assets" on storage.objects for insert with check (bucket_id = 'portfolio-assets');
-create policy "Admins can upload blog images" on storage.objects for insert with check (bucket_id = 'blog-images');
+create policy "Admins can upload portfolio assets" on storage.objects for insert with check (bucket_id = 'portfolio-assets' and auth.role() in ('authenticated', 'service_role'));
+create policy "Admins can upload blog images" on storage.objects for insert with check (bucket_id = 'blog-images' and auth.role() in ('authenticated', 'service_role'));
 
 -- -----------------------------------------------------------------------------
 -- INITIAL SEED DATA
@@ -199,8 +204,8 @@ values (
   'Staff Software Engineer & Systems Architect',
   'Clean Architecture • High Performance • Scalable Systems',
   'Staff Software Engineer & Systems Architect with 9+ years building high-throughput distributed systems, Next.js applications, Supabase integrations, and Cloudflare Pages deployments.',
-  'contact@abuhanif.dev',
-  '+880 1700-000000',
+  'abuhanifmain@gmail.com',
+  'Direct Email / Scheduled Discovery Call',
   'Dhaka, Bangladesh / Remote Worldwide',
   'Available for Architecture Consulting & High-Impact Contracts',
   true
@@ -375,12 +380,14 @@ create policy "Project Assets Public Access"
   using (bucket_id = 'project-assets');
 
 drop policy if exists "Project Assets Anon Upload" on storage.objects;
-create policy "Project Assets Anon Upload"
-  on storage.objects for insert
-  with check (bucket_id = 'project-assets');
-
 drop policy if exists "Project Assets Anon Update" on storage.objects;
-create policy "Project Assets Anon Update"
+drop policy if exists "Project Assets Admin Upload" on storage.objects;
+create policy "Project Assets Admin Upload"
+  on storage.objects for insert
+  with check (bucket_id = 'project-assets' and auth.role() in ('authenticated', 'service_role'));
+
+drop policy if exists "Project Assets Admin Update" on storage.objects;
+create policy "Project Assets Admin Update"
   on storage.objects for update
-  with check (bucket_id = 'project-assets');
+  with check (bucket_id = 'project-assets' and auth.role() in ('authenticated', 'service_role'));
 

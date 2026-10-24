@@ -1,40 +1,86 @@
 import { NextResponse } from "next/server";
 import { supabase, isSupabaseConfigured } from "../../lib/supabase";
 
+const inquiryRateLimit = new Map<string, { count: number; resetAt: number }>();
+const MAX_INQUIRIES_PER_WINDOW = 8;
+const WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+
+function getRequestIp(request: Request): string {
+  return (
+    request.headers.get("cf-connecting-ip") ||
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    "127.0.0.1"
+  );
+}
+
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { name, email, phone, projectType, budgetRange, message } = body;
+    const ip = getRequestIp(request);
+    const now = Date.now();
+    const rateRecord = inquiryRateLimit.get(ip);
 
-    // Validate required fields
-    if (!name || typeof name !== "string" || name.trim().length < 2) {
+    if (rateRecord && now < rateRecord.resetAt && rateRecord.count >= MAX_INQUIRIES_PER_WINDOW) {
       return NextResponse.json(
-        { success: false, error: "Please provide a valid name (at least 2 characters)." },
+        {
+          success: false,
+          error: "Rate limit exceeded. Please wait a few minutes or email abuhanifmain@gmail.com directly.",
+        },
+        { status: 429 }
+      );
+    }
+
+    const body = await request.json();
+    const { name, email, phone, projectType, budgetRange, message, website } = body;
+
+    // Honeypot anti-bot check: if hidden "website" field is populated, silently succeed
+    if (website && typeof website === "string" && website.trim().length > 0) {
+      return NextResponse.json({
+        success: true,
+        message: "Inquiry received! Abu Hanif will review your project details and respond within 24 hours.",
+        inquiryId: `inq-${Date.now()}`,
+      });
+    }
+
+    // Validate required fields & enforce upper length bounds
+    if (!name || typeof name !== "string" || name.trim().length < 2 || name.trim().length > 120) {
+      return NextResponse.json(
+        { success: false, error: "Please provide a valid name (2–120 characters)." },
         { status: 400 }
       );
     }
 
-    if (!email || typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (
+      !email ||
+      typeof email !== "string" ||
+      email.length > 254 ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+    ) {
       return NextResponse.json(
         { success: false, error: "Please provide a valid work email address." },
         { status: 400 }
       );
     }
 
-    if (!message || typeof message !== "string" || message.trim().length < 5) {
+    if (!message || typeof message !== "string" || message.trim().length < 5 || message.trim().length > 5000) {
       return NextResponse.json(
-        { success: false, error: "Please describe your project challenge or requirements." },
+        { success: false, error: "Please describe your project challenge or requirements (5–5,000 characters)." },
         { status: 400 }
       );
     }
 
+    const currentRate =
+      rateRecord && now < rateRecord.resetAt
+        ? { count: rateRecord.count + 1, resetAt: rateRecord.resetAt }
+        : { count: 1, resetAt: now + WINDOW_MS };
+    inquiryRateLimit.set(ip, currentRate);
+
     const recordToInsert = {
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      phone: phone ? String(phone).trim() : null,
-      project_type: projectType || "Engineering Project Consultation",
-      budget_range: budgetRange || "Flexible / To Be Scoped",
-      message: message.trim(),
+      name: name.trim().slice(0, 120),
+      email: email.trim().toLowerCase().slice(0, 254),
+      phone: phone ? String(phone).trim().slice(0, 40) : null,
+      project_type: String(projectType || "Engineering Project Consultation").slice(0, 120),
+      budget_range: String(budgetRange || "Flexible / To Be Scoped").slice(0, 120),
+      message: message.trim().slice(0, 5000),
       status: "new",
     };
 
@@ -68,7 +114,7 @@ export async function POST(request: Request) {
           embeds: [
             {
               title: `💼 ${recordToInsert.project_type}`,
-              color: 0x9cbe41, // Brand Accent Lime
+              color: 0x2563eb, // Brand Cobalt Accent
               fields: [
                 { name: "Client / Lead Name", value: recordToInsert.name, inline: true },
                 { name: "Email Address", value: `[${recordToInsert.email}](mailto:${recordToInsert.email})`, inline: true },

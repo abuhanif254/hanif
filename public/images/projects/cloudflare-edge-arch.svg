@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#060b19" />
+      <stop offset="100%" stop-color="#0d1b33" />
+    </linearGradient>
+    <pattern id="grid2" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.7" opacity="0.55" />
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg2)" />
+  <rect width="1200" height="630" fill="url(#grid2)" />
+
+  <!-- Top Header Banner -->
+  <rect x="48" y="36" width="1104" height="84" rx="10" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" />
+  <rect x="48" y="36" width="6" height="84" rx="3" fill="#0ea5e9" />
+  <text x="76" y="68" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700" fill="#38bdf8" letter-spacing="1.5">SYSTEMS ARCHITECTURE BLUEPRINT • CASE STUDY 02</text>
+  <text x="76" y="100" font-family="'Inter', system-ui, sans-serif" font-size="26" font-weight="800" fill="#f8fafc">Cloudflare Edge Multi-Tenant E-Commerce Platform</text>
+  <rect x="920" y="56" width="208" height="44" rx="8" fill="#064e3b" stroke="#10b981" stroke-width="1.2" />
+  <text x="1024" y="83" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#34d399" text-anchor="middle">95ms P99 • -64% Spend</text>
+
+  <!-- Pipeline Nodes -->
+  <rect x="56" y="185" width="245" height="230" rx="10" fill="#0f172a" stroke="#0ea5e9" stroke-width="2" />
+  <text x="178" y="220" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" fill="#38bdf8" text-anchor="middle">330+ GLOBAL EDGE PoPs</text>
+  <text x="178" y="248" font-family="'Inter', sans-serif" font-size="18" font-weight="800" fill="#ffffff" text-anchor="middle">Cloudflare Anycast CDN</text>
+  <rect x="78" y="270" width="200" height="32" rx="5" fill="#1e293b" />
+  <text x="178" y="291" font-family="'JetBrains Mono', monospace" font-size="12" fill="#38bdf8" text-anchor="middle">0ms Cold-Start V8 Isolates</text>
+  <rect x="78" y="312" width="200" height="32" rx="5" fill="#1e293b" />
+  <text x="178" y="333" font-family="'JetBrains Mono', monospace" font-size="12" fill="#cbd5e1" text-anchor="middle">Tenant Hostname Routing</text>
+  <rect x="78" y="354" width="200" height="32" rx="5" fill="#1e293b" />
+  <text x="178" y="375" font-family="'JetBrains Mono', monospace" font-size="12" fill="#34d399" text-anchor="middle">WAF + Bot Mitigation</text>
+
+  <line x1="301" y1="300" x2="365" y2="300" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="5,4" />
+  <polygon points="365,294 377,300 365,306" fill="#38bdf8" />
+
+  <rect x="377" y="185" width="245" height="230" rx="10" fill="#0f172a" stroke="#2563eb" stroke-width="2" />
+  <text x="499" y="220" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" fill="#38bdf8" text-anchor="middle">APPLICATION RUNTIME</text>
+  <text x="499" y="248" font-family="'Inter', sans-serif" font-size="18" font-weight="800" fill="#ffffff" text-anchor="middle">Next.js 16 App Router</text>
+  <rect x="399" y="270" width="200" height="32" rx="5" fill="#1e293b" />
+  <text x="499" y="291" font-family="'JetBrains Mono', monospace" font-size="12" fill="#38bdf8" text-anchor="middle">React 19 Server Actions</text>
+  <rect x="399" y="312" width="200" height="32" rx="5" fill="#1e293b" />
+  <text x="499" y="333" font-family="'JetBrains Mono', monospace" font-size="12" fill="#cbd5e1" text-anchor="middle">Workers KV Catalog Cache</text>
+  <rect x="399" y="354" width="200" height="32" rx="5" fill="#1e293b" />
+  <text x="499" y="375" font-family="'JetBrains Mono', monospace" font-size="12" fill="#34d399" text-anchor="middle">Stale-While-Revalidate</text>
+
+  <line x1="622" y1="300" x2="686" y2="300" stroke="#10b981" stroke-width="2.5" stroke-dasharray="5,4" />
+  <polygon points="686,294 698,300 686,306" fill="#10b981" />
+
+  <rect x="698" y="185" width="450" height="230" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="2" />
+  <text x="923" y="220" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" fill="#34d399" text-anchor="middle">DISTRIBUTED DATA &amp; CHECKOUT</text>
+  <text x="923" y="248" font-family="'Inter', sans-serif" font-size="18" font-weight="800" fill="#ffffff" text-anchor="middle">Supabase PostgreSQL 16 + Read Replicas</text>
+  <rect x="724" y="270" width="398" height="32" rx="5" fill="#1e293b" />
+  <text x="923" y="291" font-family="'JetBrains Mono', monospace" font-size="12" fill="#38bdf8" text-anchor="middle">Multi-Tenant Row Level Security (RLS) Isolation</text>
+  <rect x="724" y="312" width="398" height="32" rx="5" fill="#1e293b" />
+  <text x="923" y="333" font-family="'JetBrains Mono', monospace" font-size="12" fill="#cbd5e1" text-anchor="middle">Idempotent Checkout State Machine &amp; Stripe Webhooks</text>
+  <rect x="724" y="354" width="398" height="32" rx="5" fill="#1e293b" />
+  <text x="923" y="375" font-family="'JetBrains Mono', monospace" font-size="12" fill="#34d399" text-anchor="middle">1.8s Legacy Render → 95ms Global Edge Render</text>
+
+  <!-- Bottom Telemetry Metrics Strip -->
+  <rect x="48" y="470" width="1104" height="112" rx="10" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" />
+  <text x="84" y="512" font-family="'JetBrains Mono', monospace" font-size="12" fill="#94a3b8">GLOBAL TTFB P99</text>
+  <text x="84" y="550" font-family="'Inter', sans-serif" font-size="28" font-weight="800" fill="#38bdf8">95 ms (vs 1,800ms)</text>
+
+  <text x="410" y="512" font-family="'JetBrains Mono', monospace" font-size="12" fill="#94a3b8">CONVERSION LIFT</text>
+  <text x="410" y="550" font-family="'Inter', sans-serif" font-size="28" font-weight="800" fill="#10b981">+28% Checkout</text>
+
+  <text x="690" y="512" font-family="'JetBrains Mono', monospace" font-size="12" fill="#94a3b8">INFRASTRUCTURE SAVINGS</text>
+  <text x="690" y="550" font-family="'Inter', sans-serif" font-size="28" font-weight="800" fill="#f8fafc">-64% Monthly Spend</text>
+
+  <text x="970" y="512" font-family="'JetBrains Mono', monospace" font-size="12" fill="#94a3b8">ARCHITECT</text>
+  <text x="970" y="550" font-family="'Inter', sans-serif" font-size="22" font-weight="800" fill="#e2e8f0">Abu Hanif</text>
+</svg>

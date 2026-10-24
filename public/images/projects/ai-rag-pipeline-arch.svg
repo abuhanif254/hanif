@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#060b19" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <pattern id="grid3" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.7" opacity="0.55" />
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg3)" />
+  <rect width="1200" height="630" fill="url(#grid3)" />
+
+  <rect x="48" y="36" width="1104" height="84" rx="10" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" />
+  <rect x="48" y="36" width="6" height="84" rx="3" fill="#8b5cf6" />
+  <text x="76" y="68" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700" fill="#a78bfa" letter-spacing="1.5">SYSTEMS ARCHITECTURE BLUEPRINT • CASE STUDY 03</text>
+  <text x="76" y="100" font-family="'Inter', system-ui, sans-serif" font-size="26" font-weight="800" fill="#f8fafc">Enterprise AI Document Search &amp; Hybrid pgvector RAG</text>
+  <rect x="920" y="56" width="208" height="44" rx="8" fill="#064e3b" stroke="#10b981" stroke-width="1.2" />
+  <text x="1024" y="83" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#34d399" text-anchor="middle">500k+ Docs • 96.4% Acc</text>
+
+  <rect x="56" y="185" width="320" height="230" rx="10" fill="#0f172a" stroke="#8b5cf6" stroke-width="2" />
+  <text x="216" y="220" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" fill="#a78bfa" text-anchor="middle">ASYNC INGESTION PIPELINE</text>
+  <text x="216" y="248" font-family="'Inter', sans-serif" font-size="18" font-weight="800" fill="#ffffff" text-anchor="middle">FastAPI Semantic Chunker</text>
+  <rect x="80" y="270" width="272" height="32" rx="5" fill="#1e293b" />
+  <text x="216" y="291" font-family="'JetBrains Mono', monospace" font-size="12" fill="#38bdf8" text-anchor="middle">Markdown / PDF / AST Parser</text>
+  <rect x="80" y="312" width="272" height="32" rx="5" fill="#1e293b" />
+  <text x="216" y="333" font-family="'JetBrains Mono', monospace" font-size="12" fill="#cbd5e1" text-anchor="middle">1536-Dim Vector Embeddings</text>
+  <rect x="80" y="354" width="272" height="32" rx="5" fill="#1e293b" />
+  <text x="216" y="375" font-family="'JetBrains Mono', monospace" font-size="12" fill="#34d399" text-anchor="middle">Document ACL Permission Sync</text>
+
+  <line x1="376" y1="300" x2="430" y2="300" stroke="#a78bfa" stroke-width="2.5" stroke-dasharray="5,4" />
+  <polygon points="430,294 442,300 430,306" fill="#a78bfa" />
+
+  <rect x="442" y="185" width="320" height="230" rx="10" fill="#0f172a" stroke="#2563eb" stroke-width="2" />
+  <text x="602" y="220" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" fill="#38bdf8" text-anchor="middle">HYBRID RETRIEVAL ENGINE</text>
+  <text x="602" y="248" font-family="'Inter', sans-serif" font-size="18" font-weight="800" fill="#ffffff" text-anchor="middle">PostgreSQL 16 + pgvector</text>
+  <rect x="466" y="270" width="272" height="32" rx="5" fill="#1e293b" />
+  <text x="602" y="291" font-family="'JetBrains Mono', monospace" font-size="12" fill="#38bdf8" text-anchor="middle">HNSW Cosine Distance Index</text>
+  <rect x="466" y="312" width="272" height="32" rx="5" fill="#1e293b" />
+  <text x="602" y="333" font-family="'JetBrains Mono', monospace" font-size="12" fill="#cbd5e1" text-anchor="middle">Reciprocal Rank Fusion (BM25)</text>
+  <rect x="466" y="354" width="272" height="32" rx="5" fill="#1e293b" />
+  <text x="602" y="375" font-family="'JetBrains Mono', monospace" font-size="12" fill="#34d399" text-anchor="middle">Cross-Encoder Re-Ranking</text>
+
+  <line x1="762" y1="300" x2="816" y2="300" stroke="#10b981" stroke-width="2.5" stroke-dasharray="5,4" />
+  <polygon points="816,294 828,300 816,306" fill="#10b981" />
+
+  <rect x="828" y="185" width="320" height="230" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="2" />
+  <text x="988" y="220" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" fill="#34d399" text-anchor="middle">VERIFIED CITATION UI</text>
+  <text x="988" y="248" font-family="'Inter', sans-serif" font-size="18" font-weight="800" fill="#ffffff" text-anchor="middle">Streaming Answer Engine</text>
+  <rect x="852" y="270" width="272" height="32" rx="5" fill="#1e293b" />
+  <text x="988" y="291" font-family="'JetBrains Mono', monospace" font-size="12" fill="#38bdf8" text-anchor="middle">Strict Source Line Citations</text>
+  <rect x="852" y="312" width="272" height="32" rx="5" fill="#1e293b" />
+  <text x="988" y="333" font-family="'JetBrains Mono', monospace" font-size="12" fill="#cbd5e1" text-anchor="middle">Zero-Hallucination Guardrails</text>
+  <rect x="852" y="354" width="272" height="32" rx="5" fill="#1e293b" />
+  <text x="988" y="375" font-family="'JetBrains Mono', monospace" font-size="12" fill="#34d399" text-anchor="middle">26 min → 4 min Resolution</text>
+
+  <rect x="48" y="470" width="1104" height="112" rx="10" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" />
+  <text x="84" y="512" font-family="'JetBrains Mono', monospace" font-size="12" fill="#94a3b8">INDEXED CORPUS</text>
+  <text x="84" y="550" font-family="'Inter', sans-serif" font-size="28" font-weight="800" fill="#a78bfa">500,000+ Manuals</text>
+
+  <text x="410" y="512" font-family="'JetBrains Mono', monospace" font-size="12" fill="#94a3b8">CITATION ACCURACY</text>
+  <text x="410" y="550" font-family="'Inter', sans-serif" font-size="28" font-weight="800" fill="#10b981">96.4% Verified</text>
+
+  <text x="690" y="512" font-family="'JetBrains Mono', monospace" font-size="12" fill="#94a3b8">DISCOVERY SPEEDUP</text>
+  <text x="690" y="550" font-family="'Inter', sans-serif" font-size="28" font-weight="800" fill="#f8fafc">82% Faster Answers</text>
+
+  <text x="970" y="512" font-family="'JetBrains Mono', monospace" font-size="12" fill="#94a3b8">ARCHITECT</text>
+  <text x="970" y="550" font-family="'Inter', sans-serif" font-size="22" font-weight="800" fill="#e2e8f0">Abu Hanif</text>
+</svg>

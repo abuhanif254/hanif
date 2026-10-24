@@ -54,15 +54,6 @@ export const metadata: Metadata = {
     siteName: "Abu Hanif Engineering Portfolio",
     type: "website",
     locale: "en_US",
-    images: [
-      {
-        url: `${siteUrl}/images/og-card.png`,
-        width: 1200,
-        height: 630,
-        alt: "MD Abu Hanif Mia (Abu Hanif) - Staff Software Engineer & Systems Architect",
-        type: "image/png",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -70,7 +61,6 @@ export const metadata: Metadata = {
     description:
       "Scalable Systems • Distributed Architecture • High-Performance Web Applications. View portfolio work showcase, transparent pricing, and technical blog.",
     creator: "@abuhanif",
-    images: [`${siteUrl}/images/og-card.png`],
   },
   alternates: {
     canonical: siteUrl,
@@ -104,6 +94,7 @@ const jsonLd = {
       description:
         "Staff Software Engineer and Systems Architect with 9+ years experience designing high-throughput distributed applications, edge networks, and developer platforms.",
       url: siteUrl,
+      image: `${siteUrl}/images/profile.png`,
       email: "abuhanifmain@gmail.com",
       address: {
         "@type": "PostalAddress",
@@ -154,10 +145,21 @@ const jsonLd = {
         "AI & LLM RAG Systems",
       ],
       sameAs: [
-        "https://github.com",
-        "https://linkedin.com",
-        "https://x.com",
+        "https://github.com/abuhanif254",
+        "https://linkedin.com/in/abuhanif",
+        "https://x.com/abuhanif",
       ],
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": `${siteUrl}/#service`,
+      name: "Abu Hanif Systems Architecture & Engineering Consulting",
+      url: siteUrl,
+      image: `${siteUrl}/images/profile.png`,
+      email: "abuhanifmain@gmail.com",
+      priceRange: "$2,500 - $24,000+",
+      areaServed: "Worldwide",
+      founder: { "@id": `${siteUrl}/#person` },
     },
   ],
 };

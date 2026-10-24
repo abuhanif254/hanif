@@ -19,11 +19,16 @@ const securityHeaders = [
   },
   {
     key: "Referrer-Policy",
-    value: "origin-when-cross-origin",
+    value: "strict-origin-when-cross-origin",
   },
   {
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=()",
+  },
+  {
+    key: "Content-Security-Policy",
+    value:
+      "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.supabase.co https://abuhanifmia.com; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-ancestors 'self'; base-uri 'self'; form-action 'self';",
   },
 ];
 
@@ -44,10 +49,6 @@ const nextConfig: NextConfig = {
         protocol: "http",
         hostname: "localhost",
       },
-      {
-        protocol: "https",
-        hostname: "**",
-      },
     ],
   },
   experimental: {
@@ -59,6 +60,15 @@ const nextConfig: NextConfig = {
       "@radix-ui/react-tooltip",
       "recharts",
     ],
+  },
+  async redirects() {
+    return [
+      {
+        source: "/work-prices",
+        destination: "/pricing",
+        permanent: true,
+      },
+    ];
   },
   async headers() {
     return [

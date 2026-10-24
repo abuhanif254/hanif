@@ -15,24 +15,32 @@ export default function BioAndCredentials() {
     <>
       {/* Desktop Profile Pic Float */}
       <div className="profilepic-wrap-desktop" style={{ position: "relative", float: "right", margin: "0 0 20px 24px" }}>
-        <Image
-          src="/images/profile.png"
-          alt="MD Abu Hanif Mia - Staff Software Engineer"
-          width={220}
-          height={220}
-          className="profilepic"
-          priority
+        <div
           style={{
-            maxWidth: "220px",
-            height: "auto",
-            border: "1px solid #d9d9d9",
-            padding: "4px",
-            borderRadius: "4px",
-            background: "#ffffff",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-            display: "block",
+            width: "180px",
+            height: "180px",
+            borderRadius: "12px",
+            overflow: "hidden",
+            border: "2px solid #2563eb",
+            background: "radial-gradient(circle at 50% 35%, #1e293b 0%, #0b132b 100%)",
+            boxShadow: "0 8px 20px rgba(15, 23, 42, 0.14)",
           }}
-        />
+        >
+          <Image
+            src="/images/profile.png"
+            alt="MD Abu Hanif Mia - Staff Software Engineer"
+            width={180}
+            height={180}
+            className="profilepic"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              objectPosition: "center top",
+              display: "block",
+            }}
+          />
+        </div>
       </div>
 
       {/* Facebook-Style Native Mobile Profile Card (Visible on <= 768px only) */}
@@ -132,14 +140,17 @@ export default function BioAndCredentials() {
       </strong>
 
       <p style={{ lineHeight: "1.7", color: "#334155" }}>
-        <strong>MD Abu Hanif Mia</strong> (known professionally as <strong>Abu Hanif</strong>) is an experienced
-        software engineer and systems architect whose technical rigor, deep full-stack mastery, and execution
-        velocity have resulted in high-concurrency, fault-tolerant production platforms for startups and
-        enterprise organizations worldwide. Formally trained through <strong>Programming Hero</strong> (awarded the{" "}
-        <em>Certificate of Completion with Excellence</em> in Complete Web Development) and holding verified{" "}
-        <strong>freeCodeCamp</strong> certifications in JavaScript, TypeScript, and Python, Abu Hanif combines
-        modern React 19 and Next.js 16 edge engineering with low-level systems programming in <strong>Rust</strong>{" "}
-        and <strong>Go</strong>.
+        <strong>MD Abu Hanif Mia</strong> (known professionally as <strong>Abu Hanif</strong>) is a{" "}
+        <strong>Staff Software Engineer and Systems Architect</strong> holding a{" "}
+        <strong>Bachelor of Science in Computer Science &amp; Engineering (B.Sc. in CSE)</strong> with over 9 years of
+        hands-on experience designing high-concurrency, fault-tolerant production platforms for startups and enterprise
+        organizations worldwide. He combines modern <strong>Next.js 16 App Router</strong>,{" "}
+        <strong>React 19</strong>, and <strong>Cloudflare Edge</strong> delivery with low-level systems programming in{" "}
+        <strong>Rust (Tokio/Axum)</strong>, <strong>Go</strong>, and high-throughput <strong>PostgreSQL 16</strong>{" "}
+        database architecture. Formally recognized with the{" "}
+        <em>Certificate of Completion with Excellence</em> from <strong>Programming Hero</strong> (Batch-12 •{" "}
+        <code>WEB12-3991</code>) and verified <strong>freeCodeCamp</strong> accreditations across JavaScript,
+        TypeScript, and Python, he pairs deep computer science fundamentals with rapid full-stack execution.
       </p>
       <p style={{ lineHeight: "1.7", color: "#334155" }}>
         Specializing in distributed systems, PostgreSQL query tuning, Cloudflare Pages, and memory-safe concurrent

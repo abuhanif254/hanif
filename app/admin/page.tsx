@@ -71,26 +71,16 @@ export default function AdminPage() {
   const [passcodeError, setPasscodeError] = useState(false);
 
   useEffect(() => {
-    // Check server session cookie first
+    // Verify HTTP-only signed session cookie with server
     fetch("/api/admin/auth")
       .then((res) => res.json())
       .then((data) => {
         if (data.authenticated) {
           setIsAuthenticated(true);
-        } else if (typeof window !== "undefined") {
-          const auth = window.sessionStorage.getItem("abuhanif_admin_auth");
-          if (auth === "true") {
-            setIsAuthenticated(true);
-          }
         }
       })
       .catch(() => {
-        if (typeof window !== "undefined") {
-          const auth = window.sessionStorage.getItem("abuhanif_admin_auth");
-          if (auth === "true") {
-            setIsAuthenticated(true);
-          }
-        }
+        setIsAuthenticated(false);
       });
   }, []);
 
@@ -150,8 +140,10 @@ export default function AdminPage() {
     setTimeout(() => setStatusMessage(null), 3500);
   }
 
-  // Load live data from Supabase or localStorage on mount
+  // Load live data from Supabase or localStorage only AFTER authentication
   useEffect(() => {
+    if (!isAuthenticated) return;
+
     // 1. Load local inquiries from window.localStorage if available
     if (typeof window !== "undefined") {
       const savedInquiries = window.localStorage.getItem("abuhanif-inquiries");
@@ -291,7 +283,7 @@ export default function AdminPage() {
           }
         });
     }
-  }, []);
+  }, [isAuthenticated]);
 
   // Add project handler
   function handleAddProject(e: React.FormEvent) {
@@ -673,9 +665,6 @@ export default function AdminPage() {
       if (res.ok && data.success) {
         setIsAuthenticated(true);
         setPasscodeError(false);
-        if (typeof window !== "undefined") {
-          window.sessionStorage.setItem("abuhanif_admin_auth", "true");
-        }
       } else {
         setPasscodeError(true);
       }
@@ -690,9 +679,6 @@ export default function AdminPage() {
     } catch {}
     setIsAuthenticated(false);
     setPasscode("");
-    if (typeof window !== "undefined") {
-      window.sessionStorage.removeItem("abuhanif_admin_auth");
-    }
   }
 
   if (!isAuthenticated) {

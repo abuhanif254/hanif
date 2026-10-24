@@ -62,4 +62,25 @@ describe("Upload API Route (/api/upload)", () => {
     expect(json.url.length).toBeGreaterThan(0);
     expect(json.filename).toContain("test-architecture-diagram");
   });
+
+  it("should reject SVG files or spoofed non-image payloads to prevent stored XSS", async () => {
+    const maliciousSvg = '<svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)"></svg>';
+    const spoofedFile = new File([maliciousSvg], "exploit.png", { type: "image/png" });
+
+    const formData = new FormData();
+    formData.append("file", spoofedFile);
+
+    const req = new NextRequest("http://localhost:3000/api/upload", {
+      method: "POST",
+      headers: AUTH_HEADER,
+      body: formData,
+    });
+
+    const res = await POST(req);
+    expect(res.status).toBe(400);
+
+    const json = await res.json();
+    expect(json.success).toBe(false);
+    expect(json.error).toContain("binary signature verification");
+  });
 });

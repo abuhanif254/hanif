@@ -341,7 +341,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <div id="source-page-body" className="source-page-body js l2 section_83 justia-robertjfleming-com">
+      <div id="source-page-body" className="source-page-body js l2 section_83 abuhanif-portfolio-shell">
         <SiteHeader activePath="/blog" />
 
         <div className="index" id="container">

@@ -111,7 +111,6 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
     { label: "Systems Lab", href: "/lab", key: "/lab" },
     { label: "Technical Blog", href: "/blog", key: "/blog" },
     { label: "Resume / CV", href: "/resume", key: "/resume" },
-    { label: "Admin", href: "/admin", key: "/admin" },
     { label: "Contact", href: "/pricing#inquiry", id: "lc", key: "/contact" },
   ];
 

@@ -66,24 +66,25 @@ button:after,
   background-image: url("/images/abuhanif-tagline-v3.svg") !important;
 }
 
-/* Hero Banner: Modernized Responsive Architecture (Replaces legacy percentage hacks) */
+/* Hero Banner: Modernized Executive Engineering Architecture (Zero Legacy Bookshelf Image) */
 .imgwrap #img1,
 #index .imgwrap #img1 {
-  background: var(--surface-dark-midnight) url("/images/main_image_abuhanif.jpg") no-repeat center top !important;
-  background-size: cover !important;
-  min-height: 330px !important;
-  padding: 40px 32px !important;
+  background: radial-gradient(circle at 82% 28%, rgba(37, 99, 235, 0.22) 0%, rgba(16, 185, 129, 0.08) 38%, transparent 70%),
+    linear-gradient(135deg, #060b19 0%, #0b132b 55%, #0f172a 100%) !important;
+  min-height: 360px !important;
+  padding: 40px 36px !important;
   position: relative !important;
   color: var(--text-dark-primary) !important;
   display: flex !important;
   align-items: center !important;
   width: 100% !important;
   box-sizing: border-box !important;
+  border-bottom: 1px solid #1e293b !important;
 }
 
 .imgwrap #img1 .text-wrapper,
 #index .imgwrap #img1 .text-wrapper {
-  width: 68% !important;
+  width: 100% !important;
   position: relative !important;
   display: flex !important;
   flex-direction: column !important;
@@ -94,13 +95,12 @@ button:after,
 
 .imgwrap #img1 #banner-tagline,
 #index .imgwrap #img1 #banner-tagline {
-  font-size: 14px !important;
+  font-size: 12.5px !important;
   font-weight: 800 !important;
   color: var(--accent-sky) !important;
   text-transform: uppercase !important;
-  letter-spacing: 1px !important;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.6) !important;
-  margin-bottom: 8px !important;
+  letter-spacing: 1.2px !important;
+  margin-bottom: 10px !important;
 }
 
 .imgwrap #img2,
@@ -370,7 +370,7 @@ button:after,
 
 /* Fixed Header Offset: Seamless alignment with fixed master header (zero white gaps) */
 #container {
-  padding-top: 201px !important;
+  padding-top: 175px !important;
 }
 
 #main {

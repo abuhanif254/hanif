@@ -91,7 +91,7 @@ export default async function Image({ params }: OgProps) {
                 borderRadius: "6px",
               }}
             >
-              ⏱ {timeline}
+              {timeline}
             </span>
           </div>
 

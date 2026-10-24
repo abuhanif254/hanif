@@ -8,9 +8,7 @@ export default function CookieBanner() {
 
   useEffect(() => {
     // Only reveal if user has never dismissed the privacy notice
-    const dismissed =
-      window.localStorage.getItem("hanif-privacy-dismissed") ||
-      window.localStorage.getItem("rjf-cookie-consent");
+    const dismissed = window.localStorage.getItem("hanif-privacy-dismissed");
     if (!dismissed) {
       // Delay slightly so it doesn't jarringly animate during initial paint
       const timer = setTimeout(() => setVisible(true), 1200);
@@ -20,7 +18,6 @@ export default function CookieBanner() {
 
   function handleDismiss() {
     window.localStorage.setItem("hanif-privacy-dismissed", "true");
-    window.localStorage.setItem("rjf-cookie-consent", "necessary");
     setVisible(false);
   }
 

@@ -267,7 +267,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <div id="source-page-body" className="source-page-body js l2 section_10 justia-robertjfleming-com">
+      <div id="source-page-body" className="source-page-body js l2 section_10 abuhanif-portfolio-shell">
         <SiteHeader activePath="/projects" />
 
         <div className="index" id="container">
@@ -593,7 +593,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                     <span className="free-consultation">Technical Consultation</span>
                     <span className="phone-numbers">
                       abuhanifmain@gmail.com <br />
-                      +880 1700-000000
+                      Dhaka, Bangladesh • Global Remote
                     </span>
                   </div>
                   <div style={{ padding: "0 0 10px 0" }}>

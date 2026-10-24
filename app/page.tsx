@@ -27,15 +27,6 @@ export const metadata: Metadata = {
     url: siteUrl,
     type: "website",
     locale: "en_US",
-    images: [
-      {
-        url: `${siteUrl}/images/og-card.png`,
-        width: 1200,
-        height: 630,
-        alt: "MD Abu Hanif Mia (Abu Hanif) - Staff Software Engineer & Systems Architect",
-        type: "image/png",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -43,7 +34,6 @@ export const metadata: Metadata = {
     description:
       "Scalable Systems • Distributed Architecture • High-Performance Web Applications. View portfolio work showcase, transparent pricing, systems lab, and technical blog.",
     creator: "@abuhanif",
-    images: [`${siteUrl}/images/og-card.png`],
   },
 };
 
@@ -53,80 +43,11 @@ export default async function HomePage() {
     getBlogPosts(),
     getTestimonials(),
   ]);
-  const jsonLdPerson = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: "MD Abu Hanif Mia",
-    alternateName: "Abu Hanif",
-    jobTitle: "Staff Software Engineer & Systems Architect",
-    description:
-      "Staff Software Engineer specializing in distributed systems, PostgreSQL performance optimization, Cloudflare edge compute, and full-stack Next.js architecture.",
-    url: siteUrl,
-    image: `${siteUrl}/images/profile.png`,
-    email: "abuhanifmain@gmail.com",
-    alumniOf: [
-      {
-        "@type": "EducationalOrganization",
-        name: "Programming Hero",
-        description: "Complete Web Development Course with Excellence (Batch-12 • WEB12-3991)",
-      },
-    ],
-    hasCredential: [
-      {
-        "@type": "EducationalOccupationalCredential",
-        name: "Complete Web Development Certificate of Excellence",
-        credentialCategory: "Certificate of Excellence",
-        recognizedBy: {
-          "@type": "EducationalOrganization",
-          name: "Programming Hero",
-        },
-        identifier: "WEB12-3991",
-        url: `${siteUrl}/images/programming-hero-certificate.png`,
-      },
-    ],
-    knowsAbout: [
-      "Distributed Systems",
-      "PostgreSQL Query Optimization",
-      "Next.js 16 & React 19",
-      "Rust Tokio Concurrency",
-      "Go CSP Goroutines",
-      "Cloudflare Pages Edge Compute",
-      "TypeScript",
-      "AI pgvector RAG Architecture",
-    ],
-    sameAs: [
-      "https://github.com/abuhanif",
-      "https://linkedin.com/in/abuhanif",
-      "https://twitter.com/abuhanif",
-    ],
-  };
-
-  const jsonLdWebSite = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "Abu Hanif Engineering Portfolio",
-    url: siteUrl,
-    description:
-      "Official portfolio, interactive systems lab, technical blog, and architectural case studies of Staff Software Engineer Abu Hanif.",
-    author: {
-      "@type": "Person",
-      name: "MD Abu Hanif Mia",
-    },
-  };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdPerson) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebSite) }}
-      />
-
       <div id="source-page-root" data-source-path="/">
-        <div id="index" className="source-page-body js justia-robertjfleming-com">
+        <div id="index" className="source-page-body js abuhanif-portfolio-shell">
           <SiteHeader activePath="/" />
 
           <div id="container" className="index">

@@ -129,7 +129,7 @@ export default async function BlogCategoryPage({ params }: CategoryPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      <div id="source-page-body" className="source-page-body js l2 section_10 justia-robertjfleming-com">
+      <div id="source-page-body" className="source-page-body js l2 section_10 abuhanif-portfolio-shell">
         <SiteHeader activePath="/blog" />
 
         <div className="index" id="container">
