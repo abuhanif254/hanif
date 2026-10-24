@@ -78,18 +78,9 @@ export default function HeroBanner() {
   return (
     <div className="imgwrap">
       <div id="img1">
-        <div
-          className="text-wrapper"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(310px, 1fr))",
-            gap: "32px",
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
+        <div className="text-wrapper">
           {/* Left Column: Core Engineering Value Proposition + Interactive Terminal */}
-          <div style={{ flex: "1 1 560px" }}>
+          <div style={{ minWidth: 0 }}>
             <div
               id="banner-tagline"
               style={{
@@ -98,15 +89,15 @@ export default function HeroBanner() {
                 gap: "8px",
                 backgroundColor: "rgba(15, 23, 42, 0.85)",
                 border: "1px solid rgba(56, 189, 248, 0.3)",
-                padding: "5px 12px",
+                padding: "4px 10px",
                 borderRadius: "999px",
-                marginBottom: "14px",
+                marginBottom: "8px",
               }}
             >
               <span
                 style={{
-                  width: "8px",
-                  height: "8px",
+                  width: "7px",
+                  height: "7px",
                   borderRadius: "50%",
                   backgroundColor: "#10b981",
                   boxShadow: "0 0 8px #10b981",
@@ -118,18 +109,18 @@ export default function HeroBanner() {
 
             <div
               style={{
-                fontSize: "clamp(24px, 3vw, 33px)",
+                fontSize: "clamp(20px, 2.3vw, 27px)",
                 fontWeight: 900,
-                lineHeight: 1.18,
+                lineHeight: 1.2,
                 color: "#f8fafc",
                 letterSpacing: "-0.02em",
-                marginBottom: "10px",
+                marginBottom: "6px",
               }}
             >
               Architecting Sub-25ms Distributed Systems, Next.js 16 Edge Platforms &amp; Tuned Databases.
             </div>
 
-            <div id="slideshow" style={{ minHeight: "28px" }}>
+            <div id="slideshow" style={{ minHeight: "22px" }}>
               {slides.map((text, idx) => (
                 <div
                   key={idx}
@@ -137,11 +128,11 @@ export default function HeroBanner() {
                   style={{
                     display: activeSlide === idx ? "flex" : "none",
                     alignItems: "center",
-                    gap: "8px",
+                    gap: "6px",
                     fontWeight: 700,
-                    fontSize: "15.5px",
+                    fontSize: "14px",
                     color: "#38bdf8",
-                    marginTop: "4px",
+                    marginTop: "2px",
                   }}
                 >
                   <span style={{ color: "#10b981" }}>✓</span>
@@ -153,16 +144,16 @@ export default function HeroBanner() {
             {/* Interactive Systems Telemetry Terminal */}
             <div
               style={{
-                marginTop: "16px",
-                padding: "12px 16px",
+                marginTop: "10px",
+                padding: "10px 14px",
                 backgroundColor: "rgba(6, 11, 25, 0.96)",
                 border: "1px solid rgba(56, 189, 248, 0.32)",
                 borderRadius: "8px",
                 fontFamily: "var(--font-mono), monospace",
-                fontSize: "12.5px",
+                fontSize: "12px",
                 width: "100%",
-                maxWidth: "620px",
-                boxShadow: "0 8px 28px rgba(0, 0, 0, 0.45)",
+                maxWidth: "600px",
+                boxShadow: "0 6px 20px rgba(0, 0, 0, 0.4)",
               }}
             >
               {/* Terminal Switcher Tabs */}
@@ -171,9 +162,9 @@ export default function HeroBanner() {
                   display: "flex",
                   alignItems: "center",
                   gap: "6px",
-                  marginBottom: "8px",
+                  marginBottom: "6px",
                   borderBottom: "1px solid rgba(30, 41, 59, 0.85)",
-                  paddingBottom: "8px",
+                  paddingBottom: "6px",
                   flexWrap: "wrap",
                 }}
               >
@@ -228,10 +219,10 @@ export default function HeroBanner() {
                 )}
               </div>
 
-              <div style={{ color: "#38bdf8", marginBottom: "4px", fontWeight: "600", wordBreak: "break-all" }}>
+              <div style={{ color: "#38bdf8", marginBottom: "2px", fontWeight: "600", wordBreak: "break-all" }}>
                 <span style={{ color: "#10b981" }}>hanif@edge:~$</span> {currentCommand.cmd}
               </div>
-              <div style={{ color: "#cbd5e1", fontSize: "11.5px", lineHeight: "1.4" }}>
+              <div style={{ color: "#cbd5e1", fontSize: "11.5px", lineHeight: "1.35" }}>
                 &rsaquo; <span style={{ color: activeTab === 0 && livePingResult ? "#4ade80" : "inherit" }}>{currentOutput}</span>
               </div>
             </div>
@@ -240,10 +231,10 @@ export default function HeroBanner() {
             <div
               className="hero-action-buttons"
               style={{
-                marginTop: "20px",
+                marginTop: "12px",
                 display: "flex",
                 alignItems: "center",
-                gap: "12px",
+                gap: "10px",
                 flexWrap: "wrap",
               }}
             >
@@ -253,14 +244,14 @@ export default function HeroBanner() {
                   display: "inline-flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "8px",
-                  minHeight: "44px",
-                  padding: "10px 20px",
+                  gap: "6px",
+                  minHeight: "38px",
+                  padding: "8px 16px",
                   background: "#2563eb",
                   color: "#ffffff",
                   borderRadius: "6px",
                   fontWeight: 700,
-                  fontSize: "14px",
+                  fontSize: "13px",
                   textDecoration: "none",
                   boxShadow: "0 2px 10px rgba(37,99,235,0.4)",
                   transition: "all 0.15s ease",
@@ -275,15 +266,15 @@ export default function HeroBanner() {
                   display: "inline-flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "8px",
-                  minHeight: "44px",
-                  padding: "10px 18px",
+                  gap: "6px",
+                  minHeight: "38px",
+                  padding: "8px 15px",
                   background: "rgba(15, 23, 42, 0.85)",
                   color: "#f8fafc",
                   border: "1px solid #38bdf8",
                   borderRadius: "6px",
                   fontWeight: 600,
-                  fontSize: "13.5px",
+                  fontSize: "13px",
                   textDecoration: "none",
                   transition: "all 0.15s ease",
                 }}
@@ -297,15 +288,15 @@ export default function HeroBanner() {
                   display: "inline-flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "8px",
-                  minHeight: "44px",
-                  padding: "10px 18px",
+                  gap: "6px",
+                  minHeight: "38px",
+                  padding: "8px 15px",
                   background: "transparent",
                   color: "#cbd5e1",
                   border: "1px solid #475569",
                   borderRadius: "6px",
                   fontWeight: 600,
-                  fontSize: "13.5px",
+                  fontSize: "13px",
                   textDecoration: "none",
                   transition: "all 0.15s ease",
                 }}
@@ -315,19 +306,19 @@ export default function HeroBanner() {
             </div>
           </div>
 
-          {/* Right Column: Executive Architect Identity Card (Clean Framed Portrait) */}
+          {/* Right Column: Executive Architect Identity Card (Compact Framed Portrait) */}
           <div
             style={{
-              backgroundColor: "rgba(15, 23, 42, 0.9)",
+              backgroundColor: "rgba(15, 23, 42, 0.92)",
               border: "1px solid rgba(56, 189, 248, 0.25)",
-              borderRadius: "12px",
-              padding: "24px",
+              borderRadius: "10px",
+              padding: "16px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               textAlign: "center",
-              boxShadow: "0 12px 32px rgba(0, 0, 0, 0.45)",
-              maxWidth: "360px",
+              boxShadow: "0 8px 24px rgba(0, 0, 0, 0.4)",
+              maxWidth: "260px",
               marginLeft: "auto",
               marginRight: "auto",
               width: "100%",
@@ -336,22 +327,22 @@ export default function HeroBanner() {
             <div
               style={{
                 position: "relative",
-                width: "132px",
-                height: "132px",
+                width: "84px",
+                height: "84px",
                 borderRadius: "50%",
                 overflow: "hidden",
-                border: "3px solid #38bdf8",
+                border: "2.5px solid #38bdf8",
                 background: "radial-gradient(circle at 50% 35%, #1e293b 0%, #0b132b 100%)",
-                boxShadow: "0 0 24px rgba(56, 189, 248, 0.25)",
-                marginBottom: "14px",
+                boxShadow: "0 0 18px rgba(56, 189, 248, 0.22)",
+                marginBottom: "10px",
                 flexShrink: 0,
               }}
             >
               <Image
                 src="/images/profile.png"
                 alt="MD Abu Hanif Mia - Staff Software Engineer & Systems Architect"
-                width={132}
-                height={132}
+                width={84}
+                height={84}
                 priority
                 style={{
                   width: "100%",
@@ -362,18 +353,18 @@ export default function HeroBanner() {
               />
             </div>
 
-            <div style={{ fontSize: "19px", fontWeight: 800, color: "#ffffff", lineHeight: 1.2 }}>
+            <div style={{ fontSize: "16px", fontWeight: 800, color: "#ffffff", lineHeight: 1.2 }}>
               MD Abu Hanif Mia
             </div>
             <div
               style={{
-                fontSize: "12px",
+                fontSize: "10.5px",
                 fontWeight: 700,
                 color: "#38bdf8",
                 textTransform: "uppercase",
-                letterSpacing: "0.8px",
-                marginTop: "4px",
-                marginBottom: "14px",
+                letterSpacing: "0.7px",
+                marginTop: "3px",
+                marginBottom: "10px",
               }}
             >
               Staff Software Engineer &amp; Architect
@@ -383,32 +374,32 @@ export default function HeroBanner() {
               style={{
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr",
-                gap: "8px",
+                gap: "6px",
                 width: "100%",
-                marginBottom: "14px",
+                marginBottom: "10px",
               }}
             >
               <div
                 style={{
                   background: "#060b19",
                   border: "1px solid #1e293b",
-                  borderRadius: "6px",
-                  padding: "8px",
+                  borderRadius: "5px",
+                  padding: "6px",
                 }}
               >
-                <div style={{ fontSize: "15px", fontWeight: 800, color: "#10b981" }}>99.99%</div>
-                <div style={{ fontSize: "10.5px", color: "#94a3b8" }}>Production SLA</div>
+                <div style={{ fontSize: "13.5px", fontWeight: 800, color: "#10b981" }}>99.99%</div>
+                <div style={{ fontSize: "10px", color: "#94a3b8" }}>Production SLA</div>
               </div>
               <div
                 style={{
                   background: "#060b19",
                   border: "1px solid #1e293b",
-                  borderRadius: "6px",
-                  padding: "8px",
+                  borderRadius: "5px",
+                  padding: "6px",
                 }}
               >
-                <div style={{ fontSize: "15px", fontWeight: 800, color: "#38bdf8" }}>12M/sec</div>
-                <div style={{ fontSize: "10.5px", color: "#94a3b8" }}>Peak Telemetry</div>
+                <div style={{ fontSize: "13.5px", fontWeight: 800, color: "#38bdf8" }}>12M/sec</div>
+                <div style={{ fontSize: "10px", color: "#94a3b8" }}>Peak Telemetry</div>
               </div>
             </div>
 
@@ -416,11 +407,11 @@ export default function HeroBanner() {
               style={{
                 display: "flex",
                 justifyContent: "center",
-                gap: "12px",
+                gap: "10px",
                 width: "100%",
-                paddingTop: "10px",
+                paddingTop: "8px",
                 borderTop: "1px solid #1e293b",
-                fontSize: "12px",
+                fontSize: "11px",
                 fontWeight: 700,
               }}
             >
@@ -434,7 +425,7 @@ export default function HeroBanner() {
               </a>
               <span style={{ color: "#334155" }}>•</span>
               <a
-                href="https://linkedin.com/in/abuhanif"
+                href="https://www.linkedin.com/in/abuhanif254"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: "#cbd5e1", textDecoration: "none" }}
@@ -443,7 +434,7 @@ export default function HeroBanner() {
               </a>
               <span style={{ color: "#334155" }}>•</span>
               <Link href="/resume" style={{ color: "#38bdf8", textDecoration: "none" }}>
-                Resume / CV ›
+                Resume ›
               </Link>
             </div>
           </div>
@@ -453,13 +444,13 @@ export default function HeroBanner() {
       <div id="img2">
         <div className="wrapper">
           <Link className="pabttn pa1" href="/projects?category=systems" title="View Distributed Systems Architecture">
-            Distributed <br /> Systems ⚡
+            Distributed Systems ⚡
           </Link>
           <Link className="pabttn pa2" href="/projects?category=web" title="Explore Full-Stack Engineering Case Studies">
-            Full-Stack <br /> Engineering 🛠
+            Full-Stack Engineering 🛠
           </Link>
           <Link className="pabttn pa3" href="/pricing" title="View Fixed Sprints & SOW Pricing Matrix">
-            Fixed Sprints <br /> &amp; Pricing 💰
+            Fixed Sprints &amp; Pricing 💰
           </Link>
         </div>
       </div>

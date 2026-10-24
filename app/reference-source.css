@@ -8,6 +8,7 @@
 }
 
 .cwrap::after,
+.mwrap::after,
 #header::after,
 #main::after,
 #footer::after {
@@ -36,6 +37,10 @@
   width: 100%;
 }
 
+#index #breadcrumbs,
+.source-page-body.home #breadcrumbs,
+.contactform.widget label:not([for*="Disclaimer"]):not([for*="disclaimer"]),
+.detailedform legend,
 .visuallyhidden,
 .screen-reader-text {
   position: absolute;
@@ -109,11 +114,11 @@ table {
 }
 
 /* =============================================================================
-   Container & Header Geometry
+   Container & Header Geometry (40px TopBar + 98px Head + 37px TopNav = 175px)
    ============================================================================= */
 #container #main,
 #container .stripes {
-  max-width: 1220px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -129,16 +134,16 @@ table {
 
 #header .wrapper {
   margin: 0 auto;
-  max-width: 1220px;
+  max-width: 1200px;
 }
 
 #head {
   width: 100%;
-  min-height: 92px;
+  height: 98px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 24px;
+  padding: 0 24px;
 }
 
 #logo {
@@ -154,7 +159,7 @@ table {
   overflow: hidden;
   text-indent: -9001px;
   width: 326px;
-  height: 72px;
+  height: 76px;
 }
 
 #logo a img {
@@ -176,8 +181,8 @@ table {
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  width: 260px;
-  height: 51px;
+  width: 320px;
+  height: 62px;
 }
 
 /* =============================================================================
@@ -186,7 +191,7 @@ table {
 #topnav {
   position: relative;
   z-index: 9001;
-  min-height: 42px;
+  min-height: 37px;
   background-color: #0f1d38;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding: 0 16px;
@@ -209,7 +214,7 @@ table {
 
 #topnav ul#tnav-toplevel > li > a {
   display: inline-block;
-  line-height: 42px;
+  line-height: 34px;
   padding: 0 14px;
   text-transform: uppercase;
   font-size: 12.5px;
@@ -228,7 +233,7 @@ table {
 }
 
 /* =============================================================================
-   Main Content & Two-Column Responsive Layout
+   Main Content & Two-Column Responsive Layout (All Pages: #index and .l2)
    ============================================================================= */
 #main {
   background-color: #ffffff;
@@ -243,9 +248,16 @@ table {
   z-index: 0;
 }
 
+.imgwrap {
+  width: 100%;
+  clear: both;
+  position: relative;
+  z-index: 2;
+}
+
 #content .bodytext,
 #content .cfrags {
-  padding: 24px 32px;
+  padding: 20px 30px 32px;
 }
 
 #content .bodytext > h1,
@@ -257,6 +269,45 @@ table {
   color: #0f172a;
 }
 
+/* Tablet 2-Column Layout (750px - 856px) */
+@media screen and (min-width: 46.875em) and (max-width: 53.55em) {
+  .mwrap::before {
+    content: "";
+    display: block;
+    position: absolute;
+    height: 100%;
+    top: 0;
+    right: 0;
+    width: 250px;
+    z-index: -1;
+    background-color: #f8fafc;
+    border-left: 1px solid #e2e8f0;
+  }
+
+  .mwrap:not(:has(.sidebar.secondary-sidebar))::before {
+    display: none;
+  }
+
+  #content {
+    float: left;
+    width: calc(100% - 250px);
+    padding-right: 0;
+  }
+
+  #content:last-child {
+    float: none;
+    width: 100%;
+  }
+
+  .sidebar.secondary-sidebar {
+    float: right;
+    width: 250px;
+    margin-left: 0;
+    padding: 20px 16px;
+  }
+}
+
+/* Desktop 2-Column Layout (857px+) */
 @media screen and (min-width: 53.5625em) {
   .mwrap::before {
     content: "";
@@ -265,41 +316,50 @@ table {
     height: 100%;
     top: 0;
     right: 0;
-    width: 30%;
+    width: 29.16667%;
     z-index: -1;
     background-color: #f8fafc;
     border-left: 1px solid #e2e8f0;
   }
 
-  .l2 .mwrap::before {
+  .mwrap:not(:has(.sidebar.secondary-sidebar))::before {
     display: none;
   }
 
   #content {
     float: left;
-    width: 100%;
-    padding-right: 30%;
+    width: 70.83333%;
+    padding-right: 0;
   }
 
-  .l2 #content {
-    padding-right: 0;
+  #content:last-child {
+    float: none;
+    width: 100%;
   }
 
   .sidebar.secondary-sidebar {
     float: right;
-    width: 30%;
-    margin-left: -30%;
+    width: 29.16667%;
+    margin-left: 0;
     padding: 24px 20px;
   }
 }
 
-@media screen and (max-width: 53.55em) {
+/* Mobile Single-Column Layout (<750px) */
+@media screen and (max-width: 46.865em) {
+  #content {
+    float: none;
+    width: 100%;
+  }
+
   #content .bodytext,
   #content .cfrags {
     padding: 20px 18px;
   }
 
   .sidebar.secondary-sidebar {
+    float: none;
+    clear: both;
     width: 100%;
     padding: 20px 18px;
     border-top: 1px solid #e2e8f0;
@@ -308,8 +368,21 @@ table {
 }
 
 /* =============================================================================
-   Sidebar Widgets & Inquiry Forms
+   Sidebar Widgets, Buttons & Inquiry Forms
    ============================================================================= */
+a.btn,
+.btn {
+  display: block;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 11px 16px;
+  line-height: 1.25;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
 .widget,
 .detailedform {
   width: 100%;
@@ -335,27 +408,43 @@ table {
   color: #0f172a;
 }
 
+.sidebar .fragcontent,
+.sidebar .description {
+  padding-top: 8px;
+}
+
+#wdgt-feedback .description p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #334155;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #2563eb;
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin: 0 0 12px 0;
+}
+
 .contactform.widget {
-  padding: 20px;
+  padding: 18px;
   background-color: #0b132b;
   border: 1px solid #1e293b;
   border-radius: 8px;
   color: #f8fafc;
 }
 
-.contactform.widget label {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-  color: #cbd5e1;
-  margin-bottom: 4px;
+.contactform.widget .formdesc {
+  margin-bottom: 14px;
+  padding-top: 10px;
+  color: #ffffff;
+  font-size: 14px;
 }
 
 .contactform.widget .fld,
 .contactform.widget .option,
 .contactform.widget .textarea {
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .contactform.widget input[type="text"],
@@ -365,11 +454,11 @@ table {
 .contactform.widget textarea {
   width: 100%;
   border: 1px solid #334155;
-  border-radius: 6px;
+  border-radius: 5px;
   background-color: #0f172a;
   color: #f8fafc;
-  padding: 10px 12px;
-  font-size: 13.5px;
+  padding: 8px 11px;
+  font-size: 13px;
   line-height: 1.4;
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -377,7 +466,7 @@ table {
 
 .contactform.widget input::placeholder,
 .contactform.widget textarea::placeholder {
-  color: #64748b;
+  color: #94a3b8;
 }
 
 .contactform.widget input:focus,
@@ -388,21 +477,21 @@ table {
 }
 
 .contactform.widget textarea {
-  min-height: 96px;
+  min-height: 80px;
   resize: vertical;
 }
 
 .contactform.widget .disc {
   display: block;
-  margin: 12px 0;
-  font-size: 12px;
+  margin: 10px 0;
+  font-size: 11.5px;
   color: #94a3b8;
 }
 
 .contactform.widget .disc input[type="checkbox"] {
   width: auto !important;
   height: auto !important;
-  margin-right: 8px;
+  margin-right: 6px;
   vertical-align: middle;
 }
 
@@ -414,19 +503,19 @@ table {
 
 .contactform.widget .disc p {
   margin: 6px 0 0 0;
-  font-size: 11.5px;
+  font-size: 11px;
   color: #94a3b8;
-  line-height: 1.45;
+  line-height: 1.4;
 }
 
 .contactform.widget button[type="submit"] {
   width: 100%;
-  padding: 12px 16px;
+  padding: 11px 16px;
   background-color: #2563eb;
   color: #ffffff;
   border: 1px solid #1d4ed8;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -441,7 +530,7 @@ table {
 /* Bottom Contact Stripe */
 #stripe-01 {
   width: 100%;
-  padding: 36px 24px;
+  padding: 32px 24px;
   background-color: #f1f5f9;
   border-top: 1px solid #e2e8f0;
 }
@@ -452,7 +541,7 @@ table {
 }
 
 #bottom-scf.widget {
-  padding: 28px 32px;
+  padding: 24px 28px;
   background-color: #0b132b;
   border: 1px solid #1e293b;
   border-radius: 10px;
@@ -461,23 +550,23 @@ table {
 
 /* Core Competencies Sidebar List */
 #pr_ar ul.toplevel > li {
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 #pr_ar ul.toplevel > li > strong a {
   display: block;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: #0f172a;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 #pr_ar ul.toplevel ul li a {
   display: block;
-  padding: 5px 0 5px 14px;
-  font-size: 13.5px;
+  padding: 4px 0 4px 12px;
+  font-size: 13px;
   color: #334155;
   position: relative;
   border-left: 2px solid #e2e8f0;
@@ -487,5 +576,5 @@ table {
   color: #2563eb;
   border-left-color: #2563eb;
   background-color: #eff6ff;
-  padding-left: 18px;
+  padding-left: 16px;
 }
