@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase, isSupabaseConfigured } from "../../lib/supabase";
+import {
+  checkSlidingWindowRateLimit,
+  detectSuspiciousBot,
+  RATE_LIMIT_CONFIGS,
+} from "../../lib/edge-rate-limiter";
 
 export const dynamic = "force-dynamic";
 
@@ -83,7 +88,19 @@ export function detectEdgeRegion(req: NextRequest): { code: string; name: string
   };
 }
 
-export async function GET() {
+export async function GET(req?: NextRequest) {
+  let rateHeaders: Record<string, string> = {};
+  if (req) {
+    const rateCheck = checkSlidingWindowRateLimit(req, RATE_LIMIT_CONFIGS.telemetryGet);
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { error: rateCheck.error },
+        { status: 429, headers: rateCheck.headers }
+      );
+    }
+    rateHeaders = rateCheck.headers;
+  }
+
   let points: TelemetryPoint[] = [...telemetryRingBuffer];
 
   // If Supabase is configured, fetch latest telemetry records from the past 24 hours
@@ -163,7 +180,26 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    // 1. Edge sliding-window rate limit (30 requests / min)
+    const rateCheck = checkSlidingWindowRateLimit(req, RATE_LIMIT_CONFIGS.telemetryPost);
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { error: rateCheck.error },
+        { status: 429, headers: rateCheck.headers }
+      );
+    }
+
+    const body = await req.json().catch(() => ({}));
+
+    // 2. Automated scanner and exploit shield
+    const botCheck = detectSuspiciousBot(req, body);
+    if (botCheck.isSuspicious) {
+      return NextResponse.json(
+        { error: "Security check rejected automated scanner payload." },
+        { status: 400, headers: rateCheck.headers }
+      );
+    }
+
     const { latencyMs, region: clientRegion } = body;
 
     // Validate latency number
@@ -234,6 +270,7 @@ export async function POST(req: NextRequest) {
         status: 201,
         headers: {
           "Cache-Control": "no-store",
+          ...rateCheck.headers,
         },
       }
     );
