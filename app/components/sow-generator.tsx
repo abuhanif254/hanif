@@ -527,13 +527,22 @@ ${breakdown.milestones
   }
 
   function handlePrefillInquiry() {
-    const el = document.getElementById("inquiry");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
-    const messageInput = document.getElementById("message") as HTMLTextAreaElement | null;
-    if (messageInput) {
-      messageInput.value = `Hi Abu Hanif,\n\nI configured an official Statement of Work (Ref: ${documentId}) for the "${selectedService.title}" package with a total estimated investment of $${breakdown.totalInvestment.toLocaleString()} USD (${selectedService.timeline}).\n\nSelected Add-ons:\n${breakdown.chosenAddons.length > 0 ? breakdown.chosenAddons.map((a) => `- ${a.name} ($${a.price})`).join("\n") : "None"}\n\nClient Company: ${clientCompany || "Not specified"}\nTarget Start: ${targetStartDate}\n\nPlease verify calendar bandwidth for our kickoff.`;
+    const sowMessage = `Hi Abu Hanif,\n\nI configured an official Statement of Work (Ref: ${documentId}) for the "${selectedService.title}" package with a total estimated investment of $${breakdown.totalInvestment.toLocaleString()} USD (${selectedService.timeline}).\n\nSelected Add-ons:\n${breakdown.chosenAddons.length > 0 ? breakdown.chosenAddons.map((a) => `- ${a.name} ($${a.price})`).join("\n") : "None"}\n\nClient Organization: ${clientCompany || "Not specified"}\nTechnical Contact: ${clientContact || "Not specified"}\nTarget Start: ${targetStartDate}\n\nPlease confirm availability for our technical kickoff discovery call.`;
+
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("sow-prefill-inquiry", {
+          detail: {
+            projectType: selectedService.title,
+            budgetRange: `$${breakdown.totalInvestment.toLocaleString()} USD`,
+            message: sowMessage,
+          },
+        })
+      );
+      const el = document.getElementById("inquiry");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
     }
   }
 

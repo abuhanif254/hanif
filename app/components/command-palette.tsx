@@ -242,6 +242,104 @@ export default function CommandPalette() {
               </Command.Item>
             </Command.Group>
 
+            {/* Interactive Engineering Simulators & Systems Lab */}
+            <Command.Group
+              heading="Interactive Systems Lab & Engineering Simulators"
+              style={{
+                color: "#2563eb",
+                fontSize: "11px",
+                fontWeight: "800",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                padding: "10px 8px 4px 8px",
+              }}
+            >
+              <Command.Item
+                onSelect={() => runCommand(() => router.push("/lab#edge-radar"))}
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontSize: "13.5px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  color: "#1e293b",
+                }}
+              >
+                <span>⚡ <strong>Global Edge Latency Radar</strong> (Supabase Realtime P99 Mesh)</span>
+                <span style={{ fontSize: "11px", color: "#10b981", fontWeight: "bold" }}>Live P99 Mesh</span>
+              </Command.Item>
+
+              <Command.Item
+                onSelect={() => runCommand(() => router.push("/lab#postgres-planner"))}
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontSize: "13.5px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  color: "#1e293b",
+                }}
+              >
+                <span>🔍 <strong>PostgreSQL EXPLAIN Simulator</strong> (100k–25M Matrix)</span>
+                <span style={{ fontSize: "11px", color: "#2563eb", fontWeight: "bold" }}>Query Cost Tree</span>
+              </Command.Item>
+
+              <Command.Item
+                onSelect={() => runCommand(() => router.push("/lab#topology-explorer"))}
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontSize: "13.5px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  color: "#1e293b",
+                }}
+              >
+                <span>🛰️ <strong>Streaming Topology &amp; Chaos Failover Simulator</strong></span>
+                <span style={{ fontSize: "11px", color: "#c084fc", fontWeight: "bold" }}>Sequence Flow</span>
+              </Command.Item>
+
+              <Command.Item
+                onSelect={() => runCommand(() => router.push("/pricing#sow-builder"))}
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontSize: "13.5px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  color: "#1e293b",
+                }}
+              >
+                <span>📋 <strong>Statement of Work (SOW) Builder</strong> (Custom Scope &amp; PDF)</span>
+                <span style={{ fontSize: "11px", color: "#047857", fontWeight: "bold" }}>Printable SOW</span>
+              </Command.Item>
+
+              <Command.Item
+                onSelect={() => runCommand(() => router.push("/status"))}
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontSize: "13.5px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  color: "#1e293b",
+                }}
+              >
+                <span>🟢 <strong>Live Systems Status &amp; Edge PoP Health</strong> (99.99% SLA)</span>
+                <span style={{ fontSize: "11px", color: "#10b981", fontWeight: "bold" }}>Status Dashboard</span>
+              </Command.Item>
+            </Command.Group>
+
             {/* Verified Credentials */}
             <Command.Group
               heading="Verified Accreditations & Credentials"

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { initialServices, initialTestimonials, ServicePricing } from "../data/portfolio-data";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
@@ -32,6 +32,30 @@ export default function PricingClientView({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedMessage, setSubmittedMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Synchronize incoming SOW generator configuration with project inquiry form
+  useEffect(() => {
+    function handleSowPrefill(e: Event) {
+      const customEvent = e as CustomEvent<{
+        projectType?: string;
+        budgetRange?: string;
+        message?: string;
+      }>;
+      if (customEvent && customEvent.detail) {
+        setFormState((prev) => ({
+          ...prev,
+          projectType: customEvent.detail.projectType || prev.projectType,
+          budgetRange: customEvent.detail.budgetRange || prev.budgetRange,
+          message: customEvent.detail.message || prev.message,
+        }));
+      }
+    }
+
+    window.addEventListener("sow-prefill-inquiry", handleSowPrefill);
+    return () => {
+      window.removeEventListener("sow-prefill-inquiry", handleSowPrefill);
+    };
+  }, []);
 
   // Add-ons Definition
   const addonsList = [
