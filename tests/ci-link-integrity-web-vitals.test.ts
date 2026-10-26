@@ -327,5 +327,10 @@ describe("Automated Link Integrity & Core Web Vitals CI Test", () => {
     expect(nextConfigContent).toContain("Strict-Transport-Security");
     expect(nextConfigContent).toContain("Referrer-Policy");
     expect(nextConfigContent).toContain("Permissions-Policy");
+    expect(nextConfigContent).toContain("Cross-Origin-Opener-Policy");
+    expect(nextConfigContent).toContain("Cross-Origin-Resource-Policy");
+    expect(nextConfigContent).toContain("X-Permitted-Cross-Domain-Policies");
+    expect(nextConfigContent).toContain("Cache-Control");
+    expect(nextConfigContent).toContain("stale-while-revalidate");
   });
 });
