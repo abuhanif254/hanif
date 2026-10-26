@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { approveOrderMilestone } from "../../../../lib/oms-service";
+import { dispatchNotification } from "../../../../lib/notification-service";
 
 export async function POST(req: NextRequest) {
   try {
@@ -39,6 +40,22 @@ export async function POST(req: NextRequest) {
       notes,
       clientIp
     );
+
+    await dispatchNotification({
+      type: "MILESTONE_APPROVED",
+      title: `Milestone Phase ${result.milestone.milestoneIndex} Signed Off: ${result.order.orderNumber}`,
+      description: `${approverName} formally approved Phase ${result.milestone.milestoneIndex} (${result.milestone.title}) deliverables ($${result.milestone.amount.toLocaleString()} USD).`,
+      data: {
+        orderNumber: result.order.orderNumber,
+        milestoneIndex: result.milestone.milestoneIndex,
+        phaseTitle: result.milestone.title,
+        approverName,
+        signatureHash: result.milestone.approvalSignatureHash,
+        ipAddress: clientIp,
+        amount: result.milestone.amount,
+        orderStatus: result.order.status,
+      },
+    }).catch(() => {});
 
     return NextResponse.json({
       success: true,

@@ -34,6 +34,7 @@ import {
   initialOrders,
   calculatePipelineMetrics,
 } from "../lib/oms-service";
+import { NotificationEvent } from "../lib/notification-service";
 
 const mockInquiries: InquiryRecord[] = [
   {
@@ -94,6 +95,10 @@ export default function AdminPage() {
     targetCompletionDate: "",
   });
   const [recordPaymentAmount, setRecordPaymentAmount] = useState<string>("");
+
+  // Notification Mesh State
+  const [notificationEvents, setNotificationEvents] = useState<NotificationEvent[]>([]);
+  const [isSendingTestWebhook, setIsSendingTestWebhook] = useState(false);
 
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
@@ -242,6 +247,15 @@ export default function AdminPage() {
       .then((data) => {
         if (data.success && data.customers) {
           setCustomers(data.customers);
+        }
+      })
+      .catch(() => {});
+
+    fetch("/api/admin/notifications")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.events) {
+          setNotificationEvents(data.events);
         }
       })
       .catch(() => {});
@@ -1007,6 +1021,24 @@ export default function AdminPage() {
     }
   }
 
+  async function handleSendTestWebhook() {
+    setIsSendingTestWebhook(true);
+    try {
+      const res = await fetch("/api/admin/notifications/test", { method: "POST" });
+      const data = await res.json();
+      if (res.ok && data.success && data.event) {
+        setNotificationEvents((prev) => [data.event, ...prev]);
+        showNotification("Test notification dispatched to webhook channels!");
+      } else {
+        alert(data.error || "Failed to dispatch test notification.");
+      }
+    } catch {
+      alert("Network error dispatching test notification.");
+    } finally {
+      setIsSendingTestWebhook(false);
+    }
+  }
+
   async function handleLogout() {
     try {
       await fetch("/api/admin/auth", { method: "DELETE" });
@@ -1485,6 +1517,207 @@ export default function AdminPage() {
                       </span>
                     </div>
                   ))}
+                </div>
+              </div>
+
+              {/* Real-Time Event Notification & Webhook Mesh Card */}
+              <div
+                style={{
+                  backgroundColor: "#0a192f",
+                  border: "1px solid #1e293b",
+                  borderRadius: "8px",
+                  padding: "24px",
+                  marginBottom: "30px",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                    flexWrap: "wrap",
+                    gap: "14px",
+                    marginBottom: "18px",
+                  }}
+                >
+                  <div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <span style={{ fontSize: "18px" }}>🔔</span>
+                      <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#ffffff", margin: 0 }}>
+                        Real-Time Event Notification &amp; Webhook Mesh
+                      </h3>
+                      <span
+                        style={{
+                          fontSize: "11px",
+                          fontWeight: "700",
+                          textTransform: "uppercase",
+                          padding: "2px 8px",
+                          borderRadius: "4px",
+                          backgroundColor: "#1e1b4b",
+                          color: "#c084fc",
+                          border: "1px solid #7c3aed",
+                        }}
+                      >
+                        Active Mesh
+                      </span>
+                    </div>
+                    <p style={{ color: "#94a3b8", fontSize: "13px", margin: "6px 0 0 0" }}>
+                      Instant outbound event streaming to Discord, Slack, and Transactional Email on contract events, client sign-offs, and inbound leads.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    disabled={isSendingTestWebhook}
+                    onClick={handleSendTestWebhook}
+                    style={{
+                      padding: "8px 16px",
+                      backgroundColor: isSendingTestWebhook ? "#334155" : "#2563eb",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "6px",
+                      fontSize: "13px",
+                      fontWeight: "700",
+                      cursor: isSendingTestWebhook ? "not-allowed" : "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      boxShadow: "0 2px 8px rgba(37, 99, 235, 0.3)",
+                    }}
+                  >
+                    <span>🔔</span> {isSendingTestWebhook ? "Dispatching..." : "Send Test Webhook Ping"}
+                  </button>
+                </div>
+
+                {/* Notification Channels Status Bar */}
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(3, 1fr)",
+                    gap: "12px",
+                    backgroundColor: "#071324",
+                    padding: "12px 16px",
+                    borderRadius: "6px",
+                    marginBottom: "18px",
+                    border: "1px solid #1e293b",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span style={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "#10b981", display: "inline-block" }} />
+                    <span style={{ fontSize: "12px", color: "#e2e8f0", fontWeight: "600" }}>Discord Webhook</span>
+                    <span style={{ fontSize: "11px", color: "#94a3b8" }}>(Embeds Enabled)</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span style={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "#10b981", display: "inline-block" }} />
+                    <span style={{ fontSize: "12px", color: "#e2e8f0", fontWeight: "600" }}>Slack Webhook</span>
+                    <span style={{ fontSize: "11px", color: "#94a3b8" }}>(Block Kit Enabled)</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span style={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "#38bdf8", display: "inline-block" }} />
+                    <span style={{ fontSize: "12px", color: "#e2e8f0", fontWeight: "600" }}>Transactional Email</span>
+                    <span style={{ fontSize: "11px", color: "#94a3b8" }}>(Resend Engine)</span>
+                  </div>
+                </div>
+
+                {/* Event Ledger Stream */}
+                <div>
+                  <div style={{ fontSize: "12px", fontWeight: "700", color: "#94a3b8", textTransform: "uppercase", marginBottom: "10px" }}>
+                    Recent Event Stream ({notificationEvents.length})
+                  </div>
+
+                  {notificationEvents.length === 0 ? (
+                    <div style={{ padding: "20px", textAlign: "center", color: "#94a3b8", fontSize: "13px" }}>
+                      No notification events in buffer. Click "Send Test Webhook Ping" to verify dispatch.
+                    </div>
+                  ) : (
+                    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                      {notificationEvents.slice(0, 6).map((evt) => {
+                        const eventBadges: Record<string, { bg: string; text: string }> = {
+                          INQUIRY_RECEIVED: { bg: "#1e3a8a", text: "#93c5fd" },
+                          ORDER_CREATED: { bg: "#581c87", text: "#d8b4fe" },
+                          MILESTONE_SUBMITTED: { bg: "#78350f", text: "#fde047" },
+                          MILESTONE_APPROVED: { bg: "#065f46", text: "#6ee7b7" },
+                          PAYMENT_SETTLED: { bg: "#022c22", text: "#a7f3d0" },
+                          SECURITY_ALERT: { bg: "#450a0a", text: "#fca5a5" },
+                          TEST_PING: { bg: "#164e63", text: "#a5f3fc" },
+                        };
+                        const eb = eventBadges[evt.type] || { bg: "#1e293b", text: "#cbd5e1" };
+
+                        return (
+                          <div
+                            key={evt.id}
+                            style={{
+                              backgroundColor: "#071324",
+                              border: "1px solid #1e293b",
+                              borderRadius: "6px",
+                              padding: "12px 16px",
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "flex-start",
+                              flexWrap: "wrap",
+                              gap: "10px",
+                            }}
+                          >
+                            <div style={{ flex: 1, minWidth: "260px" }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
+                                <span
+                                  style={{
+                                    fontSize: "10px",
+                                    fontWeight: "800",
+                                    padding: "2px 6px",
+                                    borderRadius: "3px",
+                                    backgroundColor: eb.bg,
+                                    color: eb.text,
+                                    textTransform: "uppercase",
+                                  }}
+                                >
+                                  {evt.type.replace(/_/g, " ")}
+                                </span>
+                                <strong style={{ color: "#ffffff", fontSize: "13px" }}>{evt.title}</strong>
+                              </div>
+                              <p style={{ margin: "2px 0 0 0", fontSize: "12px", color: "#cbd5e1", lineHeight: "1.4" }}>
+                                {evt.description}
+                              </p>
+                            </div>
+
+                            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "4px" }}>
+                              <span style={{ fontSize: "11px", color: "#94a3b8" }}>
+                                {new Date(evt.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+                              </span>
+                              <div style={{ display: "flex", gap: "4px" }}>
+                                {evt.deliveryStatus.discord !== "skipped" && (
+                                  <span
+                                    style={{
+                                      fontSize: "10px",
+                                      padding: "1px 5px",
+                                      borderRadius: "2px",
+                                      backgroundColor: evt.deliveryStatus.discord === "delivered" ? "#065f46" : "#450a0a",
+                                      color: evt.deliveryStatus.discord === "delivered" ? "#6ee7b7" : "#fca5a5",
+                                    }}
+                                  >
+                                    Discord {evt.deliveryStatus.discord === "delivered" ? "✓" : "✕"}
+                                  </span>
+                                )}
+                                {evt.deliveryStatus.slack !== "skipped" && (
+                                  <span
+                                    style={{
+                                      fontSize: "10px",
+                                      padding: "1px 5px",
+                                      borderRadius: "2px",
+                                      backgroundColor: evt.deliveryStatus.slack === "delivered" ? "#065f46" : "#450a0a",
+                                      color: evt.deliveryStatus.slack === "delivered" ? "#6ee7b7" : "#fca5a5",
+                                    }}
+                                  >
+                                    Slack {evt.deliveryStatus.slack === "delivered" ? "✓" : "✕"}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

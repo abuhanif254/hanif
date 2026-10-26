@@ -5,6 +5,7 @@ import {
   detectSuspiciousBot,
   RATE_LIMIT_CONFIGS,
 } from "../../lib/edge-rate-limiter";
+import { dispatchNotification } from "../../lib/notification-service";
 
 export async function POST(request: Request) {
   try {
@@ -107,38 +108,21 @@ export async function POST(request: Request) {
       }
     }
 
-    // 2. Dispatch real-time alert webhook (Discord / Slack / Telegram) if configured
-    const webhookUrl = process.env.INQUIRY_WEBHOOK_URL || process.env.DISCORD_WEBHOOK_URL;
-    if (webhookUrl) {
-      try {
-        const payload = {
-          content: `🚨 **New High-Value Technical Consultation Inquiry Received!**`,
-          embeds: [
-            {
-              title: `💼 ${recordToInsert.project_type}`,
-              color: 0x2563eb, // Brand Cobalt Accent
-              fields: [
-                { name: "Client / Lead Name", value: recordToInsert.name, inline: true },
-                { name: "Email Address", value: `[${recordToInsert.email}](mailto:${recordToInsert.email})`, inline: true },
-                { name: "Budget Tier", value: recordToInsert.budget_range, inline: true },
-                { name: "Phone / WhatsApp", value: recordToInsert.phone || "Not specified", inline: true },
-                { name: "Project Challenge", value: recordToInsert.message.substring(0, 1000) },
-              ],
-              footer: { text: "abuhanifmia.com • Lead Dispatch Engine" },
-              timestamp: new Date().toISOString(),
-            },
-          ],
-        };
-
-        await fetch(webhookUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-      } catch (webhookErr) {
-        console.warn("Inquiry alert webhook dispatch error:", webhookErr);
-      }
-    }
+    // 2. Dispatch real-time alert through Event Notification Mesh
+    await dispatchNotification({
+      type: "INQUIRY_RECEIVED",
+      title: `Inbound Consultation Lead: ${recordToInsert.name}`,
+      description: `New technical inquiry submitted for '${recordToInsert.project_type}' (${recordToInsert.budget_range}).`,
+      data: {
+        inquiryId: generatedId,
+        clientName: recordToInsert.name,
+        email: recordToInsert.email,
+        phone: recordToInsert.phone,
+        projectType: recordToInsert.project_type,
+        budgetRange: recordToInsert.budget_range,
+        message: recordToInsert.message,
+      },
+    }).catch((err) => console.warn("Inquiry notification error:", err));
 
     return NextResponse.json(
       {

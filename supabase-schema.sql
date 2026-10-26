@@ -593,5 +593,25 @@ create policy "Clients can view their own milestones" on public.order_milestones
     )
   );
 
+-- 8.6 NOTIFICATION EVENTS TABLE (Audit Trail & Outbound Webhook Delivery)
+create table if not exists public.notification_events (
+  id text primary key,
+  event_type text not null,
+  title text not null,
+  description text not null,
+  payload jsonb not null default '{}'::jsonb,
+  delivery_status jsonb not null default '{}'::jsonb,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+create index if not exists idx_notification_events_created on public.notification_events (created_at desc);
+
+alter table public.notification_events enable row level security;
+
+create policy "Admins have full access to notification events" on public.notification_events
+  for all using (auth.role() in ('authenticated', 'service_role'))
+  with check (auth.role() in ('authenticated', 'service_role'));
+
+
 
 

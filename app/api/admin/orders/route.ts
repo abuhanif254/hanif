@@ -6,6 +6,7 @@ import {
   createOrder,
   calculatePipelineMetrics,
 } from "../../../lib/oms-service";
+import { dispatchNotification } from "../../../lib/notification-service";
 
 export async function GET(req: NextRequest) {
   const isAuth = await isRequestAuthorized(req);
@@ -43,6 +44,22 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const newOrder = await createOrder(body, "Admin");
+
+    await dispatchNotification({
+      type: "ORDER_CREATED",
+      title: `Contract Order Created: ${newOrder.orderNumber}`,
+      description: `New engagement created for '${newOrder.customer?.companyName || "Client"}' — ${newOrder.title} ($${newOrder.totalAmount.toLocaleString()} ${newOrder.currency}).`,
+      data: {
+        orderNumber: newOrder.orderNumber,
+        companyName: newOrder.customer?.companyName,
+        clientName: newOrder.customer?.primaryContactName,
+        email: newOrder.customer?.email,
+        totalAmount: newOrder.totalAmount,
+        currency: newOrder.currency,
+        serviceTier: newOrder.serviceTier,
+        trackerUrl: `/orders/tracker?token=${newOrder.clientAccessToken}`,
+      },
+    }).catch(() => {});
 
     return NextResponse.json(
       { success: true, order: newOrder },
