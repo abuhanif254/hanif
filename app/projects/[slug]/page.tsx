@@ -7,6 +7,7 @@ import SiteHeader from "../../components/site-header";
 import ProjectScreenshotGallery from "../../components/project-screenshot-gallery";
 import ProjectCaseStudyActions from "../../components/project-case-study-actions";
 import ProjectEcosystemCard from "../../components/project-ecosystem-card";
+import CaseStudyArchitectureViewer from "../../components/case-study-architecture-viewer";
 
 function renderInlineFormatting(text: string): React.ReactNode {
   const tokens = text.split(/(\*\*.*?\*\*|`.*?`)/g);
@@ -391,6 +392,12 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                       <p style={{ fontSize: "15px", lineHeight: "1.7", color: "#334155" }}>
                         {project.summary}
                       </p>
+
+                      {/* Interactive Production Architecture & Sequence Explorer */}
+                      <CaseStudyArchitectureViewer
+                        projectSlug={project.slug}
+                        projectTitle={project.title}
+                      />
 
                       {/* Case Study Content */}
                       <div
