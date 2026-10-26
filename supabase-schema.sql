@@ -110,6 +110,24 @@ create table if not exists public.inquiries (
 );
 
 -- -----------------------------------------------------------------------------
+-- 6. EDGE TELEMETRY TABLE (Live Global Latency Radar & Supabase Realtime)
+-- -----------------------------------------------------------------------------
+create table if not exists public.edge_telemetry (
+  id uuid primary key default uuid_generate_v4(),
+  region text not null,
+  city_name text not null,
+  continent text not null,
+  latency_ms int not null check (latency_ms >= 1 and latency_ms <= 10000),
+  pop_code text,
+  cf_ray text,
+  user_agent_category text default 'desktop',
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+create index if not exists idx_edge_telemetry_region_created on public.edge_telemetry (region, created_at desc);
+create index if not exists idx_edge_telemetry_continent_created on public.edge_telemetry (continent, created_at desc);
+
+-- -----------------------------------------------------------------------------
 -- ROW LEVEL SECURITY (RLS) POLICIES
 -- -----------------------------------------------------------------------------
 alter table public.profiles enable row level security;
@@ -117,6 +135,7 @@ alter table public.projects enable row level security;
 alter table public.services enable row level security;
 alter table public.blog_posts enable row level security;
 alter table public.inquiries enable row level security;
+alter table public.edge_telemetry enable row level security;
 
 -- Drop existing policies if re-running
 drop policy if exists "Public can view profiles" on public.profiles;
@@ -133,11 +152,14 @@ drop policy if exists "Public can update services" on public.services;
 drop policy if exists "Public can insert blog posts" on public.blog_posts;
 drop policy if exists "Public can update blog posts" on public.blog_posts;
 drop policy if exists "Public can update profiles" on public.profiles;
+drop policy if exists "Public can view edge telemetry" on public.edge_telemetry;
+drop policy if exists "Public can insert edge telemetry" on public.edge_telemetry;
 drop policy if exists "Admins have full access to profiles" on public.profiles;
 drop policy if exists "Admins have full access to projects" on public.projects;
 drop policy if exists "Admins have full access to services" on public.services;
 drop policy if exists "Admins have full access to blog posts" on public.blog_posts;
 drop policy if exists "Admins have full access to inquiries" on public.inquiries;
+drop policy if exists "Admins have full access to edge telemetry" on public.edge_telemetry;
 
 -- Public read policies (Strictly read-only for published/active records)
 create policy "Public can view profiles" on public.profiles for select using (true);
@@ -168,6 +190,18 @@ create policy "Admins have full access to blog posts" on public.blog_posts
   with check (auth.role() in ('authenticated', 'service_role'));
 
 create policy "Admins have full access to inquiries" on public.inquiries
+  for all using (auth.role() in ('authenticated', 'service_role'))
+  with check (auth.role() in ('authenticated', 'service_role'));
+
+-- Public edge telemetry policies (Empirical telemetry streaming)
+create policy "Public can view edge telemetry" on public.edge_telemetry
+  for select using (created_at > now() - interval '7 days');
+
+create policy "Public can insert edge telemetry" on public.edge_telemetry
+  for insert
+  with check (latency_ms >= 1 and latency_ms <= 5000 and length(trim(region)) >= 2);
+
+create policy "Admins have full access to edge telemetry" on public.edge_telemetry
   for all using (auth.role() in ('authenticated', 'service_role'))
   with check (auth.role() in ('authenticated', 'service_role'));
 
@@ -390,4 +424,35 @@ drop policy if exists "Project Assets Admin Update" on storage.objects;
 create policy "Project Assets Admin Update"
   on storage.objects for update
   with check (bucket_id = 'project-assets' and auth.role() in ('authenticated', 'service_role'));
+
+-- -----------------------------------------------------------------------------
+-- 6. REALTIME SUBSCRIPTION CONFIGURATION
+-- -----------------------------------------------------------------------------
+do $$
+begin
+  if not exists (
+    select 1 from pg_publication_tables 
+    where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'edge_telemetry'
+  ) then
+    alter publication supabase_realtime add table public.edge_telemetry;
+  end if;
+exception
+  when undefined_object then null;
+end $$;
+
+-- -----------------------------------------------------------------------------
+-- 7. INITIAL EDGE TELEMETRY SEED
+-- -----------------------------------------------------------------------------
+insert into public.edge_telemetry (region, city_name, continent, latency_ms, pop_code, cf_ray)
+values
+  ('IAD', 'Ashburn', 'North America', 18, 'IAD', '83a1290-IAD'),
+  ('SFO', 'San Jose', 'North America', 22, 'SFO', '83a1291-SFO'),
+  ('LHR', 'London', 'Europe', 24, 'LHR', '83a1292-LHR'),
+  ('FRA', 'Frankfurt', 'Europe', 26, 'FRA', '83a1293-FRA'),
+  ('SIN', 'Singapore', 'Southeast Asia', 29, 'SIN', '83a1294-SIN'),
+  ('DAC', 'Dhaka', 'South Asia', 19, 'DAC', '83a1295-DAC'),
+  ('SYD', 'Sydney', 'Oceania', 43, 'SYD', '83a1296-SYD'),
+  ('NRT', 'Tokyo', 'East Asia', 35, 'NRT', '83a1297-NRT')
+on conflict do nothing;
+
 
