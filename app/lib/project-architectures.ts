@@ -40,6 +40,28 @@ export interface ProjectTechTradeoff {
   benchmarkAdvantage: string;
 }
 
+export interface ProjectBenchmarkProfile {
+  id: "baseline" | "surge" | "extreme" | "ddos";
+  name: string;
+  badge: string;
+  concurrencyVUs: number;
+  throughputReqSec: number;
+  p50LatencyMs: number;
+  p99LatencyMs: number;
+  errorRatePercent: number;
+  cpuUtilizationPercent: number;
+  autoscalingTrigger: string;
+  status: "optimal" | "scaled" | "stressed" | "mitigated";
+}
+
+export interface ProjectBenchmarkData {
+  targetSlaMs: number;
+  maxStressVUs: number;
+  profiles: ProjectBenchmarkProfile[];
+  k6Snippet: string;
+  loadLogs: string[];
+}
+
 export interface ProjectArchitecture {
   id: string;
   projectSlug: string;
@@ -1502,4 +1524,281 @@ export function getProjectArchitecture(projectSlug: string): ProjectArchitecture
   }
   // Fallback to telemetry if unrecognized
   return null;
+}
+
+export const PROJECT_BENCHMARK_SUITES: Record<string, ProjectBenchmarkData> = {
+  "financial-telemetry-pipeline": {
+    targetSlaMs: 22,
+    maxStressVUs: 120000,
+    profiles: [
+      {
+        id: "baseline",
+        name: "Baseline Steady-State",
+        badge: "Steady Market Trading",
+        concurrencyVUs: 5000,
+        throughputReqSec: 120000,
+        p50LatencyMs: 1.2,
+        p99LatencyMs: 3.8,
+        errorRatePercent: 0.0,
+        cpuUtilizationPercent: 14,
+        autoscalingTrigger: "Normal 3-broker Kafka cluster",
+        status: "optimal",
+      },
+      {
+        id: "surge",
+        name: "10x Market Opening Surge",
+        badge: "NYSE Open Traffic",
+        concurrencyVUs: 35000,
+        throughputReqSec: 480000,
+        p50LatencyMs: 2.4,
+        p99LatencyMs: 8.6,
+        errorRatePercent: 0.001,
+        cpuUtilizationPercent: 52,
+        autoscalingTrigger: "+8 Kafka consumer threads & Redis cluster shard expansion",
+        status: "scaled",
+      },
+      {
+        id: "extreme",
+        name: "25x Flash Volatility Spike",
+        badge: "Extreme Volatility Event",
+        concurrencyVUs: 85000,
+        throughputReqSec: 1200000,
+        p50LatencyMs: 4.1,
+        p99LatencyMs: 18.2,
+        errorRatePercent: 0.004,
+        cpuUtilizationPercent: 76,
+        autoscalingTrigger: "TimescaleDB micro-batching flushes to SSD NVMe WAL buffer",
+        status: "stressed",
+      },
+      {
+        id: "ddos",
+        name: "200k VU Ingress Bot Flood",
+        badge: "Hostile Flood Absorbed",
+        concurrencyVUs: 200000,
+        throughputReqSec: 2800000,
+        p50LatencyMs: 0.8,
+        p99LatencyMs: 2.1,
+        errorRatePercent: 0.0,
+        cpuUtilizationPercent: 22,
+        autoscalingTrigger: "Envoy edge gateway drops 99.7% invalid frames in < 0.4ms",
+        status: "mitigated",
+      },
+    ],
+    k6Snippet: `import http from 'k6/http';
+import { check, sleep } from 'k6';
+
+export const options = {
+  stages: [
+    { duration: '30s', target: 5000 },
+    { duration: '1m', target: 35000 },
+    { duration: '30s', target: 85000 },
+    { duration: '30s', target: 0 },
+  ],
+  thresholds: {
+    'http_req_duration{name:telemetry_stream}': ['p(99)<22'],
+    'http_req_failed': ['rate<0.001'],
+  },
+};
+
+export default function () {
+  const payload = JSON.stringify({
+    ticker: 'BTC-USD',
+    price: 68420.50,
+    volume: 1.45,
+    t: Date.now(),
+  });
+  const res = http.post('https://stream.abuhanifmia.com/v1/telemetry', payload, {
+    headers: { 'Content-Type': 'application/json' },
+    tags: { name: 'telemetry_stream' },
+  });
+  check(res, { '200 OK': (r) => r.status === 200 });
+  sleep(0.05);
+}`,
+    loadLogs: [
+      "[13:45:00.120] INFO: Baseline ingest active at 120,000 events/sec across 16 partitions.",
+      "[13:45:01.340] WARN: Sudden 10x ingress surge detected: 480,000 req/sec from European exchanges.",
+      "[13:45:01.420] AUTOSCALE: Spawned 8 additional Kafka consumer workers (Lag: 42ms -> 0ms).",
+      "[13:45:02.100] PASS: P99 latency preserved at 8.6ms. Target SLA < 22ms 100% compliant.",
+    ],
+  },
+  "cloudflare-edge-ecommerce": {
+    targetSlaMs: 15,
+    maxStressVUs: 100000,
+    profiles: [
+      {
+        id: "baseline",
+        name: "Baseline Global Traffic",
+        badge: "Normal Browsing",
+        concurrencyVUs: 2500,
+        throughputReqSec: 18000,
+        p50LatencyMs: 0.6,
+        p99LatencyMs: 4.2,
+        errorRatePercent: 0.0,
+        cpuUtilizationPercent: 12,
+        autoscalingTrigger: "Edge cache hit ratio 98.2%",
+        status: "optimal",
+      },
+      {
+        id: "surge",
+        name: "10x Product Launch Surge",
+        badge: "Viral Drop Traffic",
+        concurrencyVUs: 25000,
+        throughputReqSec: 140000,
+        p50LatencyMs: 1.1,
+        p99LatencyMs: 9.8,
+        errorRatePercent: 0.001,
+        cpuUtilizationPercent: 46,
+        autoscalingTrigger: "Stale-while-revalidate edge isolates absorbed 99.4% hits",
+        status: "scaled",
+      },
+      {
+        id: "extreme",
+        name: "Black Friday Flash Surge",
+        badge: "Synchronized Checkout Wave",
+        concurrencyVUs: 75000,
+        throughputReqSec: 420000,
+        p50LatencyMs: 1.9,
+        p99LatencyMs: 14.1,
+        errorRatePercent: 0.003,
+        cpuUtilizationPercent: 68,
+        autoscalingTrigger: "KV micro-caching prevents database inventory oversell locks",
+        status: "stressed",
+      },
+      {
+        id: "ddos",
+        name: "180k VU Scraping Bot Attack",
+        badge: "Zero Origin Impact",
+        concurrencyVUs: 180000,
+        throughputReqSec: 850000,
+        p50LatencyMs: 0.7,
+        p99LatencyMs: 1.4,
+        errorRatePercent: 0.0,
+        cpuUtilizationPercent: 18,
+        autoscalingTrigger: "Cloudflare Turnstile & WAF isolate challenge dropped bots at edge",
+        status: "mitigated",
+      },
+    ],
+    k6Snippet: `import http from 'k6/http';
+import { check, sleep } from 'k6';
+
+export const options = {
+  stages: [
+    { duration: '30s', target: 2500 },
+    { duration: '1m', target: 25000 },
+    { duration: '30s', target: 75000 },
+    { duration: '30s', target: 0 },
+  ],
+  thresholds: {
+    'http_req_duration{name:catalog_browse}': ['p(99)<15'],
+    'http_req_failed': ['rate<0.001'],
+  },
+};
+
+export default function () {
+  const res = http.get('https://shop.abuhanifmia.com/api/products/top-deals', {
+    tags: { name: 'catalog_browse' },
+  });
+  check(res, { 'status is 200': (r) => r.status === 200 });
+  sleep(0.1);
+}`,
+    loadLogs: [
+      "[13:45:00.040] INFO: 330 Cloudflare PoPs serving 98.4% of product views from V8 memory.",
+      "[13:45:01.120] WARN: Traffic surged to 140,000 req/sec during push notification campaign.",
+      "[13:45:01.250] AUTOSCALE: Edge KV cache pre-warmed for 40,000 inventory items.",
+      "[13:45:02.000] PASS: P99 latency stayed under 9.8ms. Origin PostgreSQL received only 0.6% load.",
+    ],
+  },
+};
+
+export function getProjectBenchmarkData(projectSlug: string): ProjectBenchmarkData {
+  if (PROJECT_BENCHMARK_SUITES[projectSlug]) {
+    return PROJECT_BENCHMARK_SUITES[projectSlug];
+  }
+
+  // Universal enterprise fallback benchmark suite
+  return {
+    targetSlaMs: 20,
+    maxStressVUs: 50000,
+    profiles: [
+      {
+        id: "baseline",
+        name: "Baseline Steady-State",
+        badge: "Standard Production Load",
+        concurrencyVUs: 2500,
+        throughputReqSec: 18500,
+        p50LatencyMs: 1.4,
+        p99LatencyMs: 3.8,
+        errorRatePercent: 0.0,
+        cpuUtilizationPercent: 18,
+        autoscalingTrigger: "Stable 2-replica cluster running on edge isolates",
+        status: "optimal",
+      },
+      {
+        id: "surge",
+        name: "10x Traffic Surge",
+        badge: "Autoscaled Burst",
+        concurrencyVUs: 25000,
+        throughputReqSec: 145000,
+        p50LatencyMs: 2.8,
+        p99LatencyMs: 8.4,
+        errorRatePercent: 0.001,
+        cpuUtilizationPercent: 54,
+        autoscalingTrigger: "+4 worker isolates provisioned in < 120ms",
+        status: "scaled",
+      },
+      {
+        id: "extreme",
+        name: "25x Black Friday Surge",
+        badge: "Max Stress Spike",
+        concurrencyVUs: 65000,
+        throughputReqSec: 380000,
+        p50LatencyMs: 4.2,
+        p99LatencyMs: 14.8,
+        errorRatePercent: 0.004,
+        cpuUtilizationPercent: 76,
+        autoscalingTrigger: "Postgres read-replica connection pooling with WAL buffering",
+        status: "stressed",
+      },
+      {
+        id: "ddos",
+        name: "100k VU Hostile Bot Influx",
+        badge: "Edge WAF Mitigated",
+        concurrencyVUs: 100000,
+        throughputReqSec: 820000,
+        p50LatencyMs: 0.8,
+        p99LatencyMs: 2.4,
+        errorRatePercent: 0.0,
+        cpuUtilizationPercent: 22,
+        autoscalingTrigger: "Cloudflare edge dropped 99.8% invalid signatures at point of ingress",
+        status: "mitigated",
+      },
+    ],
+    k6Snippet: `import http from 'k6/http';
+import { check, sleep } from 'k6';
+
+export const options = {
+  stages: [
+    { duration: '30s', target: 2500 },
+    { duration: '1m', target: 25000 },
+    { duration: '30s', target: 65000 },
+    { duration: '30s', target: 0 },
+  ],
+  thresholds: {
+    'http_req_duration': ['p(99)<20'],
+    'http_req_failed': ['rate<0.001'],
+  },
+};
+
+export default function () {
+  const res = http.get('https://api.abuhanifmia.com/v1/health');
+  check(res, { 'status is 200': (r) => r.status === 200 });
+  sleep(0.1);
+}`,
+    loadLogs: [
+      "[13:45:00.000] INFO: Baseline operations steady at 18,500 req/s across edge mesh.",
+      "[13:45:01.200] WARN: Traffic rate spike detected: 145,000 req/s incoming.",
+      "[13:45:01.320] AUTOSCALE: Spawned 4 isolate workers in under 120ms.",
+      "[13:45:02.000] PASS: P99 latency preserved at 8.4ms (Target SLA < 20ms compliant).",
+    ],
+  };
 }

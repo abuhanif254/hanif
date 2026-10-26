@@ -114,6 +114,23 @@ export const blogCategoryPillars: BlogCategoryPillar[] = [
     consultingServiceTitle: "Rust & Systems Concurrency Advisory",
     consultingPrice: "$2,500",
   },
+  {
+    slug: "security",
+    name: "Security Engineering & Zero-Trust Architecture",
+    tagline: "Row-Level Security (RLS), HMAC session revocation, passkeys, and distributed RBAC.",
+    description: "Enterprise application and infrastructure security: PostgreSQL Row-Level Security (RLS) policies, cryptographically signed tokens, zero-trust RBAC, and vulnerability remediation.",
+    keywords: [
+      "Zero-Trust Architecture",
+      "PostgreSQL RLS",
+      "Passkeys WebAuthn",
+      "HMAC Token Security",
+      "Security Audit Consultant",
+    ],
+    matchingTags: ["Security", "Authentication", "Zero-Trust", "RLS"],
+    consultingServiceSlug: "security-hardening",
+    consultingServiceTitle: "Security Hardening & SOC2 Readiness Sprint",
+    consultingPrice: "$3,800",
+  },
 ];
 
 export function getCategoryPillarBySlug(slug: string): BlogCategoryPillar | undefined {

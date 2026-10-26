@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   PROJECT_ARCHITECTURES,
   getProjectArchitecture,
+  getProjectBenchmarkData,
 } from "../app/lib/project-architectures";
 import { initialProjects, initialServices } from "../app/data/portfolio-data";
 
@@ -109,5 +110,44 @@ describe("Case Study Interactive Architecture Engine", () => {
   it("handles unknown project slugs gracefully with null fallback", () => {
     const unknown = getProjectArchitecture("non-existent-project-xyz");
     expect(unknown).toBeNull();
+  });
+
+  it("verifies interactive benchmark profiles define realistic load surges and k6 scripts", () => {
+    const slugs = [
+      "financial-telemetry-pipeline",
+      "cloudflare-edge-ecommerce",
+      "enterprise-ai-document-search",
+    ];
+
+    slugs.forEach((slug) => {
+      const benchmark = getProjectBenchmarkData(slug);
+      expect(benchmark).toBeDefined();
+      expect(benchmark.targetSlaMs).toBeGreaterThan(0);
+      expect(benchmark.maxStressVUs).toBeGreaterThanOrEqual(10000);
+      expect(benchmark.profiles.length).toBe(4);
+
+      // Verify profiles include baseline, surge, extreme, and ddos
+      const profileIds = benchmark.profiles.map((p) => p.id);
+      expect(profileIds).toContain("baseline");
+      expect(profileIds).toContain("surge");
+      expect(profileIds).toContain("extreme");
+      expect(profileIds).toContain("ddos");
+
+      benchmark.profiles.forEach((p) => {
+        expect(p.concurrencyVUs).toBeGreaterThan(0);
+        expect(p.throughputReqSec).toBeGreaterThan(0);
+        expect(p.p50LatencyMs).toBeGreaterThan(0);
+        expect(p.p99LatencyMs).toBeGreaterThan(0);
+        expect(p.cpuUtilizationPercent).toBeGreaterThanOrEqual(0);
+        expect(p.cpuUtilizationPercent).toBeLessThanOrEqual(100);
+        expect(p.autoscalingTrigger.length).toBeGreaterThan(10);
+      });
+
+      // Verify executable k6 snippet
+      expect(benchmark.k6Snippet).toContain("import http from 'k6/http';");
+      expect(benchmark.k6Snippet).toContain("thresholds");
+      expect(benchmark.k6Snippet).toContain("stages");
+      expect(benchmark.loadLogs.length).toBeGreaterThanOrEqual(3);
+    });
   });
 });

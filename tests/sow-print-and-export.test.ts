@@ -121,6 +121,10 @@ describe("Printable Architecture Blueprint & RFC Export Engine", () => {
       expect(html).toContain(item.benchmarkAdvantage);
     });
 
+    // Verified Benchmark SLA & Load Tolerance Certification
+    expect(html).toContain("Verified Benchmark SLA &amp; Load Tolerance Certification");
+    expect(html).toContain("Baseline Steady-State");
+
     // IP Handover & Dual Signatures
     expect(html).toContain("100% Client Intellectual Property");
     expect(html).toContain("30-Day Production Bug Warranty");

@@ -59,7 +59,7 @@ describe("Global Command Palette & Quick Discovery Hub", () => {
     expect(paletteSource).toContain("initialServices.map");
 
     expect(initialProjects.length).toBeGreaterThanOrEqual(6);
-    expect(blogCategoryPillars.length).toBe(6);
+    expect(blogCategoryPillars.length).toBeGreaterThanOrEqual(6);
     expect(initialBlogPosts.length).toBeGreaterThanOrEqual(4);
     expect(initialServices.length).toBeGreaterThanOrEqual(6);
   });

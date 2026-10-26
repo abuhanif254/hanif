@@ -4,9 +4,9 @@ import { initialProjects, initialBlogPosts, initialServices } from "../app/data/
 import { PROJECT_SLUG_ALIASES, SERVICE_SLUG_ALIASES } from "../app/lib/portfolio-store";
 
 describe("Routes, SEO & Topic Pillars Verification", () => {
-  it("should define all 6 topic category pillars with valid metadata and slugs", () => {
-    expect(blogCategoryPillars).toHaveLength(6);
-    const expectedSlugs = ["postgresql", "nextjs", "cloudflare", "architecture", "performance", "rust"];
+  it("should define all topic category pillars with valid metadata and slugs", () => {
+    expect(blogCategoryPillars).toHaveLength(7);
+    const expectedSlugs = ["postgresql", "nextjs", "cloudflare", "architecture", "performance", "rust", "security"];
 
     for (const slug of expectedSlugs) {
       const pillar = blogCategoryPillars.find((p) => p.slug === slug);
