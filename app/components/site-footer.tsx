@@ -1,5 +1,6 @@
 import Link from "next/link";
 import DhakaTimeBadge from "./dhaka-time-badge";
+import CoreWebVitalsRadar from "./core-web-vitals-radar";
 
 export default function SiteFooter() {
   const currentYear = new Date().getFullYear();
@@ -224,8 +225,10 @@ export default function SiteFooter() {
         </div>
 
         {/* =========================================================================
-            TIER 3: Cloud & Edge Infrastructure Telemetry Strip
+            TIER 3: Live Core Web Vitals & Real-Time Performance Telemetry
             ========================================================================= */}
+        <CoreWebVitalsRadar />
+
         <div className="global-footer-telemetry">
           <div className="telemetry-item">
             <span className="telemetry-label">Framework Engine:</span>
