@@ -71,6 +71,8 @@ export default function ProjectScreenshotGallery({
             <img
               src={coverImage}
               alt={`${title} Cover`}
+              width={800}
+              height={440}
               style={{
                 width: "100%",
                 maxHeight: "440px",
@@ -173,6 +175,8 @@ export default function ProjectScreenshotGallery({
                     <img
                       src={url}
                       alt={`Architecture Screenshot ${idx + 1}`}
+                      width={200}
+                      height={120}
                       style={{
                         width: "100%",
                         height: "100%",
@@ -285,6 +289,8 @@ export default function ProjectScreenshotGallery({
             <img
               src={allImages[activeLightboxIndex].url}
               alt={allImages[activeLightboxIndex].label}
+              width={1200}
+              height={800}
               style={{
                 maxWidth: "100%",
                 maxHeight: "80vh",

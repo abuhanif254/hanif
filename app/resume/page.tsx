@@ -4,7 +4,7 @@ import ResumeClientView from "./resume-client-view";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 export const metadata: Metadata = {
-  title: "Technical Resume & Credentials | MD Abu Hanif Mia (Staff Software Engineer)",
+  title: "Technical Resume & Credentials",
   description:
     "Official resume of MD Abu Hanif Mia (Abu Hanif) - Staff Software Engineer & Systems Architect. 9+ years experience, 99.99% uptime track record, B.Sc. in CSE, Programming Hero Batch-12 certified (WEB12-3991), and freeCodeCamp accreditations.",
   keywords: [

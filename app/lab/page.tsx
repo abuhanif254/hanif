@@ -9,7 +9,7 @@ import ArchitectureTopologyExplorer from "../components/architecture-topology-ex
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 export const metadata: Metadata = {
-  title: "Interactive Systems Architecture Lab & Live Benchmarks | Abu Hanif (MD Abu Hanif Mia)",
+  title: "Systems Architecture Lab & Live Benchmarks",
   description:
     "Interactive empirical systems telemetry, live browser edge latency testing, PostgreSQL EXPLAIN ANALYZE query plan simulator, and distributed systems architecture blueprints by Staff Software Engineer Abu Hanif.",
   keywords: [

@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   }
 
   return {
-    title: `${post.title} | Abu Hanif (MD Abu Hanif Mia)`,
+    title: post.title,
     description: post.excerpt,
     keywords: [
       post.title,
@@ -486,6 +486,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         <img
                           src="/images/profile.png"
                           alt="MD Abu Hanif Mia"
+                          width={80}
+                          height={80}
                           style={{
                             width: "80px",
                             height: "80px",
@@ -611,6 +613,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                       <img
                         src="/images/profile.png"
                         alt="MD Abu Hanif Mia - Staff Software Engineer"
+                        width={260}
+                        height={260}
                         style={{
                           width: "100%",
                           borderRadius: "6px",

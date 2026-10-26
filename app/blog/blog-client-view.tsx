@@ -395,6 +395,8 @@ export default function BlogClientView({
                       <img
                         src="/images/profile.png"
                         alt="MD Abu Hanif Mia"
+                        width={260}
+                        height={260}
                         style={{
                           width: "100%",
                           borderRadius: "6px",

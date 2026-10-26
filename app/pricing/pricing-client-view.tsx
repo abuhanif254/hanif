@@ -1028,6 +1028,8 @@ export default function PricingClientView({
                       <img
                         src="/images/profile.png"
                         alt="MD Abu Hanif Mia"
+                        width={260}
+                        height={260}
                         style={{
                           width: "100%",
                           borderRadius: "4px",

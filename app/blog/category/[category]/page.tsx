@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   }
 
   return {
-    title: `${pillar.name} — Technical Architecture Articles | Abu Hanif`,
+    title: `${pillar.name} — Architecture Articles`,
     description: pillar.description,
     keywords: [
       ...pillar.keywords,

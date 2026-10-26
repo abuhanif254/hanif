@@ -4,7 +4,7 @@ import PricingPage from "../pricing/page";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 export const metadata: Metadata = {
-  title: "Engineering Services & Work Prices | Abu Hanif",
+  title: "Engineering Services & Work Prices",
   description:
     "Transparent pricing for staff-level software engineering, PostgreSQL performance tuning sprints, Cloudflare edge migrations, and full-stack SaaS MVP architecture.",
   alternates: {

@@ -7,7 +7,7 @@ import StatusDashboardClient from "./status-dashboard-client";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 export const metadata: Metadata = {
-  title: "Live Systems Status & Edge Observability | Abu Hanif (MD Abu Hanif Mia)",
+  title: "Live Systems Status & Edge Observability",
   description:
     "Real-time operational status, Cloudflare Pages edge health, PostgreSQL database connection pool metrics, and multi-region latency benchmarks for Abu Hanif's production architecture.",
   keywords: [

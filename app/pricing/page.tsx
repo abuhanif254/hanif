@@ -5,7 +5,7 @@ import { getServices } from "../lib/portfolio-store";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 export const metadata: Metadata = {
-  title: "Engineering Services & Work Pricing | Abu Hanif (MD Abu Hanif Mia)",
+  title: "Engineering Services, SOW & Pricing",
   description:
     "Transparent pricing for staff-level software engineering, PostgreSQL performance tuning sprints, Cloudflare edge migrations, and full-stack SaaS MVP architecture.",
   keywords: [

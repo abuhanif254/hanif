@@ -163,6 +163,7 @@ export default function BioAndCredentials() {
 
       {/* VERIFIED CERTIFICATIONS & ACCREDITATIONS SECTION */}
       <div
+        id="competencies"
         style={{
           margin: "32px 0",
           background: "#ffffff",

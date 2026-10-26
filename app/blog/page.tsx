@@ -5,7 +5,7 @@ import { getBlogPosts } from "../lib/portfolio-store";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 export const metadata: Metadata = {
-  title: "Technical Architecture Blog | Abu Hanif (MD Abu Hanif Mia)",
+  title: "Technical Architecture Blog",
   description:
     "In-depth engineering articles on Next.js 16 App Router, PostgreSQL CDC, Cloudflare edge networks, distributed telemetry pipelines, and database optimization.",
   keywords: [

@@ -24,7 +24,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 const keywordMapping: Record<string, { title: string; metaDesc: string; keywords: string[] }> = {
   "database-optimization": {
-    title: "Hire PostgreSQL Query Optimization Specialist | Abu Hanif (MD Abu Hanif Mia)",
+    title: "PostgreSQL Query Optimization & Database Performance",
     metaDesc: "Surgical database performance tuning, B-tree/GIN/BRIN composite indexing, connection pooling, and sub-20ms P99 query latency audits by Staff Engineer Abu Hanif.",
     keywords: [
       "Hire PostgreSQL Consultant",
@@ -36,7 +36,7 @@ const keywordMapping: Record<string, { title: string; metaDesc: string; keywords
     ],
   },
   "cloudflare-edge-migration": {
-    title: "Cloudflare Pages & OpenNext Migration Architect | Abu Hanif (MD Abu Hanif Mia)",
+    title: "Cloudflare Pages & OpenNext Edge Migration",
     metaDesc: "Migrate Next.js monolithic or AWS infrastructure to Cloudflare Pages edge compute. Sub-30ms global TTFB, zero cold starts, and 64% cloud bill reduction.",
     keywords: [
       "Cloudflare Pages Migration Consultant",
@@ -47,7 +47,7 @@ const keywordMapping: Record<string, { title: string; metaDesc: string; keywords
     ],
   },
   "architecture-audit": {
-    title: "Codebase & Systems Architecture Diagnostic Audit | Abu Hanif (MD Abu Hanif Mia)",
+    title: "Systems Architecture & Codebase Diagnostic Audit",
     metaDesc: "A comprehensive architectural diagnostic inspection of your application, database queries, memory leaks, and cloud infrastructure costs with a 25+ page roadmap.",
     keywords: [
       "Systems Architecture Audit Consultant",
@@ -58,7 +58,7 @@ const keywordMapping: Record<string, { title: string; metaDesc: string; keywords
     ],
   },
   "mvp-feature-sprint": {
-    title: "Full-Stack SaaS MVP Engineering Sprint | Abu Hanif (MD Abu Hanif Mia)",
+    title: "Full-Stack SaaS MVP Engineering Sprint",
     metaDesc: "High-velocity delivery from technical specifications to a production-grade web platform on Next.js 16, Supabase, and Cloudflare with 100% client IP ownership.",
     keywords: [
       "Full-Stack SaaS MVP Developer",
@@ -69,7 +69,7 @@ const keywordMapping: Record<string, { title: string; metaDesc: string; keywords
     ],
   },
   "distributed-telemetry-engine": {
-    title: "Distributed Telemetry & Event Streaming Architect | Abu Hanif (MD Abu Hanif Mia)",
+    title: "Distributed Telemetry & Event Streaming Architect",
     metaDesc: "High-throughput message streaming, pub/sub infrastructure, and sub-25ms WebSocket tick delivery built to handle 10M+ daily events with fault tolerance.",
     keywords: [
       "Distributed Systems Architect",
@@ -80,7 +80,7 @@ const keywordMapping: Record<string, { title: string; metaDesc: string; keywords
     ],
   },
   "fractional-staff-engineer": {
-    title: "Fractional Staff Systems Architect Retainer | Abu Hanif (MD Abu Hanif Mia)",
+    title: "Fractional Staff Systems Architect Retainer",
     metaDesc: "On-demand senior technical leadership, architectural RFC reviews, PR sign-offs, and critical path execution for growing engineering teams.",
     keywords: [
       "Fractional Staff Software Engineer",
@@ -101,7 +101,7 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
   }
 
   const customSeo = keywordMapping[service.slug] || {
-    title: `${service.title} | Abu Hanif (MD Abu Hanif Mia) Systems Architect`,
+    title: `${service.title} — Consulting & Architecture`,
     metaDesc: service.description,
     keywords: [service.title, "Systems Architecture", "Abu Hanif", "Staff Software Engineer"],
   };

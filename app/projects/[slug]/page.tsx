@@ -174,7 +174,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   }
 
   return {
-    title: `${project.title} | Abu Hanif (MD Abu Hanif Mia) Case Studies`,
+    title: `${project.title} — Case Study`,
     description: project.summary,
     keywords: [
       project.title,

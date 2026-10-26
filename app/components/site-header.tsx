@@ -239,6 +239,8 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
                   alt="Abu Hanif - Staff Software Engineer"
                   id="mainlogo"
                   src="/images/abuhanif-logo-v3.svg"
+                  width={326}
+                  height={79}
                 />
                 Abu Hanif Staff Software Engineer Home
               </Link>
@@ -337,6 +339,8 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
                   <img
                     src="/images/profile.png"
                     alt="Abu Hanif"
+                    width={40}
+                    height={40}
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
                   <span

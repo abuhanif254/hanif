@@ -420,6 +420,8 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                                       <img
                                         src={project.imageUrl}
                                         alt={project.title}
+                                        width={90}
+                                        height={60}
                                         style={{ width: "100%", height: "100%", objectFit: "cover" }}
                                         onError={(e) => {
                                           (e.target as HTMLImageElement).style.display = "none";

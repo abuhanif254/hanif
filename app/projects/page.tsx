@@ -5,7 +5,7 @@ import ProjectsClientView from "./projects-client-view";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 export const metadata: Metadata = {
-  title: "Engineering Projects & Systems Showcase | Abu Hanif (MD Abu Hanif Mia)",
+  title: "Engineering Projects & Systems Showcase",
   description:
     "Explore production systems, distributed pipelines, Next.js edge applications, and database optimization case studies delivered by Staff Software Engineer Abu Hanif.",
   keywords: [

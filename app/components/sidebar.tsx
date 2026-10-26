@@ -72,6 +72,8 @@ export default function Sidebar() {
         <img
           src="/images/programming-hero-certificate.png"
           alt="Programming Hero Certificate Thumbnail"
+          width={50}
+          height={36}
           style={{
             width: "50px",
             height: "36px",
