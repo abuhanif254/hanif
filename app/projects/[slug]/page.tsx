@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getProjectBySlug, getProjects, PROJECT_SLUG_ALIASES } from "../../lib/portfolio-store";
+import { initialTestimonials } from "../../data/portfolio-data";
 import SiteFooter from "../../components/site-footer";
 import SiteHeader from "../../components/site-header";
 import ProjectScreenshotGallery from "../../components/project-screenshot-gallery";
@@ -210,6 +211,8 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   if (!project) {
     notFound();
   }
+
+  const matchingTestimonial = initialTestimonials.find((t) => t.projectSlug === project.slug);
 
   const projectSchema = {
     "@context": "https://schema.org",
@@ -435,6 +438,101 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                           ))}
                         </div>
                       </div>
+
+                      {/* Verified Client Sponsor Review */}
+                      {matchingTestimonial && (
+                        <div
+                          style={{
+                            marginTop: "32px",
+                            backgroundColor: "#ffffff",
+                            border: "1px solid #cbd5e1",
+                            borderLeft: "4px solid #10b981",
+                            borderRadius: "8px",
+                            padding: "20px 24px",
+                            boxShadow: "0 2px 10px rgba(15, 23, 42, 0.04)",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              flexWrap: "wrap",
+                              gap: "8px",
+                              marginBottom: "10px",
+                            }}
+                          >
+                            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                              <span style={{ color: "#f59e0b", fontSize: "13px" }}>★★★★★</span>
+                              <span
+                                style={{
+                                  fontSize: "11px",
+                                  fontWeight: 700,
+                                  color: "#065f46",
+                                  backgroundColor: "#ecfdf5",
+                                  border: "1px solid #a7f3d0",
+                                  padding: "2px 8px",
+                                  borderRadius: "4px",
+                                }}
+                              >
+                                {matchingTestimonial.verificationBadge || "✓ Verified Production Outcome"}
+                              </span>
+                            </div>
+                            {matchingTestimonial.engagementScope && (
+                              <span
+                                style={{
+                                  fontSize: "11.5px",
+                                  fontWeight: 600,
+                                  color: "#334155",
+                                  backgroundColor: "#f1f5f9",
+                                  padding: "2px 8px",
+                                  borderRadius: "4px",
+                                }}
+                              >
+                                💰 {matchingTestimonial.engagementScope} ({matchingTestimonial.engagementDuration})
+                              </span>
+                            )}
+                          </div>
+
+                          <p
+                            style={{
+                              margin: "0 0 14px 0",
+                              fontSize: "14px",
+                              fontStyle: "italic",
+                              color: "#1e293b",
+                              lineHeight: "1.65",
+                            }}
+                          >
+                            &ldquo;{matchingTestimonial.quote}&rdquo;
+                          </p>
+
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              flexWrap: "wrap",
+                              gap: "8px",
+                              borderTop: "1px solid #f1f5f9",
+                              paddingTop: "10px",
+                            }}
+                          >
+                            <div>
+                              <strong style={{ fontSize: "14px", color: "#0f172a" }}>
+                                {matchingTestimonial.author}
+                              </strong>
+                              <span style={{ fontSize: "12px", color: "#64748b" }}>
+                                {" "}&bull; {matchingTestimonial.role}, <strong>{matchingTestimonial.company}</strong>
+                              </span>
+                            </div>
+                            {matchingTestimonial.verifiedMetric && (
+                              <span style={{ fontSize: "12px", fontWeight: 700, color: "#065f46" }}>
+                                {matchingTestimonial.verifiedMetric}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )}
 
                       {/* Connected Engineering Ecosystem: Lab, Article, Fixed SOW */}
                       <ProjectEcosystemCard projectSlug={project.slug} />

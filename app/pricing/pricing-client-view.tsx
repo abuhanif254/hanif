@@ -690,7 +690,7 @@ export default function PricingClientView({
                             }}
                           >
                             <div>
-                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
                                 <div style={{ color: "#f59e0b", fontSize: "13px", letterSpacing: "2px" }}>★★★★★</div>
                                 {t.deliverableTag && (
                                   <span style={{ fontSize: "11px", color: "#1e40af", backgroundColor: "#eff6ff", border: "1px solid #bfdbfe", padding: "2px 6px", borderRadius: "3px", fontWeight: "700" }}>
@@ -698,6 +698,16 @@ export default function PricingClientView({
                                   </span>
                                 )}
                               </div>
+                              {t.engagementScope && (
+                                <div style={{ display: "flex", gap: "6px", alignItems: "center", marginBottom: "10px", flexWrap: "wrap" }}>
+                                  <span style={{ fontSize: "10.5px", fontWeight: "600", backgroundColor: "#f1f5f9", color: "#334155", padding: "2px 6px", borderRadius: "3px" }}>
+                                    💰 {t.engagementScope}
+                                  </span>
+                                  <span style={{ fontSize: "10.5px", fontWeight: "700", color: "#065f46", backgroundColor: "#ecfdf5", border: "1px solid #a7f3d0", padding: "2px 6px", borderRadius: "3px" }}>
+                                    ✓ Verified SOW Delivery
+                                  </span>
+                                </div>
+                              )}
                               <p style={{ fontSize: "13px", color: "#1e293b", lineHeight: "1.6", fontStyle: "italic", margin: "0 0 14px 0" }}>
                                 &ldquo;{t.quote}&rdquo;
                               </p>

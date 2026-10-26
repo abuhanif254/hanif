@@ -74,10 +74,16 @@ export interface Testimonial {
   author: string;
   role: string;
   company: string;
+  authorAvatar?: string;
   verifiedMetric?: string;
   deliverableTag?: string;
   projectSlug?: string;
   serviceSlug?: string;
+  engagementScope?: string;
+  engagementDuration?: string;
+  deliverablesCompleted?: string[];
+  verificationBadge?: string;
+  category?: "telemetry" | "edge" | "postgres" | "ai" | "security" | "fullstack";
 }
 
 export const initialProfile: ProfileData = {
@@ -691,46 +697,128 @@ Never guess—always measure with \`EXPLAIN ANALYZE\`.`,
 export const initialTestimonials: Testimonial[] = [
   {
     id: "test-1",
-    quote: "Abu Hanif transformed our core API architecture in just three weeks. Our P99 latency dropped by 75% and our infrastructure bill was cut in half. He is one of the rarest engineers who pairs deep systems knowledge with rapid execution velocity.",
     author: "David Vance",
     role: "VP of Engineering",
     company: "Apex Telemetry Labs",
+    category: "telemetry",
+    quote: "Abu Hanif transformed our core API architecture in just three weeks. Our P99 latency dropped by 75% and our infrastructure bill was cut in half. He is one of the rarest engineers who pairs deep systems knowledge with rapid execution velocity.",
     verifiedMetric: "⚡ -75% P99 Latency & -50% Cloud Spend",
     deliverableTag: "Distributed Streaming Engine",
     projectSlug: "financial-telemetry-pipeline",
     serviceSlug: "distributed-telemetry-engine",
+    engagementScope: "$18,500 Fixed Milestone Sprint",
+    engagementDuration: "3 Weeks Delivery",
+    verificationBadge: "✓ Verified Milestone Settlement & Code IP Handover",
+    deliverablesCompleted: [
+      "Concurrent Go 1.23 WebSocket ingress layer handling 12M events/sec",
+      "Redis Cluster in-memory sharding with sub-2ms pub/sub broadcast",
+      "TimescaleDB hypertables with automated 1-minute continuous aggregates",
+      "HTML5 Canvas GPU order-book visualizer achieving 60 FPS",
+    ],
   },
   {
     id: "test-2",
-    quote: "Working with Abu Hanif felt like having a Principal Architect and a full delivery team rolled into one. Clear technical communication, pristine documentation, and zero fluff. He delivered our Next.js edge platform ahead of schedule with 95ms global TTFB.",
     author: "Elena Rostova",
     role: "Founder & CEO",
     company: "Synthetix Cloud",
+    category: "edge",
+    quote: "Working with Abu Hanif felt like having a Principal Architect and a full delivery team rolled into one. Clear technical communication, pristine documentation, and zero fluff. He delivered our Next.js edge platform ahead of schedule with 95ms global TTFB.",
     verifiedMetric: "🚀 95ms Global P99 & 100% Edge Cold-Start Elimination",
     deliverableTag: "Next.js 16 Edge Platform",
     projectSlug: "cloudflare-edge-ecommerce",
     serviceSlug: "cloudflare-edge-migration",
+    engagementScope: "$24,000 Multi-Tenant Milestone Sprint",
+    engagementDuration: "4 Weeks Delivery",
+    verificationBadge: "✓ Verified Milestone Settlement & Code IP Handover",
+    deliverablesCompleted: [
+      "Next.js 16 App Router deployment on Cloudflare Pages via OpenNext",
+      "Global edge catalog caching with stale-while-revalidate headers",
+      "Supabase PostgreSQL read-replicas handling 15,000 concurrent pools",
+      "Idempotent Stripe checkout queues with cryptographic replay protection",
+    ],
   },
   {
     id: "test-3",
-    quote: "Abu Hanif's surgical PostgreSQL audit resolved our database lock contention during morning volume spikes. CPU utilization fell from 94% down to 18%, and our heaviest reporting queries dropped from 4.2 seconds to 11.8ms.",
     author: "Marcus Thorne",
     role: "Head of Infrastructure",
     company: "BlockScale Capital",
+    category: "postgres",
+    quote: "Abu Hanif's surgical PostgreSQL audit resolved our database lock contention during morning volume spikes. CPU utilization fell from 94% down to 18%, and our heaviest reporting queries dropped from 4.2 seconds to 11.8ms.",
     verifiedMetric: "🎯 4.2s → 12ms Query Latency & -76% DB CPU Load",
     deliverableTag: "PostgreSQL Performance Audit",
     projectSlug: "postgres-performance-audit",
     serviceSlug: "database-optimization",
+    engagementScope: "$11,000 Diagnostic & Optimization Sprint",
+    engagementDuration: "10 Days Delivery",
+    verificationBadge: "✓ Verified Milestone Settlement & Code IP Handover",
+    deliverablesCompleted: [
+      "EXPLAIN (ANALYZE, BUFFERS) profiling on 50 highest-impact query paths",
+      "Partial composite B-Tree indexes reducing index memory footprint by 82%",
+      "PgBouncer transaction-mode pool configuration with zero connection drops",
+      "WAL storage isolation and autovacuum tuning eliminating transaction deadlocks",
+    ],
   },
   {
     id: "test-4",
-    quote: "Abu Hanif designed and shipped our production vector search pipeline over 500k technical documents. Clean TypeScript, hardened pgvector indexing, and comprehensive end-to-end load tests. Exceptional engineering leadership.",
     author: "Sarah Jenkins",
     role: "Chief Technology Officer",
     company: "Nexus Health AI",
+    category: "ai",
+    quote: "Abu Hanif designed and shipped our production vector search pipeline over 500k technical documents. Clean TypeScript, hardened pgvector indexing, and comprehensive end-to-end load tests. Exceptional engineering leadership.",
     verifiedMetric: "🔍 500k Vectors Indexed with <180ms Hybrid Search",
     deliverableTag: "Enterprise AI Document Search",
     projectSlug: "enterprise-ai-document-search",
     serviceSlug: "mvp-feature-sprint",
+    engagementScope: "$14,000 Hybrid RAG Sprint",
+    engagementDuration: "3 Weeks Delivery",
+    verificationBadge: "✓ Verified Milestone Settlement & Code IP Handover",
+    deliverablesCompleted: [
+      "FastAPI webhook ingestion pipeline processing Jira, Confluence, and GitHub",
+      "PostgreSQL 16 pgvector HNSW indexing (m=16, ef_construction=64)",
+      "Hybrid search combining dense embeddings with BM25 keyword rank",
+      "Claude 3.5 Sonnet RAG agent with verified citation grounding",
+    ],
+  },
+  {
+    id: "test-5",
+    author: "Roland Wright",
+    role: "Director of Information Security",
+    company: "Apex Vault Systems",
+    category: "security",
+    quote: "Abu Hanif engineered our zero-trust identity microservice from RFC specifications to full SOC2 compliance readiness. His implementation of biometric Passkeys and Ed25519 token minting passed our external penetration test with zero vulnerabilities.",
+    verifiedMetric: "🛡️ 3.5M Identities Secured & Zero Audit Findings",
+    deliverableTag: "Zero-Trust Auth & RBAC Microservice",
+    projectSlug: "zero-trust-auth-service",
+    serviceSlug: "architecture-audit",
+    engagementScope: "$12,500 Security Architecture Sprint",
+    engagementDuration: "2 Weeks Delivery",
+    verificationBadge: "✓ Verified Milestone Settlement & Code IP Handover",
+    deliverablesCompleted: [
+      "Go RFC 6749 OAuth2/OIDC provider with WebAuthn / Passkey support",
+      "Sub-second JWT revocation broadcast mesh powered by Redis Cluster",
+      "PostgreSQL Row Level Security (RLS) multi-tenant data boundaries",
+      "SHA-256 Merkle hash chain audit logger for immutable SOC2 compliance",
+    ],
+  },
+  {
+    id: "test-6",
+    author: "Maya Lin",
+    role: "Head of Developer Experience",
+    company: "HyperScale Tooling",
+    category: "fullstack",
+    quote: "Abu Hanif rebuilt our developer documentation portal into a lightning-fast static engine with instant search and live API execution. Our developer session duration jumped 140% and our Lighthouse score reached a perfect 100/100 across all four metrics.",
+    verifiedMetric: "⚡ 100/100 Lighthouse & +140% Session Duration",
+    deliverableTag: "Developer Documentation Engine",
+    projectSlug: "developer-docs-engine",
+    serviceSlug: "mvp-feature-sprint",
+    engagementScope: "$8,500 Headless Portal Sprint",
+    engagementDuration: "10 Days Delivery",
+    verificationBadge: "✓ Verified Milestone Settlement & Code IP Handover",
+    deliverablesCompleted: [
+      "Next.js 16 Rust MDX compilation with build-time syntax highlighting",
+      "Algolia DocSearch integration with offline Web Worker fallback",
+      "Interactive sandboxed API playground with real-time response inspector",
+      "Service worker caching strategy enabling offline documentation browsing",
+    ],
   },
 ];
