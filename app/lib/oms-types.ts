@@ -59,6 +59,12 @@ export interface CustomerRecord {
   updatedAt: string;
 }
 
+export interface DeliverableArtifact {
+  label: string;
+  url: string;
+  type: "staging" | "github" | "docs" | "benchmark" | "report";
+}
+
 export interface OrderMilestoneRecord {
   id: string;
   orderId: string;
@@ -69,7 +75,54 @@ export interface OrderMilestoneRecord {
   dueDate?: string;
   status: MilestoneStatus;
   approvedAt?: string;
+  approvedBy?: string;
+  approvalSignatureHash?: string;
+  deliverableArtifacts?: DeliverableArtifact[];
   createdAt: string;
+}
+
+export interface InvoiceLineItem {
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  total: number;
+}
+
+export interface InvoiceRecord {
+  invoiceNumber: string;
+  orderId: string;
+  orderNumber: string;
+  issueDate: string;
+  dueDate: string;
+  currency: CurrencyCode;
+  customer: {
+    companyName: string;
+    primaryContactName: string;
+    email: string;
+    billingAddress?: CustomerRecord["billingAddress"];
+    vatTaxId?: string;
+  };
+  issuer: {
+    name: string;
+    title: string;
+    email: string;
+    address: string;
+    taxId?: string;
+    wireDetails: {
+      bankName: string;
+      swiftBic: string;
+      accountOrIban: string;
+      cryptoUsdtErc20?: string;
+    };
+  };
+  lineItems: InvoiceLineItem[];
+  subtotal: number;
+  taxAmount: number;
+  totalAmount: number;
+  amountPaid: number;
+  balanceDue: number;
+  paymentStatus: PaymentStatus;
+  notes?: string;
 }
 
 export interface OrderRecord {

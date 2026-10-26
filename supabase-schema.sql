@@ -525,6 +525,9 @@ create table if not exists public.order_milestones (
   status text not null default 'pending'
     check (status in ('pending', 'in_progress', 'submitted', 'client_approved', 'paid')),
   approved_at timestamp with time zone,
+  approved_by text,
+  approval_signature_hash text,
+  deliverable_artifacts jsonb default '[]'::jsonb,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   unique (order_id, milestone_index)
 );

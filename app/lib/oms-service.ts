@@ -7,6 +7,8 @@ import {
   OrderStatus,
   CreateOrderPayload,
   UpdateOrderPayload,
+  InvoiceRecord,
+  InvoiceLineItem,
 } from "./oms-types";
 import { supabase, isSupabaseConfigured } from "./supabase";
 
@@ -88,6 +90,12 @@ export const initialOrders: OrderRecord[] = [
         dueDate: "2026-10-22",
         status: "client_approved",
         approvedAt: "2026-10-23T14:00:00Z",
+        approvedBy: "Sarah Jenkins, VP of Engineering",
+        approvalSignatureHash: "sig_sha256_8f93ab0192e8ca92bfa041",
+        deliverableArtifacts: [
+          { label: "Architecture Spec & RFC", url: "/lab", type: "docs" },
+          { label: "Supabase Schema Migration", url: "https://github.com/abuhanifmain-art/hanif", type: "github" },
+        ],
         createdAt: "2026-10-15T09:00:00Z",
       },
       {
@@ -99,6 +107,9 @@ export const initialOrders: OrderRecord[] = [
         amount: 6750.0,
         dueDate: "2026-11-10",
         status: "in_progress",
+        deliverableArtifacts: [
+          { label: "Staging Preview Portal", url: "https://apex.abuhanifmia.com", type: "staging" },
+        ],
         createdAt: "2026-10-15T09:00:00Z",
       },
       {
@@ -145,6 +156,11 @@ export const initialOrders: OrderRecord[] = [
         dueDate: "2026-10-12",
         status: "client_approved",
         approvedAt: "2026-10-13T10:00:00Z",
+        approvedBy: "Marcus Thorne, Chief Architect",
+        approvalSignatureHash: "sig_sha256_31a7bc819024fba9182371",
+        deliverableArtifacts: [
+          { label: "EXPLAIN Query Audit Report", url: "/blog/mastering-postgres-indexing-query-optimization", type: "report" },
+        ],
         createdAt: "2026-10-01T09:00:00Z",
       },
       {
@@ -156,6 +172,10 @@ export const initialOrders: OrderRecord[] = [
         amount: 7500.0,
         dueDate: "2026-10-26",
         status: "submitted",
+        deliverableArtifacts: [
+          { label: "Live Cluster Benchmarks", url: "/status", type: "benchmark" },
+          { label: "Migration Pull Request", url: "https://github.com/abuhanifmain-art/hanif", type: "github" },
+        ],
         createdAt: "2026-10-01T09:00:00Z",
       },
     ],
@@ -357,6 +377,231 @@ export function convertInquiryToOrderPayload(
       },
     ],
   };
+}
+
+// -----------------------------------------------------------------------------
+// CRYPTOGRAPHIC APPROVAL SIGNATURE (SHA-256)
+// -----------------------------------------------------------------------------
+export function generateApprovalSignature(
+  orderId: string,
+  milestoneId: string,
+  approverName: string,
+  approvedAt: string
+): string {
+  const payload = `signoff:${orderId}:${milestoneId}:${approverName}:${approvedAt}`;
+  const hash = crypto.createHmac("sha256", OMS_SECRET).update(payload).digest("hex");
+  return `sig_sha256_${hash.substring(0, 32)}`;
+}
+
+// -----------------------------------------------------------------------------
+// INSTITUTIONAL TAX INVOICE GENERATOR (INV-YYYY-XXXX)
+// -----------------------------------------------------------------------------
+export function generateInvoiceForOrder(
+  order: OrderRecord,
+  customer?: CustomerRecord,
+  milestoneIndex?: number
+): InvoiceRecord {
+  const cust = customer || order.customer || {
+    id: order.customerId,
+    companyName: "Client Organization",
+    primaryContactName: "Client Lead",
+    email: "client@example.com",
+    clientTier: "active_client" as const,
+    ndaStatus: "none" as const,
+    totalSpendUsd: order.totalAmount,
+    createdAt: order.createdAt,
+    updatedAt: order.updatedAt,
+  };
+
+  const invoiceNumber = milestoneIndex
+    ? `INV-${order.orderNumber.replace("ORD-", "")}-M${milestoneIndex}`
+    : `INV-${order.orderNumber.replace("ORD-", "")}`;
+
+  let lineItems: InvoiceLineItem[] = [];
+  let subtotal = 0;
+  let taxAmount = 0;
+  let totalAmount = 0;
+  let amountPaid = 0;
+
+  if (milestoneIndex) {
+    const ms = order.milestones.find((m) => m.milestoneIndex === milestoneIndex);
+    if (ms) {
+      lineItems = [
+        {
+          description: `Milestone Phase ${ms.milestoneIndex}: ${ms.title} (${ms.deliverablesSummary})`,
+          quantity: 1,
+          unitPrice: ms.amount,
+          total: ms.amount,
+        },
+      ];
+      subtotal = ms.amount;
+      taxAmount = 0;
+      totalAmount = ms.amount;
+      amountPaid = ms.status === "paid" ? ms.amount : 0;
+    }
+  } else {
+    lineItems = order.milestones.map((m) => ({
+      description: `Phase ${m.milestoneIndex}: ${m.title} — ${m.deliverablesSummary}`,
+      quantity: 1,
+      unitPrice: m.amount,
+      total: m.amount,
+    }));
+    subtotal = order.subtotalAmount;
+    taxAmount = order.taxAmount;
+    totalAmount = order.totalAmount;
+    amountPaid = order.amountPaid;
+  }
+
+  const balanceDue = Number(Math.max(0, totalAmount - amountPaid).toFixed(2));
+  const paymentStatus =
+    amountPaid >= totalAmount
+      ? "paid"
+      : amountPaid > 0
+      ? "partially_paid"
+      : "unpaid";
+
+  return {
+    invoiceNumber,
+    orderId: order.id,
+    orderNumber: order.orderNumber,
+    issueDate: order.createdAt.split("T")[0] || new Date().toISOString().split("T")[0],
+    dueDate: order.targetCompletionDate || new Date(Date.now() + 14 * 86400000).toISOString().split("T")[0],
+    currency: order.currency,
+    customer: {
+      companyName: cust.companyName,
+      primaryContactName: cust.primaryContactName,
+      email: cust.email,
+      billingAddress: cust.billingAddress,
+      vatTaxId: cust.vatTaxId,
+    },
+    issuer: {
+      name: "Abu Hanif Mia",
+      title: "Principal Full-Stack & Cloud Systems Architect",
+      email: "contact@abuhanifmia.com",
+      address: "Dhaka, Bangladesh • Global Remote Consulting",
+      taxId: "TAX-ENG-2026-HANIF",
+      wireDetails: {
+        bankName: "Standard Chartered Bank / Wise Commercial Routing",
+        swiftBic: "SCBLBDDX",
+        accountOrIban: "BD29SCBL00025491823901",
+        cryptoUsdtErc20: "0x71C...b9F1 (USDT / USDC ERC-20 on request)",
+      },
+    },
+    lineItems,
+    subtotal,
+    taxAmount,
+    totalAmount,
+    amountPaid,
+    balanceDue,
+    paymentStatus,
+    notes:
+      "All intellectual property, source repositories, and deployment credentials transfer 100% upon milestone settlement. Includes standard 30-day bug warranty.",
+  };
+}
+
+// -----------------------------------------------------------------------------
+// CLIENT MILESTONE DIGITAL SIGN-OFF & APPROVAL ENGINE
+// -----------------------------------------------------------------------------
+export async function approveOrderMilestone(
+  orderToken: string,
+  milestoneId: string,
+  approverName: string,
+  notes?: string,
+  clientIp?: string
+): Promise<{ order: OrderRecord; milestone: OrderMilestoneRecord }> {
+  if (!approverName || approverName.trim().length < 2) {
+    throw new Error("Approver name is required for legal milestone sign-off.");
+  }
+
+  const order = await getOrderByIdOrToken(orderToken);
+  if (!order) {
+    throw new Error("Order not found or access token invalid.");
+  }
+
+  const milestone = order.milestones.find((m) => m.id === milestoneId);
+  if (!milestone) {
+    throw new Error(`Milestone '${milestoneId}' not found on order '${order.orderNumber}'.`);
+  }
+
+  if (milestone.status === "client_approved" || milestone.status === "paid") {
+    return { order, milestone };
+  }
+
+  if (milestone.status !== "submitted") {
+    throw new Error(
+      `Milestone cannot be approved while in '${milestone.status}' status. It must be in 'submitted' status.`
+    );
+  }
+
+  const approvedAt = new Date().toISOString();
+  const signatureHash = generateApprovalSignature(
+    order.id,
+    milestone.id,
+    approverName.trim(),
+    approvedAt
+  );
+
+  milestone.status = "client_approved";
+  milestone.approvedAt = approvedAt;
+  milestone.approvedBy = approverName.trim();
+  milestone.approvalSignatureHash = signatureHash;
+
+  // Check if all milestones are now approved; if so, transition order to 'completed'
+  const allApproved = order.milestones.every(
+    (m) => m.status === "client_approved" || m.status === "paid"
+  );
+  if (allApproved && order.status === "milestone_review") {
+    order.status = "completed";
+    order.completedAt = approvedAt;
+  }
+  order.updatedAt = approvedAt;
+
+  // If Supabase is configured, persist
+  if (isSupabaseConfigured && supabase) {
+    try {
+      await supabase
+        .from("order_milestones")
+        .update({
+          status: "client_approved",
+          approved_at: approvedAt,
+          approved_by: approverName.trim(),
+          approval_signature_hash: signatureHash,
+        })
+        .eq("id", milestone.id);
+
+      if (allApproved) {
+        await supabase
+          .from("orders")
+          .update({
+            status: order.status,
+            completed_at: order.completedAt,
+            updated_at: order.updatedAt,
+          })
+          .eq("id", order.id);
+      }
+
+      await supabase.from("order_audit_logs").insert([
+        {
+          order_id: order.id,
+          actor: `Client: ${approverName.trim()}`,
+          action: "MILESTONE_APPROVED",
+          previous_state: { milestoneId: milestone.id, previousStatus: "submitted" },
+          new_state: {
+            milestoneId: milestone.id,
+            status: "client_approved",
+            approvedBy: approverName.trim(),
+            signatureHash,
+            notes,
+          },
+          ip_address: clientIp,
+        },
+      ]);
+    } catch (err) {
+      console.error("Supabase milestone approval error:", err);
+    }
+  }
+
+  return { order, milestone };
 }
 
 // -----------------------------------------------------------------------------
@@ -733,6 +978,6 @@ export async function deleteOrder(id: string, actor: string = "Admin"): Promise<
 
 // Reset state helper for testing
 export function _resetOmsStoresForTesting(): void {
-  customersStore = [...initialCustomers];
-  ordersStore = [...initialOrders];
+  customersStore = JSON.parse(JSON.stringify(initialCustomers));
+  ordersStore = JSON.parse(JSON.stringify(initialOrders));
 }

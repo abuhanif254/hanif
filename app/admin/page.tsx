@@ -2059,6 +2059,27 @@ export default function AdminPage() {
                                     <span>🔗</span> Copy Client Tracker URL
                                   </button>
 
+                                  <a
+                                    href={`/orders/invoice?token=${order.clientAccessToken}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                      padding: "6px 12px",
+                                      backgroundColor: "#1e293b",
+                                      border: "1px solid #334155",
+                                      borderRadius: "4px",
+                                      color: "#38bdf8",
+                                      fontSize: "12px",
+                                      fontWeight: "600",
+                                      textDecoration: "none",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: "4px",
+                                    }}
+                                  >
+                                    <span>📄</span> Tax Invoice ↗
+                                  </a>
+
                                   <button
                                     type="button"
                                     onClick={() => handleDeleteOrder(order.id)}
@@ -5085,14 +5106,24 @@ export default function AdminPage() {
                     <div style={{ fontSize: "12px", fontWeight: "700", color: "#34d399", display: "flex", alignItems: "center", gap: "6px" }}>
                       <span>🔐</span> Zero-Trust Client Portal Tracker URL
                     </div>
-                    <a
-                      href={`/orders/tracker?token=${selectedOrder.clientAccessToken}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ fontSize: "12px", color: "#38bdf8", fontWeight: "600", textDecoration: "none" }}
-                    >
-                      Open Live Portal ↗
-                    </a>
+                    <div style={{ display: "flex", gap: "12px" }}>
+                      <a
+                        href={`/orders/invoice?token=${selectedOrder.clientAccessToken}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ fontSize: "12px", color: "#4ade80", fontWeight: "600", textDecoration: "none" }}
+                      >
+                        📄 Tax Invoice (PDF) ↗
+                      </a>
+                      <a
+                        href={`/orders/tracker?token=${selectedOrder.clientAccessToken}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ fontSize: "12px", color: "#38bdf8", fontWeight: "600", textDecoration: "none" }}
+                      >
+                        Open Live Portal ↗
+                      </a>
+                    </div>
                   </div>
                   <p style={{ fontSize: "12px", color: "#94a3b8", margin: "0 0 10px 0" }}>
                     Share this cryptographically-signed access link with your client. They can track deliverable progress, review milestones, and inspect sprint completions in real time without creating an account.
@@ -5258,8 +5289,13 @@ export default function AdminPage() {
                           </div>
 
                           {m.approvedAt && (
-                            <div style={{ fontSize: "11px", color: "#10b981", marginTop: "4px" }}>
-                              ✓ Approved by client on {new Date(m.approvedAt).toLocaleString()}
+                            <div style={{ fontSize: "11px", color: "#10b981", marginTop: "4px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "6px" }}>
+                              <span>✓ Formally approved by: <strong>{m.approvedBy || "Client Signatory"}</strong> on {new Date(m.approvedAt).toLocaleString()}</span>
+                              {m.approvalSignatureHash && (
+                                <code style={{ fontSize: "10px", color: "#94a3b8", backgroundColor: "#0f172a", padding: "1px 4px", borderRadius: "3px" }}>
+                                  {m.approvalSignatureHash.substring(0, 20)}...
+                                </code>
+                              )}
                             </div>
                           )}
                         </div>
