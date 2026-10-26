@@ -71,10 +71,14 @@ export default function AdminPage() {
       .then((data) => {
         if (data.authenticated) {
           setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+          window.location.href = "/admin/login";
         }
       })
       .catch(() => {
         setIsAuthenticated(false);
+        window.location.href = "/admin/login";
       });
   }, []);
 
@@ -789,7 +793,7 @@ export default function AdminPage() {
       await fetch("/api/admin/auth", { method: "DELETE" });
     } catch {}
     setIsAuthenticated(false);
-    setPasscode("");
+    window.location.href = "/admin/login";
   }
 
   if (!isAuthenticated) {
@@ -802,7 +806,8 @@ export default function AdminPage() {
           alignItems: "center",
           justifyContent: "center",
           padding: "20px",
-          fontFamily: "sans-serif",
+          color: "#94a3b8",
+          fontFamily: "system-ui, -apple-system, sans-serif",
         }}
       >
         <div
@@ -811,71 +816,36 @@ export default function AdminPage() {
             border: "1px solid #1e293b",
             borderRadius: "8px",
             padding: "36px 40px",
-            width: "100%",
             maxWidth: "420px",
-            boxShadow: "0 12px 30px rgba(0,0,0,0.4)",
             textAlign: "center",
+            boxShadow: "0 12px 30px rgba(0,0,0,0.4)",
           }}
         >
           <div style={{ fontSize: "42px", marginBottom: "14px" }}>🔒</div>
-          <h1 style={{ margin: "0 0 6px 0", fontSize: "20px", color: "#ffffff", fontWeight: "bold" }}>
-            Admin Portal Authentication
+          <h1 style={{ margin: "0 0 8px 0", fontSize: "20px", color: "#ffffff", fontWeight: "bold" }}>
+            Admin Session Locked
           </h1>
-          <p style={{ margin: "0 0 24px 0", fontSize: "13px", color: "#94a3b8", lineHeight: "1.5" }}>
-            Enter your authorized administrator security passcode to manage projects, blog articles, services, and live inquiries.
+          <p style={{ margin: "0 0 20px 0", fontSize: "13px", lineHeight: "1.5" }}>
+            Edge Proxy requires active cryptographic verification to access the systems control panel.
           </p>
-
-          <form onSubmit={handlePasscodeSubmit}>
-            <div style={{ marginBottom: "16px" }}>
-              <input
-                type="password"
-                placeholder="Enter Passcode"
-                value={passcode}
-                onChange={(e) => {
-                  setPasscode(e.target.value);
-                  setPasscodeError(false);
-                }}
-                autoFocus
-                style={{
-                  width: "100%",
-                  boxSizing: "border-box",
-                  padding: "12px 14px",
-                  background: "#071324",
-                  border: passcodeError ? "1px solid #ef4444" : "1px solid #1e293b",
-                  borderRadius: "4px",
-                  color: "#ffffff",
-                  fontSize: "16px",
-                  textAlign: "center",
-                  letterSpacing: "4px",
-                }}
-              />
-              {passcodeError && (
-                <div style={{ color: "#ef4444", fontSize: "12px", marginTop: "8px" }}>
-                  Invalid security passcode. Please try again.
-                </div>
-              )}
-            </div>
-
-            <button
-              type="submit"
-              style={{
-                width: "100%",
-                padding: "12px",
-                background: "#0284c7",
-                color: "#ffffff",
-                border: "none",
-                borderRadius: "4px",
-                fontWeight: "bold",
-                fontSize: "14px",
-                cursor: "pointer",
-                transition: "background 0.2s",
-              }}
-            >
-              Unlock Control Panel &nbsp;›
-            </button>
-          </form>
-
-          <div style={{ marginTop: "24px", paddingTop: "16px", borderTop: "1px solid #1e293b", fontSize: "13px" }}>
+          <Link
+            href="/admin/login"
+            style={{
+              display: "inline-block",
+              width: "100%",
+              boxSizing: "border-box",
+              padding: "12px",
+              backgroundColor: "#2563eb",
+              color: "#ffffff",
+              borderRadius: "4px",
+              textDecoration: "none",
+              fontSize: "14px",
+              fontWeight: "bold",
+            }}
+          >
+            Authenticate at Security Gate ›
+          </Link>
+          <div style={{ marginTop: "20px", paddingTop: "14px", borderTop: "1px solid #1e293b", fontSize: "13px" }}>
             <Link href="/" style={{ color: "#38bdf8", textDecoration: "none" }}>
               ‹ Return to Public Portfolio
             </Link>
