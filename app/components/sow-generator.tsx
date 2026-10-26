@@ -127,6 +127,385 @@ export function calculateSowBreakdown(
   };
 }
 
+export interface SowPrintData {
+  service: ServicePricing;
+  breakdown: ReturnType<typeof calculateSowBreakdown>;
+  clientCompany: string;
+  clientContact: string;
+  targetStartDate: string;
+  documentId: string;
+}
+
+export function generateSowPrintHtml(data: SowPrintData): string {
+  const { service, breakdown, clientCompany, clientContact, targetStartDate, documentId } = data;
+  const today = new Date().toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  return `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>${documentId} - Statement of Work - ${service.title}</title>
+    <style>
+      @page {
+        margin: 1.5cm 1.4cm;
+        size: A4 portrait;
+      }
+      * { box-sizing: border-box; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        color: #0f172a;
+        background: #ffffff;
+        line-height: 1.55;
+        font-size: 13px;
+        margin: 0;
+        padding: 24px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .no-print {
+        display: block;
+      }
+      .print-toolbar {
+        background-color: #0b132b;
+        color: #ffffff;
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+      }
+      .print-toolbar-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .btn-print {
+        background-color: #2563eb;
+        color: #ffffff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        font-weight: 700;
+        font-size: 12.5px;
+        cursor: pointer;
+      }
+      .btn-print:hover {
+        background-color: #1d4ed8;
+      }
+      .btn-close {
+        background-color: #334155;
+        color: #ffffff;
+        border: none;
+        padding: 8px 14px;
+        border-radius: 5px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      @media print {
+        .no-print {
+          display: none !important;
+        }
+        body {
+          padding: 0 !important;
+        }
+        .page-break {
+          page-break-before: always;
+        }
+        .avoid-break {
+          page-break-inside: avoid;
+        }
+        tr {
+          page-break-inside: avoid;
+        }
+      }
+      .header-bar {
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 16px;
+        margin-bottom: 22px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+      .header-bar h1 {
+        font-size: 21px;
+        color: #0b132b;
+        margin: 4px 0 2px 0;
+        font-weight: 800;
+        letter-spacing: -0.4px;
+      }
+      .doc-id {
+        font-family: monospace;
+        font-size: 11.5px;
+        color: #2563eb;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+      }
+      .stamp-badge {
+        display: inline-block;
+        border: 1.5px solid #059669;
+        color: #059669;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        padding: 3px 8px;
+        border-radius: 4px;
+        background-color: #f0fdf4;
+      }
+      .parties-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 16px;
+        margin-bottom: 22px;
+      }
+      .party-box h4 {
+        margin: 0 0 6px 0;
+        font-size: 11px;
+        text-transform: uppercase;
+        color: #64748b;
+        letter-spacing: 0.6px;
+        font-weight: 800;
+      }
+      .party-box p {
+        margin: 2px 0;
+        font-size: 12.5px;
+      }
+      h2 {
+        font-size: 14.5px;
+        color: #0b132b;
+        border-bottom: 1px solid #cbd5e1;
+        padding-bottom: 6px;
+        margin: 22px 0 10px 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      ul {
+        margin: 6px 0 14px 0;
+        padding-left: 20px;
+      }
+      li {
+        margin-bottom: 5px;
+        font-size: 12px;
+        color: #334155;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 14px 0 20px 0;
+        font-size: 12px;
+      }
+      th, td {
+        border: 1px solid #cbd5e1;
+        padding: 8px 12px;
+        text-align: left;
+      }
+      th {
+        background-color: #0b132b;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 11.5px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+      }
+      tr:nth-child(even) {
+        background-color: #f8fafc;
+      }
+      .total-row {
+        background-color: #ecfdf5 !important;
+        font-weight: 800;
+        color: #065f46;
+        font-size: 13px;
+      }
+      .legal-box {
+        background-color: #f8fafc;
+        border-left: 3px solid #2563eb;
+        padding: 12px 16px;
+        margin: 16px 0 24px 0;
+        font-size: 12px;
+        color: #334155;
+        border-radius: 0 4px 4px 0;
+      }
+      .signature-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+        margin-top: 28px;
+        padding-top: 16px;
+        page-break-inside: avoid;
+      }
+      .sig-line {
+        border-top: 1px dashed #64748b;
+        padding-top: 8px;
+        font-size: 11.5px;
+        color: #64748b;
+      }
+      .footer-note {
+        margin-top: 28px;
+        border-top: 1px solid #e2e8f0;
+        padding-top: 10px;
+        font-size: 11px;
+        color: #94a3b8;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="no-print print-toolbar">
+      <div class="print-toolbar-inner">
+        <div>
+          <strong>Statement of Work Dossier &bull; Ref: ${documentId}</strong>
+          <span style="margin-left: 10px; color: #94a3b8; font-size: 12px;">Fixed-Price Architecture Sprint</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" onclick="window.print()" class="btn-print">🖨️ Print / Save as PDF</button>
+          <button type="button" onclick="window.close()" class="btn-close">✕ Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-bar">
+      <div>
+        <span class="doc-id">DOC REF: ${documentId}</span>
+        <h1>ENGINEERING STATEMENT OF WORK (SOW)</h1>
+        <p style="margin: 0; color: #475569; font-size: 12.5px;">
+          Fixed-Price Milestone Architecture Agreement &bull; Zero Budget Creep
+        </p>
+      </div>
+      <div style="text-align: right; font-size: 12px; color: #64748b;">
+        <span class="stamp-badge">✓ Official Architecture Proposal</span>
+        <p style="margin: 6px 0 0 0;"><strong>Date:</strong> ${today}</p>
+        <p style="margin: 2px 0 0 0;"><strong>Target Kickoff:</strong> ${targetStartDate}</p>
+      </div>
+    </div>
+
+    <div class="parties-grid">
+      <div class="party-box">
+        <h4>Client Organization (Party A)</h4>
+        <p><strong>Organization:</strong> ${clientCompany || "Client Organization"}</p>
+        <p><strong>Technical Sponsor:</strong> ${clientContact || "Engineering Leadership"}</p>
+        <p><strong>Jurisdiction:</strong> Standard Commercial / Applicable Law</p>
+      </div>
+      <div class="party-box">
+        <h4>Principal Systems Architect (Party B)</h4>
+        <p><strong>Engineer:</strong> MD Abu Hanif Mia</p>
+        <p><strong>Credentials:</strong> B.Sc. in CSE &bull; Batch-12 PH Honor (WEB12-3991)</p>
+        <p><strong>Direct Email:</strong> abuhanifmain@gmail.com &bull; abuhanifmia.com</p>
+      </div>
+    </div>
+
+    <h2>1. Engagement Scope: ${service.title}</h2>
+    <p style="margin: 0 0 8px 0; font-size: 12.5px;">
+      <strong>Engagement Model:</strong> ${service.pricingType.toUpperCase()} Milestone Sprint &bull;
+      <strong>Delivery Timeline:</strong> ${service.timeline} &bull;
+      <strong>Base Investment:</strong> ${service.priceDisplay}
+    </p>
+    <p style="margin: 0 0 10px 0; font-size: 12.5px; color: #334155;">${service.description}</p>
+
+    <h3 style="font-size: 12.5px; color: #0b132b; margin: 12px 0 4px 0;">Contract Deliverables Breakdown:</h3>
+    <ul>
+      ${service.deliverables.map((d) => `<li>${d}</li>`).join("")}
+    </ul>
+
+    ${
+      breakdown.chosenAddons.length > 0
+        ? `
+      <h3 style="font-size: 12.5px; color: #0b132b; margin: 14px 0 4px 0;">Integrated Architectural Add-On Modules:</h3>
+      <ul>
+        ${breakdown.chosenAddons
+          .map(
+            (a) =>
+              `<li><strong>${a.name} (+$${a.price.toLocaleString()} USD):</strong> ${a.description}</li>`
+          )
+          .join("")}
+      </ul>
+    `
+        : ""
+    }
+
+    <h2>2. Milestone Delivery &amp; Investment Schedule</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 14%;">Milestone</th>
+          <th style="width: 56%;">Engineering Deliverables &amp; Acceptance Criteria</th>
+          <th style="width: 15%; text-align: center;">Allocation</th>
+          <th style="width: 15%; text-align: right;">Amount (USD)</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${breakdown.milestones
+          .map(
+            (m) => `
+          <tr>
+            <td><strong>M${m.number}</strong></td>
+            <td><strong>${m.name}</strong><br /><span style="color: #64748b; font-size: 11px;">${m.deliverables}</span></td>
+            <td style="text-align: center;">${m.percentage}%</td>
+            <td style="text-align: right; font-weight: bold;">$${m.amount.toLocaleString()}</td>
+          </tr>
+        `
+          )
+          .join("")}
+        <tr class="total-row">
+          <td colspan="2">TOTAL FIXED SOW INVESTMENT (GUARANTEED)</td>
+          <td style="text-align: center;">100%</td>
+          <td style="text-align: right;">$${breakdown.totalInvestment.toLocaleString()} USD</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="avoid-break">
+      <h2>3. Intellectual Property, Warranty &amp; SLA Terms</h2>
+      <div class="legal-box">
+        <p style="margin: 0 0 6px 0;"><strong>1. 100% Client IP Ownership:</strong> Upon settlement of final milestone invoice, all git histories, pull requests, architectures, schemas, and deployed codebases become the sole and exclusive intellectual property of the Client.</p>
+        <p style="margin: 0 0 6px 0;"><strong>2. 30-Day Production Bug Warranty:</strong> Abu Hanif warrants the codebase for 30 consecutive calendar days against regressions or SLA deviations with zero additional billing.</p>
+        <p style="margin: 0 0 6px 0;"><strong>3. Mutual NDA &amp; Confidentiality:</strong> All technical schemas, database tokens, proprietary logic, and business requirements remain strictly confidential under mutual non-disclosure obligations.</p>
+        <p style="margin: 0;"><strong>4. Direct Execution:</strong> 100% of architectural and code tasks are delivered directly by Abu Hanif with no offshore junior delegation.</p>
+      </div>
+
+      <div class="signature-grid">
+        <div>
+          <div class="stamp-badge">✓ Verified Principal Architect</div>
+          <p style="margin: 6px 0 2px 0; font-weight: bold; font-size: 13px;">MD Abu Hanif Mia</p>
+          <p style="margin: 0 0 22px 0; font-size: 11.5px; color: #64748b;">Staff Software Engineer &amp; Systems Architect</p>
+          <div class="sig-line">
+            <span>Authorized Signature &bull; Date: ${today}</span>
+          </div>
+        </div>
+        <div>
+          <div style="height: 22px;"></div>
+          <p style="margin: 6px 0 2px 0; font-weight: bold; font-size: 13px;">${clientContact || "Client Technical Sponsor"}</p>
+          <p style="margin: 0 0 22px 0; font-size: 11.5px; color: #64748b;">${clientCompany || "Client Organization"}</p>
+          <div class="sig-line">
+            <span>Client Acceptance Signature &bull; Date</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Generated via Abu Hanif Systems Architecture SOW Engine &bull; https://abuhanifmia.com/pricing &bull; abuhanifmain@gmail.com
+    </div>
+
+    <script>
+      window.onload = function() {
+        setTimeout(function() {
+          window.print();
+        }, 250);
+      };
+    </script>
+  </body>
+</html>`;
+}
+
 export default function StatementOfWorkGenerator() {
   const [selectedServiceSlug, setSelectedServiceSlug] =
     useState<string>("database-optimization");
@@ -244,285 +623,19 @@ ${breakdown.milestones
 
   function handlePrintSow() {
     if (typeof window === "undefined") return;
-    const printWindow = window.open("", "_blank", "width=880,height=1000");
+    const printWindow = window.open("", "_blank", "width=920,height=1000");
     if (!printWindow) return;
 
-    const today = new Date().toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+    const html = generateSowPrintHtml({
+      service: selectedService,
+      breakdown,
+      clientCompany,
+      clientContact,
+      targetStartDate,
+      documentId,
     });
 
-    printWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>${documentId} - Statement of Work - ${selectedService.title}</title>
-          <meta charset="utf-8" />
-          <style>
-            @page { margin: 1.8cm 1.6cm; size: A4; }
-            * { box-sizing: border-box; }
-            body {
-              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-              color: #0f172a;
-              background: #ffffff;
-              line-height: 1.5;
-              font-size: 13px;
-              margin: 0;
-              padding: 24px;
-            }
-            .header-bar {
-              border-bottom: 3px solid #2563eb;
-              padding-bottom: 16px;
-              margin-bottom: 24px;
-              display: flex;
-              justify-content: space-between;
-              align-items: flex-start;
-            }
-            .header-bar h1 {
-              font-size: 22px;
-              color: #0b132b;
-              margin: 0 0 4px 0;
-              font-weight: 800;
-              letter-spacing: -0.5px;
-            }
-            .doc-id {
-              font-family: monospace;
-              font-size: 12px;
-              color: #2563eb;
-              font-weight: 700;
-            }
-            .parties-grid {
-              display: grid;
-              grid-template-columns: 1fr 1fr;
-              gap: 20px;
-              background-color: #f8fafc;
-              border: 1px solid #e2e8f0;
-              border-radius: 6px;
-              padding: 16px;
-              margin-bottom: 24px;
-            }
-            .party-box h4 {
-              margin: 0 0 6px 0;
-              font-size: 11px;
-              text-transform: uppercase;
-              color: #64748b;
-              letter-spacing: 0.5px;
-            }
-            .party-box p {
-              margin: 2px 0;
-              font-size: 13px;
-            }
-            h2 {
-              font-size: 15px;
-              color: #0b132b;
-              border-bottom: 1px solid #cbd5e1;
-              padding-bottom: 6px;
-              margin: 24px 0 12px 0;
-              text-transform: uppercase;
-              letter-spacing: 0.5px;
-            }
-            ul {
-              margin: 0;
-              padding-left: 20px;
-            }
-            li {
-              margin-bottom: 6px;
-              font-size: 12.5px;
-            }
-            table {
-              width: 100%;
-              border-collapse: collapse;
-              margin: 16px 0;
-              font-size: 12px;
-            }
-            th, td {
-              border: 1px solid #cbd5e1;
-              padding: 9px 12px;
-              text-align: left;
-            }
-            th {
-              background-color: #0b132b;
-              color: #ffffff;
-              font-weight: 700;
-            }
-            tr:nth-child(even) {
-              background-color: #f8fafc;
-            }
-            .total-row {
-              background-color: #ecfdf5 !important;
-              font-weight: 800;
-              color: #065f46;
-              font-size: 13.5px;
-            }
-            .legal-box {
-              background-color: #f8fafc;
-              border-left: 3px solid #2563eb;
-              padding: 12px 16px;
-              margin: 20px 0;
-              font-size: 12px;
-              color: #334155;
-            }
-            .signature-grid {
-              display: grid;
-              grid-template-columns: 1fr 1fr;
-              gap: 32px;
-              margin-top: 36px;
-              padding-top: 16px;
-              page-break-inside: avoid;
-            }
-            .sig-line {
-              border-top: 1px dashed #64748b;
-              padding-top: 8px;
-              font-size: 12px;
-            }
-            .sig-stamp {
-              display: inline-block;
-              border: 2px solid #059669;
-              color: #059669;
-              font-size: 10px;
-              font-weight: 800;
-              text-transform: uppercase;
-              padding: 2px 8px;
-              border-radius: 4px;
-              margin-bottom: 8px;
-            }
-            .footer-note {
-              margin-top: 32px;
-              border-top: 1px solid #e2e8f0;
-              padding-top: 10px;
-              font-size: 11px;
-              color: #94a3b8;
-              text-align: center;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="header-bar">
-            <div>
-              <span class="doc-id">DOC REF: ${documentId}</span>
-              <h1>ENGINEERING STATEMENT OF WORK (SOW)</h1>
-              <p style="margin: 0; color: #475569; font-size: 13px;">Fixed-Price Milestone Architecture Agreement</p>
-            </div>
-            <div style="text-align: right; font-size: 12px; color: #64748b;">
-              <p style="margin: 0;"><strong>Date:</strong> ${today}</p>
-              <p style="margin: 2px 0 0 0;"><strong>Target Kickoff:</strong> ${targetStartDate}</p>
-            </div>
-          </div>
-
-          <div class="parties-grid">
-            <div class="party-box">
-              <h4>Client Organization (Party A)</h4>
-              <p><strong>Organization:</strong> ${clientCompany || "Client Organization"}</p>
-              <p><strong>Technical Sponsor:</strong> ${clientContact || "Engineering Leadership"}</p>
-              <p><strong>Jurisdiction:</strong> Standard Commercial</p>
-            </div>
-            <div class="party-box">
-              <h4>Principal Systems Architect (Party B)</h4>
-              <p><strong>Engineer:</strong> MD Abu Hanif Mia</p>
-              <p><strong>Credentials:</strong> B.Sc. in CSE • Batch-12 PH Honor (WEB12-3991)</p>
-              <p><strong>Direct Email:</strong> abuhanifmain@gmail.com</p>
-            </div>
-          </div>
-
-          <h2>1. Engagement Scope: ${selectedService.title}</h2>
-          <p style="margin: 0 0 8px 0; font-size: 13px;">
-            <strong>Engagement Model:</strong> ${selectedService.pricingType.toUpperCase()} Milestone Sprint &bull;
-            <strong>Delivery Timeline:</strong> ${selectedService.timeline}
-          </p>
-          <p style="margin: 0 0 10px 0; font-size: 12.5px; color: #334155;">${selectedService.description}</p>
-
-          <h3 style="font-size: 13px; color: #0b132b; margin: 12px 0 6px 0;">Contract Deliverables Breakdown:</h3>
-          <ul>
-            ${selectedService.deliverables.map((d) => `<li>${d}</li>`).join("")}
-          </ul>
-
-          ${
-            breakdown.chosenAddons.length > 0
-              ? `
-            <h3 style="font-size: 13px; color: #0b132b; margin: 16px 0 6px 0;">Integrated Architectural Add-On Modules:</h3>
-            <ul>
-              ${breakdown.chosenAddons
-                .map(
-                  (a) =>
-                    `<li><strong>${a.name} (+$${a.price.toLocaleString()} USD):</strong> ${a.description}</li>`
-                )
-                .join("")}
-            </ul>
-          `
-              : ""
-          }
-
-          <h2>2. Milestone Delivery &amp; Investment Schedule</h2>
-          <table>
-            <thead>
-              <tr>
-                <th style="width: 15%;">Milestone</th>
-                <th style="width: 55%;">Engineering Deliverables</th>
-                <th style="width: 15%; text-align: center;">Allocation</th>
-                <th style="width: 15%; text-align: right;">Amount (USD)</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${breakdown.milestones
-                .map(
-                  (m) => `
-                <tr>
-                  <td><strong>M${m.number}</strong></td>
-                  <td><strong>${m.name}</strong><br /><span style="color: #64748b; font-size: 11px;">${m.deliverables}</span></td>
-                  <td style="text-align: center;">${m.percentage}%</td>
-                  <td style="text-align: right; font-weight: bold;">$${m.amount.toLocaleString()}</td>
-                </tr>
-              `
-                )
-                .join("")}
-              <tr class="total-row">
-                <td colspan="2">TOTAL FIXED SOW INVESTMENT</td>
-                <td style="text-align: center;">100%</td>
-                <td style="text-align: right;">$${breakdown.totalInvestment.toLocaleString()} USD</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <h2>3. Intellectual Property, Warranty &amp; SLA Terms</h2>
-          <div class="legal-box">
-            <p style="margin: 0 0 6px 0;"><strong>1. 100% Client IP Ownership:</strong> Upon settlement of final milestone invoice, all git histories, pull requests, architectures, schemas, and deployed codebases become the sole and exclusive intellectual property of the Client.</p>
-            <p style="margin: 0 0 6px 0;"><strong>2. 30-Day Production Bug Warranty:</strong> Abu Hanif warrants the codebase for 30 consecutive calendar days against regressions or SLA deviations with zero additional charge.</p>
-            <p style="margin: 0 0 6px 0;"><strong>3. Mutual NDA &amp; Confidentiality:</strong> All technical schemas, database tokens, proprietary logic, and business requirements remain strictly confidential under mutual non-disclosure obligations.</p>
-            <p style="margin: 0;"><strong>4. Direct Execution:</strong> 100% of architectural and code tasks are delivered directly by Abu Hanif with no offshore junior delegation.</p>
-          </div>
-
-          <div class="signature-grid">
-            <div>
-              <div class="sig-stamp">✓ Verified Principal Architect</div>
-              <p style="margin: 0 0 4px 0; font-weight: bold;">MD Abu Hanif Mia</p>
-              <p style="margin: 0 0 24px 0; font-size: 11.5px; color: #64748b;">Staff Software Engineer &amp; Systems Architect</p>
-              <div class="sig-line">
-                <span>Authorized Signature &bull; Date: ${today}</span>
-              </div>
-            </div>
-            <div>
-              <div style="height: 24px;"></div>
-              <p style="margin: 0 0 4px 0; font-weight: bold;">${clientContact || "Client Technical Sponsor"}</p>
-              <p style="margin: 0 0 24px 0; font-size: 11.5px; color: #64748b;">${clientCompany || "Client Organization"}</p>
-              <div class="sig-line">
-                <span>Client Acceptance Signature &bull; Date</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="footer-note">
-            Generated via Abu Hanif Systems Architecture SOW Engine &bull; https://abuhanifmia.com/pricing &bull; abuhanifmain@gmail.com
-          </div>
-
-          <script>
-            window.onload = function() {
-              window.print();
-            }
-          </script>
-        </body>
-      </html>
-    `);
+    printWindow.document.write(html);
     printWindow.document.close();
   }
 
@@ -917,6 +1030,28 @@ ${breakdown.milestones
               <div style={{ textAlign: "right", fontSize: "12px", color: "#475569" }}>
                 <div><strong>Effective Date:</strong> {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</div>
                 <div style={{ marginTop: "2px" }}><strong>Target Kickoff:</strong> {targetStartDate}</div>
+                <button
+                  type="button"
+                  onClick={handlePrintSow}
+                  style={{
+                    marginTop: "8px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    padding: "6px 12px",
+                    backgroundColor: "#2563eb",
+                    color: "#ffffff",
+                    border: "none",
+                    borderRadius: "5px",
+                    fontSize: "11.5px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    boxShadow: "0 2px 6px rgba(37,99,235,0.25)",
+                  }}
+                  title="Export official high-definition vector PDF"
+                >
+                  🖨️ Export PDF / Print SOW
+                </button>
               </div>
             </div>
 

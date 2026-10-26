@@ -13,6 +13,449 @@ interface CaseStudyArchitectureViewerProps {
   projectTitle: string;
 }
 
+export function generateArchitectureBlueprintHtml(arch: ProjectArchitecture): string {
+  const today = new Date().toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  const docRef = `ARCH-SPEC-2026-${arch.projectSlug.toUpperCase().replace(/[^A-Z0-9]/g, "-")}`;
+
+  return `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>${docRef} - Architecture Blueprint - ${arch.title}</title>
+    <style>
+      @page {
+        margin: 1.5cm 1.4cm;
+        size: A4 portrait;
+      }
+      * { box-sizing: border-box; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        color: #0f172a;
+        background: #ffffff;
+        line-height: 1.55;
+        font-size: 12.5px;
+        margin: 0;
+        padding: 24px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .no-print {
+        display: block;
+      }
+      .print-toolbar {
+        background-color: #0b132b;
+        color: #ffffff;
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+      }
+      .print-toolbar-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .btn-print {
+        background-color: #2563eb;
+        color: #ffffff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        font-weight: 700;
+        font-size: 12.5px;
+        cursor: pointer;
+      }
+      .btn-print:hover {
+        background-color: #1d4ed8;
+      }
+      .btn-close {
+        background-color: #334155;
+        color: #ffffff;
+        border: none;
+        padding: 8px 14px;
+        border-radius: 5px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      @media print {
+        .no-print {
+          display: none !important;
+        }
+        body {
+          padding: 0 !important;
+        }
+        .page-break {
+          page-break-before: always;
+        }
+        .avoid-break {
+          page-break-inside: avoid;
+        }
+        tr {
+          page-break-inside: avoid;
+        }
+      }
+      .header-bar {
+        border-bottom: 3px solid #0284c7;
+        padding-bottom: 16px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+      .header-bar h1 {
+        font-size: 20px;
+        color: #0b132b;
+        margin: 4px 0 2px 0;
+        font-weight: 800;
+        letter-spacing: -0.4px;
+      }
+      .doc-id {
+        font-family: monospace;
+        font-size: 11.5px;
+        color: #0284c7;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+      }
+      .stamp-badge {
+        display: inline-block;
+        border: 1.5px solid #059669;
+        color: #059669;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        padding: 3px 8px;
+        border-radius: 4px;
+        background-color: #f0fdf4;
+      }
+      .meta-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-bottom: 22px;
+      }
+      .meta-box {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 10px 14px;
+      }
+      .meta-box-label {
+        font-size: 10.5px;
+        color: #64748b;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+      }
+      .meta-box-val {
+        font-size: 14px;
+        font-weight: 800;
+        color: #0f172a;
+        margin-top: 2px;
+      }
+      h2 {
+        font-size: 14px;
+        color: #0b132b;
+        border-bottom: 1px solid #cbd5e1;
+        padding-bottom: 6px;
+        margin: 22px 0 10px 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0 18px 0;
+        font-size: 11.5px;
+      }
+      th, td {
+        border: 1px solid #cbd5e1;
+        padding: 8px 10px;
+        text-align: left;
+      }
+      th {
+        background-color: #0b132b;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+      }
+      tr:nth-child(even) {
+        background-color: #f8fafc;
+      }
+      .code-pill {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        background-color: #f1f5f9;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 11px;
+        color: #0369a1;
+        font-weight: 600;
+      }
+      .chaos-box {
+        background-color: #090e17;
+        color: #e2e8f0;
+        border-radius: 6px;
+        padding: 14px 18px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 11px;
+        margin: 10px 0 18px 0;
+        border-left: 4px solid #ef4444;
+      }
+      .chaos-log-line {
+        line-height: 1.6;
+        color: #38bdf8;
+      }
+      .legal-box {
+        background-color: #f8fafc;
+        border-left: 3px solid #0284c7;
+        padding: 10px 14px;
+        margin: 16px 0 20px 0;
+        font-size: 11.5px;
+        color: #334155;
+        border-radius: 0 4px 4px 0;
+      }
+      .signature-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+        margin-top: 24px;
+        padding-top: 14px;
+        page-break-inside: avoid;
+      }
+      .sig-line {
+        border-top: 1px dashed #64748b;
+        padding-top: 8px;
+        font-size: 11.5px;
+        color: #64748b;
+      }
+      .footer-note {
+        margin-top: 26px;
+        border-top: 1px solid #e2e8f0;
+        padding-top: 10px;
+        font-size: 11px;
+        color: #94a3b8;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="no-print print-toolbar">
+      <div class="print-toolbar-inner">
+        <div>
+          <strong>Architecture Blueprint Dossier &bull; Ref: ${docRef}</strong>
+          <span style="margin-left: 10px; color: #94a3b8; font-size: 12px;">RFC Specification &amp; Failover Runbook</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" onclick="window.print()" class="btn-print">🖨️ Print / Save as PDF</button>
+          <button type="button" onclick="window.close()" class="btn-close">✕ Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-bar">
+      <div>
+        <span class="doc-id">DOC REF: ${docRef}</span>
+        <h1>SYSTEMS ARCHITECTURE BLUEPRINT &bull; ${arch.title.toUpperCase()}</h1>
+        <p style="margin: 0; color: #475569; font-size: 12.5px;">
+          Principal Systems Architecture Specification &bull; Reference Implementation
+        </p>
+      </div>
+      <div style="text-align: right; font-size: 12px; color: #64748b;">
+        <span class="stamp-badge">✓ Verified Architecture Specification</span>
+        <p style="margin: 6px 0 0 0;"><strong>Date:</strong> ${today}</p>
+        <p style="margin: 2px 0 0 0;"><strong>Scope Allocation:</strong> ${arch.scopePrice}</p>
+      </div>
+    </div>
+
+    <!-- 4 KPI Metrics -->
+    <div class="meta-grid">
+      <div class="meta-box">
+        <div class="meta-box-label">Peak Throughput</div>
+        <div class="meta-box-val" style="color: #0284c7;">${arch.peakThroughput}</div>
+      </div>
+      <div class="meta-box">
+        <div class="meta-box-label">P99 Latency SLA</div>
+        <div class="meta-box-val" style="color: #059669;">${arch.p99Latency}</div>
+      </div>
+      <div class="meta-box">
+        <div class="meta-box-label">Infrastructure Impact</div>
+        <div class="meta-box-val" style="color: #d97706;">${arch.costSavings}</div>
+      </div>
+      <div class="meta-box">
+        <div class="meta-box-label">Disaster Recovery</div>
+        <div class="meta-box-val" style="color: #7c3aed;">${arch.failoverScenario.recoveryTimeMs}ms MTTR</div>
+      </div>
+    </div>
+
+    <p style="margin: 0 0 16px 0; font-size: 12.5px; color: #334155; line-height: 1.6;">
+      <strong>Executive Summary:</strong> ${arch.tagline} Designed, benchmarked, and verified by Principal Systems Architect MD Abu Hanif Mia.
+    </p>
+
+    <!-- Section 1: 5-Tier Topology -->
+    <h2>1. Distributed 5-Tier Topology Specification</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 22%;">Node / Component</th>
+          <th style="width: 26%;">Sub-System Role</th>
+          <th style="width: 22%;">Technology Stack</th>
+          <th style="width: 15%;">Throughput</th>
+          <th style="width: 15%;">Latency Budget</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${arch.nodes
+          .map(
+            (node) => `
+          <tr>
+            <td><strong>${node.label}</strong></td>
+            <td>${node.sub}<br /><span style="font-size: 10.5px; color: #64748b;">${node.rationale}</span></td>
+            <td><span class="code-pill">${node.tech}</span></td>
+            <td style="font-weight: 700; color: #0284c7;">${node.throughput}</td>
+            <td style="font-weight: 700; color: #059669;">${node.latencyBudget}</td>
+          </tr>
+        `
+          )
+          .join("")}
+      </tbody>
+    </table>
+
+    <!-- Section 2: Dataflow Protocol -->
+    <h2>2. High-Throughput Dataflow Sequence Protocol</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 8%;">Hop</th>
+          <th style="width: 22%;">Direction</th>
+          <th style="width: 16%;">Protocol</th>
+          <th style="width: 16%;">Payload Format</th>
+          <th style="width: 12%;">Latency Budget</th>
+          <th style="width: 26%;">Sequence Responsibility</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${arch.sequenceSteps
+          .map(
+            (step) => `
+          <tr>
+            <td style="text-align: center; font-weight: bold; color: #0284c7;">#${step.stepNumber}</td>
+            <td><strong>${step.from}</strong> &rarr; <strong>${step.to}</strong></td>
+            <td><span class="code-pill">${step.protocol}</span></td>
+            <td>${step.payload}</td>
+            <td style="font-weight: 700; color: #059669;">${step.latencyBudget}</td>
+            <td>${step.description}</td>
+          </tr>
+        `
+          )
+          .join("")}
+      </tbody>
+    </table>
+
+    <!-- Section 3: Chaos & Failover Protocol -->
+    <div class="avoid-break">
+      <h2>3. Chaos Engineering &amp; Disaster Recovery Protocol</h2>
+      <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px 16px; margin-bottom: 10px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 12px;">
+          <div><strong>Trigger Condition:</strong> ${arch.failoverScenario.triggerName}</div>
+          <div><strong>Failed Component:</strong> ${arch.failoverScenario.failedComponent}</div>
+          <div><strong>Fallback Route:</strong> ${arch.failoverScenario.fallbackRoute}</div>
+          <div><strong>Recovery Mechanism:</strong> ${arch.failoverScenario.recoveryMechanism}</div>
+          <div><strong>Verified MTTR:</strong> <span style="color: #059669; font-weight: 800;">${arch.failoverScenario.recoveryTimeMs}ms MTTR</span></div>
+          <div><strong>Data Loss Risk:</strong> <span style="color: #0284c7; font-weight: 800;">${arch.failoverScenario.dataLossRisk}</span></div>
+        </div>
+      </div>
+
+      <div class="chaos-box">
+        <div style="color: #94a3b8; margin-bottom: 6px; font-weight: bold;">// Verified Failover Trace Execution Logs:</div>
+        ${arch.failoverScenario.recoveryLogs
+          .map((log) => `<div class="chaos-log-line">&gt; ${log}</div>`)
+          .join("")}
+      </div>
+    </div>
+
+    <!-- Section 4: Architecture Trade-Offs (ADR) -->
+    <div class="avoid-break">
+      <h2>4. Architecture Decision Records (ADR) &amp; Trade-off Matrix</h2>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 16%;">Layer</th>
+            <th style="width: 18%;">Chosen Technology</th>
+            <th style="width: 18%;">Rejected Alternative</th>
+            <th style="width: 28%;">Architectural Justification</th>
+            <th style="width: 20%;">Benchmark Advantage</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${(arch.techTradeoffs || [])
+            .map(
+              (item) => `
+            <tr>
+              <td><strong>${item.layer}</strong></td>
+              <td style="color: #065f46; font-weight: 700; background-color: #f0fdf4;">✓ ${item.chosenTech}</td>
+              <td style="color: #991b1b; text-decoration: line-through; background-color: #fef2f2;">${item.rejectedAlternative}</td>
+              <td>${item.whyChosen}</td>
+              <td style="color: #0369a1; font-weight: 600;">${item.benchmarkAdvantage}</td>
+            </tr>
+          `
+            )
+            .join("")}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Section 5: Handover Terms & Verification -->
+    <div class="avoid-break">
+      <h2>5. Commercial Certification &amp; IP Handover</h2>
+      <div class="legal-box">
+        <p style="margin: 0 0 4px 0;"><strong>1. 100% Client Intellectual Property:</strong> All topology diagrams, RFC documents, IaC Terraform/Pulumi manifests, and deployment runbooks are transferred to Client ownership upon milestone completion.</p>
+        <p style="margin: 0 0 4px 0;"><strong>2. 30-Day Production Bug Warranty:</strong> Abu Hanif warrants zero performance regressions against agreed latency and throughput SLAs for 30 consecutive calendar days.</p>
+        <p style="margin: 0;"><strong>3. Direct Principal Execution:</strong> Engineered and reviewed directly by MD Abu Hanif Mia. Zero junior delegation.</p>
+      </div>
+
+      <div class="signature-grid">
+        <div>
+          <div class="stamp-badge">✓ Verified Principal Architect</div>
+          <p style="margin: 6px 0 2px 0; font-weight: bold; font-size: 13px;">MD Abu Hanif Mia</p>
+          <p style="margin: 0 0 22px 0; font-size: 11.5px; color: #64748b;">Staff Software Engineer &amp; Systems Architect &bull; Batch-12 WEB12-3991</p>
+          <div class="sig-line">
+            <span>Authorized Signature &bull; Date: ${today}</span>
+          </div>
+        </div>
+        <div>
+          <div style="height: 22px;"></div>
+          <p style="margin: 6px 0 2px 0; font-weight: bold; font-size: 13px;">Enterprise Technical Acceptance</p>
+          <p style="margin: 0 0 22px 0; font-size: 11.5px; color: #64748b;">VP Engineering / Principal Architect Sponsor</p>
+          <div class="sig-line">
+            <span>Client Acceptance Signature &bull; Date</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Generated via Abu Hanif Systems Architecture Blueprint Engine &bull; https://abuhanifmia.com/projects/${arch.projectSlug} &bull; abuhanifmain@gmail.com
+    </div>
+
+    <script>
+      window.onload = function() {
+        setTimeout(function() {
+          window.print();
+        }, 250);
+      };
+    </script>
+  </body>
+</html>`;
+}
+
 export default function CaseStudyArchitectureViewer({
   projectSlug,
   projectTitle,
@@ -68,6 +511,15 @@ export default function CaseStudyArchitectureViewer({
       setCopiedCode(true);
       setTimeout(() => setCopiedCode(false), 2400);
     }
+  }
+
+  function handlePrintBlueprint() {
+    if (typeof window === "undefined") return;
+    const printWindow = window.open("", "_blank", "width=960,height=1000");
+    if (!printWindow) return;
+    const html = generateArchitectureBlueprintHtml(arch);
+    printWindow.document.write(html);
+    printWindow.document.close();
   }
 
   return (
@@ -152,6 +604,27 @@ export default function CaseStudyArchitectureViewer({
             >
               {arch.resiliencyGrade}
             </span>
+            <button
+              type="button"
+              onClick={handlePrintBlueprint}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "5px",
+                backgroundColor: "#1e293b",
+                color: "#38bdf8",
+                border: "1px solid rgba(56, 189, 248, 0.4)",
+                padding: "4px 10px",
+                borderRadius: "5px",
+                fontSize: "11.5px",
+                fontWeight: 700,
+                cursor: "pointer",
+                transition: "all 0.15s ease",
+              }}
+              title="Export high-resolution architecture blueprint & RFC dossier (PDF / Print)"
+            >
+              🖨️ Export Blueprint (PDF)
+            </button>
           </div>
         </div>
 
@@ -1071,7 +1544,26 @@ export default function CaseStudyArchitectureViewer({
           </div>
         </div>
 
-        <div style={{ display: "flex", gap: "10px" }}>
+        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+          <button
+            type="button"
+            onClick={handlePrintBlueprint}
+            style={{
+              fontSize: "12.5px",
+              fontWeight: 700,
+              padding: "8px 14px",
+              backgroundColor: "#0b132b",
+              color: "#38bdf8",
+              border: "1px solid rgba(56, 189, 248, 0.4)",
+              borderRadius: "6px",
+              cursor: "pointer",
+              transition: "all 0.15s ease",
+            }}
+            title="Download printable architecture dossier with full topology and failover protocols"
+          >
+            🖨️ Export Blueprint (PDF)
+          </button>
+
           <Link
             href={`/pricing#sow-builder`}
             style={{
