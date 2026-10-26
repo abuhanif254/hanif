@@ -455,4 +455,140 @@ values
   ('NRT', 'Tokyo', 'East Asia', 35, 'NRT', '83a1297-NRT')
 on conflict do nothing;
 
+-- =============================================================================
+-- 8. CUSTOMER & ORDER MANAGEMENT SYSTEM (CRM & OMS)
+-- =============================================================================
+
+-- 8.1 CUSTOMERS TABLE (Client Organizations & Enterprise Accounts)
+create table if not exists public.customers (
+  id uuid primary key default uuid_generate_v4(),
+  company_name text not null,
+  primary_contact_name text not null,
+  email text not null unique,
+  phone text,
+  billing_address jsonb default '{}'::jsonb,
+  vat_tax_id text,
+  client_tier text not null default 'active_client'
+    check (client_tier in ('lead', 'active_client', 'vip_partner', 'retained', 'churned')),
+  nda_status text not null default 'none'
+    check (nda_status in ('none', 'requested', 'signed', 'mutual_nda_active')),
+  total_spend_usd numeric(12, 2) not null default 0.00
+    check (total_spend_usd >= 0),
+  internal_notes text,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+create index if not exists idx_customers_email on public.customers (email);
+create index if not exists idx_customers_tier on public.customers (client_tier);
+
+-- 8.2 ORDERS TABLE (Contracts, Scoped SOWs & Engineering Sprints)
+create table if not exists public.orders (
+  id uuid primary key default uuid_generate_v4(),
+  order_number text not null unique,
+  customer_id uuid not null references public.customers(id) on delete cascade,
+  inquiry_id uuid references public.inquiries(id) on delete set null,
+  title text not null,
+  service_tier text not null,
+  status text not null default 'draft'
+    check (status in ('draft', 'quoted', 'deposit_paid', 'in_progress', 'milestone_review', 'completed', 'delivered', 'cancelled', 'refunded')),
+  payment_status text not null default 'unpaid'
+    check (payment_status in ('unpaid', 'partially_paid', 'paid', 'refunded')),
+  currency text not null default 'USD'
+    check (currency in ('USD', 'EUR', 'GBP')),
+  subtotal_amount numeric(12, 2) not null check (subtotal_amount >= 0),
+  tax_amount numeric(12, 2) not null default 0.00 check (tax_amount >= 0),
+  total_amount numeric(12, 2) not null check (total_amount >= 0),
+  amount_paid numeric(12, 2) not null default 0.00 check (amount_paid >= 0 and amount_paid <= total_amount),
+  start_date date,
+  target_completion_date date,
+  completed_at timestamp with time zone,
+  sow_document_url text,
+  client_access_token text not null unique,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+create index if not exists idx_orders_customer on public.orders (customer_id);
+create index if not exists idx_orders_status on public.orders (status);
+create index if not exists idx_orders_token on public.orders (client_access_token);
+
+-- 8.3 ORDER MILESTONES TABLE (Deliverable Phases & Payment Slices)
+create table if not exists public.order_milestones (
+  id uuid primary key default uuid_generate_v4(),
+  order_id uuid not null references public.orders(id) on delete cascade,
+  milestone_index int not null check (milestone_index >= 1),
+  title text not null,
+  deliverables_summary text not null,
+  amount numeric(12, 2) not null check (amount >= 0),
+  due_date date,
+  status text not null default 'pending'
+    check (status in ('pending', 'in_progress', 'submitted', 'client_approved', 'paid')),
+  approved_at timestamp with time zone,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  unique (order_id, milestone_index)
+);
+
+create index if not exists idx_milestones_order on public.order_milestones (order_id);
+
+-- 8.4 ORDER AUDIT LOGS TABLE (Immutable Governance & Security Trail)
+create table if not exists public.order_audit_logs (
+  id uuid primary key default uuid_generate_v4(),
+  order_id uuid not null references public.orders(id) on delete cascade,
+  actor text not null,
+  action text not null,
+  previous_state jsonb,
+  new_state jsonb,
+  ip_address text,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+create index if not exists idx_audit_order on public.order_audit_logs (order_id, created_at desc);
+
+-- 8.5 ROW LEVEL SECURITY FOR CRM & OMS
+alter table public.customers enable row level security;
+alter table public.orders enable row level security;
+alter table public.order_milestones enable row level security;
+alter table public.order_audit_logs enable row level security;
+
+-- Drop prior policies if present
+drop policy if exists "Admins have full access to customers" on public.customers;
+drop policy if exists "Admins have full access to orders" on public.orders;
+drop policy if exists "Admins have full access to order milestones" on public.order_milestones;
+drop policy if exists "Admins have full access to audit logs" on public.order_audit_logs;
+drop policy if exists "Clients can view their own order by token" on public.orders;
+drop policy if exists "Clients can view their own milestones" on public.order_milestones;
+
+-- Admin access (Authenticated sessions or Service Role)
+create policy "Admins have full access to customers" on public.customers
+  for all using (auth.role() in ('authenticated', 'service_role'))
+  with check (auth.role() in ('authenticated', 'service_role'));
+
+create policy "Admins have full access to orders" on public.orders
+  for all using (auth.role() in ('authenticated', 'service_role'))
+  with check (auth.role() in ('authenticated', 'service_role'));
+
+create policy "Admins have full access to order milestones" on public.order_milestones
+  for all using (auth.role() in ('authenticated', 'service_role'))
+  with check (auth.role() in ('authenticated', 'service_role'));
+
+create policy "Admins have full access to audit logs" on public.order_audit_logs
+  for all using (auth.role() in ('authenticated', 'service_role'))
+  with check (auth.role() in ('authenticated', 'service_role'));
+
+-- Public client self-service read: strictly matching client_access_token (IDOR-immune)
+create policy "Clients can view their own order by token" on public.orders
+  for select using (client_access_token is not null and length(client_access_token) >= 32);
+
+create policy "Clients can view their own milestones" on public.order_milestones
+  for select using (
+    exists (
+      select 1 from public.orders o
+      where o.id = order_milestones.order_id
+        and o.client_access_token is not null
+        and length(o.client_access_token) >= 32
+    )
+  );
+
+
 

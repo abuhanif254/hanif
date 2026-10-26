@@ -21,6 +21,19 @@ import {
   exportInquiriesToJson,
   filterInquiries,
 } from "../lib/admin-leads-exporter";
+import {
+  CustomerRecord,
+  OrderRecord,
+  OrderMilestoneRecord,
+  OrderPipelineMetrics,
+  OrderStatus,
+  PaymentStatus,
+} from "../lib/oms-types";
+import {
+  initialCustomers,
+  initialOrders,
+  calculatePipelineMetrics,
+} from "../lib/oms-service";
 
 const mockInquiries: InquiryRecord[] = [
   {
@@ -48,7 +61,7 @@ const mockInquiries: InquiryRecord[] = [
 
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<
-    "overview" | "projects" | "services" | "blog" | "inquiries" | "profile"
+    "overview" | "orders" | "projects" | "services" | "blog" | "inquiries" | "profile"
   >("overview");
 
   // State stores
@@ -57,6 +70,31 @@ export default function AdminPage() {
   const [services, setServices] = useState<ServicePricing[]>(initialServices);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>(initialBlogPosts);
   const [inquiries, setInquiries] = useState<InquiryRecord[]>(mockInquiries);
+
+  // CRM & OMS State Stores
+  const [orders, setOrders] = useState<OrderRecord[]>(initialOrders);
+  const [customers, setCustomers] = useState<CustomerRecord[]>(initialCustomers);
+  const [orderMetrics, setOrderMetrics] = useState<OrderPipelineMetrics>(
+    calculatePipelineMetrics(initialOrders, initialCustomers)
+  );
+  const [omsSubTab, setOmsSubTab] = useState<"orders" | "customers">("orders");
+  const [orderFilterStatus, setOrderFilterStatus] = useState<"all" | OrderStatus>("all");
+  const [orderSearch, setOrderSearch] = useState("");
+  const [selectedOrder, setSelectedOrder] = useState<OrderRecord | null>(null);
+  const [isCreateOrderOpen, setIsCreateOrderOpen] = useState(false);
+  const [newOrderForm, setNewOrderForm] = useState({
+    customerId: "",
+    newCompanyName: "",
+    newContactName: "",
+    newEmail: "",
+    newPhone: "",
+    title: "",
+    serviceTier: "Full-Stack Web Application (Next.js/React)",
+    subtotalAmount: 10000,
+    targetCompletionDate: "",
+  });
+  const [recordPaymentAmount, setRecordPaymentAmount] = useState<string>("");
+
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
   // Security Passcode Gate State
@@ -187,6 +225,26 @@ export default function AdminPage() {
         } catch {}
       }
     }
+
+    // 2. Fetch live orders & customer directory from OMS API
+    fetch("/api/admin/orders")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.orders) {
+          setOrders(data.orders);
+          if (data.metrics) setOrderMetrics(data.metrics);
+        }
+      })
+      .catch(() => {});
+
+    fetch("/api/admin/customers")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.customers) {
+          setCustomers(data.customers);
+        }
+      })
+      .catch(() => {});
 
     // 2. Fetch from Supabase if configured
     if (isSupabaseConfigured && supabase) {
@@ -768,23 +826,184 @@ export default function AdminPage() {
     }
   }
 
-  async function handlePasscodeSubmit(e: React.FormEvent) {
+  // ---------------------------------------------------------------------------
+  // CRM & ORDER MANAGEMENT SYSTEM HANDLERS
+  // ---------------------------------------------------------------------------
+  async function handleCreateOrderSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const subtotal = Number(newOrderForm.subtotalAmount) || 10000;
+    const p1 = Number((subtotal * 0.5).toFixed(2));
+    const p2 = Number((subtotal * 0.3).toFixed(2));
+    const p3 = Number((subtotal - p1 - p2).toFixed(2));
+
+    const payload = {
+      customerId: newOrderForm.customerId || undefined,
+      newCustomer: !newOrderForm.customerId && newOrderForm.newEmail
+        ? {
+            companyName: newOrderForm.newCompanyName || `${newOrderForm.newContactName} Organization`,
+            primaryContactName: newOrderForm.newContactName || "Client Lead",
+            email: newOrderForm.newEmail,
+            phone: newOrderForm.newPhone || undefined,
+          }
+        : undefined,
+      title: newOrderForm.title || `${newOrderForm.serviceTier} Engagement`,
+      serviceTier: newOrderForm.serviceTier,
+      currency: "USD" as const,
+      subtotalAmount: subtotal,
+      taxAmount: 0,
+      targetCompletionDate: newOrderForm.targetCompletionDate || undefined,
+      milestones: [
+        {
+          title: "Phase 1: Architecture Blueprint & Environment Setup",
+          deliverablesSummary: "Zero-trust schema, SSR architecture, and staging deployment",
+          amount: p1,
+        },
+        {
+          title: "Phase 2: Core Engineering & Staging Preview",
+          deliverablesSummary: "API implementation, core features, and test coverage",
+          amount: p2,
+        },
+        {
+          title: "Phase 3: Production Hardening, Audit & Handover",
+          deliverablesSummary: "Load tests, 100% IP transfer, and 30-day bug warranty",
+          amount: p3,
+        },
+      ],
+    };
+
     try {
-      const res = await fetch("/api/admin/auth", {
+      const res = await fetch("/api/admin/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ passcode: passcode.trim() }),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
-      if (res.ok && data.success) {
-        setIsAuthenticated(true);
-        setPasscodeError(false);
+      if (res.ok && data.success && data.order) {
+        setOrders([data.order, ...orders]);
+        setOrderMetrics(calculatePipelineMetrics([data.order, ...orders], customers));
+        setIsCreateOrderOpen(false);
+        setNewOrderForm({
+          customerId: "",
+          newCompanyName: "",
+          newContactName: "",
+          newEmail: "",
+          newPhone: "",
+          title: "",
+          serviceTier: "Full-Stack Web Application (Next.js/React)",
+          subtotalAmount: 10000,
+          targetCompletionDate: "",
+        });
+        showNotification(`Order ${data.order.orderNumber} successfully created!`);
       } else {
-        setPasscodeError(true);
+        alert(data.error || "Failed to create order.");
       }
     } catch {
-      setPasscodeError(true);
+      alert("Network error creating order.");
+    }
+  }
+
+  async function handleQuickOrderStatusChange(orderId: string, newStatus: OrderStatus) {
+    try {
+      const res = await fetch(`/api/admin/orders/${orderId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success && data.order) {
+        const updatedOrders = orders.map((o) => (o.id === orderId ? data.order : o));
+        setOrders(updatedOrders);
+        setOrderMetrics(calculatePipelineMetrics(updatedOrders, customers));
+        if (selectedOrder && selectedOrder.id === orderId) {
+          setSelectedOrder(data.order);
+        }
+        showNotification(`Order status updated to '${newStatus}'.`);
+      } else {
+        alert(data.error || "Failed to update order status.");
+      }
+    } catch {
+      alert("Network error updating order status.");
+    }
+  }
+
+  async function handleRecordPayment(orderId: string, amount: number) {
+    try {
+      const res = await fetch(`/api/admin/orders/${orderId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amountPaid: amount }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success && data.order) {
+        const updatedOrders = orders.map((o) => (o.id === orderId ? data.order : o));
+        setOrders(updatedOrders);
+        setOrderMetrics(calculatePipelineMetrics(updatedOrders, customers));
+        if (selectedOrder && selectedOrder.id === orderId) {
+          setSelectedOrder(data.order);
+        }
+        showNotification(`Payment recorded: $${amount.toLocaleString()} settled.`);
+      } else {
+        alert(data.error || "Failed to record payment.");
+      }
+    } catch {
+      alert("Network error recording payment.");
+    }
+  }
+
+  async function handleDeleteOrder(orderId: string) {
+    if (!window.confirm("Permanently delete this engagement order and all associated milestones?")) {
+      return;
+    }
+    try {
+      const res = await fetch(`/api/admin/orders/${orderId}`, { method: "DELETE" });
+      if (res.ok) {
+        const updatedOrders = orders.filter((o) => o.id !== orderId);
+        setOrders(updatedOrders);
+        setOrderMetrics(calculatePipelineMetrics(updatedOrders, customers));
+        if (selectedOrder && selectedOrder.id === orderId) {
+          setSelectedOrder(null);
+        }
+        showNotification("Order record deleted from system.");
+      }
+    } catch {
+      alert("Failed to delete order.");
+    }
+  }
+
+  async function handleConvertInquiry(inquiry: InquiryRecord) {
+    if (!window.confirm(`Convert inquiry from '${inquiry.name}' into an official Customer & Contract Order?`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/admin/orders/convert-inquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ inquiry }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success && data.order) {
+        setOrders([data.order, ...orders]);
+        setOrderMetrics(calculatePipelineMetrics([data.order, ...orders], customers));
+        setActiveTab("orders");
+        showNotification(`Inquiry converted! Order ${data.order.orderNumber} created.`);
+      } else {
+        alert(data.error || "Failed to convert inquiry.");
+      }
+    } catch {
+      alert("Network error during inquiry conversion.");
+    }
+  }
+
+  function copyClientTrackerUrl(token: string) {
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://abuhanifmia.com";
+    const url = `${origin}/orders/tracker?token=${token}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url);
+      showNotification("Copied Client Order Tracker link to clipboard!");
+    } else {
+      prompt("Copy Client Order Tracker URL:", url);
     }
   }
 
@@ -987,6 +1206,7 @@ export default function AdminPage() {
           <nav className="admin-sidebar-nav" style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
             {[
               ["overview", "Dashboard Overview", "📊"],
+              ["orders", `Orders & CRM (${orders.length})`, "💼"],
               ["projects", "Work & Portfolio", "💻"],
               ["services", "Services & Pricing", "🏷️"],
               ["blog", "Technical Blog", "📝"],
@@ -1032,12 +1252,24 @@ export default function AdminPage() {
               </p>
 
               {/* Stats Grid */}
-              <div className="admin-stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "20px", marginBottom: "30px" }}>
+              <div className="admin-stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "20px", marginBottom: "24px" }}>
+                <div style={{ backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "6px", padding: "20px" }}>
+                  <div style={{ color: "#94a3b8", fontSize: "12px", textTransform: "uppercase", fontWeight: "700" }}>
+                    Total Contract Value (TCV)
+                  </div>
+                  <div style={{ fontSize: "30px", fontWeight: "800", color: "#4ade80", marginTop: "8px" }}>
+                    ${orderMetrics.totalContractValueUsd.toLocaleString()}
+                  </div>
+                  <div style={{ fontSize: "12px", color: "#94a3b8", marginTop: "4px" }}>
+                    ${orderMetrics.totalRevenueCollectedUsd.toLocaleString()} collected ({orderMetrics.activeOrdersCount} active orders)
+                  </div>
+                </div>
+
                 <div style={{ backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "6px", padding: "20px" }}>
                   <div style={{ color: "#94a3b8", fontSize: "12px", textTransform: "uppercase", fontWeight: "700" }}>
                     Active Inquiries
                   </div>
-                  <div style={{ fontSize: "32px", fontWeight: "800", color: "#38bdf8", marginTop: "8px" }}>
+                  <div style={{ fontSize: "30px", fontWeight: "800", color: "#38bdf8", marginTop: "8px" }}>
                     {inquiries.length}
                   </div>
                   <div style={{ fontSize: "12px", color: "#10b981", marginTop: "4px" }}>
@@ -1049,7 +1281,7 @@ export default function AdminPage() {
                   <div style={{ color: "#94a3b8", fontSize: "12px", textTransform: "uppercase", fontWeight: "700" }}>
                     Featured Projects
                   </div>
-                  <div style={{ fontSize: "32px", fontWeight: "800", color: "#ffffff", marginTop: "8px" }}>
+                  <div style={{ fontSize: "30px", fontWeight: "800", color: "#ffffff", marginTop: "8px" }}>
                     {projects.length}
                   </div>
                   <div style={{ fontSize: "12px", color: "#94a3b8", marginTop: "4px" }}>
@@ -1059,21 +1291,9 @@ export default function AdminPage() {
 
                 <div style={{ backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "6px", padding: "20px" }}>
                   <div style={{ color: "#94a3b8", fontSize: "12px", textTransform: "uppercase", fontWeight: "700" }}>
-                    Pricing Packages
-                  </div>
-                  <div style={{ fontSize: "32px", fontWeight: "800", color: "#16a34a", marginTop: "8px" }}>
-                    {services.length}
-                  </div>
-                  <div style={{ fontSize: "12px", color: "#94a3b8", marginTop: "4px" }}>
-                    Transparent client rates
-                  </div>
-                </div>
-
-                <div style={{ backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "6px", padding: "20px" }}>
-                  <div style={{ color: "#94a3b8", fontSize: "12px", textTransform: "uppercase", fontWeight: "700" }}>
                     Blog Articles
                   </div>
-                  <div style={{ fontSize: "32px", fontWeight: "800", color: "#eab308", marginTop: "8px" }}>
+                  <div style={{ fontSize: "30px", fontWeight: "800", color: "#eab308", marginTop: "8px" }}>
                     {blogPosts.length}
                   </div>
                   <div style={{ fontSize: "12px", color: "#94a3b8", marginTop: "4px" }}>
@@ -1267,6 +1487,730 @@ export default function AdminPage() {
                   ))}
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* TAB 7: ORDERS & CRM */}
+          {activeTab === "orders" && (
+            <div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                  marginBottom: "24px",
+                  flexWrap: "wrap",
+                  gap: "14px",
+                }}
+              >
+                <div>
+                  <h2 style={{ fontSize: "24px", fontWeight: "800", margin: "0 0 6px 0", color: "#ffffff" }}>
+                    Client Orders &amp; Customer Relationship Management (CRM / OMS)
+                  </h2>
+                  <p style={{ margin: 0, fontSize: "14px", color: "#94a3b8" }}>
+                    Institutional order pipeline, cryptographic client deliverables tracking, escrow milestone settlement, and client relationship ledger.
+                  </p>
+                </div>
+
+                <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                  <button
+                    type="button"
+                    onClick={() => setIsCreateOrderOpen(true)}
+                    style={{
+                      padding: "10px 18px",
+                      backgroundColor: "#2563eb",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "6px",
+                      fontSize: "13px",
+                      fontWeight: "700",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      boxShadow: "0 4px 12px rgba(37, 99, 235, 0.3)",
+                    }}
+                  >
+                    <span>➕</span> Create New Order
+                  </button>
+                </div>
+              </div>
+
+              {/* Financial KPI Summary Grid */}
+              <div
+                className="admin-stats-grid"
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(5, 1fr)",
+                  gap: "14px",
+                  marginBottom: "28px",
+                }}
+              >
+                <div style={{ backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "8px", padding: "16px" }}>
+                  <div style={{ color: "#94a3b8", fontSize: "11px", textTransform: "uppercase", fontWeight: "700" }}>
+                    Total Contract Value (TCV)
+                  </div>
+                  <div style={{ fontSize: "22px", fontWeight: "800", color: "#4ade80", marginTop: "6px" }}>
+                    ${orderMetrics.totalContractValueUsd.toLocaleString()}
+                  </div>
+                  <div style={{ fontSize: "11px", color: "#94a3b8", marginTop: "4px" }}>
+                    All pipeline agreements
+                  </div>
+                </div>
+
+                <div style={{ backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "8px", padding: "16px" }}>
+                  <div style={{ color: "#94a3b8", fontSize: "11px", textTransform: "uppercase", fontWeight: "700" }}>
+                    Collected Revenue
+                  </div>
+                  <div style={{ fontSize: "22px", fontWeight: "800", color: "#38bdf8", marginTop: "6px" }}>
+                    ${orderMetrics.totalRevenueCollectedUsd.toLocaleString()}
+                  </div>
+                  <div style={{ fontSize: "11px", color: "#10b981", marginTop: "4px" }}>
+                    Settled milestone funds
+                  </div>
+                </div>
+
+                <div style={{ backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "8px", padding: "16px" }}>
+                  <div style={{ color: "#94a3b8", fontSize: "11px", textTransform: "uppercase", fontWeight: "700" }}>
+                    In-Flight Sprints
+                  </div>
+                  <div style={{ fontSize: "22px", fontWeight: "800", color: "#f59e0b", marginTop: "6px" }}>
+                    ${orderMetrics.inFlightContractValueUsd.toLocaleString()}
+                  </div>
+                  <div style={{ fontSize: "11px", color: "#94a3b8", marginTop: "4px" }}>
+                    Currently under delivery
+                  </div>
+                </div>
+
+                <div style={{ backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "8px", padding: "16px" }}>
+                  <div style={{ color: "#94a3b8", fontSize: "11px", textTransform: "uppercase", fontWeight: "700" }}>
+                    Active Engagements
+                  </div>
+                  <div style={{ fontSize: "22px", fontWeight: "800", color: "#a855f7", marginTop: "6px" }}>
+                    {orderMetrics.activeOrdersCount}
+                  </div>
+                  <div style={{ fontSize: "11px", color: "#94a3b8", marginTop: "4px" }}>
+                    Orders in execution
+                  </div>
+                </div>
+
+                <div style={{ backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "8px", padding: "16px" }}>
+                  <div style={{ color: "#94a3b8", fontSize: "11px", textTransform: "uppercase", fontWeight: "700" }}>
+                    Customer Accounts
+                  </div>
+                  <div style={{ fontSize: "22px", fontWeight: "800", color: "#ffffff", marginTop: "6px" }}>
+                    {customers.length}
+                  </div>
+                  <div style={{ fontSize: "11px", color: "#94a3b8", marginTop: "4px" }}>
+                    Verified enterprise clients
+                  </div>
+                </div>
+              </div>
+
+              {/* Sub-Tab Navigation Bar */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  marginBottom: "20px",
+                  borderBottom: "1px solid #1e293b",
+                  paddingBottom: "12px",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOmsSubTab("orders")}
+                  style={{
+                    padding: "8px 16px",
+                    borderRadius: "6px",
+                    border: "none",
+                    backgroundColor: omsSubTab === "orders" ? "#1e293b" : "transparent",
+                    color: omsSubTab === "orders" ? "#38bdf8" : "#94a3b8",
+                    fontSize: "13px",
+                    fontWeight: omsSubTab === "orders" ? "700" : "500",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  <span>📋</span> Orders Pipeline ({orders.length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setOmsSubTab("customers")}
+                  style={{
+                    padding: "8px 16px",
+                    borderRadius: "6px",
+                    border: "none",
+                    backgroundColor: omsSubTab === "customers" ? "#1e293b" : "transparent",
+                    color: omsSubTab === "customers" ? "#38bdf8" : "#94a3b8",
+                    fontSize: "13px",
+                    fontWeight: omsSubTab === "customers" ? "700" : "500",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  <span>🏢</span> Customer Directory ({customers.length})
+                </button>
+              </div>
+
+              {/* SUBTAB 1: ORDERS PIPELINE */}
+              {omsSubTab === "orders" && (
+                <div>
+                  {/* Filters & Search Toolbar */}
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: "12px",
+                      marginBottom: "18px",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <div style={{ flex: 1, minWidth: "260px" }}>
+                      <input
+                        type="text"
+                        placeholder="Search by order #, client name, service tier..."
+                        value={orderSearch}
+                        onChange={(e) => setOrderSearch(e.target.value)}
+                        style={{
+                          width: "100%",
+                          padding: "8px 12px",
+                          backgroundColor: "#071324",
+                          border: "1px solid #1e293b",
+                          borderRadius: "6px",
+                          color: "#fff",
+                          fontSize: "13px",
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                      <label style={{ fontSize: "12px", color: "#94a3b8" }}>Status Filter:</label>
+                      <select
+                        value={orderFilterStatus}
+                        onChange={(e) => setOrderFilterStatus(e.target.value as any)}
+                        style={{
+                          padding: "8px 12px",
+                          backgroundColor: "#071324",
+                          border: "1px solid #1e293b",
+                          borderRadius: "6px",
+                          color: "#fff",
+                          fontSize: "13px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <option value="all">All Statuses ({orders.length})</option>
+                        <option value="draft">Draft</option>
+                        <option value="quoted">Quoted</option>
+                        <option value="deposit_paid">Deposit Paid</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="milestone_review">Milestone Review</option>
+                        <option value="completed">Completed</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Orders Cards List */}
+                  {(() => {
+                    const filteredOrders = orders.filter((o) => {
+                      const matchStatus = orderFilterStatus === "all" || o.status === orderFilterStatus;
+                      const searchLower = orderSearch.toLowerCase();
+                      const matchSearch =
+                        !orderSearch ||
+                        o.orderNumber.toLowerCase().includes(searchLower) ||
+                        o.title.toLowerCase().includes(searchLower) ||
+                        o.serviceTier.toLowerCase().includes(searchLower) ||
+                        (o.customer?.companyName || "").toLowerCase().includes(searchLower) ||
+                        (o.customer?.primaryContactName || "").toLowerCase().includes(searchLower);
+                      return matchStatus && matchSearch;
+                    });
+
+                    if (filteredOrders.length === 0) {
+                      return (
+                        <div
+                          style={{
+                            padding: "48px 24px",
+                            textAlign: "center",
+                            backgroundColor: "#0a192f",
+                            border: "1px solid #1e293b",
+                            borderRadius: "8px",
+                            color: "#94a3b8",
+                          }}
+                        >
+                          <div style={{ fontSize: "32px", marginBottom: "12px" }}>💼</div>
+                          <h4 style={{ fontSize: "16px", color: "#e2e8f0", margin: "0 0 6px 0" }}>No Orders Match Your Filter</h4>
+                          <p style={{ fontSize: "13px", margin: "0 0 16px 0" }}>
+                            Try adjusting your search criteria, or create a new order directly.
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => setIsCreateOrderOpen(true)}
+                            style={{
+                              padding: "8px 16px",
+                              backgroundColor: "#2563eb",
+                              color: "#fff",
+                              border: "none",
+                              borderRadius: "4px",
+                              fontSize: "13px",
+                              fontWeight: "600",
+                              cursor: "pointer",
+                            }}
+                          >
+                            ➕ Create New Order
+                          </button>
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                        {filteredOrders.map((order) => {
+                          const completedMilestones = order.milestones.filter(
+                            (m) => m.status === "client_approved" || m.status === "paid"
+                          ).length;
+                          const progressPct =
+                            order.milestones.length > 0
+                              ? Math.round((completedMilestones / order.milestones.length) * 100)
+                              : 0;
+
+                          const statusColors: Record<OrderStatus, { bg: string; text: string; border: string }> = {
+                            draft: { bg: "#334155", text: "#cbd5e1", border: "#475569" },
+                            quoted: { bg: "#1e3a5f", text: "#93c5fd", border: "#2563eb" },
+                            deposit_paid: { bg: "#064e3b", text: "#6ee7b7", border: "#059669" },
+                            in_progress: { bg: "#1e1b4b", text: "#c084fc", border: "#7c3aed" },
+                            milestone_review: { bg: "#78350f", text: "#fde047", border: "#d97706" },
+                            completed: { bg: "#065f46", text: "#34d399", border: "#10b981" },
+                            delivered: { bg: "#022c22", text: "#a7f3d0", border: "#047857" },
+                            cancelled: { bg: "#450a0a", text: "#fca5a5", border: "#991b1b" },
+                            refunded: { bg: "#450a0a", text: "#fca5a5", border: "#991b1b" },
+                          };
+
+                          const sc = statusColors[order.status] || statusColors.draft;
+
+                          return (
+                            <div
+                              key={order.id}
+                              style={{
+                                backgroundColor: "#0a192f",
+                                border: "1px solid #1e293b",
+                                borderRadius: "8px",
+                                padding: "20px",
+                                transition: "border-color 0.2s ease",
+                              }}
+                            >
+                              {/* Top Bar: Order Number, Customer, Status Selector */}
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "flex-start",
+                                  marginBottom: "14px",
+                                  flexWrap: "wrap",
+                                  gap: "10px",
+                                }}
+                              >
+                                <div>
+                                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                    <span style={{ fontSize: "16px", fontWeight: "800", color: "#38bdf8", fontFamily: "monospace" }}>
+                                      {order.orderNumber}
+                                    </span>
+                                    <span
+                                      style={{
+                                        fontSize: "11px",
+                                        fontWeight: "700",
+                                        padding: "3px 8px",
+                                        borderRadius: "4px",
+                                        backgroundColor: sc.bg,
+                                        color: sc.text,
+                                        border: `1px solid ${sc.border}`,
+                                        textTransform: "uppercase",
+                                      }}
+                                    >
+                                      {order.status.replace("_", " ")}
+                                    </span>
+                                    <span
+                                      style={{
+                                        fontSize: "11px",
+                                        fontWeight: "700",
+                                        padding: "3px 8px",
+                                        borderRadius: "4px",
+                                        backgroundColor:
+                                          order.paymentStatus === "paid"
+                                            ? "#065f46"
+                                            : order.paymentStatus === "partially_paid"
+                                            ? "#78350f"
+                                            : "#450a0a",
+                                        color:
+                                          order.paymentStatus === "paid"
+                                            ? "#34d399"
+                                            : order.paymentStatus === "partially_paid"
+                                            ? "#fde047"
+                                            : "#fca5a5",
+                                        textTransform: "uppercase",
+                                      }}
+                                    >
+                                      {order.paymentStatus.replace("_", " ")}
+                                    </span>
+                                  </div>
+                                  <div style={{ fontSize: "13px", color: "#e2e8f0", marginTop: "4px", fontWeight: "600" }}>
+                                    {order.customer?.companyName || "Direct Organization Lead"}
+                                    {order.customer?.primaryContactName && (
+                                      <span style={{ color: "#94a3b8", fontWeight: "400" }}>
+                                        {" "}• {order.customer.primaryContactName}
+                                      </span>
+                                    )}
+                                    {order.customer?.email && (
+                                      <span style={{ color: "#38bdf8", fontWeight: "400" }}>
+                                        {" "}• <a href={`mailto:${order.customer.email}`} style={{ color: "#38bdf8" }}>{order.customer.email}</a>
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                                  <label style={{ fontSize: "11px", color: "#94a3b8" }}>Update Status:</label>
+                                  <select
+                                    value={order.status}
+                                    onChange={(e) => handleQuickOrderStatusChange(order.id, e.target.value as OrderStatus)}
+                                    style={{
+                                      padding: "4px 8px",
+                                      backgroundColor: "#071324",
+                                      border: "1px solid #1e293b",
+                                      borderRadius: "4px",
+                                      color: "#fff",
+                                      fontSize: "12px",
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    <option value="draft">Draft</option>
+                                    <option value="quoted">Quoted</option>
+                                    <option value="deposit_paid">Deposit Paid</option>
+                                    <option value="in_progress">In Progress</option>
+                                    <option value="milestone_review">Milestone Review</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="delivered">Delivered</option>
+                                    <option value="cancelled">Cancelled</option>
+                                  </select>
+                                </div>
+                              </div>
+
+                              {/* Title & Service Tier */}
+                              <div style={{ marginBottom: "14px" }}>
+                                <div style={{ fontSize: "16px", fontWeight: "700", color: "#ffffff", marginBottom: "4px" }}>
+                                  {order.title}
+                                </div>
+                                <div style={{ fontSize: "12px", color: "#38bdf8" }}>
+                                  Service Tier: <span style={{ color: "#cbd5e1" }}>{order.serviceTier}</span>
+                                  {order.targetCompletionDate && (
+                                    <span style={{ color: "#94a3b8" }}> • Target: {order.targetCompletionDate}</span>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Financial Breakdown & Milestones Progress Bar */}
+                              <div
+                                style={{
+                                  display: "grid",
+                                  gridTemplateColumns: "1fr 1fr",
+                                  gap: "16px",
+                                  backgroundColor: "#071324",
+                                  padding: "14px",
+                                  borderRadius: "6px",
+                                  marginBottom: "14px",
+                                }}
+                              >
+                                <div>
+                                  <div style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase", marginBottom: "4px" }}>
+                                    Financial Reconciliation
+                                  </div>
+                                  <div style={{ display: "flex", gap: "16px", alignItems: "baseline" }}>
+                                    <div>
+                                      <span style={{ fontSize: "11px", color: "#94a3b8" }}>Total: </span>
+                                      <strong style={{ fontSize: "15px", color: "#ffffff" }}>
+                                        ${order.totalAmount.toLocaleString()} {order.currency}
+                                      </strong>
+                                    </div>
+                                    <div>
+                                      <span style={{ fontSize: "11px", color: "#94a3b8" }}>Paid: </span>
+                                      <strong style={{ fontSize: "15px", color: "#4ade80" }}>
+                                        ${order.amountPaid.toLocaleString()}
+                                      </strong>
+                                    </div>
+                                    <div>
+                                      <span style={{ fontSize: "11px", color: "#94a3b8" }}>Balance: </span>
+                                      <strong style={{ fontSize: "15px", color: "#f87171" }}>
+                                        ${(order.totalAmount - order.amountPaid).toLocaleString()}
+                                      </strong>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
+                                    <div style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase" }}>
+                                      Milestone Delivery Progress
+                                    </div>
+                                    <div style={{ fontSize: "11px", color: "#38bdf8", fontWeight: "700" }}>
+                                      {completedMilestones} of {order.milestones.length} approved ({progressPct}%)
+                                    </div>
+                                  </div>
+                                  <div
+                                    style={{
+                                      width: "100%",
+                                      height: "8px",
+                                      backgroundColor: "#1e293b",
+                                      borderRadius: "4px",
+                                      overflow: "hidden",
+                                      marginBottom: "6px",
+                                    }}
+                                  >
+                                    <div
+                                      style={{
+                                        width: `${progressPct}%`,
+                                        height: "100%",
+                                        backgroundColor: progressPct === 100 ? "#10b981" : "#38bdf8",
+                                        transition: "width 0.4s ease",
+                                      }}
+                                    />
+                                  </div>
+                                  <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                                    {order.milestones.map((ms, idx) => (
+                                      <span
+                                        key={ms.id || idx}
+                                        style={{
+                                          fontSize: "10px",
+                                          padding: "2px 6px",
+                                          borderRadius: "3px",
+                                          backgroundColor:
+                                            ms.status === "client_approved" || ms.status === "paid"
+                                              ? "#065f46"
+                                              : ms.status === "submitted"
+                                              ? "#78350f"
+                                              : "#1e293b",
+                                          color:
+                                            ms.status === "client_approved" || ms.status === "paid"
+                                              ? "#6ee7b7"
+                                              : ms.status === "submitted"
+                                              ? "#fde047"
+                                              : "#94a3b8",
+                                        }}
+                                      >
+                                        P{ms.milestoneIndex}: ${ms.amount.toLocaleString()} ({ms.status.replace("_", " ")})
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Action Footer: Milestones, Client URL, Delete */}
+                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
+                                <div style={{ fontSize: "11px", color: "#94a3b8" }}>
+                                  Created: {new Date(order.createdAt).toLocaleDateString()} • Client Token:{" "}
+                                  <code style={{ color: "#38bdf8", backgroundColor: "#071324", padding: "2px 6px", borderRadius: "3px" }}>
+                                    {order.clientAccessToken.substring(0, 18)}...
+                                  </code>
+                                </div>
+
+                                <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                                  <button
+                                    type="button"
+                                    onClick={() => setSelectedOrder(order)}
+                                    style={{
+                                      padding: "6px 12px",
+                                      backgroundColor: "#1e293b",
+                                      border: "1px solid #334155",
+                                      borderRadius: "4px",
+                                      color: "#ffffff",
+                                      fontSize: "12px",
+                                      fontWeight: "600",
+                                      cursor: "pointer",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: "4px",
+                                    }}
+                                  >
+                                    <span>🔍</span> Milestones &amp; Details
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    onClick={() => copyClientTrackerUrl(order.clientAccessToken)}
+                                    style={{
+                                      padding: "6px 12px",
+                                      backgroundColor: "#065f46",
+                                      border: "1px solid #059669",
+                                      borderRadius: "4px",
+                                      color: "#6ee7b7",
+                                      fontSize: "12px",
+                                      fontWeight: "600",
+                                      cursor: "pointer",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: "4px",
+                                    }}
+                                  >
+                                    <span>🔗</span> Copy Client Tracker URL
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteOrder(order.id)}
+                                    style={{
+                                      padding: "6px 10px",
+                                      backgroundColor: "#450a0a",
+                                      border: "1px solid #991b1b",
+                                      borderRadius: "4px",
+                                      color: "#fca5a5",
+                                      fontSize: "12px",
+                                      cursor: "pointer",
+                                    }}
+                                    title="Delete Order"
+                                  >
+                                    🗑️
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })()}
+                </div>
+              )}
+
+              {/* SUBTAB 2: CUSTOMER DIRECTORY */}
+              {omsSubTab === "customers" && (
+                <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBottom: "16px",
+                    }}
+                  >
+                    <div>
+                      <h3 style={{ fontSize: "16px", fontWeight: "700", color: "#ffffff", margin: 0 }}>
+                        Customer Directory &amp; Enterprise Accounts ({customers.length})
+                      </h3>
+                      <p style={{ margin: "4px 0 0 0", fontSize: "12px", color: "#94a3b8" }}>
+                        Direct client contacts, NDA agreements, and lifetime billings ledger.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))", gap: "16px" }}>
+                    {customers.map((c) => {
+                      const linkedOrders = orders.filter((o) => o.customerId === c.id);
+                      const ndaBadge =
+                        c.ndaStatus === "mutual_nda_active" || c.ndaStatus === "signed"
+                          ? { bg: "#065f46", text: "#6ee7b7", label: "NDA SIGNED" }
+                          : { bg: "#78350f", text: "#fde047", label: "NDA PENDING" };
+
+                      return (
+                        <div
+                          key={c.id}
+                          style={{
+                            backgroundColor: "#0a192f",
+                            border: "1px solid #1e293b",
+                            borderRadius: "8px",
+                            padding: "18px",
+                          }}
+                        >
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
+                            <div>
+                              <h4 style={{ fontSize: "16px", fontWeight: "700", color: "#ffffff", margin: 0 }}>
+                                {c.companyName}
+                              </h4>
+                              <div style={{ fontSize: "13px", color: "#38bdf8", marginTop: "2px" }}>
+                                {c.primaryContactName}
+                              </div>
+                            </div>
+                            <span
+                              style={{
+                                fontSize: "10px",
+                                fontWeight: "700",
+                                padding: "3px 8px",
+                                borderRadius: "4px",
+                                backgroundColor: ndaBadge.bg,
+                                color: ndaBadge.text,
+                              }}
+                            >
+                              {ndaBadge.label}
+                            </span>
+                          </div>
+
+                          <div style={{ fontSize: "12px", color: "#94a3b8", marginBottom: "12px", lineHeight: "1.6" }}>
+                            <div>
+                              📧 <a href={`mailto:${c.email}`} style={{ color: "#cbd5e1" }}>{c.email}</a>
+                            </div>
+                            {c.phone && <div>📞 {c.phone}</div>}
+                            {c.billingAddress && (
+                              <div>📍 {c.billingAddress.city}, {c.billingAddress.country}</div>
+                            )}
+                          </div>
+
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              backgroundColor: "#071324",
+                              padding: "10px 12px",
+                              borderRadius: "6px",
+                              marginBottom: "12px",
+                            }}
+                          >
+                            <div>
+                              <div style={{ fontSize: "10px", color: "#94a3b8", textTransform: "uppercase" }}>Lifetime Spend</div>
+                              <div style={{ fontSize: "14px", fontWeight: "700", color: "#4ade80" }}>
+                                ${c.totalSpendUsd.toLocaleString()} USD
+                              </div>
+                            </div>
+                            <div>
+                              <div style={{ fontSize: "10px", color: "#94a3b8", textTransform: "uppercase" }}>Engagements</div>
+                              <div style={{ fontSize: "14px", fontWeight: "700", color: "#38bdf8", textAlign: "right" }}>
+                                {linkedOrders.length} Orders
+                              </div>
+                            </div>
+                          </div>
+
+                          {c.internalNotes && (
+                            <div style={{ fontSize: "11px", color: "#94a3b8", fontStyle: "italic", marginBottom: "12px" }}>
+                              "{c.internalNotes}"
+                            </div>
+                          )}
+
+                          <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}>
+                            <a
+                              href={`mailto:${c.email}?subject=Consultation%20Follow-up%20-%20Abu%20Hanif`}
+                              style={{
+                                fontSize: "12px",
+                                padding: "6px 12px",
+                                backgroundColor: "#1e293b",
+                                color: "#38bdf8",
+                                borderRadius: "4px",
+                                textDecoration: "none",
+                                fontWeight: "600",
+                              }}
+                            >
+                              Email Client ↗
+                            </a>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -2778,6 +3722,27 @@ export default function AdminPage() {
 
                           <button
                             type="button"
+                            onClick={() => handleConvertInquiry(inq)}
+                            title="Convert inbound inquiry into an official Customer & Contract Order"
+                            style={{
+                              padding: "4px 10px",
+                              backgroundColor: "#065f46",
+                              border: "1px solid #059669",
+                              color: "#6ee7b7",
+                              fontSize: "12px",
+                              borderRadius: "4px",
+                              cursor: "pointer",
+                              fontWeight: "600",
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: "4px",
+                            }}
+                          >
+                            💼 Convert to Order
+                          </button>
+
+                          <button
+                            type="button"
                             onClick={() => handleDeleteInquiry(inq.id)}
                             title="Delete this inquiry record"
                             style={{
@@ -3711,6 +4676,614 @@ export default function AdminPage() {
                     }}
                   >
                     Delete Permanently
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* CREATE NEW ORDER MODAL */}
+          {isCreateOrderOpen && (
+            <div
+              style={{
+                position: "fixed",
+                inset: 0,
+                backgroundColor: "rgba(0, 0, 0, 0.75)",
+                zIndex: 9999,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "20px",
+              }}
+            >
+              <div
+                className="admin-modal-card"
+                style={{
+                  backgroundColor: "#0a192f",
+                  border: "1px solid #334155",
+                  borderRadius: "8px",
+                  maxWidth: "680px",
+                  width: "100%",
+                  maxHeight: "90vh",
+                  overflowY: "auto",
+                  padding: "24px",
+                  boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.5)",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "16px",
+                    borderBottom: "1px solid #1e293b",
+                    paddingBottom: "12px",
+                  }}
+                >
+                  <div>
+                    <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#ffffff", margin: 0 }}>
+                      Create New Engagement Order
+                    </h3>
+                    <p style={{ margin: "4px 0 0 0", fontSize: "12px", color: "#94a3b8" }}>
+                      Issues an institutional contract with 3-phase milestone escrow and cryptographic client tracker.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsCreateOrderOpen(false)}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: "#94a3b8",
+                      fontSize: "20px",
+                      cursor: "pointer",
+                      padding: "0 4px",
+                    }}
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <form onSubmit={handleCreateOrderSubmit}>
+                  {/* Customer Selection */}
+                  <div style={{ marginBottom: "14px" }}>
+                    <label style={{ fontSize: "12px", color: "#cbd5e1", display: "block", marginBottom: "4px" }}>
+                      Customer Account *
+                    </label>
+                    <select
+                      value={newOrderForm.customerId}
+                      onChange={(e) => setNewOrderForm({ ...newOrderForm, customerId: e.target.value })}
+                      style={{
+                        width: "100%",
+                        padding: "8px 10px",
+                        backgroundColor: "#071324",
+                        border: "1px solid #1e293b",
+                        color: "#fff",
+                        borderRadius: "4px",
+                        fontSize: "13px",
+                      }}
+                    >
+                      <option value="">➕ New Client Lead (Enter details below)</option>
+                      {customers.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.companyName} ({c.primaryContactName} — {c.email})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* If New Customer, show inputs */}
+                  {!newOrderForm.customerId && (
+                    <div
+                      style={{
+                        backgroundColor: "#071324",
+                        padding: "14px",
+                        borderRadius: "6px",
+                        marginBottom: "14px",
+                        border: "1px dashed #1e293b",
+                      }}
+                    >
+                      <div style={{ fontSize: "11px", fontWeight: "700", color: "#38bdf8", textTransform: "uppercase", marginBottom: "10px" }}>
+                        New Client Details
+                      </div>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "10px" }}>
+                        <div>
+                          <label style={{ fontSize: "11px", color: "#94a3b8", display: "block", marginBottom: "3px" }}>Company / Org Name *</label>
+                          <input
+                            required={!newOrderForm.customerId}
+                            placeholder="e.g. Acme FinTech Corp"
+                            value={newOrderForm.newCompanyName}
+                            onChange={(e) => setNewOrderForm({ ...newOrderForm, newCompanyName: e.target.value })}
+                            style={{ width: "100%", padding: "6px 8px", backgroundColor: "#0a192f", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "12px" }}
+                          />
+                        </div>
+                        <div>
+                          <label style={{ fontSize: "11px", color: "#94a3b8", display: "block", marginBottom: "3px" }}>Primary Contact Name *</label>
+                          <input
+                            required={!newOrderForm.customerId}
+                            placeholder="e.g. Alex Morgan"
+                            value={newOrderForm.newContactName}
+                            onChange={(e) => setNewOrderForm({ ...newOrderForm, newContactName: e.target.value })}
+                            style={{ width: "100%", padding: "6px 8px", backgroundColor: "#0a192f", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "12px" }}
+                          />
+                        </div>
+                      </div>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                        <div>
+                          <label style={{ fontSize: "11px", color: "#94a3b8", display: "block", marginBottom: "3px" }}>Contact Email *</label>
+                          <input
+                            required={!newOrderForm.customerId}
+                            type="email"
+                            placeholder="alex@acmecorp.com"
+                            value={newOrderForm.newEmail}
+                            onChange={(e) => setNewOrderForm({ ...newOrderForm, newEmail: e.target.value })}
+                            style={{ width: "100%", padding: "6px 8px", backgroundColor: "#0a192f", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "12px" }}
+                          />
+                        </div>
+                        <div>
+                          <label style={{ fontSize: "11px", color: "#94a3b8", display: "block", marginBottom: "3px" }}>Phone / WhatsApp (Optional)</label>
+                          <input
+                            placeholder="+1 (555) 000-0000"
+                            value={newOrderForm.newPhone}
+                            onChange={(e) => setNewOrderForm({ ...newOrderForm, newPhone: e.target.value })}
+                            style={{ width: "100%", padding: "6px 8px", backgroundColor: "#0a192f", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "12px" }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Scope Title */}
+                  <div style={{ marginBottom: "14px" }}>
+                    <label style={{ fontSize: "12px", color: "#cbd5e1", display: "block", marginBottom: "4px" }}>
+                      Engagement / Project Title *
+                    </label>
+                    <input
+                      required
+                      placeholder="e.g. High-Throughput E-Commerce API & Payment Gateway Migration"
+                      value={newOrderForm.title}
+                      onChange={(e) => setNewOrderForm({ ...newOrderForm, title: e.target.value })}
+                      style={{
+                        width: "100%",
+                        padding: "8px 10px",
+                        backgroundColor: "#071324",
+                        border: "1px solid #1e293b",
+                        color: "#fff",
+                        borderRadius: "4px",
+                        fontSize: "13px",
+                      }}
+                    />
+                  </div>
+
+                  {/* Service Tier & Subtotal */}
+                  <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "12px", marginBottom: "14px" }}>
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#cbd5e1", display: "block", marginBottom: "4px" }}>
+                        Engineering Service Tier *
+                      </label>
+                      <select
+                        value={newOrderForm.serviceTier}
+                        onChange={(e) => setNewOrderForm({ ...newOrderForm, serviceTier: e.target.value })}
+                        style={{
+                          width: "100%",
+                          padding: "8px 10px",
+                          backgroundColor: "#071324",
+                          border: "1px solid #1e293b",
+                          color: "#fff",
+                          borderRadius: "4px",
+                          fontSize: "13px",
+                        }}
+                      >
+                        <option value="Full-Stack Web Application (Next.js/React)">Full-Stack Web Application (Next.js/React)</option>
+                        <option value="Database Optimization & High-Throughput Sprints">Database Optimization & High-Throughput Sprints</option>
+                        <option value="Cloud Native Architecture & AWS/GCP">Cloud Native Architecture & AWS/GCP</option>
+                        <option value="Enterprise Security & Zero-Trust Audit">Enterprise Security & Zero-Trust Audit</option>
+                        <option value="API Design & Real-Time Sync Ecosystems">API Design & Real-Time Sync Ecosystems</option>
+                        <option value="Fractional CTO & Advisory Retainer">Fractional CTO & Advisory Retainer</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#cbd5e1", display: "block", marginBottom: "4px" }}>
+                        Contract Total (USD $) *
+                      </label>
+                      <input
+                        required
+                        type="number"
+                        min="500"
+                        step="100"
+                        value={newOrderForm.subtotalAmount}
+                        onChange={(e) => setNewOrderForm({ ...newOrderForm, subtotalAmount: Number(e.target.value) })}
+                        style={{
+                          width: "100%",
+                          padding: "8px 10px",
+                          backgroundColor: "#071324",
+                          border: "1px solid #1e293b",
+                          color: "#4ade80",
+                          borderRadius: "4px",
+                          fontSize: "14px",
+                          fontWeight: "700",
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Target Completion Date */}
+                  <div style={{ marginBottom: "18px" }}>
+                    <label style={{ fontSize: "12px", color: "#cbd5e1", display: "block", marginBottom: "4px" }}>
+                      Target Completion Date (Optional)
+                    </label>
+                    <input
+                      type="date"
+                      value={newOrderForm.targetCompletionDate}
+                      onChange={(e) => setNewOrderForm({ ...newOrderForm, targetCompletionDate: e.target.value })}
+                      style={{
+                        width: "100%",
+                        padding: "8px 10px",
+                        backgroundColor: "#071324",
+                        border: "1px solid #1e293b",
+                        color: "#fff",
+                        borderRadius: "4px",
+                        fontSize: "13px",
+                      }}
+                    />
+                  </div>
+
+                  {/* Milestone Breakdown Notice */}
+                  <div
+                    style={{
+                      backgroundColor: "#071324",
+                      border: "1px solid #1e293b",
+                      borderRadius: "6px",
+                      padding: "12px",
+                      fontSize: "12px",
+                      color: "#94a3b8",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    💡 <strong>Automatic Milestone Allocation:</strong> This contract will generate 3 balanced phases:
+                    <ul style={{ margin: "6px 0 0 16px", padding: 0 }}>
+                      <li>Phase 1 (50%): Architecture Blueprint, SSR Scaffold &amp; Auth Engine</li>
+                      <li>Phase 2 (30%): Core Feature Engineering, API Integrations &amp; Staging Deploy</li>
+                      <li>Phase 3 (20%): Production Load Testing, IP Handover &amp; 30-Day Bug Warranty</li>
+                    </ul>
+                  </div>
+
+                  <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", borderTop: "1px solid #1e293b", paddingTop: "14px" }}>
+                    <button
+                      type="button"
+                      onClick={() => setIsCreateOrderOpen(false)}
+                      style={{
+                        padding: "8px 16px",
+                        backgroundColor: "#334155",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "4px",
+                        fontSize: "13px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      style={{
+                        padding: "8px 20px",
+                        backgroundColor: "#2563eb",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "4px",
+                        fontSize: "13px",
+                        fontWeight: "700",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Create Order &amp; Issue Tracker
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* ORDER DETAIL & MILESTONES MODAL */}
+          {selectedOrder && (
+            <div
+              style={{
+                position: "fixed",
+                inset: 0,
+                backgroundColor: "rgba(0, 0, 0, 0.75)",
+                zIndex: 9999,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "20px",
+              }}
+            >
+              <div
+                className="admin-modal-card"
+                style={{
+                  backgroundColor: "#0a192f",
+                  border: "1px solid #334155",
+                  borderRadius: "8px",
+                  maxWidth: "840px",
+                  width: "100%",
+                  maxHeight: "90vh",
+                  overflowY: "auto",
+                  padding: "24px",
+                  boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.5)",
+                }}
+              >
+                {/* Header */}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                    marginBottom: "16px",
+                    borderBottom: "1px solid #1e293b",
+                    paddingBottom: "12px",
+                  }}
+                >
+                  <div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                      <span style={{ fontSize: "20px", fontWeight: "800", color: "#38bdf8", fontFamily: "monospace" }}>
+                        {selectedOrder.orderNumber}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: "11px",
+                          fontWeight: "700",
+                          padding: "3px 8px",
+                          borderRadius: "4px",
+                          backgroundColor: "#1e293b",
+                          color: "#cbd5e1",
+                          border: "1px solid #334155",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {selectedOrder.status.replace("_", " ")}
+                      </span>
+                    </div>
+                    <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#ffffff", margin: "4px 0 0 0" }}>
+                      {selectedOrder.title}
+                    </h3>
+                    <div style={{ fontSize: "12px", color: "#94a3b8", marginTop: "2px" }}>
+                      Client: <strong style={{ color: "#e2e8f0" }}>{selectedOrder.customer?.companyName || "Organization"}</strong>
+                      {selectedOrder.customer?.primaryContactName && ` (${selectedOrder.customer.primaryContactName})`}
+                      {selectedOrder.customer?.email && ` • ${selectedOrder.customer.email}`}
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setSelectedOrder(null)}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: "#94a3b8",
+                      fontSize: "20px",
+                      cursor: "pointer",
+                      padding: "0 4px",
+                    }}
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                {/* Client Live Tracker URL Box */}
+                <div
+                  style={{
+                    backgroundColor: "#071324",
+                    border: "1px solid #059669",
+                    borderRadius: "6px",
+                    padding: "14px",
+                    marginBottom: "20px",
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                    <div style={{ fontSize: "12px", fontWeight: "700", color: "#34d399", display: "flex", alignItems: "center", gap: "6px" }}>
+                      <span>🔐</span> Zero-Trust Client Portal Tracker URL
+                    </div>
+                    <a
+                      href={`/orders/tracker?token=${selectedOrder.clientAccessToken}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ fontSize: "12px", color: "#38bdf8", fontWeight: "600", textDecoration: "none" }}
+                    >
+                      Open Live Portal ↗
+                    </a>
+                  </div>
+                  <p style={{ fontSize: "12px", color: "#94a3b8", margin: "0 0 10px 0" }}>
+                    Share this cryptographically-signed access link with your client. They can track deliverable progress, review milestones, and inspect sprint completions in real time without creating an account.
+                  </p>
+                  <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                    <input
+                      readOnly
+                      value={typeof window !== "undefined" ? `${window.location.origin}/orders/tracker?token=${selectedOrder.clientAccessToken}` : `/orders/tracker?token=${selectedOrder.clientAccessToken}`}
+                      style={{
+                        flex: 1,
+                        padding: "6px 10px",
+                        backgroundColor: "#0a192f",
+                        border: "1px solid #1e293b",
+                        borderRadius: "4px",
+                        color: "#cbd5e1",
+                        fontSize: "12px",
+                        fontFamily: "monospace",
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => copyClientTrackerUrl(selectedOrder.clientAccessToken)}
+                      style={{
+                        padding: "6px 14px",
+                        backgroundColor: "#065f46",
+                        border: "1px solid #059669",
+                        color: "#6ee7b7",
+                        borderRadius: "4px",
+                        fontSize: "12px",
+                        fontWeight: "700",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Copy URL
+                    </button>
+                  </div>
+                </div>
+
+                {/* Financial Ledger & Payment Settle Input */}
+                <div
+                  style={{
+                    backgroundColor: "#071324",
+                    border: "1px solid #1e293b",
+                    borderRadius: "6px",
+                    padding: "16px",
+                    marginBottom: "20px",
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px", flexWrap: "wrap", gap: "10px" }}>
+                    <div>
+                      <div style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase" }}>Financial Settlement</div>
+                      <div style={{ display: "flex", gap: "16px", alignItems: "baseline", marginTop: "4px" }}>
+                        <div>Total: <strong style={{ color: "#ffffff", fontSize: "16px" }}>${selectedOrder.totalAmount.toLocaleString()}</strong></div>
+                        <div>Paid: <strong style={{ color: "#4ade80", fontSize: "16px" }}>${selectedOrder.amountPaid.toLocaleString()}</strong></div>
+                        <div>Remaining: <strong style={{ color: "#f87171", fontSize: "16px" }}>${(selectedOrder.totalAmount - selectedOrder.amountPaid).toLocaleString()}</strong></div>
+                      </div>
+                    </div>
+
+                    <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                      <input
+                        type="number"
+                        placeholder="Amount ($)"
+                        value={recordPaymentAmount}
+                        onChange={(e) => setRecordPaymentAmount(e.target.value)}
+                        style={{
+                          width: "120px",
+                          padding: "6px 8px",
+                          backgroundColor: "#0a192f",
+                          border: "1px solid #1e293b",
+                          borderRadius: "4px",
+                          color: "#fff",
+                          fontSize: "13px",
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const val = Number(recordPaymentAmount);
+                          if (!val || val <= 0) {
+                            alert("Please enter a valid positive payment amount.");
+                            return;
+                          }
+                          handleRecordPayment(selectedOrder.id, selectedOrder.amountPaid + val);
+                          setRecordPaymentAmount("");
+                        }}
+                        style={{
+                          padding: "6px 12px",
+                          backgroundColor: "#16a34a",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "4px",
+                          fontSize: "12px",
+                          fontWeight: "700",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Record Payment
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Milestones Breakdown */}
+                <div style={{ marginBottom: "20px" }}>
+                  <h4 style={{ fontSize: "14px", fontWeight: "700", color: "#ffffff", margin: "0 0 10px 0" }}>
+                    Contract Milestones ({selectedOrder.milestones.length})
+                  </h4>
+
+                  <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                    {selectedOrder.milestones.map((m) => {
+                      const mStatusColors: Record<string, { bg: string; text: string }> = {
+                        pending: { bg: "#1e293b", text: "#94a3b8" },
+                        in_progress: { bg: "#1e1b4b", text: "#c084fc" },
+                        submitted: { bg: "#78350f", text: "#fde047" },
+                        client_approved: { bg: "#065f46", text: "#6ee7b7" },
+                        paid: { bg: "#065f46", text: "#34d399" },
+                      };
+                      const msc = mStatusColors[m.status] || mStatusColors.pending;
+
+                      return (
+                        <div
+                          key={m.id}
+                          style={{
+                            backgroundColor: "#071324",
+                            border: "1px solid #1e293b",
+                            borderRadius: "6px",
+                            padding: "12px 14px",
+                          }}
+                        >
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "4px" }}>
+                            <div>
+                              <strong style={{ fontSize: "13px", color: "#ffffff" }}>
+                                Phase {m.milestoneIndex}: {m.title}
+                              </strong>
+                              {m.dueDate && (
+                                <span style={{ fontSize: "11px", color: "#94a3b8", marginLeft: "8px" }}>
+                                  (Target Due: {m.dueDate})
+                                </span>
+                              )}
+                            </div>
+                            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                              <span style={{ fontSize: "13px", fontWeight: "700", color: "#4ade80" }}>
+                                ${m.amount.toLocaleString()} USD
+                              </span>
+                              <span
+                                style={{
+                                  fontSize: "10px",
+                                  fontWeight: "700",
+                                  padding: "2px 6px",
+                                  borderRadius: "3px",
+                                  backgroundColor: msc.bg,
+                                  color: msc.text,
+                                  textTransform: "uppercase",
+                                }}
+                              >
+                                {m.status.replace("_", " ")}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div style={{ fontSize: "12px", color: "#94a3b8", lineHeight: "1.4" }}>
+                            Deliverables: {m.deliverablesSummary}
+                          </div>
+
+                          {m.approvedAt && (
+                            <div style={{ fontSize: "11px", color: "#10b981", marginTop: "4px" }}>
+                              ✓ Approved by client on {new Date(m.approvedAt).toLocaleString()}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div style={{ display: "flex", justifyContent: "flex-end", borderTop: "1px solid #1e293b", paddingTop: "14px" }}>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedOrder(null)}
+                    style={{
+                      padding: "8px 20px",
+                      backgroundColor: "#334155",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "4px",
+                      fontSize: "13px",
+                      fontWeight: "600",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Close
                   </button>
                 </div>
               </div>
