@@ -562,6 +562,10 @@ a, button, input, select, textarea {
     margin-bottom: 6px !important;
   }
 
+  .hero-slider-header-bar {
+    justify-content: center !important;
+  }
+
   .hero-action-buttons {
     justify-content: center !important;
   }
