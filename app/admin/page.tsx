@@ -160,12 +160,23 @@ export default function AdminPage() {
     title: "",
     slug: "",
     description: "",
-    pricingType: "fixed" as const,
+    pricingType: "fixed" as "fixed" | "retainer" | "hourly",
     priceDisplay: "$3,500",
     timeline: "1-2 Weeks",
     deliverables: "Architecture review, Diagnostic report, Implementation",
+    category: "growth-seo" as "growth-seo" | "web-saas" | "systems-architecture" | "systems-cloud",
+    tagline: "",
+    roiMetric: "",
+    techStack: "Next.js 16, TypeScript, Supabase",
+    engagementSteps: "1. Technical Discovery, 2. RFC & Architecture Spec, 3. Production Sprint, 4. 30-Day Warranty",
     isPopular: false,
+    isActive: true,
   });
+
+  const [serviceCategoryFilter, setServiceCategoryFilter] = useState<
+    "all" | "growth-seo" | "web-saas" | "systems-architecture" | "inactive"
+  >("all");
+  const [isAddServiceOpen, setIsAddServiceOpen] = useState(false);
 
   const [newPost, setNewPost] = useState({
     title: "",
@@ -313,27 +324,49 @@ export default function AdminPage() {
           }
         });
 
-      // Services
-      supabase
-        .from("services")
-        .select("*")
-        .order("sort_order", { ascending: true })
-        .then(({ data, error }) => {
-          if (!error && data && data.length > 0) {
-            setServices(
-              data.map((d: any) => ({
-                id: d.id,
-                title: d.title,
-                slug: d.slug,
-                description: d.description,
-                pricingType: d.pricing_type,
-                priceDisplay: d.price_display,
-                timeline: d.timeline,
-                deliverables: d.deliverables || [],
-                isPopular: d.is_popular,
-                isActive: d.is_active,
-              }))
-            );
+      // Services (Full control load via admin API with Supabase fallback)
+      fetch("/api/admin/services")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && Array.isArray(data.services) && data.services.length > 0) {
+            setServices(data.services);
+          } else {
+            throw new Error("API services empty");
+          }
+        })
+        .catch(() => {
+          if (isSupabaseConfigured && supabase) {
+            supabase
+              .from("services")
+              .select("*")
+              .order("sort_order", { ascending: true })
+              .then(({ data, error }) => {
+                if (!error && data && data.length > 0) {
+                  const sMap = new Map(data.map((d: any) => [d.slug, d]));
+                  const merged = initialServices.map((initS) => {
+                    const item = sMap.get(initS.slug);
+                    if (item) {
+                      return {
+                        ...initS,
+                        id: item.id || initS.id,
+                        title: item.title || initS.title,
+                        description: item.description || initS.description,
+                        pricingType: item.pricing_type || initS.pricingType,
+                        priceDisplay: item.price_display || initS.priceDisplay,
+                        timeline: item.timeline || initS.timeline,
+                        deliverables:
+                          item.deliverables && item.deliverables.length > 0
+                            ? item.deliverables
+                            : initS.deliverables,
+                        isPopular: item.is_popular !== undefined ? item.is_popular : initS.isPopular,
+                        isActive: item.is_active !== undefined ? item.is_active : initS.isActive,
+                      };
+                    }
+                    return initS;
+                  });
+                  setServices(merged);
+                }
+              });
           }
         });
 
@@ -523,56 +556,101 @@ export default function AdminPage() {
     showNotification("Project featured showcase status updated.");
   }
 
-  // Add service handler
-  function handleAddService(e: React.FormEvent) {
+  // Add service handler (Full control with API and state update)
+  async function handleAddService(e: React.FormEvent) {
     e.preventDefault();
     const item: ServicePricing = {
       id: `serv-${Date.now()}`,
       title: newService.title,
-      slug: newService.slug || newService.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+      slug:
+        newService.slug.trim() ||
+        newService.title
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, ""),
       description: newService.description,
       pricingType: newService.pricingType,
       priceDisplay: newService.priceDisplay,
       timeline: newService.timeline,
-      deliverables: newService.deliverables.split(",").map((s) => s.trim()),
+      deliverables: newService.deliverables
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
+      category: newService.category,
+      tagline: newService.tagline,
+      roiMetric: newService.roiMetric,
+      techStack: newService.techStack
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
+      engagementSteps: newService.engagementSteps
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
       isPopular: newService.isPopular,
-      isActive: true,
+      isActive: newService.isActive,
     };
-    setServices([...services, item]);
+
+    setServices([item, ...services]);
+
+    fetch("/api/admin/services", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(item),
+    }).catch(() => {});
 
     if (isSupabaseConfigured && supabase) {
-      supabase.from("services").insert([{
-        title: item.title,
-        slug: item.slug,
-        description: item.description,
-        pricing_type: item.pricingType,
-        price_display: item.priceDisplay,
-        timeline: item.timeline,
-        deliverables: item.deliverables,
-        is_popular: item.isPopular,
-        is_active: true,
-      }]).then();
+      supabase
+        .from("services")
+        .insert([
+          {
+            id: item.id,
+            title: item.title,
+            slug: item.slug,
+            description: item.description,
+            pricing_type: item.pricingType,
+            price_display: item.priceDisplay,
+            timeline: item.timeline,
+            deliverables: item.deliverables,
+            is_popular: item.isPopular,
+            is_active: item.isActive,
+          },
+        ])
+        .then(() => {}, () => {});
     }
 
     setNewService({
       title: "",
       slug: "",
       description: "",
+      category: "growth-seo",
+      tagline: "",
+      roiMetric: "",
       pricingType: "fixed",
       priceDisplay: "$3,500",
       timeline: "1-2 Weeks",
       deliverables: "Architecture review, Diagnostic report, Implementation",
+      techStack: "Next.js 16, TypeScript, Supabase",
+      engagementSteps: "1. Technical Discovery, 2. RFC & Architecture Spec, 3. Production Sprint, 4. 30-Day Warranty",
       isPopular: false,
+      isActive: true,
     });
-    showNotification("Service & pricing tier added!");
+    setIsAddServiceOpen(false);
+    showNotification("Service successfully created & published!");
   }
 
   // Save Service Edit
-  function handleSaveServiceEdit(e: React.FormEvent) {
+  async function handleSaveServiceEdit(e: React.FormEvent) {
     e.preventDefault();
     if (!editingService) return;
 
     setServices(services.map((s) => (s.id === editingService.id ? editingService : s)));
+
+    fetch("/api/admin/services", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(editingService),
+    }).catch(() => {});
 
     if (isSupabaseConfigured && supabase) {
       supabase
@@ -589,7 +667,7 @@ export default function AdminPage() {
           is_active: editingService.isActive,
         })
         .eq("id", editingService.id)
-        .then();
+        .then(() => {}, () => {});
     }
 
     setEditingService(null);
@@ -597,13 +675,18 @@ export default function AdminPage() {
   }
 
   // Confirm Delete Service
-  function handleConfirmDeleteService() {
+  async function handleConfirmDeleteService() {
     if (!serviceToDelete) return;
 
-    setServices(services.filter((s) => s.id !== serviceToDelete.id));
+    const idToDelete = serviceToDelete.id;
+    setServices(services.filter((s) => s.id !== idToDelete));
+
+    fetch(`/api/admin/services?id=${idToDelete}`, {
+      method: "DELETE",
+    }).catch(() => {});
 
     if (isSupabaseConfigured && supabase) {
-      supabase.from("services").delete().eq("id", serviceToDelete.id).then();
+      supabase.from("services").delete().eq("id", idToDelete).then(() => {}, () => {});
     }
 
     setServiceToDelete(null);
@@ -615,8 +698,14 @@ export default function AdminPage() {
     const updated = services.map((s) => {
       if (s.id === id) {
         const nextActive = !s.isActive;
+        fetch("/api/admin/services", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "toggle_active", id }),
+        }).catch(() => {});
+
         if (isSupabaseConfigured && supabase) {
-          supabase.from("services").update({ is_active: nextActive }).eq("id", id).then();
+          supabase.from("services").update({ is_active: nextActive }).eq("id", id).then(() => {}, () => {});
         }
         return { ...s, isActive: nextActive };
       }
@@ -631,8 +720,14 @@ export default function AdminPage() {
     const updated = services.map((s) => {
       if (s.id === id) {
         const nextPopular = !s.isPopular;
+        fetch("/api/admin/services", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "toggle_popular", id }),
+        }).catch(() => {});
+
         if (isSupabaseConfigured && supabase) {
-          supabase.from("services").update({ is_popular: nextPopular }).eq("id", id).then();
+          supabase.from("services").update({ is_popular: nextPopular }).eq("id", id).then(() => {}, () => {});
         }
         return { ...s, isPopular: nextPopular };
       }
@@ -640,6 +735,51 @@ export default function AdminPage() {
     });
     setServices(updated);
     showNotification("Service popular badge status updated.");
+  }
+
+  // Reorder Service Position
+  function moveServiceOrder(index: number, direction: "up" | "down") {
+    if (direction === "up" && index === 0) return;
+    if (direction === "down" && index === services.length - 1) return;
+
+    const newServices = [...services];
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    const temp = newServices[index];
+    newServices[index] = newServices[targetIndex];
+    newServices[targetIndex] = temp;
+
+    setServices(newServices);
+    fetch("/api/admin/services", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "reorder",
+        orderedIds: newServices.map((s) => s.id),
+      }),
+    }).catch(() => {});
+    showNotification("Service display order updated.");
+  }
+
+  // Duplicate / Clone Service
+  function handleDuplicateService(serv: ServicePricing) {
+    setNewService({
+      title: `${serv.title} (Copy)`,
+      slug: `${serv.slug}-copy`,
+      description: serv.description,
+      category: serv.category || "growth-seo",
+      tagline: serv.tagline || "",
+      roiMetric: serv.roiMetric || "",
+      pricingType: serv.pricingType,
+      priceDisplay: serv.priceDisplay,
+      timeline: serv.timeline,
+      deliverables: (serv.deliverables || []).join(", "),
+      techStack: (serv.techStack || []).join(", "),
+      engagementSteps: (serv.engagementSteps || []).join(", "),
+      isPopular: false,
+      isActive: true,
+    });
+    setIsAddServiceOpen(true);
+    showNotification("Service details duplicated into add form!");
   }
 
   // Add blog post handler
@@ -2933,156 +3073,416 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* TAB 3: SERVICES */}
+          {/* TAB 3: SERVICES & PRICING MASTER CONTROL */}
           {activeTab === "services" && (
             <div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "12px" }}>
+              {/* Header & Stats Banner */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px", flexWrap: "wrap", gap: "16px" }}>
                 <div>
-                  <h2 style={{ fontSize: "24px", fontWeight: "800", margin: "0 0 6px 0" }}>
-                    Work Pricing &amp; Engineering Services Manager
+                  <h2 style={{ fontSize: "24px", fontWeight: "800", color: "#ffffff", margin: "0 0 6px 0", display: "flex", alignItems: "center", gap: "10px" }}>
+                    <span>🏷️ Services &amp; Digital Engineering Solutions Manager</span>
                   </h2>
-                  <p style={{ margin: 0, fontSize: "14px", color: "#94a3b8" }}>
-                    Add, edit, and curate transparent engineering packages, deliverables, timelines, and rates synced with Supabase.
+                  <p style={{ margin: 0, fontSize: "14px", color: "#94a3b8", maxWidth: "800px", lineHeight: 1.5 }}>
+                    Full administrative control over all consulting offerings, programmatic SEO pipelines, custom web applications, deliverables, and fixed-sprint pricing. Changes sync live to public <code style={{ color: "#38bdf8" }}>/services</code> and <code style={{ color: "#38bdf8" }}>/pricing</code> pages.
                   </p>
                 </div>
-                <div style={{ display: "flex", gap: "10px" }}>
-                  <span style={{ fontSize: "12px", padding: "6px 12px", backgroundColor: "#0f172a", border: "1px solid #1e293b", borderRadius: "4px", color: "#e2e8f0" }}>
-                    Total Packages: <strong style={{ color: "#38bdf8" }}>{services.length}</strong>
-                  </span>
-                  <span style={{ fontSize: "12px", padding: "6px 12px", backgroundColor: "#064e3b", border: "1px solid #047857", borderRadius: "4px", color: "#6ee7b7" }}>
-                    Active: <strong>{services.filter((s) => s.isActive).length}</strong>
-                  </span>
-                  <span style={{ fontSize: "12px", padding: "6px 12px", backgroundColor: "#78350f", border: "1px solid #b45309", borderRadius: "4px", color: "#fcd34d" }}>
-                    Popular: <strong>{services.filter((s) => s.isPopular).length}</strong>
-                  </span>
+
+                <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                  <button
+                    type="button"
+                    onClick={() => setIsAddServiceOpen(!isAddServiceOpen)}
+                    style={{
+                      padding: "8px 18px",
+                      backgroundColor: isAddServiceOpen ? "#334155" : "#16a34a",
+                      color: "#ffffff",
+                      border: "none",
+                      borderRadius: "6px",
+                      fontSize: "13px",
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "6px",
+                    }}
+                  >
+                    {isAddServiceOpen ? "✕ Close Add Form" : "+ Add New Service Offering"}
+                  </button>
+                  <Link
+                    href="/services"
+                    target="_blank"
+                    style={{
+                      padding: "8px 16px",
+                      backgroundColor: "rgba(56, 189, 248, 0.12)",
+                      border: "1px solid rgba(56, 189, 248, 0.4)",
+                      color: "#38bdf8",
+                      borderRadius: "6px",
+                      fontSize: "13px",
+                      fontWeight: 700,
+                      textDecoration: "none",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "6px",
+                    }}
+                  >
+                    ↗ Preview Public /services Hub
+                  </Link>
                 </div>
               </div>
 
-              {/* Add Pricing Package Form */}
-              <div style={{ backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "6px", padding: "24px", marginBottom: "30px" }}>
-                <h3 style={{ fontSize: "16px", fontWeight: "700", margin: "0 0 16px 0", color: "#38bdf8" }}>
-                  + Add New Pricing Package
-                </h3>
-                <form onSubmit={handleAddService}>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "14px", marginBottom: "14px" }}>
-                    <div>
-                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Service Title *</label>
-                      <input
-                        required
-                        value={newService.title}
-                        onChange={(e) => setNewService({ ...newService, title: e.target.value })}
-                        placeholder="e.g. Performance Audit Sprint"
-                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
-                      />
-                    </div>
-                    <div>
-                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>URL Slug (optional)</label>
-                      <input
-                        value={newService.slug}
-                        onChange={(e) => setNewService({ ...newService, slug: e.target.value })}
-                        placeholder="e.g. performance-audit-sprint"
-                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
-                      />
-                    </div>
-                    <div>
-                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Pricing Model *</label>
-                      <select
-                        value={newService.pricingType}
-                        onChange={(e) => setNewService({ ...newService, pricingType: e.target.value as any })}
-                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
-                      >
-                        <option value="fixed">Fixed-Scope Milestone</option>
-                        <option value="retainer">Monthly Retainer</option>
-                        <option value="hourly">Hourly Advisory</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Price Display *</label>
-                      <input
-                        required
-                        value={newService.priceDisplay}
-                        onChange={(e) => setNewService({ ...newService, priceDisplay: e.target.value })}
-                        placeholder="e.g. $4,500 or $5,500 / mo"
-                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
-                      />
-                    </div>
-                    <div>
-                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Timeline / Capacity</label>
-                      <input
-                        value={newService.timeline}
-                        onChange={(e) => setNewService({ ...newService, timeline: e.target.value })}
-                        placeholder="e.g. 1 Week or 15–20h / wk"
-                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
-                      />
-                    </div>
+              {/* Analytics Metric Bar */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+                  gap: "10px",
+                  marginBottom: "20px",
+                }}
+              >
+                <div style={{ backgroundColor: "#0b152d", border: "1px solid #1e293b", borderRadius: "6px", padding: "10px 14px" }}>
+                  <div style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase", fontWeight: 700 }}>Total Offerings</div>
+                  <div style={{ fontSize: "22px", fontWeight: 900, color: "#ffffff" }}>{services.length}</div>
+                </div>
+                <div style={{ backgroundColor: "#0b152d", border: "1px solid rgba(16, 185, 129, 0.3)", borderRadius: "6px", padding: "10px 14px" }}>
+                  <div style={{ fontSize: "11px", color: "#10b981", textTransform: "uppercase", fontWeight: 700 }}>Live &amp; Active</div>
+                  <div style={{ fontSize: "22px", fontWeight: 900, color: "#10b981" }}>{services.filter((s) => s.isActive).length}</div>
+                </div>
+                <div style={{ backgroundColor: "#0b152d", border: "1px solid rgba(245, 158, 11, 0.3)", borderRadius: "6px", padding: "10px 14px" }}>
+                  <div style={{ fontSize: "11px", color: "#f59e0b", textTransform: "uppercase", fontWeight: 700 }}>Popular Tier</div>
+                  <div style={{ fontSize: "22px", fontWeight: 900, color: "#f59e0b" }}>{services.filter((s) => s.isPopular).length}</div>
+                </div>
+                <div style={{ backgroundColor: "#0b152d", border: "1px solid rgba(56, 189, 248, 0.2)", borderRadius: "6px", padding: "10px 14px" }}>
+                  <div style={{ fontSize: "11px", color: "#38bdf8", textTransform: "uppercase", fontWeight: 700 }}>Growth &amp; SEO</div>
+                  <div style={{ fontSize: "22px", fontWeight: 900, color: "#38bdf8" }}>{services.filter((s) => s.category === "growth-seo").length}</div>
+                </div>
+                <div style={{ backgroundColor: "#0b152d", border: "1px solid rgba(168, 85, 247, 0.2)", borderRadius: "6px", padding: "10px 14px" }}>
+                  <div style={{ fontSize: "11px", color: "#a855f7", textTransform: "uppercase", fontWeight: 700 }}>Web &amp; SaaS</div>
+                  <div style={{ fontSize: "22px", fontWeight: 900, color: "#a855f7" }}>{services.filter((s) => s.category === "web-saas").length}</div>
+                </div>
+                <div style={{ backgroundColor: "#0b152d", border: "1px solid #1e293b", borderRadius: "6px", padding: "10px 14px" }}>
+                  <div style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase", fontWeight: 700 }}>Systems &amp; Cloud</div>
+                  <div style={{ fontSize: "22px", fontWeight: 900, color: "#cbd5e1" }}>
+                    {services.filter((s) => s.category === "systems-architecture" || s.category === "systems-cloud" || !s.category).length}
                   </div>
-
-                  <div style={{ marginBottom: "14px" }}>
-                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Key Deliverables (comma separated) *</label>
-                    <input
-                      required
-                      value={newService.deliverables}
-                      onChange={(e) => setNewService({ ...newService, deliverables: e.target.value })}
-                      placeholder="e.g. Full query plan analysis, B-tree indexing, Connection pooling, 30-day warranty"
-                      style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
-                    />
-                  </div>
-
-                  <div style={{ marginBottom: "16px" }}>
-                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Scope Description *</label>
-                    <textarea
-                      required
-                      rows={2}
-                      value={newService.description}
-                      onChange={(e) => setNewService({ ...newService, description: e.target.value })}
-                      placeholder="Detailed overview of technical problems solved and execution approach..."
-                      style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
-                    />
-                  </div>
-
-                  <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "18px" }}>
-                    <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "#e2e8f0", cursor: "pointer" }}>
-                      <input
-                        type="checkbox"
-                        checked={newService.isPopular}
-                        onChange={(e) => setNewService({ ...newService, isPopular: e.target.checked })}
-                      />
-                      <span>Mark as &ldquo;Most Popular&rdquo; highlighted package</span>
-                    </label>
-                  </div>
-
-                  <button
-                    type="submit"
-                    style={{
-                      padding: "10px 22px",
-                      backgroundColor: "#16a34a",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "4px",
-                      fontWeight: "700",
-                      fontSize: "13px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    + Add Pricing Package
-                  </button>
-                </form>
+                </div>
               </div>
 
-              {/* Filter and Search Bar */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", gap: "12px", flexWrap: "wrap" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: "1 1 300px" }}>
+              {/* Add Pricing Package Form (Collapsible) */}
+              {isAddServiceOpen && (
+                <div style={{ backgroundColor: "#0b152d", border: "1px solid rgba(56, 189, 248, 0.4)", borderRadius: "8px", padding: "24px", marginBottom: "28px", boxShadow: "0 10px 30px rgba(0,0,0,0.5)" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                    <h3 style={{ fontSize: "17px", fontWeight: "800", margin: 0, color: "#38bdf8" }}>
+                      + Architect &amp; Publish New Service Offering
+                    </h3>
+                    <span style={{ fontSize: "12px", color: "#94a3b8" }}>All fields editable &amp; synced live</span>
+                  </div>
+
+                  <form onSubmit={handleAddService}>
+                    {/* Row 1: Category, Title, Slug */}
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "14px", marginBottom: "14px" }}>
+                      <div>
+                        <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>
+                          Category Pillar *
+                        </label>
+                        <select
+                          value={newService.category}
+                          onChange={(e) => setNewService({ ...newService, category: e.target.value as any })}
+                          style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                        >
+                          <option value="growth-seo">Growth &amp; SEO Engineering</option>
+                          <option value="web-saas">Web &amp; Full-Stack SaaS Platforms</option>
+                          <option value="systems-architecture">Systems, Cloud &amp; Database Architecture</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>
+                          Service Title *
+                        </label>
+                        <input
+                          required
+                          value={newService.title}
+                          onChange={(e) => setNewService({ ...newService, title: e.target.value })}
+                          placeholder="e.g. Programmatic SEO Data Pipeline"
+                          style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                        />
+                      </div>
+
+                      <div>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
+                          <label style={{ fontSize: "12px", color: "#94a3b8", fontWeight: 700 }}>URL Slug</label>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (newService.title) {
+                                setNewService({
+                                  ...newService,
+                                  slug: newService.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+                                });
+                              }
+                            }}
+                            style={{ background: "transparent", border: "none", color: "#38bdf8", fontSize: "11px", cursor: "pointer", padding: 0 }}
+                          >
+                            ⚡ Auto-Generate
+                          </button>
+                        </div>
+                        <input
+                          value={newService.slug}
+                          onChange={(e) => setNewService({ ...newService, slug: e.target.value })}
+                          placeholder="e.g. programmatic-seo-data-pipeline"
+                          style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Row 2: Tagline & ROI Metric */}
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "14px", marginBottom: "14px" }}>
+                      <div>
+                        <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>
+                          Marketing Tagline / Value Proposition
+                        </label>
+                        <input
+                          value={newService.tagline}
+                          onChange={(e) => setNewService({ ...newService, tagline: e.target.value })}
+                          placeholder="e.g. Automated Data Pipelines & Schema Domination"
+                          style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                        />
+                      </div>
+
+                      <div>
+                        <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>
+                          Key ROI / Performance Metric Badge
+                        </label>
+                        <input
+                          value={newService.roiMetric}
+                          onChange={(e) => setNewService({ ...newService, roiMetric: e.target.value })}
+                          placeholder="e.g. +300% Organic Clicks • 100/100 Core Web Vitals"
+                          style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Row 3: Commercials (Pricing Model, Price Display, Timeline) */}
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "14px", marginBottom: "14px" }}>
+                      <div>
+                        <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>Pricing Model *</label>
+                        <select
+                          value={newService.pricingType}
+                          onChange={(e) => setNewService({ ...newService, pricingType: e.target.value as any })}
+                          style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                        >
+                          <option value="fixed">Fixed-Scope Sprint</option>
+                          <option value="retainer">Monthly Retainer</option>
+                          <option value="hourly">Hourly Advisory</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>Price Display *</label>
+                        <input
+                          required
+                          value={newService.priceDisplay}
+                          onChange={(e) => setNewService({ ...newService, priceDisplay: e.target.value })}
+                          placeholder="e.g. $4,500 or $5,500 / mo"
+                          style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                        />
+                      </div>
+
+                      <div>
+                        <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>Timeline / Capacity *</label>
+                        <input
+                          value={newService.timeline}
+                          onChange={(e) => setNewService({ ...newService, timeline: e.target.value })}
+                          placeholder="e.g. 1-2 Weeks or Ongoing (15h/wk)"
+                          style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Row 4: Scope Deliverables */}
+                    <div style={{ marginBottom: "14px" }}>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>
+                        Key Deliverables (comma separated) *
+                      </label>
+                      <input
+                        required
+                        value={newService.deliverables}
+                        onChange={(e) => setNewService({ ...newService, deliverables: e.target.value })}
+                        placeholder="e.g. Programmatic generation architecture, Schema.org JSON-LD graphs, Dynamic sitemap engine, 30-day warranty"
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      />
+                    </div>
+
+                    {/* Row 5: Tech Stack & Engagement Steps */}
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "14px", marginBottom: "14px" }}>
+                      <div>
+                        <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>
+                          Tech Stack Tags (comma separated)
+                        </label>
+                        <input
+                          value={newService.techStack}
+                          onChange={(e) => setNewService({ ...newService, techStack: e.target.value })}
+                          placeholder="e.g. Next.js 16, Cloudflare Edge, Supabase, Redis"
+                          style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                        />
+                      </div>
+
+                      <div>
+                        <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>
+                          Engagement Roadmap Steps (comma separated)
+                        </label>
+                        <input
+                          value={newService.engagementSteps}
+                          onChange={(e) => setNewService({ ...newService, engagementSteps: e.target.value })}
+                          placeholder="e.g. 1. Architecture Audit, 2. RFC & Schema Design, 3. Production Sprint, 4. 30-Day SLA Handover"
+                          style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Row 6: Scope Description */}
+                    <div style={{ marginBottom: "16px" }}>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>Scope Description *</label>
+                      <textarea
+                        required
+                        rows={3}
+                        value={newService.description}
+                        onChange={(e) => setNewService({ ...newService, description: e.target.value })}
+                        placeholder="Detailed overview of technical problems solved, architecture patterns used, and execution approach..."
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      />
+                    </div>
+
+                    {/* Row 7: Toggles */}
+                    <div style={{ display: "flex", gap: "24px", marginBottom: "20px", padding: "12px 14px", backgroundColor: "#071324", borderRadius: "6px", border: "1px solid #1e293b" }}>
+                      <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "#e2e8f0", cursor: "pointer" }}>
+                        <input
+                          type="checkbox"
+                          checked={newService.isActive}
+                          onChange={(e) => setNewService({ ...newService, isActive: e.target.checked })}
+                        />
+                        <span>Visible &amp; Active on live website</span>
+                      </label>
+                      <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "#e2e8f0", cursor: "pointer" }}>
+                        <input
+                          type="checkbox"
+                          checked={newService.isPopular}
+                          onChange={(e) => setNewService({ ...newService, isPopular: e.target.checked })}
+                        />
+                        <span>Highlight with &ldquo;Most Popular&rdquo; badge</span>
+                      </label>
+                    </div>
+
+                    <div style={{ display: "flex", gap: "10px" }}>
+                      <button
+                        type="submit"
+                        style={{
+                          padding: "10px 24px",
+                          backgroundColor: "#16a34a",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "6px",
+                          fontWeight: "800",
+                          fontSize: "13px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        ✓ Create &amp; Publish Service
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setIsAddServiceOpen(false)}
+                        style={{
+                          padding: "10px 18px",
+                          backgroundColor: "#334155",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "6px",
+                          fontSize: "13px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              )}
+
+              {/* Category Filter Tabs & Search Bar */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "16px",
+                  gap: "12px",
+                  flexWrap: "wrap",
+                }}
+              >
+                {/* Category Pills */}
+                <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                  {[
+                    { id: "all", label: "All Packages", count: services.length },
+                    { id: "growth-seo", label: "🚀 Growth & SEO", count: services.filter((s) => s.category === "growth-seo").length },
+                    { id: "web-saas", label: "💻 Web & SaaS", count: services.filter((s) => s.category === "web-saas").length },
+                    {
+                      id: "systems-architecture",
+                      label: "⚡ Systems & Cloud",
+                      count: services.filter((s) => s.category === "systems-architecture" || s.category === "systems-cloud" || !s.category).length,
+                    },
+                    { id: "inactive", label: "🔒 Drafts / Hidden", count: services.filter((s) => !s.isActive).length },
+                  ].map((cat) => {
+                    const isSelected = serviceCategoryFilter === cat.id;
+                    return (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => setServiceCategoryFilter(cat.id as any)}
+                        style={{
+                          backgroundColor: isSelected ? "#2563eb" : "#0f172a",
+                          color: isSelected ? "#ffffff" : "#94a3b8",
+                          border: isSelected ? "1px solid #38bdf8" : "1px solid #1e293b",
+                          borderRadius: "6px",
+                          padding: "6px 12px",
+                          fontSize: "12px",
+                          fontWeight: isSelected ? 700 : 500,
+                          cursor: "pointer",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "6px",
+                        }}
+                      >
+                        <span>{cat.label}</span>
+                        <span
+                          style={{
+                            backgroundColor: isSelected ? "rgba(255,255,255,0.2)" : "rgba(30,41,59,0.8)",
+                            color: isSelected ? "#ffffff" : "#64748b",
+                            borderRadius: "10px",
+                            padding: "1px 6px",
+                            fontSize: "10px",
+                            fontWeight: 700,
+                          }}
+                        >
+                          {cat.count}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Live Search Box */}
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: "1 1 240px", maxWidth: "380px" }}>
                   <input
                     type="text"
                     value={serviceSearch}
                     onChange={(e) => setServiceSearch(e.target.value)}
-                    placeholder="Search packages by title, description, pricing, or deliverables..."
+                    placeholder="Search by title, stack, deliverables, or rate..."
                     style={{
                       width: "100%",
                       padding: "8px 12px",
                       backgroundColor: "#071324",
                       border: "1px solid #1e293b",
-                      borderRadius: "4px",
+                      borderRadius: "6px",
                       color: "#fff",
                       fontSize: "13px",
                     }}
@@ -3096,197 +3496,352 @@ export default function AdminPage() {
                         backgroundColor: "#334155",
                         color: "#fff",
                         border: "none",
-                        borderRadius: "4px",
+                        borderRadius: "6px",
                         fontSize: "12px",
                         cursor: "pointer",
                       }}
                     >
-                      Clear
+                      ✕
                     </button>
                   )}
                 </div>
-                <div style={{ fontSize: "13px", color: "#94a3b8" }}>
-                  Showing{" "}
-                  <strong style={{ color: "#ffffff" }}>
-                    {services.filter((s) => {
-                      if (!serviceSearch.trim()) return true;
-                      const q = serviceSearch.toLowerCase();
-                      return (
-                        s.title.toLowerCase().includes(q) ||
-                        s.description.toLowerCase().includes(q) ||
-                        s.priceDisplay.toLowerCase().includes(q) ||
-                        s.deliverables.some((d) => d.toLowerCase().includes(q))
-                      );
-                    }).length}
-                  </strong>{" "}
-                  of {services.length} packages
-                </div>
               </div>
 
-              {/* Services Cards Grid */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "16px" }}>
+              {/* Services Cards Grid with Full Control Actions */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "16px" }}>
                 {services
                   .filter((serv) => {
+                    // Category filter
+                    if (serviceCategoryFilter === "growth-seo" && serv.category !== "growth-seo") return false;
+                    if (serviceCategoryFilter === "web-saas" && serv.category !== "web-saas") return false;
+                    if (
+                      serviceCategoryFilter === "systems-architecture" &&
+                      serv.category !== "systems-architecture" &&
+                      serv.category !== "systems-cloud" &&
+                      serv.category !== undefined
+                    )
+                      return false;
+                    if (serviceCategoryFilter === "inactive" && serv.isActive !== false) return false;
+
+                    // Text search
                     if (!serviceSearch.trim()) return true;
                     const q = serviceSearch.toLowerCase();
                     return (
                       serv.title.toLowerCase().includes(q) ||
                       serv.description.toLowerCase().includes(q) ||
                       serv.priceDisplay.toLowerCase().includes(q) ||
+                      (serv.tagline && serv.tagline.toLowerCase().includes(q)) ||
+                      (serv.roiMetric && serv.roiMetric.toLowerCase().includes(q)) ||
+                      (serv.techStack && serv.techStack.some((t) => t.toLowerCase().includes(q))) ||
                       serv.deliverables.some((d) => d.toLowerCase().includes(q))
                     );
                   })
-                  .map((serv) => (
-                    <div
-                      key={serv.id}
-                      style={{
-                        padding: "20px",
-                        backgroundColor: "#0a192f",
-                        border: serv.isPopular ? "1px solid #16a34a" : "1px solid #1e293b",
-                        borderRadius: "6px",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <div>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "8px", marginBottom: "8px" }}>
-                          <div>
-                            <span style={{ fontSize: "11px", textTransform: "uppercase", color: "#94a3b8", fontWeight: "700" }}>
-                              {serv.pricingType}
-                            </span>
-                            <div style={{ fontSize: "24px", fontWeight: "800", color: "#ffffff", margin: "2px 0 4px 0" }}>
-                              {serv.priceDisplay}
+                  .map((serv, index) => {
+                    const categoryMeta =
+                      serv.category === "growth-seo"
+                        ? { label: "Growth & SEO", color: "#38bdf8", bg: "rgba(56, 189, 248, 0.12)", icon: "🚀" }
+                        : serv.category === "web-saas"
+                        ? { label: "Web & SaaS Platform", color: "#a855f7", bg: "rgba(168, 85, 247, 0.12)", icon: "💻" }
+                        : { label: "Systems & Architecture", color: "#10b981", bg: "rgba(16, 185, 129, 0.12)", icon: "⚡" };
+
+                    return (
+                      <div
+                        key={serv.id}
+                        style={{
+                          padding: "20px",
+                          backgroundColor: "#0a192f",
+                          border: serv.isPopular ? "1px solid #16a34a" : "1px solid #1e293b",
+                          borderRadius: "8px",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "space-between",
+                          position: "relative",
+                          boxShadow: "0 4px 16px rgba(0,0,0,0.3)",
+                        }}
+                      >
+                        <div>
+                          {/* Card Top: Category, Ordering & Toggles */}
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "8px", marginBottom: "12px" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                              <span
+                                style={{
+                                  fontSize: "11px",
+                                  fontWeight: 800,
+                                  color: categoryMeta.color,
+                                  backgroundColor: categoryMeta.bg,
+                                  border: `1px solid ${categoryMeta.color}40`,
+                                  borderRadius: "4px",
+                                  padding: "2px 8px",
+                                }}
+                              >
+                                {categoryMeta.icon} {categoryMeta.label}
+                              </span>
+                              {/* Reorder Arrows */}
+                              <div style={{ display: "inline-flex", gap: "2px" }}>
+                                <button
+                                  type="button"
+                                  onClick={() => moveServiceOrder(index, "up")}
+                                  disabled={index === 0}
+                                  title="Move up in display order"
+                                  style={{
+                                    backgroundColor: "#1e293b",
+                                    color: index === 0 ? "#475569" : "#cbd5e1",
+                                    border: "none",
+                                    borderRadius: "3px",
+                                    padding: "2px 5px",
+                                    fontSize: "10px",
+                                    cursor: index === 0 ? "default" : "pointer",
+                                  }}
+                                >
+                                  ▲
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => moveServiceOrder(index, "down")}
+                                  disabled={index === services.length - 1}
+                                  title="Move down in display order"
+                                  style={{
+                                    backgroundColor: "#1e293b",
+                                    color: index === services.length - 1 ? "#475569" : "#cbd5e1",
+                                    border: "none",
+                                    borderRadius: "3px",
+                                    padding: "2px 5px",
+                                    fontSize: "10px",
+                                    cursor: index === services.length - 1 ? "default" : "pointer",
+                                  }}
+                                >
+                                  ▼
+                                </button>
+                              </div>
+                            </div>
+
+                            <div style={{ display: "flex", gap: "6px" }}>
+                              {/* Active Toggle Button */}
+                              <button
+                                type="button"
+                                onClick={() => toggleServiceActive(serv.id)}
+                                title="Toggle public visibility on /services"
+                                style={{
+                                  padding: "4px 8px",
+                                  borderRadius: "4px",
+                                  fontSize: "11px",
+                                  fontWeight: "700",
+                                  border: "none",
+                                  cursor: "pointer",
+                                  backgroundColor: serv.isActive ? "#065f46" : "#334155",
+                                  color: serv.isActive ? "#a7f3d0" : "#94a3b8",
+                                }}
+                              >
+                                {serv.isActive ? "● Active" : "○ Draft"}
+                              </button>
+                              {/* Popular Toggle Button */}
+                              <button
+                                type="button"
+                                onClick={() => toggleServicePopular(serv.id)}
+                                title="Toggle popular highlight badge"
+                                style={{
+                                  padding: "4px 8px",
+                                  borderRadius: "4px",
+                                  fontSize: "11px",
+                                  fontWeight: "700",
+                                  border: "none",
+                                  cursor: "pointer",
+                                  backgroundColor: serv.isPopular ? "#78350f" : "#1e293b",
+                                  color: serv.isPopular ? "#fde68a" : "#cbd5e1",
+                                }}
+                              >
+                                {serv.isPopular ? "★ Popular" : "☆ Standard"}
+                              </button>
                             </div>
                           </div>
-                          <div style={{ display: "flex", gap: "6px" }}>
-                            {/* Active Toggle Button */}
-                            <button
-                              type="button"
-                              onClick={() => toggleServiceActive(serv.id)}
-                              title="Toggle public visibility"
+
+                          {/* Price & Timeline Bar */}
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "8px" }}>
+                            <div style={{ fontSize: "24px", fontWeight: "900", color: "#ffffff" }}>
+                              {serv.priceDisplay}
+                            </div>
+                            <div style={{ fontSize: "11.5px", color: "#94a3b8" }}>
+                              ⏱ <strong style={{ color: "#e2e8f0" }}>{serv.timeline}</strong>
+                            </div>
+                          </div>
+
+                          {/* Title & Slug */}
+                          <div style={{ marginBottom: "6px" }}>
+                            <Link
+                              href={`/services/${serv.slug}`}
+                              target="_blank"
                               style={{
-                                padding: "4px 8px",
-                                borderRadius: "3px",
-                                fontSize: "11px",
-                                fontWeight: "700",
-                                border: "none",
-                                cursor: "pointer",
-                                backgroundColor: serv.isActive ? "#065f46" : "#334155",
-                                color: serv.isActive ? "#a7f3d0" : "#94a3b8",
+                                fontSize: "17px",
+                                fontWeight: "800",
+                                color: "#38bdf8",
+                                textDecoration: "none",
                               }}
                             >
-                              {serv.isActive ? "● Active" : "○ Inactive"}
-                            </button>
-                            {/* Popular Toggle Button */}
-                            <button
-                              type="button"
-                              onClick={() => toggleServicePopular(serv.id)}
-                              title="Toggle popular highlight badge"
+                              {serv.title} ↗
+                            </Link>
+                            <div style={{ fontSize: "11px", fontFamily: "monospace", color: "#64748b", marginTop: "2px" }}>
+                              slug: /{serv.slug}
+                            </div>
+                          </div>
+
+                          {/* Tagline & ROI Metric */}
+                          {serv.tagline && (
+                            <div style={{ fontSize: "12px", color: "#cbd5e1", fontStyle: "italic", marginBottom: "6px" }}>
+                              &ldquo;{serv.tagline}&rdquo;
+                            </div>
+                          )}
+
+                          {serv.roiMetric && (
+                            <div
                               style={{
-                                padding: "4px 8px",
-                                borderRadius: "3px",
+                                display: "inline-block",
+                                backgroundColor: "rgba(16, 185, 129, 0.12)",
+                                border: "1px solid rgba(16, 185, 129, 0.3)",
+                                color: "#10b981",
                                 fontSize: "11px",
-                                fontWeight: "700",
-                                border: "none",
-                                cursor: "pointer",
-                                backgroundColor: serv.isPopular ? "#78350f" : "#1e293b",
-                                color: serv.isPopular ? "#fde68a" : "#cbd5e1",
+                                fontWeight: 700,
+                                borderRadius: "4px",
+                                padding: "2px 8px",
+                                marginBottom: "10px",
                               }}
                             >
-                              {serv.isPopular ? "★ Popular" : "☆ Standard"}
-                            </button>
+                              📈 {serv.roiMetric}
+                            </div>
+                          )}
+
+                          {/* Scope Description */}
+                          <p style={{ fontSize: "12.5px", color: "#94a3b8", lineHeight: "1.5", margin: "0 0 12px 0" }}>
+                            {serv.description}
+                          </p>
+
+                          {/* Tech Stack Tags */}
+                          {serv.techStack && serv.techStack.length > 0 && (
+                            <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginBottom: "12px" }}>
+                              {serv.techStack.map((tech) => (
+                                <span
+                                  key={tech}
+                                  style={{
+                                    backgroundColor: "rgba(30, 41, 59, 0.7)",
+                                    border: "1px solid #1e293b",
+                                    color: "#94a3b8",
+                                    fontSize: "10.5px",
+                                    padding: "1px 6px",
+                                    borderRadius: "3px",
+                                  }}
+                                >
+                                  {tech}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* Deliverables Checklist */}
+                          <div style={{ borderTop: "1px solid #1e293b", paddingTop: "10px", marginBottom: "14px" }}>
+                            <strong style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase", display: "block", marginBottom: "6px" }}>
+                              Included Deliverables ({serv.deliverables.length}):
+                            </strong>
+                            <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "12px", color: "#cbd5e1", lineHeight: "1.4" }}>
+                              {serv.deliverables.slice(0, 4).map((deliv, idx) => (
+                                <li key={idx} style={{ marginBottom: "3px" }}>
+                                  {deliv}
+                                </li>
+                              ))}
+                              {serv.deliverables.length > 4 && (
+                                <li style={{ color: "#38bdf8", listStyleType: "none", marginTop: "4px", fontSize: "11px" }}>
+                                  + {serv.deliverables.length - 4} additional enterprise deliverables
+                                </li>
+                              )}
+                            </ul>
                           </div>
                         </div>
 
-                        <div style={{ fontSize: "17px", fontWeight: "700", color: "#38bdf8", marginBottom: "4px" }}>
-                          {serv.title}
-                        </div>
-                        <div style={{ fontSize: "12px", color: "#94a3b8", marginBottom: "12px" }}>
-                          ⏱ Timeline: <strong style={{ color: "#e2e8f0" }}>{serv.timeline}</strong>
-                        </div>
-
-                        <p style={{ fontSize: "13px", color: "#cbd5e1", lineHeight: "1.5", margin: "0 0 14px 0" }}>
-                          {serv.description}
-                        </p>
-
-                        <div style={{ borderTop: "1px solid #1e293b", paddingTop: "10px", marginBottom: "16px" }}>
-                          <strong style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase", display: "block", marginBottom: "6px" }}>
-                            Included Deliverables ({serv.deliverables.length}):
-                          </strong>
-                          <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "12px", color: "#94a3b8", lineHeight: "1.5" }}>
-                            {serv.deliverables.map((deliv, idx) => (
-                              <li key={idx} style={{ marginBottom: "3px" }}>
-                                {deliv}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #1e293b", paddingTop: "12px", marginTop: "10px" }}>
-                        <Link
-                          href="/pricing"
-                          target="_blank"
+                        {/* Card Footer Actions */}
+                        <div
                           style={{
-                            fontSize: "12px",
-                            color: "#38bdf8",
-                            textDecoration: "none",
-                            fontWeight: "600",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            borderTop: "1px solid #1e293b",
+                            paddingTop: "12px",
+                            marginTop: "8px",
+                            flexWrap: "wrap",
+                            gap: "8px",
                           }}
                         >
-                          ↗ View on Site
-                        </Link>
-                        <div style={{ display: "flex", gap: "8px" }}>
-                          <button
-                            type="button"
-                            onClick={() => setEditingService({ ...serv })}
-                            style={{
-                              padding: "5px 12px",
-                              backgroundColor: "#1e3a8a",
-                              color: "#bfdbfe",
-                              border: "1px solid #2563eb",
-                              borderRadius: "4px",
-                              fontSize: "12px",
-                              fontWeight: "600",
-                              cursor: "pointer",
-                            }}
-                          >
-                            ✏️ Edit
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setServiceToDelete(serv)}
-                            style={{
-                              padding: "5px 12px",
-                              backgroundColor: "#7f1d1d",
-                              color: "#fecaca",
-                              border: "none",
-                              borderRadius: "4px",
-                              fontSize: "12px",
-                              cursor: "pointer",
-                            }}
-                          >
-                            🗑️ Delete
-                          </button>
+                          <div style={{ display: "flex", gap: "6px" }}>
+                            <Link
+                              href={`/services/${serv.slug}`}
+                              target="_blank"
+                              style={{
+                                fontSize: "12px",
+                                color: "#38bdf8",
+                                textDecoration: "none",
+                                fontWeight: "600",
+                              }}
+                            >
+                              ↗ Public Page
+                            </Link>
+                          </div>
+
+                          <div style={{ display: "flex", gap: "6px" }}>
+                            <button
+                              type="button"
+                              onClick={() => handleDuplicateService(serv)}
+                              title="Duplicate as new service draft"
+                              style={{
+                                padding: "5px 10px",
+                                backgroundColor: "#1e293b",
+                                color: "#cbd5e1",
+                                border: "1px solid #334155",
+                                borderRadius: "4px",
+                                fontSize: "11.5px",
+                                fontWeight: "600",
+                                cursor: "pointer",
+                              }}
+                            >
+                              📋 Clone
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setEditingService({ ...serv })}
+                              style={{
+                                padding: "5px 12px",
+                                backgroundColor: "#1e3a8a",
+                                color: "#bfdbfe",
+                                border: "1px solid #2563eb",
+                                borderRadius: "4px",
+                                fontSize: "11.5px",
+                                fontWeight: "600",
+                                cursor: "pointer",
+                              }}
+                            >
+                              ✏️ Edit
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setServiceToDelete(serv)}
+                              style={{
+                                padding: "5px 10px",
+                                backgroundColor: "#7f1d1d",
+                                color: "#fecaca",
+                                border: "none",
+                                borderRadius: "4px",
+                                fontSize: "11.5px",
+                                cursor: "pointer",
+                              }}
+                            >
+                              🗑️ Delete
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
               </div>
 
-              {services.filter((s) => {
-                if (!serviceSearch.trim()) return true;
-                const q = serviceSearch.toLowerCase();
-                return (
-                  s.title.toLowerCase().includes(q) ||
-                  s.description.toLowerCase().includes(q) ||
-                  s.priceDisplay.toLowerCase().includes(q) ||
-                  s.deliverables.some((d) => d.toLowerCase().includes(q))
-                );
-              }).length === 0 && (
-                <div style={{ padding: "40px", textAlign: "center", backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "6px", color: "#94a3b8" }}>
-                  No packages found matching &ldquo;{serviceSearch}&rdquo;.
+              {services.length === 0 && (
+                <div style={{ padding: "40px", textAlign: "center", backgroundColor: "#0a192f", border: "1px solid #1e293b", borderRadius: "8px", color: "#94a3b8" }}>
+                  No services found. Click &ldquo;+ Add New Service Offering&rdquo; to create your first package.
                 </div>
               )}
             </div>
@@ -4412,13 +4967,13 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* EDIT SERVICE MODAL */}
+          {/* EDIT SERVICE MODAL (Full Control Suite) */}
           {editingService && (
             <div
               style={{
                 position: "fixed",
                 inset: 0,
-                backgroundColor: "rgba(0, 0, 0, 0.75)",
+                backgroundColor: "rgba(0, 0, 0, 0.8)",
                 zIndex: 9999,
                 display: "flex",
                 alignItems: "center",
@@ -4429,20 +4984,25 @@ export default function AdminPage() {
               <div
                 style={{
                   backgroundColor: "#0a192f",
-                  border: "1px solid #334155",
+                  border: "1px solid rgba(56, 189, 248, 0.4)",
                   borderRadius: "8px",
-                  maxWidth: "700px",
+                  maxWidth: "760px",
                   width: "100%",
-                  maxHeight: "90vh",
+                  maxHeight: "92vh",
                   overflowY: "auto",
                   padding: "24px",
-                  boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.5)",
+                  boxShadow: "0 24px 50px rgba(0, 0, 0, 0.7)",
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", borderBottom: "1px solid #1e293b", paddingBottom: "12px" }}>
-                  <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#ffffff", margin: 0 }}>
-                    Edit Pricing Package: {editingService.title}
-                  </h3>
+                  <div>
+                    <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#ffffff", margin: "0 0 2px 0" }}>
+                      Edit Service Offering: {editingService.title}
+                    </h3>
+                    <div style={{ fontSize: "11px", color: "#94a3b8", fontFamily: "monospace" }}>
+                      ID: {editingService.id} • Slug: /{editingService.slug}
+                    </div>
+                  </div>
                   <button
                     type="button"
                     onClick={() => setEditingService(null)}
@@ -4460,9 +5020,26 @@ export default function AdminPage() {
                 </div>
 
                 <form onSubmit={handleSaveServiceEdit}>
+                  {/* Category Pillar */}
+                  <div style={{ marginBottom: "14px" }}>
+                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>
+                      Category Pillar *
+                    </label>
+                    <select
+                      value={editingService.category || "systems-architecture"}
+                      onChange={(e) => setEditingService({ ...editingService, category: e.target.value as any })}
+                      style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                    >
+                      <option value="growth-seo">🚀 Growth &amp; SEO Engineering</option>
+                      <option value="web-saas">💻 Web &amp; Full-Stack SaaS Platforms</option>
+                      <option value="systems-architecture">⚡ Systems, Cloud &amp; Database Architecture</option>
+                    </select>
+                  </div>
+
+                  {/* Title & Slug */}
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "14px" }}>
                     <div>
-                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Service Title *</label>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>Service Title *</label>
                       <input
                         required
                         value={editingService.title}
@@ -4471,7 +5048,7 @@ export default function AdminPage() {
                       />
                     </div>
                     <div>
-                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>URL Slug *</label>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>URL Slug *</label>
                       <input
                         required
                         value={editingService.slug}
@@ -4479,8 +5056,34 @@ export default function AdminPage() {
                         style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
                       />
                     </div>
+                  </div>
+
+                  {/* Tagline & ROI Metric */}
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "14px" }}>
                     <div>
-                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Pricing Model *</label>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>Marketing Tagline</label>
+                      <input
+                        value={editingService.tagline || ""}
+                        onChange={(e) => setEditingService({ ...editingService, tagline: e.target.value })}
+                        placeholder="e.g. Automated Data Pipelines & Schema Domination"
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>Key ROI Metric</label>
+                      <input
+                        value={editingService.roiMetric || ""}
+                        onChange={(e) => setEditingService({ ...editingService, roiMetric: e.target.value })}
+                        placeholder="e.g. +300% Organic Clicks • 100/100 Core Web Vitals"
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Commercials: Pricing Model, Price Display, Timeline */}
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "14px", marginBottom: "14px" }}>
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>Pricing Model *</label>
                       <select
                         value={editingService.pricingType}
                         onChange={(e) => setEditingService({ ...editingService, pricingType: e.target.value as any })}
@@ -4492,7 +5095,7 @@ export default function AdminPage() {
                       </select>
                     </div>
                     <div>
-                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Price Display *</label>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>Price Display *</label>
                       <input
                         required
                         value={editingService.priceDisplay}
@@ -4500,18 +5103,18 @@ export default function AdminPage() {
                         style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
                       />
                     </div>
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>Timeline / Capacity *</label>
+                      <input
+                        required
+                        value={editingService.timeline}
+                        onChange={(e) => setEditingService({ ...editingService, timeline: e.target.value })}
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      />
+                    </div>
                   </div>
 
-                  <div style={{ marginBottom: "14px" }}>
-                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Timeline / Capacity *</label>
-                    <input
-                      required
-                      value={editingService.timeline}
-                      onChange={(e) => setEditingService({ ...editingService, timeline: e.target.value })}
-                      style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
-                    />
-                  </div>
-
+                  {/* Visibility & Highlighting Switches */}
                   <div style={{ display: "flex", gap: "24px", marginBottom: "14px", padding: "10px 12px", backgroundColor: "#071324", borderRadius: "4px", border: "1px solid #1e293b" }}>
                     <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "#e2e8f0", cursor: "pointer" }}>
                       <input
@@ -4531,8 +5134,47 @@ export default function AdminPage() {
                     </label>
                   </div>
 
+                  {/* Tech Stack & Engagement Steps */}
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "14px" }}>
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>
+                        Tech Stack Tags (comma separated)
+                      </label>
+                      <input
+                        value={(editingService.techStack || []).join(", ")}
+                        onChange={(e) =>
+                          setEditingService({
+                            ...editingService,
+                            techStack: e.target.value.split(",").map((s) => s.trim()).filter(Boolean),
+                          })
+                        }
+                        placeholder="e.g. Next.js 16, Supabase, Cloudflare"
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>
+                        Engagement Roadmap Steps (comma separated)
+                      </label>
+                      <input
+                        value={(editingService.engagementSteps || []).join(", ")}
+                        onChange={(e) =>
+                          setEditingService({
+                            ...editingService,
+                            engagementSteps: e.target.value.split(",").map((s) => s.trim()).filter(Boolean),
+                          })
+                        }
+                        placeholder="e.g. 1. Audit, 2. RFC, 3. Sprint, 4. Warranty"
+                        style={{ width: "100%", padding: "8px 10px", backgroundColor: "#071324", border: "1px solid #1e293b", color: "#fff", borderRadius: "4px", fontSize: "13px" }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Key Deliverables */}
                   <div style={{ marginBottom: "14px" }}>
-                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Key Deliverables (comma separated) *</label>
+                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>
+                      Key Deliverables (comma separated) *
+                    </label>
                     <textarea
                       required
                       rows={3}
@@ -4547,8 +5189,9 @@ export default function AdminPage() {
                     />
                   </div>
 
+                  {/* Scope Description */}
                   <div style={{ marginBottom: "20px" }}>
-                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px" }}>Scope Description *</label>
+                    <label style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginBottom: "4px", fontWeight: 700 }}>Scope Description *</label>
                     <textarea
                       required
                       rows={3}
@@ -4587,7 +5230,7 @@ export default function AdminPage() {
                         cursor: "pointer",
                       }}
                     >
-                      Save Package Changes
+                      Save Changes
                     </button>
                   </div>
                 </form>

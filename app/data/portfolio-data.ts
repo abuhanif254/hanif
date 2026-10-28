@@ -53,7 +53,7 @@ export interface ServicePricing {
   deliverables: string[];
   isPopular: boolean;
   isActive: boolean;
-  category?: "growth-seo" | "web-saas" | "systems-cloud";
+  category?: "growth-seo" | "web-saas" | "systems-architecture" | "systems-cloud";
   tagline?: string;
   roiMetric?: string;
   techStack?: string[];

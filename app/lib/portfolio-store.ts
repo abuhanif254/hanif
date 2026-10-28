@@ -130,72 +130,210 @@ export async function getProjectBySlug(slug: string): Promise<ProjectItem | unde
   );
 }
 
+let dynamicServicesStore: ServicePricing[] = [...initialServices];
+
+export async function getAllServicesAdmin(): Promise<ServicePricing[]> {
+  await getServices();
+  return [...dynamicServicesStore];
+}
+
+export async function createService(serviceData: Omit<ServicePricing, "id"> & { id?: string }): Promise<ServicePricing> {
+  const id = serviceData.id || `srv-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+  const slug =
+    serviceData.slug ||
+    serviceData.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+
+  const newRecord: ServicePricing = {
+    ...serviceData,
+    id,
+    slug,
+    category: serviceData.category || "systems-architecture",
+    isActive: serviceData.isActive !== false,
+    isPopular: Boolean(serviceData.isPopular),
+    deliverables: serviceData.deliverables || [],
+    techStack: serviceData.techStack || [],
+    engagementSteps: serviceData.engagementSteps || [],
+  };
+
+  dynamicServicesStore = [newRecord, ...dynamicServicesStore];
+
+  if (isSupabaseConfigured && supabase) {
+    try {
+      supabase
+        .from("services")
+        .insert([
+          {
+            id: newRecord.id,
+            title: newRecord.title,
+            slug: newRecord.slug,
+            description: newRecord.description,
+            pricing_type: newRecord.pricingType,
+            price_display: newRecord.priceDisplay,
+            timeline: newRecord.timeline,
+            deliverables: newRecord.deliverables,
+            is_popular: newRecord.isPopular,
+            is_active: newRecord.isActive,
+          },
+        ])
+        .then(() => {}, () => {});
+    } catch {
+      // Graceful fallback
+    }
+  }
+
+  return newRecord;
+}
+
+export async function updateService(
+  id: string,
+  updates: Partial<ServicePricing>
+): Promise<ServicePricing | null> {
+  const index = dynamicServicesStore.findIndex((s) => s.id === id || s.slug === id);
+  if (index === -1) return null;
+
+  const current = dynamicServicesStore[index];
+  const updated: ServicePricing = {
+    ...current,
+    ...updates,
+    id: current.id,
+  };
+
+  dynamicServicesStore[index] = updated;
+
+  if (isSupabaseConfigured && supabase) {
+    try {
+      supabase
+        .from("services")
+        .update({
+          title: updated.title,
+          slug: updated.slug,
+          description: updated.description,
+          pricing_type: updated.pricingType,
+          price_display: updated.priceDisplay,
+          timeline: updated.timeline,
+          deliverables: updated.deliverables,
+          is_popular: updated.isPopular,
+          is_active: updated.isActive,
+        })
+        .eq("id", current.id)
+        .then(() => {}, () => {});
+    } catch {
+      // Graceful fallback
+    }
+  }
+
+  return updated;
+}
+
+export async function deleteService(id: string): Promise<boolean> {
+  const prevLen = dynamicServicesStore.length;
+  dynamicServicesStore = dynamicServicesStore.filter((s) => s.id !== id && s.slug !== id);
+  const deleted = dynamicServicesStore.length < prevLen;
+
+  if (deleted && isSupabaseConfigured && supabase) {
+    try {
+      supabase.from("services").delete().eq("id", id).then(() => {}, () => {});
+    } catch {
+      // Graceful fallback
+    }
+  }
+
+  return deleted;
+}
+
+export async function toggleServiceActive(id: string): Promise<ServicePricing | null> {
+  const match = dynamicServicesStore.find((s) => s.id === id || s.slug === id);
+  if (!match) return null;
+  return updateService(match.id, { isActive: !match.isActive });
+}
+
+export async function toggleServicePopular(id: string): Promise<ServicePricing | null> {
+  const match = dynamicServicesStore.find((s) => s.id === id || s.slug === id);
+  if (!match) return null;
+  return updateService(match.id, { isPopular: !match.isPopular });
+}
+
+export async function reorderServices(orderedIds: string[]): Promise<ServicePricing[]> {
+  const idMap = new Map(dynamicServicesStore.map((s) => [s.id, s]));
+  const reordered: ServicePricing[] = [];
+  const seenIds = new Set<string>();
+
+  for (const id of orderedIds) {
+    const s = idMap.get(id);
+    if (s) {
+      reordered.push(s);
+      seenIds.add(id);
+    }
+  }
+
+  for (const s of dynamicServicesStore) {
+    if (!seenIds.has(s.id)) {
+      reordered.push(s);
+    }
+  }
+
+  dynamicServicesStore = reordered;
+  return dynamicServicesStore;
+}
+
 export async function getServices(): Promise<ServicePricing[]> {
   if (isSupabaseConfigured && supabase) {
     try {
       const { data, error } = await supabase
         .from("services")
         .select("*")
-        .eq("is_active", true)
         .order("sort_order", { ascending: true });
       if (!error && data && data.length > 0) {
         const supabaseMap = new Map(data.map((item) => [item.slug, item]));
 
-        const merged: ServicePricing[] = [];
-        const seenSlugs = new Set<string>();
-
-        for (const initServ of initialServices) {
-          const item = supabaseMap.get(initServ.slug);
-          seenSlugs.add(initServ.slug);
+        dynamicServicesStore = dynamicServicesStore.map((service) => {
+          const item = supabaseMap.get(service.slug);
           if (item) {
-            merged.push({
-              id: item.id || initServ.id,
-              title: item.title || initServ.title,
-              slug: item.slug || initServ.slug,
-              description: item.description || initServ.description,
-              pricingType: item.pricing_type || initServ.pricingType,
-              priceDisplay: item.price_display || initServ.priceDisplay,
-              timeline: item.timeline || initServ.timeline,
-              deliverables: item.deliverables && item.deliverables.length > 0 ? item.deliverables : initServ.deliverables,
-              isPopular: item.is_popular !== undefined ? item.is_popular : initServ.isPopular,
-              isActive: item.is_active !== undefined ? item.is_active : initServ.isActive,
-              category: initServ.category,
-              tagline: initServ.tagline,
-              roiMetric: initServ.roiMetric,
-              techStack: initServ.techStack,
-              engagementSteps: initServ.engagementSteps,
-            });
-          } else {
-            merged.push(initServ);
+            return {
+              ...service,
+              title: item.title || service.title,
+              description: item.description || service.description,
+              pricingType: item.pricing_type || service.pricingType,
+              priceDisplay: item.price_display || service.priceDisplay,
+              timeline: item.timeline || service.timeline,
+              deliverables:
+                item.deliverables && item.deliverables.length > 0 ? item.deliverables : service.deliverables,
+              isPopular: item.is_popular !== undefined ? item.is_popular : service.isPopular,
+              isActive: item.is_active !== undefined ? item.is_active : service.isActive,
+            };
           }
-        }
+          return service;
+        });
 
         // Add any additional active services from Supabase that were not in initialServices
+        const seenSlugs = new Set(dynamicServicesStore.map((s) => s.slug));
         for (const item of data) {
-          if (!seenSlugs.has(item.slug) && item.is_active) {
-            merged.push({
+          if (!seenSlugs.has(item.slug)) {
+            dynamicServicesStore.push({
               id: item.id,
               title: item.title,
               slug: item.slug,
               description: item.description,
-              pricingType: item.pricing_type,
+              pricingType: item.pricing_type || "fixed",
               priceDisplay: item.price_display,
               timeline: item.timeline,
               deliverables: item.deliverables || [],
-              isPopular: item.is_popular,
-              isActive: item.is_active,
-              category: "systems-cloud",
+              isPopular: item.is_popular || false,
+              isActive: item.is_active !== false,
+              category: "systems-architecture",
             });
+            seenSlugs.add(item.slug);
           }
         }
-
-        return merged;
       }
     } catch {
       // Fallback
     }
   }
-  return initialServices;
+  return dynamicServicesStore.filter((s) => s.isActive !== false);
 }
 
 export async function getServiceBySlug(slug: string): Promise<ServicePricing | undefined> {

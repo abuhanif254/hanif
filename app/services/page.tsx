@@ -136,6 +136,22 @@ export default async function ServicesHubPage() {
 
   return (
     <div id="source-page-root" data-source-path="/services">
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            .services-page-shell #container,
+            .services-page-shell #main,
+            .services-page-shell .cwrap,
+            .services-page-shell .mwrap,
+            .services-page-shell #content {
+              background-color: #060b19 !important;
+              background: #060b19 !important;
+              border: none !important;
+              box-shadow: none !important;
+            }
+          `,
+        }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
@@ -149,14 +165,14 @@ export default async function ServicesHubPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      <div id="source-page-body" className="source-page-body js l2 section_10 abuhanif-portfolio-shell">
+      <div id="source-page-body" className="source-page-body js l2 section_10 abuhanif-portfolio-shell services-page-shell">
         <SiteHeader activePath="/services" />
 
-        <div className="index" id="container">
-          <div className="cwrap">
-            <div id="main">
-              <div className="mwrap">
-                <div id="content" style={{ width: "100%", maxWidth: "100%", float: "none", margin: 0, padding: 0 }}>
+        <div className="index" id="container" style={{ backgroundColor: "#060b19" }}>
+          <div className="cwrap" style={{ backgroundColor: "#060b19" }}>
+            <div id="main" style={{ backgroundColor: "#060b19", border: "none", boxShadow: "none" }}>
+              <div className="mwrap" style={{ backgroundColor: "#060b19" }}>
+                <div id="content" style={{ width: "100%", maxWidth: "100%", float: "none", margin: 0, padding: 0, backgroundColor: "#060b19" }}>
                   {/* Semantic Breadcrumbs */}
                   <div id="breadcrumbs" style={{ padding: "12px 24px", background: "rgba(6, 11, 25, 0.95)", borderBottom: "1px solid #1e293b" }}>
                     <div className="wrapper" style={{ fontSize: "12px", color: "#94a3b8" }}>

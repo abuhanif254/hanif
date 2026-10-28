@@ -72,7 +72,7 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
   }
 
   return (
-    <div className="services-hub-wrapper" style={{ width: "100%", color: "#e2e8f0" }}>
+    <div className="services-hub-wrapper" style={{ width: "100%", backgroundColor: "#060b19", color: "#e2e8f0" }}>
       {/* Visual Hero Header Bar */}
       <section
         className="services-hero-banner"
@@ -1024,56 +1024,162 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
         </div>
       </section>
 
-      {/* Bottom Conversion Banner */}
+      {/* Bottom Conversion Banner (High-Contrast Midnight Slate) */}
       <section
         style={{
           maxWidth: "1140px",
           margin: "0 auto 48px auto",
-          padding: "32px 24px",
-          background: "linear-gradient(135deg, rgba(37, 99, 235, 0.25) 0%, rgba(16, 185, 129, 0.15) 100%)",
+          padding: "40px 28px",
+          backgroundColor: "#0b152d",
+          backgroundImage: "linear-gradient(135deg, #0b152d 0%, #0d2042 50%, #07152b 100%)",
           border: "1px solid rgba(56, 189, 248, 0.4)",
-          borderRadius: "12px",
+          borderRadius: "14px",
           textAlign: "center",
-          boxShadow: "0 10px 30px rgba(0,0,0,0.4)",
+          boxShadow: "0 24px 50px -15px rgba(0, 0, 0, 0.9), 0 0 35px rgba(37, 99, 235, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12)",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        <h2 style={{ fontSize: "24px", fontWeight: 900, color: "#ffffff", margin: "0 0 10px 0" }}>
-          Ready to Architect Your Next Scalable Breakthrough?
-        </h2>
-        <p style={{ fontSize: "14px", color: "#e2e8f0", maxWidth: "600px", margin: "0 auto 20px auto" }}>
-          Schedule a direct 15-minute architecture discovery call or receive an instantaneous Statement of Work proposal.
-        </p>
-        <div style={{ display: "flex", justifyContent: "center", gap: "12px", flexWrap: "wrap" }}>
-          <Link
-            href="/pricing#inquiry"
+        {/* Subtle Ambient Decorative Glow */}
+        <div
+          style={{
+            position: "absolute",
+            top: "-50px",
+            right: "20%",
+            width: "300px",
+            height: "300px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%)",
+            filter: "blur(40px)",
+            pointerEvents: "none",
+          }}
+        />
+
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <div
             style={{
-              backgroundColor: "#2563eb",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              backgroundColor: "rgba(56, 189, 248, 0.12)",
+              border: "1px solid rgba(56, 189, 248, 0.35)",
+              padding: "5px 16px",
+              borderRadius: "999px",
+              marginBottom: "16px",
+            }}
+          >
+            <span
+              style={{
+                width: "8px",
+                height: "8px",
+                borderRadius: "50%",
+                backgroundColor: "#10b981",
+                boxShadow: "0 0 8px #10b981",
+              }}
+            />
+            <span style={{ fontSize: "11px", fontWeight: 800, color: "#38bdf8", textTransform: "uppercase", letterSpacing: "1px" }}>
+              ⚡ Fixed Sprints • 100% Client IP • Zero-Bug 30-Day SLA
+            </span>
+          </div>
+
+          <h2
+            style={{
+              fontSize: "clamp(22px, 2.5vw, 32px)",
+              fontWeight: 900,
               color: "#ffffff",
-              padding: "10px 22px",
-              borderRadius: "6px",
-              fontWeight: 800,
-              fontSize: "13px",
-              textDecoration: "none",
-              boxShadow: "0 4px 14px rgba(37,99,235,0.5)",
+              margin: "0 0 12px 0",
+              letterSpacing: "-0.02em",
+              textShadow: "0 2px 10px rgba(0,0,0,0.8)",
             }}
           >
-            Book 15-Min Discovery Call 📅
-          </Link>
-          <Link
-            href="/pricing#sow-builder"
+            Ready to Architect Your Next Scalable Breakthrough?
+          </h2>
+
+          <p
             style={{
-              backgroundColor: "rgba(15, 23, 42, 0.8)",
-              border: "1px solid #38bdf8",
-              color: "#38bdf8",
-              padding: "10px 20px",
-              borderRadius: "6px",
-              fontWeight: 700,
-              fontSize: "13px",
-              textDecoration: "none",
+              fontSize: "15px",
+              color: "#cbd5e1",
+              maxWidth: "680px",
+              margin: "0 auto 20px auto",
+              lineHeight: 1.6,
             }}
           >
-            Instant SOW Proposal Generator 📋
-          </Link>
+            Schedule a direct 15-minute architecture discovery call or receive an instantaneous Statement of Work proposal.
+          </p>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              flexWrap: "wrap",
+              gap: "10px",
+              margin: "0 auto 24px auto",
+              maxWidth: "760px",
+            }}
+          >
+            {[
+              "⚡ 48-Hour Sprint Kickoff",
+              "🔒 100% Git & Code Ownership",
+              "🛡️ 30-Day Post-Launch Warranty",
+              "🤝 Fixed-Scope Milestone Pricing",
+            ].map((badge) => (
+              <span
+                key={badge}
+                style={{
+                  backgroundColor: "rgba(15, 23, 42, 0.8)",
+                  border: "1px solid rgba(56, 189, 248, 0.25)",
+                  color: "#94a3b8",
+                  fontSize: "12px",
+                  fontWeight: 600,
+                  padding: "4px 12px",
+                  borderRadius: "6px",
+                }}
+              >
+                {badge}
+              </span>
+            ))}
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "center", gap: "14px", flexWrap: "wrap" }}>
+            <Link
+              href="/pricing#inquiry"
+              style={{
+                backgroundColor: "#2563eb",
+                backgroundImage: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
+                color: "#ffffff",
+                padding: "12px 26px",
+                borderRadius: "6px",
+                fontWeight: 800,
+                fontSize: "13.5px",
+                textDecoration: "none",
+                boxShadow: "0 4px 18px rgba(37,99,235,0.55)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              Book 15-Min Discovery Call 📅
+            </Link>
+            <Link
+              href="/pricing#sow-builder"
+              style={{
+                backgroundColor: "rgba(15, 23, 42, 0.9)",
+                border: "1px solid #38bdf8",
+                color: "#38bdf8",
+                padding: "12px 24px",
+                borderRadius: "6px",
+                fontWeight: 700,
+                fontSize: "13.5px",
+                textDecoration: "none",
+                boxShadow: "0 4px 14px rgba(0,0,0,0.4)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              Instant SOW Proposal Generator 📋
+            </Link>
+          </div>
         </div>
       </section>
     </div>
