@@ -106,6 +106,7 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
     { label: "Home", href: "/", id: "fc", key: "/" },
     { label: "About", href: "/#about", key: "/#about" },
     { label: "Engineering Focus", href: "/#competencies", key: "/#competencies" },
+    { label: "Services", href: "/services", key: "/services" },
     { label: "Work Showcase", href: "/projects", key: "/projects" },
     { label: "Pricing & SOW", href: "/pricing", key: "/pricing" },
     { label: "Systems Lab", href: "/lab", key: "/lab" },

@@ -139,34 +139,56 @@ export async function getServices(): Promise<ServicePricing[]> {
         .eq("is_active", true)
         .order("sort_order", { ascending: true });
       if (!error && data && data.length > 0) {
-        const supabaseServices: ServicePricing[] = data.map((item) => ({
-          id: item.id,
-          title: item.title,
-          slug: item.slug,
-          description: item.description,
-          pricingType: item.pricing_type,
-          priceDisplay: item.price_display,
-          timeline: item.timeline,
-          deliverables: item.deliverables || [],
-          isPopular: item.is_popular,
-          isActive: item.is_active,
-        }));
+        const supabaseMap = new Map(data.map((item) => [item.slug, item]));
 
-        const existingSlugs = new Set(
-          supabaseServices.flatMap((s) => [
-            s.slug,
-            ...Object.entries(SERVICE_SLUG_ALIASES)
-              .filter(([_, canonical]) => canonical === s.slug)
-              .map(([alias]) => alias),
-          ])
-        );
+        const merged: ServicePricing[] = [];
+        const seenSlugs = new Set<string>();
 
-        const merged = [...supabaseServices];
         for (const initServ of initialServices) {
-          if (!existingSlugs.has(initServ.slug)) {
+          const item = supabaseMap.get(initServ.slug);
+          seenSlugs.add(initServ.slug);
+          if (item) {
+            merged.push({
+              id: item.id || initServ.id,
+              title: item.title || initServ.title,
+              slug: item.slug || initServ.slug,
+              description: item.description || initServ.description,
+              pricingType: item.pricing_type || initServ.pricingType,
+              priceDisplay: item.price_display || initServ.priceDisplay,
+              timeline: item.timeline || initServ.timeline,
+              deliverables: item.deliverables && item.deliverables.length > 0 ? item.deliverables : initServ.deliverables,
+              isPopular: item.is_popular !== undefined ? item.is_popular : initServ.isPopular,
+              isActive: item.is_active !== undefined ? item.is_active : initServ.isActive,
+              category: initServ.category,
+              tagline: initServ.tagline,
+              roiMetric: initServ.roiMetric,
+              techStack: initServ.techStack,
+              engagementSteps: initServ.engagementSteps,
+            });
+          } else {
             merged.push(initServ);
           }
         }
+
+        // Add any additional active services from Supabase that were not in initialServices
+        for (const item of data) {
+          if (!seenSlugs.has(item.slug) && item.is_active) {
+            merged.push({
+              id: item.id,
+              title: item.title,
+              slug: item.slug,
+              description: item.description,
+              pricingType: item.pricing_type,
+              priceDisplay: item.price_display,
+              timeline: item.timeline,
+              deliverables: item.deliverables || [],
+              isPopular: item.is_popular,
+              isActive: item.is_active,
+              category: "systems-cloud",
+            });
+          }
+        }
+
         return merged;
       }
     } catch {

@@ -23,6 +23,54 @@ export async function generateStaticParams() {
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 const keywordMapping: Record<string, { title: string; metaDesc: string; keywords: string[] }> = {
+  "technical-programmatic-seo": {
+    title: "Technical & Programmatic SEO Engineering",
+    metaDesc: "High-density programmatic SEO architectures, Google Knowledge Graph JSON-LD schemas, and 100/100 Core Web Vitals engineering by Staff Software Engineer Abu Hanif.",
+    keywords: [
+      "Programmatic SEO Engineer",
+      "Technical SEO Consultant",
+      "Next.js Programmatic Architecture",
+      "Core Web Vitals 100 Specialist",
+      "Knowledge Graph Schema Injection",
+      "Crawl Budget Optimization",
+    ],
+  },
+  "social-media-automation": {
+    title: "Social Media Automation & Autonomous Growth Bots",
+    metaDesc: "Automated multi-platform content syndication engines, queue workers, and webhook-driven engagement bots across X/Twitter, LinkedIn, Discord & Telegram.",
+    keywords: [
+      "Social Media Automation Developer",
+      "Autonomous Content Syndication Engine",
+      "Twitter v2 API Engineer",
+      "LinkedIn API Automation",
+      "Discord Telegram Webhook Bot Mesh",
+      "Growth Engineering Automation",
+    ],
+  },
+  "high-converting-landing-pages": {
+    title: "High-Converting Next.js Landing Pages & CRO Architecture",
+    metaDesc: "Ultra-fast Next.js 16 landing pages with sub-50ms global edge TTFB, high-converting interactive calculators, Stripe checkout flows, and 0 layout shift.",
+    keywords: [
+      "Next.js Landing Page Developer",
+      "High Conversion Rate Landing Page",
+      "Sub-50ms TTFB Edge Landing Page",
+      "Stripe Checkout Funnel Developer",
+      "Conversion Rate Optimization CRO Engineer",
+      "React 19 Landing Page Specialist",
+    ],
+  },
+  "custom-web-saas": {
+    title: "Bespoke Custom Web Applications & Full-Stack SaaS Platforms",
+    metaDesc: "Production-grade, full-stack software platforms engineered from technical specs to scalable cloud deployment in 3 to 4 weeks on Next.js 16, Supabase, and Cloudflare.",
+    keywords: [
+      "Full-Stack SaaS Platform Engineer",
+      "Hire Next.js 16 Supabase Developer",
+      "Custom Enterprise Web Platform",
+      "Zero-Trust Auth SaaS Architecture",
+      "Cloudflare Pages PostgreSQL Builder",
+      "Staff Software Engineer SaaS Sprints",
+    ],
+  },
   "database-optimization": {
     title: "PostgreSQL Query Optimization & Database Performance",
     metaDesc: "Surgical database performance tuning, B-tree/GIN/BRIN composite indexing, connection pooling, and sub-20ms P99 query latency audits by Staff Engineer Abu Hanif.",

@@ -53,6 +53,11 @@ export interface ServicePricing {
   deliverables: string[];
   isPopular: boolean;
   isActive: boolean;
+  category?: "growth-seo" | "web-saas" | "systems-cloud";
+  tagline?: string;
+  roiMetric?: string;
+  techStack?: string[];
+  engagementSteps?: string[];
 }
 
 export interface BlogPost {
@@ -386,6 +391,126 @@ Manual data entry and fragile overnight Python scripts caused frequent data corr
 ];
 
 export const initialServices: ServicePricing[] = [
+  {
+    id: "serv-seo",
+    title: "Technical & Programmatic SEO Engineering",
+    slug: "technical-programmatic-seo",
+    description: "Automated programmatic SEO architectures, rich Schema.org knowledge graph injection, and 100/100 Core Web Vitals engineering to dominate organic search intent at scale.",
+    pricingType: "fixed",
+    priceDisplay: "$3,500",
+    timeline: "1–2 Weeks",
+    category: "growth-seo",
+    tagline: "Programmatic URL Graphs, Schema Knowledge Injection & Sub-1.2s LCP",
+    roiMetric: "100/100 Lighthouse • 10k+ Indexable Pages • 0 CLS",
+    techStack: ["Next.js 16", "TypeScript", "Schema.org", "Google Indexing API", "Tailwind CSS", "Cloudflare Pages"],
+    deliverables: [
+      "Programmatic URL generation architecture supporting 10,000+ targeted indexable pages",
+      "Comprehensive Schema.org JSON-LD knowledge graph (Organization, Service, FAQ, Article)",
+      "Dynamic automated XML sitemap generation with Google Indexing API auto-pinging",
+      "Core Web Vitals 100/100 audit (sub-1.2s LCP, CLS = 0.000, sub-50ms INP)",
+      "Semantic keyword clustering, crawl-budget optimization & internal linking graph",
+      "Automated canonicalization and hreflang tag configuration",
+      "Real-time Google Search Console indexation telemetry and rankings monitoring",
+    ],
+    engagementSteps: [
+      "1. Crawl & Indexing Audit (Search intent, site taxonomy, and keyword gaps)",
+      "2. Programmatic Schema Architecture (JSON-LD knowledge graphs & metadata pipelines)",
+      "3. Core Web Vitals Optimization (Eliminating render-blocking resources, 0 CLS)",
+      "4. Launch & Search Console Mesh (Auto-pinging sitemaps & rank monitoring)",
+    ],
+    isPopular: true,
+    isActive: true,
+  },
+  {
+    id: "serv-automation",
+    title: "Social Media Automation & Growth Bot Systems",
+    slug: "social-media-automation",
+    description: "Autonomous multi-platform content syndication pipelines, scheduling engines, and webhook-driven engagement bots across X/Twitter, LinkedIn, Discord, and Telegram.",
+    pricingType: "fixed",
+    priceDisplay: "$4,000",
+    timeline: "2 Weeks",
+    category: "growth-seo",
+    tagline: "Autonomous Multi-Platform Syndication & Scheduled Engagement Queues",
+    roiMetric: "100% Automated Syndication • 4 Major Social Networks • 0 Manual Effort",
+    techStack: ["Node.js", "BullMQ", "Twitter API v2", "LinkedIn API", "Discord Webhooks", "Telegram Bot API", "Redis"],
+    deliverables: [
+      "Multi-platform automated syndication engine connecting X/Twitter, LinkedIn, Discord & Telegram",
+      "Headless BullMQ queuing worker with automatic exponential backoff retry mechanisms",
+      "AI-assisted post hook formatting and automated dynamic OpenGraph image rendering",
+      "RSS-to-social ingestion pipeline turning blog posts into platform-native threads",
+      "Real-time webhook dispatcher mesh with Slack/Discord operational alerts",
+      "Tamper-resistant HMAC signature authentication on all incoming webhook triggers",
+      "Delivery telemetry dashboard with post analytics and engagement logs",
+    ],
+    engagementSteps: [
+      "1. Channel Architecture & API Provisioning (Twitter v2, LinkedIn, Discord tokens)",
+      "2. Queue Worker & Ingestion Pipeline (BullMQ worker setup with Redis storage)",
+      "3. Content Formatting Engine (Thread splitting, hashtag optimization & dynamic cards)",
+      "4. Production Deployment & Telemetry (Webhook health check & automated failover)",
+    ],
+    isPopular: false,
+    isActive: true,
+  },
+  {
+    id: "serv-landing",
+    title: "High-Converting Next.js Landing Pages & CRO",
+    slug: "high-converting-landing-pages",
+    description: "Ultra-fast, performance-engineered landing pages built on Next.js 16 App Router with sub-50ms TTFB, high-converting interactive widgets, and friction-free payment checkouts.",
+    pricingType: "fixed",
+    priceDisplay: "$2,800",
+    timeline: "5–7 Business Days",
+    category: "growth-seo",
+    tagline: "Sub-50ms Global Edge TTFB, Frictionless Checkout Funnels & Micro-Interactions",
+    roiMetric: "+28% Checkout Conversion • Sub-50ms TTFB • 0 Layout Shifts",
+    techStack: ["Next.js 16", "React 19", "Tailwind CSS", "Stripe API", "Cloudflare Pages", "TypeScript"],
+    deliverables: [
+      "Next.js 16 App Router + React 19 responsive, high-performance landing page",
+      "Sub-50ms global edge TTFB via Cloudflare Pages and V8 isolate caching",
+      "Interactive pricing/SOW calculator widgets and conversion-tested layout architecture",
+      "Frictionless Stripe payment gateway or custom subscription onboarding integration",
+      "WCAG 2.1 AAA accessibility, 0 layout shifts (CLS = 0), and mobile-first touch optimization",
+      "Privacy-first analytics telemetry (PostHog / Plausible) with zero cookie-banner latency",
+      "A/B testing readiness and 30-day post-launch conversion warranty",
+    ],
+    engagementSteps: [
+      "1. Conversion Blueprint & Wireframing (Information hierarchy and offer framing)",
+      "2. Next.js 16 Edge Development (Interactive calculators, micro-animations, fast forms)",
+      "3. Payment & Analytics Hookup (Stripe checkout, event tracking & lead routing)",
+      "4. Edge Launch & Performance SLA (Cloudflare DNS cutover & sub-50ms verification)",
+    ],
+    isPopular: false,
+    isActive: true,
+  },
+  {
+    id: "serv-custom-web",
+    title: "Bespoke Custom Web Applications & Enterprise SaaS",
+    slug: "custom-web-saas",
+    description: "Production-grade, full-stack software platforms engineered from technical requirements to scalable cloud deployment in 3 to 4 weeks on Next.js 16, Supabase, and Cloudflare.",
+    pricingType: "fixed",
+    priceDisplay: "$14,500",
+    timeline: "3–4 Weeks",
+    category: "web-saas",
+    tagline: "Enterprise Full-Stack Architecture, Zero-Trust Auth & Real-Time Sync",
+    roiMetric: "100% Client IP Ownership • Production SaaS in 4 Weeks • 99.99% SLA",
+    techStack: ["Next.js 16", "Supabase", "PostgreSQL", "React 19", "Tailwind CSS", "Stripe", "Cloudflare Pages"],
+    deliverables: [
+      "Production-grade Next.js 16 App Router web platform with React 19 Server Components",
+      "Supabase PostgreSQL relational schema, migrations, and Row Level Security (RLS)",
+      "Zero-trust authentication (Email Magic Links, OAuth2, Passkeys / WebAuthn)",
+      "Stripe subscription billing, metered usage invoices, and customer management portal",
+      "Real-time WebSocket collaboration engine and background job queues",
+      "Automated CI/CD deployment pipeline with staging preview branches",
+      "100% Client Intellectual Property handover + 30-day post-launch warranty",
+    ],
+    engagementSteps: [
+      "1. Technical RFC & Schema Modeling (Database ERD, auth models, API contracts)",
+      "2. Sprint 1: Core Platform & Auth (Next.js 16 App Router, Supabase RLS, layout)",
+      "3. Sprint 2: Business Logic & Billing (Stripe checkout, WebSockets, background tasks)",
+      "4. Sprint 3: Polish, CI/CD & IP Handover (Edge deploy, documentation & repository transfer)",
+    ],
+    isPopular: true,
+    isActive: true,
+  },
   {
     id: "serv-1",
     title: "Architecture & Codebase Diagnostic Audit",
