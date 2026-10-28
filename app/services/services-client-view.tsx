@@ -72,128 +72,60 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
   }
 
   return (
-    <div className="services-hub-wrapper" style={{ width: "100%", backgroundColor: "#060b19", color: "#e2e8f0" }}>
-      {/* Visual Hero Header Bar */}
-      <section
-        className="services-hero-banner"
-        style={{
-          background: "linear-gradient(135deg, rgba(6, 11, 25, 0.98) 0%, rgba(11, 19, 43, 0.95) 55%, rgba(15, 23, 42, 0.92) 100%)",
-          borderBottom: "1px solid rgba(56, 189, 248, 0.25)",
-          padding: "36px 24px 28px 24px",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        {/* Subtle Ambient Glow */}
+    <div
+      className="services-hub-wrapper"
+      style={{
+        width: "100%",
+        backgroundColor: "#ffffff",
+        color: "#0f172a",
+        padding: "24px 20px 48px 20px",
+        boxSizing: "border-box",
+      }}
+    >
+      {/* Executive Intro & Guarantees Strip */}
+      <section style={{ maxWidth: "1140px", margin: "0 auto 24px auto" }}>
+        <h2 style={{ fontSize: "22px", fontWeight: 800, color: "#0f172a", margin: "0 0 10px 0" }}>
+          Predictable Engineering Investment. Zero Budget Creep.
+        </h2>
+        <p style={{ fontSize: "14px", color: "#475569", lineHeight: 1.6, margin: "0 0 20px 0", maxWidth: "920px" }}>
+          Senior engineering leadership driven by measurable production outcomes. From high-density{" "}
+          <strong style={{ color: "#0f172a" }}>Programmatic SEO</strong> and multi-channel{" "}
+          <strong style={{ color: "#0f172a" }}>Social Media Automation Bots</strong> to ultra-fast{" "}
+          <strong style={{ color: "#0f172a" }}>Next.js 16 Landing Pages</strong> and production-grade{" "}
+          <strong style={{ color: "#0f172a" }}>Custom SaaS Platforms</strong>. Every engagement is delivered on a fixed-price,
+          transparent milestone with 100% intellectual property ownership assigned to your company, automated CI/CD pipelines, and an unconditional 30-day post-launch warranty.
+        </p>
+
+        {/* 4 Pillars Summary Strip (Matching /pricing & /) */}
         <div
           style={{
-            position: "absolute",
-            top: "-60px",
-            right: "10%",
-            width: "380px",
-            height: "380px",
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(37, 99, 235, 0.18) 0%, rgba(16, 185, 129, 0.08) 50%, transparent 70%)",
-            filter: "blur(50px)",
-            pointerEvents: "none",
-            zIndex: 0,
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+            gap: "12px",
+            marginBottom: "28px",
           }}
-        />
-
-        <div style={{ maxWidth: "1140px", margin: "0 auto", position: "relative", zIndex: 1 }}>
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              backgroundColor: "rgba(15, 23, 42, 0.85)",
-              border: "1px solid rgba(56, 189, 248, 0.4)",
-              padding: "4px 12px",
-              borderRadius: "999px",
-              marginBottom: "12px",
-            }}
-          >
-            <span
-              style={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "50%",
-                backgroundColor: "#10b981",
-                boxShadow: "0 0 10px #10b981",
-                display: "inline-block",
-              }}
-            />
-            <span style={{ fontSize: "11px", fontWeight: 800, color: "#38bdf8", textTransform: "uppercase", letterSpacing: "1px" }}>
-              High-Velocity Engineering • Programmatic SEO • Custom SaaS &amp; Automation
-            </span>
+        >
+          <div style={{ padding: "14px", backgroundColor: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "6px", boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+            <strong style={{ display: "block", color: "#0f172a", fontSize: "13px" }}>⚡ Fixed-Scope Sprints</strong>
+            <span style={{ fontSize: "12px", color: "#64748b" }}>Guaranteed delivery dates &amp; fixed milestone costs.</span>
           </div>
-
-          <h1
-            style={{
-              fontSize: "clamp(26px, 3.2vw, 38px)",
-              fontWeight: 900,
-              lineHeight: 1.18,
-              color: "#ffffff",
-              letterSpacing: "-0.025em",
-              marginBottom: "12px",
-            }}
-          >
-            Engineering &amp; Growth Solutions: Built for Speed, Scale &amp; Dominance.
-          </h1>
-
-          <p
-            style={{
-              fontSize: "clamp(14px, 1.3vw, 16px)",
-              color: "#94a3b8",
-              maxWidth: "850px",
-              lineHeight: 1.6,
-              marginBottom: "20px",
-            }}
-          >
-            From high-density <strong style={{ color: "#38bdf8" }}>Programmatic SEO</strong> and multi-channel{" "}
-            <strong style={{ color: "#10b981" }}>Social Media Automation Bots</strong> to ultra-fast{" "}
-            <strong style={{ color: "#ffffff" }}>Next.js 16 Landing Pages</strong> and production-grade{" "}
-            <strong style={{ color: "#f59e0b" }}>Custom SaaS Platforms</strong>. Every engagement is delivered on a fixed-price,
-            transparent milestone with 100% intellectual property ownership and an unconditional 30-day warranty.
-          </p>
-
-          {/* Quick Metrics Bar */}
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "12px",
-              alignItems: "center",
-              paddingTop: "14px",
-              borderTop: "1px solid rgba(30, 41, 59, 0.8)",
-            }}
-          >
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "12.5px" }}>
-              <span style={{ color: "#10b981", fontWeight: 800 }}>⚡ Sub-50ms TTFB</span>
-              <span style={{ color: "#64748b" }}>•</span>
-              <span style={{ color: "#cbd5e1" }}>Cloudflare V8 Isolates</span>
-            </div>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "12.5px" }}>
-              <span style={{ color: "#38bdf8", fontWeight: 800 }}>🎯 100/100 Core Web Vitals</span>
-              <span style={{ color: "#64748b" }}>•</span>
-              <span style={{ color: "#cbd5e1" }}>Zero Layout Shift (CLS = 0)</span>
-            </div>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "12.5px" }}>
-              <span style={{ color: "#f59e0b", fontWeight: 800 }}>🛡️ 100% Client IP</span>
-              <span style={{ color: "#64748b" }}>•</span>
-              <span style={{ color: "#cbd5e1" }}>Git Repo Handover</span>
-            </div>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "12.5px" }}>
-              <span style={{ color: "#a855f7", fontWeight: 800 }}>⏱️ 5–14 Days Kickoff</span>
-              <span style={{ color: "#64748b" }}>•</span>
-              <span style={{ color: "#cbd5e1" }}>Fixed-Price SOW</span>
-            </div>
+          <div style={{ padding: "14px", backgroundColor: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "6px", boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+            <strong style={{ display: "block", color: "#0f172a", fontSize: "13px" }}>🔒 100% Client IP</strong>
+            <span style={{ fontSize: "12px", color: "#64748b" }}>Direct commits to your private Git repo from day one.</span>
+          </div>
+          <div style={{ padding: "14px", backgroundColor: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "6px", boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+            <strong style={{ display: "block", color: "#0f172a", fontSize: "13px" }}>🎯 Production SLAs</strong>
+            <span style={{ fontSize: "12px", color: "#64748b" }}>Sub-50ms TTFB and 100/100 Core Web Vitals targets.</span>
+          </div>
+          <div style={{ padding: "14px", backgroundColor: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "6px", boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+            <strong style={{ display: "block", color: "#0f172a", fontSize: "13px" }}>🛡️ 30-Day Warranty</strong>
+            <span style={{ fontSize: "12px", color: "#64748b" }}>Post-deployment bug fixes at zero extra cost.</span>
           </div>
         </div>
       </section>
 
       {/* Main Interactive Controls: Category Tabs & Search Filter */}
-      <section style={{ maxWidth: "1140px", margin: "24px auto 16px auto", padding: "0 16px" }}>
+      <section style={{ maxWidth: "1140px", margin: "0 auto 28px auto" }}>
         <div
           style={{
             display: "flex",
@@ -201,20 +133,25 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
             alignItems: "center",
             flexWrap: "wrap",
             gap: "14px",
-            backgroundColor: "rgba(10, 18, 38, 0.85)",
-            border: "1px solid rgba(56, 189, 248, 0.25)",
+            backgroundColor: "#f8fafc",
+            border: "1px solid #e2e8f0",
             borderRadius: "10px",
             padding: "12px 16px",
-            backdropFilter: "blur(10px)",
           }}
         >
           {/* Category Tabs */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
             {[
               { id: "all", label: "All Solutions", count: services.length },
-              { id: "growth-seo", label: "Growth & SEO", count: 3 },
-              { id: "web-saas", label: "Web & SaaS Engineering", count: 3 },
-              { id: "systems-cloud", label: "Systems & Architecture", count: 5 },
+              { id: "growth-seo", label: "Growth & SEO", count: services.filter((s) => s.category === "growth-seo").length },
+              { id: "web-saas", label: "Web & SaaS Engineering", count: services.filter((s) => s.category === "web-saas").length },
+              {
+                id: "systems-cloud",
+                label: "Systems & Architecture",
+                count: services.filter(
+                  (s) => s.category === "systems-architecture" || s.category === "systems-cloud" || !s.category
+                ).length,
+              },
             ].map((cat) => {
               const isSelected = selectedCategory === cat.id;
               return (
@@ -223,9 +160,9 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
                   type="button"
                   onClick={() => setSelectedCategory(cat.id as ServiceCategory)}
                   style={{
-                    backgroundColor: isSelected ? "#2563eb" : "rgba(15, 23, 42, 0.6)",
-                    color: isSelected ? "#ffffff" : "#94a3b8",
-                    border: isSelected ? "1px solid #38bdf8" : "1px solid rgba(51, 65, 85, 0.8)",
+                    backgroundColor: isSelected ? "#2563eb" : "#ffffff",
+                    color: isSelected ? "#ffffff" : "#475569",
+                    border: isSelected ? "1px solid #1d4ed8" : "1px solid #cbd5e1",
                     borderRadius: "20px",
                     padding: "6px 14px",
                     fontSize: "12px",
@@ -235,14 +172,14 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
                     alignItems: "center",
                     gap: "6px",
                     transition: "all 0.18s ease",
-                    boxShadow: isSelected ? "0 2px 10px rgba(37, 99, 235, 0.4)" : "none",
+                    boxShadow: isSelected ? "0 2px 8px rgba(37, 99, 235, 0.25)" : "none",
                   }}
                 >
                   <span>{cat.label}</span>
                   <span
                     style={{
-                      backgroundColor: isSelected ? "rgba(255, 255, 255, 0.2)" : "rgba(30, 41, 59, 0.8)",
-                      color: isSelected ? "#ffffff" : "#64748b",
+                      backgroundColor: isSelected ? "rgba(255, 255, 255, 0.25)" : "#e2e8f0",
+                      color: isSelected ? "#ffffff" : "#475569",
                       borderRadius: "10px",
                       padding: "1px 6px",
                       fontSize: "10px",
@@ -265,12 +202,12 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
                 width: "100%",
-                backgroundColor: "rgba(6, 11, 25, 0.9)",
-                border: "1px solid rgba(56, 189, 248, 0.3)",
+                backgroundColor: "#ffffff",
+                border: "1px solid #cbd5e1",
                 borderRadius: "6px",
                 padding: "8px 12px 8px 32px",
                 fontSize: "12px",
-                color: "#f8fafc",
+                color: "#0f172a",
                 outline: "none",
                 boxSizing: "border-box",
               }}
@@ -298,7 +235,7 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
                   transform: "translateY(-50%)",
                   background: "none",
                   border: "none",
-                  color: "#94a3b8",
+                  color: "#64748b",
                   cursor: "pointer",
                   fontSize: "11px",
                 }}
@@ -311,7 +248,7 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
       </section>
 
       {/* Services Grid with Custom Animated Micro-Visualizers */}
-      <section style={{ maxWidth: "1140px", margin: "0 auto 36px auto", padding: "0 16px" }}>
+      <section style={{ maxWidth: "1140px", margin: "0 auto 36px auto" }}>
         <div
           style={{
             display: "grid",
@@ -328,18 +265,20 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
                 key={service.id}
                 id={service.slug}
                 style={{
-                  backgroundColor: "rgba(10, 18, 38, 0.95)",
+                  backgroundColor: "#ffffff",
                   border: isBundled
                     ? "2px solid #10b981"
-                    : "1px solid rgba(56, 189, 248, 0.28)",
+                    : service.isPopular
+                    ? "2px solid #2563eb"
+                    : "1px solid #e2e8f0",
                   borderRadius: "12px",
                   padding: "20px",
                   display: "flex",
                   flexDirection: "column",
                   position: "relative",
                   boxShadow: isBundled
-                    ? "0 10px 30px rgba(16, 185, 129, 0.25)"
-                    : "0 8px 25px rgba(0, 0, 0, 0.4)",
+                    ? "0 10px 25px rgba(16, 185, 129, 0.15)"
+                    : "0 4px 16px rgba(15, 23, 42, 0.06)",
                   transition: "all 0.22s ease",
                 }}
               >
@@ -356,9 +295,24 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
                   <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", alignItems: "center" }}>
                     <span
                       style={{
-                        backgroundColor: "rgba(37, 99, 235, 0.2)",
-                        border: "1px solid rgba(56, 189, 248, 0.4)",
-                        color: "#38bdf8",
+                        backgroundColor:
+                          service.category === "growth-seo"
+                            ? "#eff6ff"
+                            : service.category === "web-saas"
+                            ? "#faf5ff"
+                            : "#f0fdf4",
+                        border:
+                          service.category === "growth-seo"
+                            ? "1px solid #bfdbfe"
+                            : service.category === "web-saas"
+                            ? "1px solid #e9d5ff"
+                            : "1px solid #bbf7d0",
+                        color:
+                          service.category === "growth-seo"
+                            ? "#1d4ed8"
+                            : service.category === "web-saas"
+                            ? "#7e22ce"
+                            : "#15803d",
                         borderRadius: "4px",
                         padding: "2px 8px",
                         fontSize: "11px",
@@ -376,9 +330,9 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
                     {service.isPopular && (
                       <span
                         style={{
-                          backgroundColor: "rgba(16, 185, 129, 0.2)",
-                          border: "1px solid #10b981",
-                          color: "#10b981",
+                          backgroundColor: "#fef3c7",
+                          border: "1px solid #fde68a",
+                          color: "#b45309",
                           borderRadius: "4px",
                           padding: "2px 8px",
                           fontSize: "11px",
@@ -392,10 +346,10 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
 
                   {/* Price & Timeline Badge */}
                   <div style={{ textAlign: "right", flexShrink: 0 }}>
-                    <div style={{ fontSize: "18px", fontWeight: 900, color: "#ffffff", lineHeight: 1 }}>
+                    <div style={{ fontSize: "20px", fontWeight: 900, color: "#0f172a", lineHeight: 1 }}>
                       {service.priceDisplay}
                     </div>
-                    <div style={{ fontSize: "10.5px", color: "#94a3b8", marginTop: "3px" }}>
+                    <div style={{ fontSize: "11px", color: "#64748b", marginTop: "3px" }}>
                       ⏱️ {service.timeline}
                     </div>
                   </div>
@@ -406,7 +360,7 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
                   style={{
                     fontSize: "19px",
                     fontWeight: 800,
-                    color: "#f8fafc",
+                    color: "#0f172a",
                     lineHeight: 1.3,
                     margin: "0 0 6px 0",
                   }}
@@ -414,7 +368,7 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
                   {service.title}
                 </h2>
 
-                <p style={{ fontSize: "12.5px", color: "#94a3b8", lineHeight: 1.5, margin: "0 0 16px 0" }}>
+                <p style={{ fontSize: "12.5px", color: "#475569", lineHeight: 1.5, margin: "0 0 16px 0" }}>
                   {service.description}
                 </p>
 
@@ -693,7 +647,7 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
                   style={{
                     display: "flex",
                     gap: "4px",
-                    borderBottom: "1px solid rgba(30, 41, 59, 0.8)",
+                    borderBottom: "1px solid #e2e8f0",
                     paddingBottom: "8px",
                     marginBottom: "12px",
                   }}
@@ -711,9 +665,9 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
                         type="button"
                         onClick={() => setCardTab(service.id, tab.id as any)}
                         style={{
-                          backgroundColor: isTabSelected ? "rgba(37, 99, 235, 0.3)" : "transparent",
-                          color: isTabSelected ? "#38bdf8" : "#94a3b8",
-                          border: isTabSelected ? "1px solid rgba(56, 189, 248, 0.4)" : "1px solid transparent",
+                          backgroundColor: isTabSelected ? "#eff6ff" : "transparent",
+                          color: isTabSelected ? "#1d4ed8" : "#64748b",
+                          border: isTabSelected ? "1px solid #bfdbfe" : "1px solid transparent",
                           borderRadius: "4px",
                           padding: "3px 8px",
                           fontSize: "11px",
@@ -733,13 +687,13 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
                   {currentTab === "deliverables" && (
                     <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "6px" }}>
                       {service.deliverables.slice(0, 4).map((d, idx) => (
-                        <li key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "12px", color: "#cbd5e1" }}>
+                        <li key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "12px", color: "#334155" }}>
                           <span style={{ color: "#10b981", fontWeight: 900, flexShrink: 0 }}>✓</span>
                           <span>{d}</span>
                         </li>
                       ))}
                       {service.deliverables.length > 4 && (
-                        <li style={{ fontSize: "11px", color: "#38bdf8", marginTop: "2px" }}>
+                        <li style={{ fontSize: "11px", color: "#2563eb", fontWeight: 600, marginTop: "2px" }}>
                           + {service.deliverables.length - 4} additional enterprise deliverables
                         </li>
                       )}
@@ -752,9 +706,9 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
                         <span
                           key={tech}
                           style={{
-                            backgroundColor: "rgba(15, 23, 42, 0.8)",
-                            border: "1px solid rgba(56, 189, 248, 0.25)",
-                            color: "#38bdf8",
+                            backgroundColor: "#f8fafc",
+                            border: "1px solid #e2e8f0",
+                            color: "#334155",
                             borderRadius: "4px",
                             padding: "3px 8px",
                             fontSize: "11px",
@@ -769,20 +723,20 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
 
                   {currentTab === "roi" && (
                     <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "12px" }}>
-                      <div style={{ backgroundColor: "rgba(6, 11, 25, 0.6)", padding: "8px", borderRadius: "6px", border: "1px solid #1e293b" }}>
-                        <div style={{ fontSize: "10.5px", color: "#94a3b8" }}>Primary Measurable Benchmark:</div>
-                        <div style={{ fontSize: "13.5px", fontWeight: 800, color: "#10b981", marginTop: "2px" }}>
+                      <div style={{ backgroundColor: "#f0fdf4", padding: "10px", borderRadius: "6px", border: "1px solid #bbf7d0" }}>
+                        <div style={{ fontSize: "10.5px", color: "#166534", fontWeight: 700 }}>Primary Measurable Benchmark:</div>
+                        <div style={{ fontSize: "13.5px", fontWeight: 800, color: "#15803d", marginTop: "2px" }}>
                           {service.roiMetric || "Sub-50ms Global P99 Latency & Zero Regressions"}
                         </div>
                       </div>
-                      <div style={{ fontSize: "11.5px", color: "#cbd5e1" }}>
-                        🛡️ <strong>Unconditional 30-Day SLA Warranty</strong>: Every defect, performance regression, or configuration bug patched at zero extra charge.
+                      <div style={{ fontSize: "11.5px", color: "#475569" }}>
+                        🛡️ <strong style={{ color: "#0f172a" }}>Unconditional 30-Day SLA Warranty</strong>: Every defect, performance regression, or configuration bug patched at zero extra charge.
                       </div>
                     </div>
                   )}
 
                   {currentTab === "process" && (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "11.5px", color: "#cbd5e1" }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "11.5px", color: "#334155" }}>
                       {(service.engagementSteps || [
                         "1. Technical Discovery & Scope Alignment (Architecture RFC)",
                         "2. Milestone Sprint Execution (Weekly staging demo branch)",
@@ -790,7 +744,7 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
                         "4. Production Cutover & Full IP Code Handover",
                       ]).map((step, idx) => (
                         <div key={idx} style={{ display: "flex", gap: "6px" }}>
-                          <span style={{ color: "#38bdf8", fontWeight: 800 }}>•</span>
+                          <span style={{ color: "#2563eb", fontWeight: 800 }}>•</span>
                           <span>{step}</span>
                         </div>
                       ))}
@@ -805,7 +759,7 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
                     alignItems: "center",
                     gap: "8px",
                     paddingTop: "12px",
-                    borderTop: "1px solid rgba(30, 41, 59, 0.8)",
+                    borderTop: "1px solid #e2e8f0",
                     marginTop: "auto",
                   }}
                 >
@@ -824,7 +778,7 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
                       fontWeight: 700,
                       fontSize: "12.5px",
                       textDecoration: "none",
-                      boxShadow: "0 2px 8px rgba(37, 99, 235, 0.4)",
+                      boxShadow: "0 2px 8px rgba(37, 99, 235, 0.25)",
                       transition: "background 0.15s ease",
                       textAlign: "center",
                     }}
@@ -838,9 +792,9 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
                     title={isBundled ? "Remove from custom SOW bundle" : "Add to custom SOW bundle"}
                     style={{
                       padding: "8px 12px",
-                      backgroundColor: isBundled ? "rgba(16, 185, 129, 0.2)" : "rgba(15, 23, 42, 0.8)",
-                      border: isBundled ? "1px solid #10b981" : "1px solid rgba(56, 189, 248, 0.3)",
-                      color: isBundled ? "#10b981" : "#cbd5e1",
+                      backgroundColor: isBundled ? "#ecfdf5" : "#f8fafc",
+                      border: isBundled ? "1px solid #10b981" : "1px solid #cbd5e1",
+                      color: isBundled ? "#047857" : "#334155",
                       borderRadius: "6px",
                       fontSize: "12px",
                       fontWeight: 700,
@@ -855,7 +809,7 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
                     href={`/services/${service.slug}`}
                     style={{
                       padding: "8px 10px",
-                      color: "#94a3b8",
+                      color: "#2563eb",
                       fontSize: "12px",
                       textDecoration: "none",
                       fontWeight: 600,
@@ -962,17 +916,17 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
         style={{
           maxWidth: "1140px",
           margin: "36px auto",
-          padding: "32px 20px",
-          backgroundColor: "rgba(10, 18, 38, 0.8)",
-          border: "1px solid rgba(56, 189, 248, 0.25)",
+          padding: "36px 24px",
+          backgroundColor: "#f8fafc",
+          border: "1px solid #e2e8f0",
           borderRadius: "12px",
         }}
       >
         <div style={{ textAlign: "center", marginBottom: "24px" }}>
-          <h2 style={{ fontSize: "24px", fontWeight: 800, color: "#ffffff", margin: "0 0 8px 0" }}>
+          <h2 style={{ fontSize: "24px", fontWeight: 800, color: "#0f172a", margin: "0 0 8px 0" }}>
             Frequently Asked Engineering &amp; Engagement Questions
           </h2>
-          <p style={{ fontSize: "14px", color: "#94a3b8", margin: 0 }}>
+          <p style={{ fontSize: "14px", color: "#64748b", margin: 0 }}>
             Everything you need to know about milestone deliverables, code IP handover, and production SLAs.
           </p>
         </div>
@@ -1007,16 +961,17 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
             <div
               key={idx}
               style={{
-                backgroundColor: "rgba(6, 11, 25, 0.7)",
-                border: "1px solid #1e293b",
+                backgroundColor: "#ffffff",
+                border: "1px solid #e2e8f0",
                 borderRadius: "8px",
-                padding: "16px",
+                padding: "18px",
+                boxShadow: "0 1px 3px rgba(15, 23, 42, 0.04)",
               }}
             >
-              <h3 style={{ fontSize: "14px", fontWeight: 700, color: "#38bdf8", margin: "0 0 8px 0" }}>
+              <h3 style={{ fontSize: "14.5px", fontWeight: 700, color: "#0f172a", margin: "0 0 8px 0" }}>
                 {item.q}
               </h3>
-              <p style={{ fontSize: "12.5px", color: "#cbd5e1", lineHeight: 1.5, margin: 0 }}>
+              <p style={{ fontSize: "12.5px", color: "#475569", lineHeight: 1.6, margin: 0 }}>
                 {item.a}
               </p>
             </div>
@@ -1024,7 +979,7 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
         </div>
       </section>
 
-      {/* Bottom Conversion Banner (High-Contrast Midnight Slate) */}
+      {/* Bottom Conversion Banner (Executive Midnight Navy Card on White Background) */}
       <section
         style={{
           maxWidth: "1140px",
@@ -1035,7 +990,7 @@ export default function ServicesClientView({ services }: ServicesClientViewProps
           border: "1px solid rgba(56, 189, 248, 0.4)",
           borderRadius: "14px",
           textAlign: "center",
-          boxShadow: "0 24px 50px -15px rgba(0, 0, 0, 0.9), 0 0 35px rgba(37, 99, 235, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12)",
+          boxShadow: "0 20px 40px -12px rgba(11, 21, 45, 0.28), 0 0 25px rgba(37, 99, 235, 0.15)",
           position: "relative",
           overflow: "hidden",
         }}

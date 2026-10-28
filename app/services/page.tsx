@@ -136,22 +136,6 @@ export default async function ServicesHubPage() {
 
   return (
     <div id="source-page-root" data-source-path="/services">
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-            .services-page-shell #container,
-            .services-page-shell #main,
-            .services-page-shell .cwrap,
-            .services-page-shell .mwrap,
-            .services-page-shell #content {
-              background-color: #060b19 !important;
-              background: #060b19 !important;
-              border: none !important;
-              box-shadow: none !important;
-            }
-          `,
-        }}
-      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
@@ -165,25 +149,40 @@ export default async function ServicesHubPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      <div id="source-page-body" className="source-page-body js l2 section_10 abuhanif-portfolio-shell services-page-shell">
+      <div id="source-page-body" className="source-page-body js l2 section_10 abuhanif-portfolio-shell">
         <SiteHeader activePath="/services" />
 
-        <div className="index" id="container" style={{ backgroundColor: "#060b19" }}>
-          <div className="cwrap" style={{ backgroundColor: "#060b19" }}>
-            <div id="main" style={{ backgroundColor: "#060b19", border: "none", boxShadow: "none" }}>
-              <div className="mwrap" style={{ backgroundColor: "#060b19" }}>
-                <div id="content" style={{ width: "100%", maxWidth: "100%", float: "none", margin: 0, padding: 0, backgroundColor: "#060b19" }}>
+        <div className="index" id="container">
+          <div className="cwrap">
+            <div id="main">
+              <div className="mwrap">
+                {/* Standard Inner Page Executive Banner */}
+                <div className="imgwrap">
+                  <div id="img1">
+                    <div className="banner-text-wrapper">
+                      <div>
+                        <h1 style={{ margin: 0, fontSize: "28px", textTransform: "uppercase", letterSpacing: "1px" }}>
+                          Engineering &amp; Growth Solutions: Built for Speed &amp; Scale
+                        </h1>
+                        <p style={{ margin: "8px 0 0 0", fontSize: "14px", fontWeight: "normal", color: "#e2e8f0" }}>
+                          Programmatic SEO • Social Media Automation • High-Converting Landing Pages • Full-Stack SaaS Platforms
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="tcfrags"></div>
+
+                <div id="content" style={{ width: "100%", maxWidth: "100%", float: "none", margin: 0, padding: 0 }}>
                   {/* Semantic Breadcrumbs */}
-                  <div id="breadcrumbs" style={{ padding: "12px 24px", background: "rgba(6, 11, 25, 0.95)", borderBottom: "1px solid #1e293b" }}>
-                    <div className="wrapper" style={{ fontSize: "12px", color: "#94a3b8" }}>
-                      <Link href="/" style={{ color: "#38bdf8", textDecoration: "none" }}>
-                        Home
-                      </Link>{" "}
-                      &gt; <span style={{ color: "#ffffff", fontWeight: 700 }}>Engineering &amp; Growth Services</span>
+                  <div id="breadcrumbs">
+                    <div className="wrapper">
+                      <Link href="/">Home</Link> &gt; <span>Engineering &amp; Growth Services</span>
                     </div>
                   </div>
 
-                  {/* High-Impact Visual Client Experience */}
+                  {/* Clean White Executive Services Client Experience */}
                   <ServicesClientView services={services} />
                 </div>
               </div>
