@@ -26,7 +26,97 @@ export default function BadgesBar() {
         borderBottom: "1px solid #e2e8f0",
       }}
     >
-      {/* Red Mark Area: Programming Hero Verified Certificate Badge */}
+      {/* 1. 9+ YRS EXP Badge */}
+      <span className="badge" title="Staff Systems Architect & Senior Full-Stack Engineer">
+        <strong
+          style={{
+            display: "inline-block",
+            padding: "8px 14px",
+            background: "#070f1e",
+            color: "#38bdf8",
+            border: "1px solid #1e293b",
+            borderRadius: "6px",
+            fontSize: "13px",
+            fontWeight: "bold",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
+          }}
+        >
+          9+ YRS EXP
+        </strong>
+      </span>
+
+      {/* 2. 99.99% UPTIME Badge */}
+      <span className="badge" title="99.99% Production Uptime SLA with Sub-30ms Global Edge">
+        <strong
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            padding: "8px 14px",
+            background: "#064e3b",
+            color: "#4ade80",
+            border: "1px solid #059669",
+            borderRadius: "6px",
+            fontSize: "13px",
+            fontWeight: "bold",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
+          }}
+        >
+          <span
+            style={{
+              width: "6px",
+              height: "6px",
+              borderRadius: "50%",
+              background: "#4ade80",
+              display: "inline-block",
+              boxShadow: "0 0 6px #4ade80",
+            }}
+          />
+          99.99% UPTIME
+        </strong>
+      </span>
+
+      {/* 3. Rust & Go Systems Badge */}
+      <span className="badge" title="High-Concurrency Systems in Rust, Go & Next.js 16">
+        <strong
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            padding: "8px 14px",
+            background: "#070f1e",
+            color: "#f97316",
+            border: "1px solid #ea580c",
+            borderRadius: "6px",
+            fontSize: "12px",
+            fontWeight: "bold",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
+          }}
+        >
+          <span>🦀</span> RUST &amp; GO SYSTEMS
+        </strong>
+      </span>
+
+      {/* 4. 50+ SHIPPED APPS Badge */}
+      <span className="badge" title="50+ Shipped Production Deployments">
+        <strong
+          style={{
+            display: "inline-block",
+            padding: "8px 14px",
+            background: "#1e1b4b",
+            color: "#c084fc",
+            border: "1px solid #4338ca",
+            borderRadius: "6px",
+            fontSize: "13px",
+            fontWeight: "bold",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
+          }}
+        >
+          50+ SHIPPED APPS
+        </strong>
+      </span>
+
+      {/* 5. Verified Technical Credential: Programming Hero Certificate of Excellence */}
       <a
         href="#certificate-modal"
         id="ph-certificate-trigger"
@@ -107,7 +197,7 @@ export default function BadgesBar() {
         </div>
       </a>
 
-      {/* freeCodeCamp Verified Badge */}
+      {/* 6. freeCodeCamp Verified Badge */}
       <span
         className="badge"
         title="freeCodeCamp Verified Certifications: JavaScript Algorithms, TypeScript, Python"
@@ -128,96 +218,6 @@ export default function BadgesBar() {
           }}
         >
           <span>(fCC)</span> JS • TS • PYTHON
-        </strong>
-      </span>
-
-      {/* Rust & Go Systems Badge */}
-      <span className="badge" title="Systems Concurrency in Rust & Go">
-        <strong
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-            padding: "8px 14px",
-            background: "#070f1e",
-            color: "#f97316",
-            border: "1px solid #ea580c",
-            borderRadius: "6px",
-            fontSize: "12px",
-            fontWeight: "bold",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
-          }}
-        >
-          <span>🦀</span> RUST &amp; GO SYSTEMS
-        </strong>
-      </span>
-
-      {/* 9+ YRS EXP Badge */}
-      <span className="badge" title="Full-Stack Senior Engineer">
-        <strong
-          style={{
-            display: "inline-block",
-            padding: "8px 14px",
-            background: "#070f1e",
-            color: "#38bdf8",
-            border: "1px solid #1e293b",
-            borderRadius: "6px",
-            fontSize: "13px",
-            fontWeight: "bold",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
-          }}
-        >
-          9+ YRS EXP
-        </strong>
-      </span>
-
-      {/* 99.99% UPTIME Badge */}
-      <span className="badge" title="99.99% Production Uptime with Live Edge Health">
-        <strong
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-            padding: "8px 14px",
-            background: "#064e3b",
-            color: "#4ade80",
-            border: "1px solid #059669",
-            borderRadius: "6px",
-            fontSize: "13px",
-            fontWeight: "bold",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
-          }}
-        >
-          <span
-            style={{
-              width: "6px",
-              height: "6px",
-              borderRadius: "50%",
-              background: "#4ade80",
-              display: "inline-block",
-              boxShadow: "0 0 6px #4ade80",
-            }}
-          />
-          99.99% UPTIME
-        </strong>
-      </span>
-
-      {/* 50+ SHIPPED APPS Badge */}
-      <span className="badge" title="50+ Shipped Deployments">
-        <strong
-          style={{
-            display: "inline-block",
-            padding: "8px 14px",
-            background: "#1e1b4b",
-            color: "#c084fc",
-            border: "1px solid #4338ca",
-            borderRadius: "6px",
-            fontSize: "13px",
-            fontWeight: "bold",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
-          }}
-        >
-          50+ SHIPPED APPS
         </strong>
       </span>
     </div>

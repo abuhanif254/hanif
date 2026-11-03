@@ -96,6 +96,7 @@ const jsonLd = {
       url: siteUrl,
       image: `${siteUrl}/images/profile.png`,
       email: "abuhanifmain@gmail.com",
+      telephone: "+8801724010261",
       address: {
         "@type": "PostalAddress",
         addressLocality: "Dhaka",
@@ -157,6 +158,7 @@ const jsonLd = {
       url: siteUrl,
       image: `${siteUrl}/images/profile.png`,
       email: "abuhanifmain@gmail.com",
+      telephone: "+8801724010261",
       priceRange: "$2,500 - $24,000+",
       areaServed: "Worldwide",
       founder: { "@id": `${siteUrl}/#person` },

@@ -165,7 +165,21 @@ export default function ProjectEcosystemCard({ projectSlug }: ProjectEcosystemCa
               Engage Abu Hanif to architect and ship a customized version of this production system.
             </p>
           </div>
-          <div style={{ marginTop: "14px" }}>
+          <div style={{ marginTop: "14px", display: "flex", flexDirection: "column", gap: "6px" }}>
+            <Link
+              href={`/services/${eco.serviceSlug}`}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "4px",
+                fontSize: "12px",
+                fontWeight: 700,
+                color: "#2563eb",
+                textDecoration: "none",
+              }}
+            >
+              Explore {eco.serviceTitle} Specs &rsaquo;
+            </Link>
             <Link
               href="/pricing#sow-builder"
               style={{

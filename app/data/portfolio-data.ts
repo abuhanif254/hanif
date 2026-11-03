@@ -97,7 +97,7 @@ export const initialProfile: ProfileData = {
   headline: "Clean Architecture • High Performance • Scalable Systems",
   bio: "Senior Full-Stack Software Engineer & Systems Architect with 9+ years designing high-throughput distributed applications, edge networks, and developer platforms. Specializing in TypeScript, Next.js, Go, PostgreSQL, and Cloudflare Pages.",
   email: "abuhanifmain@gmail.com",
-  phone: "Direct Email / Scheduled Discovery Call",
+  phone: "+880 1724-010261",
   location: "Dhaka, Bangladesh / Remote Worldwide",
   availabilityStatus: "Available for Q4 Contracts & High-Impact Roles",
   isAvailable: true,
@@ -339,6 +339,10 @@ A SaaS company with multiple sub-products needed to consolidate disparate login 
     techStack: ["Go", "PostgreSQL", "Redis", "OAuth2", "WebAuthn", "Docker"],
     isFeatured: true,
     published: true,
+    imageUrl: "/images/projects/zero-trust-auth-arch.svg",
+    screenshots: [
+      "/images/projects/zero-trust-auth-arch.svg",
+    ],
   },
   {
     id: "proj-6",
@@ -364,6 +368,10 @@ Developers were bouncing from legacy docs due to sluggish navigation, lack of in
     techStack: ["Next.js", "TypeScript", "MDX", "Tailwind CSS", "Algolia"],
     isFeatured: true,
     published: true,
+    imageUrl: "/images/projects/developer-docs-arch.svg",
+    screenshots: [
+      "/images/projects/developer-docs-arch.svg",
+    ],
   },
   {
     id: "proj-7",
@@ -387,6 +395,10 @@ Manual data entry and fragile overnight Python scripts caused frequent data corr
     techStack: ["Node.js", "BullMQ", "PostgreSQL", "AWS S3", "Zod", "Docker"],
     isFeatured: true,
     published: true,
+    imageUrl: "/images/projects/etl-automation-arch.svg",
+    screenshots: [
+      "/images/projects/etl-automation-arch.svg",
+    ],
   },
 ];
 

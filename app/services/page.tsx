@@ -8,7 +8,7 @@ import { getServices } from "../lib/portfolio-store";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
 
 export const metadata: Metadata = {
-  title: "Engineering & Growth Services | Technical SEO, Social Automation, Custom Web & SaaS | Abu Hanif",
+  title: "Engineering & Architecture Services",
   description:
     "Enterprise-grade technical services by Staff Software Engineer Abu Hanif: Programmatic SEO, automated social media bots, high-converting landing pages, custom Next.js SaaS platforms, and PostgreSQL performance tuning.",
   keywords: [

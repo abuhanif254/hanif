@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { NextRequest } from "next/server";
 import {
   InquiryRecord,
   exportInquiriesToCsv,
@@ -7,6 +8,26 @@ import {
   sanitizeCsvCell,
 } from "../app/lib/admin-leads-exporter";
 import { BlogPost } from "../app/data/portfolio-data";
+import {
+  GET as getAdminInquiries,
+  PATCH as patchAdminInquiry,
+  DELETE as deleteAdminInquiry,
+} from "../app/api/admin/inquiries/route";
+import {
+  GET as getAdminProjects,
+  POST as postAdminProject,
+  PUT as putAdminProject,
+  PATCH as patchAdminProject,
+  DELETE as deleteAdminProject,
+} from "../app/api/admin/projects/route";
+import {
+  GET as getAdminBlog,
+  POST as postAdminBlog,
+  PUT as putAdminBlog,
+  PATCH as patchAdminBlog,
+  DELETE as deleteAdminBlog,
+} from "../app/api/admin/blog/route";
+import { recordInboundInquiry } from "../app/lib/portfolio-store";
 
 describe("Admin Panel & Inbound Lead Engine", () => {
   const sampleLeads: InquiryRecord[] = [
@@ -201,6 +222,279 @@ describe("Admin Panel & Inbound Lead Engine", () => {
       expect(samplePost.coverImageUrl).toBeDefined();
       expect(samplePost.coverImageUrl).toMatch(/\.(webp|png|jpg|jpeg)$/i);
       expect(samplePost.coverImageUrl).not.toContain(".svg");
+    });
+  });
+
+  describe("Protected Admin Inquiries API (/api/admin/inquiries)", () => {
+    const authHeaders = {
+      Authorization: "Bearer hanif2026",
+      "Content-Type": "application/json",
+    };
+
+    it("should reject unauthenticated requests with 401 Unauthorized", async () => {
+      const unauthReq = new NextRequest("http://localhost:3000/api/admin/inquiries");
+      const res = await getAdminInquiries(unauthReq);
+      expect(res.status).toBe(401);
+      const json = await res.json();
+      expect(json.success).toBe(false);
+      expect(json.error).toContain("Unauthorized");
+    });
+
+    it("should allow authenticated admin to retrieve inquiries list", async () => {
+      // First ensure at least one test inquiry is recorded
+      await recordInboundInquiry({
+        name: "Test Lead Admin",
+        email: "lead.admin@enterprise.io",
+        projectType: "Full-Stack Architecture",
+        budgetRange: "$15,000+",
+        message: "Requesting full architectural review for multi-tenant platform.",
+      });
+
+      const req = new NextRequest("http://localhost:3000/api/admin/inquiries", {
+        headers: authHeaders,
+      });
+      const res = await getAdminInquiries(req);
+      expect(res.status).toBe(200);
+
+      const json = await res.json();
+      expect(json.success).toBe(true);
+      expect(Array.isArray(json.inquiries)).toBe(true);
+      expect(json.inquiries.length).toBeGreaterThanOrEqual(1);
+
+      const target = json.inquiries.find((i: any) => i.email === "lead.admin@enterprise.io");
+      expect(target).toBeDefined();
+      expect(target.name).toBe("Test Lead Admin");
+    });
+
+    it("should allow authenticated admin to update inquiry status via PATCH", async () => {
+      const newLead = await recordInboundInquiry({
+        name: "Status Test Client",
+        email: "status.test@acme.org",
+        projectType: "PostgreSQL Audit",
+        budgetRange: "$11,000",
+        message: "High concurrency audit request.",
+      });
+
+      const patchReq = new NextRequest("http://localhost:3000/api/admin/inquiries", {
+        method: "PATCH",
+        headers: authHeaders,
+        body: JSON.stringify({
+          id: newLead.id,
+          status: "in_discussion",
+          notes: "Scheduled initial technical discovery call.",
+        }),
+      });
+
+      const res = await patchAdminInquiry(patchReq);
+      expect(res.status).toBe(200);
+
+      const json = await res.json();
+      expect(json.success).toBe(true);
+      expect(json.inquiry.status).toBe("in_discussion");
+    });
+
+    it("should allow authenticated admin to delete an inquiry via DELETE", async () => {
+      const leadToDelete = await recordInboundInquiry({
+        name: "Spam Inquiry Candidate",
+        email: "spam@randomdomain.test",
+        projectType: "Spam Scope",
+        budgetRange: "$0",
+        message: "Spam message payload.",
+      });
+
+      const deleteReq = new NextRequest(
+        `http://localhost:3000/api/admin/inquiries?id=${leadToDelete.id}`,
+        {
+          method: "DELETE",
+          headers: authHeaders,
+        }
+      );
+
+      const res = await deleteAdminInquiry(deleteReq);
+      expect(res.status).toBe(200);
+
+      const json = await res.json();
+      expect(json.success).toBe(true);
+      expect(json.message).toContain("deleted");
+    });
+  });
+
+  describe("Protected Admin Projects API (/api/admin/projects)", () => {
+    const authHeaders = {
+      Authorization: "Bearer hanif2026",
+      "Content-Type": "application/json",
+    };
+
+    it("should reject unauthenticated requests with 401 Unauthorized", async () => {
+      const unauthReq = new NextRequest("http://localhost:3000/api/admin/projects");
+      const res = await getAdminProjects(unauthReq);
+      expect(res.status).toBe(401);
+    });
+
+    it("should create, read, update, toggle, and delete a project via authenticated API", async () => {
+      // 1. CREATE via POST
+      const postReq = new NextRequest("http://localhost:3000/api/admin/projects", {
+        method: "POST",
+        headers: authHeaders,
+        body: JSON.stringify({
+          title: "Real-Time Telemetry & Observability Pipeline",
+          slug: "realtime-telemetry-observability",
+          summary: "Distributed OpenTelemetry pipeline streaming 100k events/sec into ClickHouse.",
+          descriptionMarkdown: "Comprehensive distributed tracing and metrics ingestion architecture.",
+          clientName: "FinTech Global",
+          priceTag: "$16,500 Scope",
+          impactMetric: "100k events/sec at <5ms ingestion latency",
+          techStack: ["Next.js 16", "ClickHouse", "Kafka", "TypeScript"],
+          isFeatured: true,
+          published: true,
+        }),
+      });
+
+      const createRes = await postAdminProject(postReq);
+      expect(createRes.status).toBe(200);
+      const createJson = await createRes.json();
+      expect(createJson.success).toBe(true);
+      expect(createJson.project.slug).toBe("realtime-telemetry-observability");
+      const projectId = createJson.project.id;
+
+      // 2. READ via GET
+      const getReq = new NextRequest("http://localhost:3000/api/admin/projects", {
+        headers: authHeaders,
+      });
+      const getRes = await getAdminProjects(getReq);
+      expect(getRes.status).toBe(200);
+      const getJson = await getRes.json();
+      expect(getJson.projects.some((p: any) => p.id === projectId)).toBe(true);
+
+      // 3. UPDATE via PUT
+      const putReq = new NextRequest("http://localhost:3000/api/admin/projects", {
+        method: "PUT",
+        headers: authHeaders,
+        body: JSON.stringify({
+          id: projectId,
+          priceTag: "$18,000 Scope",
+          impactMetric: "120k events/sec at <4ms ingestion latency",
+        }),
+      });
+      const putRes = await putAdminProject(putReq);
+      expect(putRes.status).toBe(200);
+      const putJson = await putRes.json();
+      expect(putJson.project.priceTag).toBe("$18,000 Scope");
+
+      // 4. TOGGLE via PATCH
+      const patchReq = new NextRequest("http://localhost:3000/api/admin/projects", {
+        method: "PATCH",
+        headers: authHeaders,
+        body: JSON.stringify({
+          id: projectId,
+          action: "toggle_published",
+        }),
+      });
+      const patchRes = await patchAdminProject(patchReq);
+      expect(patchRes.status).toBe(200);
+      const patchJson = await patchRes.json();
+      expect(patchJson.project.published).toBe(false);
+
+      // 5. DELETE via DELETE
+      const deleteReq = new NextRequest(
+        `http://localhost:3000/api/admin/projects?id=${projectId}`,
+        {
+          method: "DELETE",
+          headers: authHeaders,
+        }
+      );
+      const deleteRes = await deleteAdminProject(deleteReq);
+      expect(deleteRes.status).toBe(200);
+      const deleteJson = await deleteRes.json();
+      expect(deleteJson.success).toBe(true);
+    });
+  });
+
+  describe("Protected Admin Blog API (/api/admin/blog)", () => {
+    const authHeaders = {
+      Authorization: "Bearer hanif2026",
+      "Content-Type": "application/json",
+    };
+
+    it("should reject unauthenticated requests with 401 Unauthorized", async () => {
+      const unauthReq = new NextRequest("http://localhost:3000/api/admin/blog");
+      const res = await getAdminBlog(unauthReq);
+      expect(res.status).toBe(401);
+    });
+
+    it("should create, read, update, toggle, and delete an article via authenticated API", async () => {
+      // 1. CREATE via POST
+      const postReq = new NextRequest("http://localhost:3000/api/admin/blog", {
+        method: "POST",
+        headers: authHeaders,
+        body: JSON.stringify({
+          title: "Designing Zero-Downtime Distributed Migrations",
+          slug: "zero-downtime-distributed-migrations",
+          excerpt: "How to perform blue-green database schema migrations without locking active rows.",
+          contentMarkdown: "## Zero-Downtime Patterns\n\nDual-writing with shadow reads...",
+          tags: ["Architecture", "PostgreSQL", "Database"],
+          readingTimeMinutes: 7,
+          isPublished: true,
+        }),
+      });
+
+      const createRes = await postAdminBlog(postReq);
+      expect(createRes.status).toBe(200);
+      const createJson = await createRes.json();
+      expect(createJson.success).toBe(true);
+      expect(createJson.post.slug).toBe("zero-downtime-distributed-migrations");
+      const postId = createJson.post.id;
+
+      // 2. READ via GET
+      const getReq = new NextRequest("http://localhost:3000/api/admin/blog", {
+        headers: authHeaders,
+      });
+      const getRes = await getAdminBlog(getReq);
+      expect(getRes.status).toBe(200);
+      const getJson = await getRes.json();
+      expect(getJson.posts.some((p: any) => p.id === postId)).toBe(true);
+
+      // 3. UPDATE via PUT
+      const putReq = new NextRequest("http://localhost:3000/api/admin/blog", {
+        method: "PUT",
+        headers: authHeaders,
+        body: JSON.stringify({
+          id: postId,
+          readingTimeMinutes: 9,
+          excerpt: "Updated guide on zero-downtime schema migrations for high-write databases.",
+        }),
+      });
+      const putRes = await putAdminBlog(putReq);
+      expect(putRes.status).toBe(200);
+      const putJson = await putRes.json();
+      expect(putJson.post.readingTimeMinutes).toBe(9);
+
+      // 4. TOGGLE via PATCH
+      const patchReq = new NextRequest("http://localhost:3000/api/admin/blog", {
+        method: "PATCH",
+        headers: authHeaders,
+        body: JSON.stringify({
+          id: postId,
+          action: "toggle_published",
+        }),
+      });
+      const patchRes = await patchAdminBlog(patchReq);
+      expect(patchRes.status).toBe(200);
+      const patchJson = await patchRes.json();
+      expect(patchJson.post.isPublished).toBe(false);
+
+      // 5. DELETE via DELETE
+      const deleteReq = new NextRequest(
+        `http://localhost:3000/api/admin/blog?id=${postId}`,
+        {
+          method: "DELETE",
+          headers: authHeaders,
+        }
+      );
+      const deleteRes = await deleteAdminBlog(deleteReq);
+      expect(deleteRes.status).toBe(200);
+      const deleteJson = await deleteRes.json();
+      expect(deleteJson.success).toBe(true);
     });
   });
 });

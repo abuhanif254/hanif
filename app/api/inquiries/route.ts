@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabase, isSupabaseConfigured } from "../../lib/supabase";
+import { getServiceSupabase } from "../../lib/supabase-admin";
+import { recordInboundInquiry } from "../../lib/portfolio-store";
 import {
   checkSlidingWindowRateLimit,
   detectSuspiciousBot,
@@ -89,10 +91,11 @@ export async function POST(request: Request) {
 
     let generatedId = `inq-${Date.now()}`;
 
-    // 1. Insert into Supabase if configured
-    if (isSupabaseConfigured && supabase) {
+    // 1. Insert into Supabase if configured (using privileged service client if available)
+    const dbClient = getServiceSupabase() || supabase;
+    if (dbClient) {
       try {
-        const { data: dbData, error: dbError } = await supabase
+        const { data: dbData, error: dbError } = await dbClient
           .from("inquiries")
           .insert([recordToInsert])
           .select("id")
@@ -107,6 +110,21 @@ export async function POST(request: Request) {
         console.error("Supabase client connection error:", err);
       }
     }
+
+    // Always record into fallback in-memory store so admin APIs display it
+    try {
+      await recordInboundInquiry({
+        id: generatedId,
+        name: recordToInsert.name,
+        email: recordToInsert.email,
+        phone: recordToInsert.phone || undefined,
+        projectType: recordToInsert.project_type,
+        budgetRange: recordToInsert.budget_range,
+        message: recordToInsert.message,
+        status: "new",
+        createdAt: new Date().toISOString(),
+      });
+    } catch {}
 
     // 2. Dispatch real-time alert through Event Notification Mesh
     await dispatchNotification({

@@ -745,7 +745,14 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                   <div className="formdesc">
                     <span className="free-consultation">Technical Consultation</span>
                     <span className="phone-numbers">
-                      abuhanifmain@gmail.com <br />
+                      <a href="mailto:abuhanifmain@gmail.com" style={{ color: "#38bdf8", textDecoration: "none" }}>
+                        abuhanifmain@gmail.com
+                      </a>{" "}
+                      &bull;{" "}
+                      <a href="tel:+8801724010261" style={{ color: "#38bdf8", textDecoration: "none" }}>
+                        +880 1724-010261
+                      </a>
+                      <br />
                       Dhaka, Bangladesh • Global Remote
                     </span>
                   </div>

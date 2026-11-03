@@ -199,6 +199,7 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
       jobTitle: "Staff Software Engineer & Systems Architect",
       url: siteUrl,
       email: "abuhanifmain@gmail.com",
+      telephone: "+8801724010261",
     },
     offers: {
       "@type": "Offer",

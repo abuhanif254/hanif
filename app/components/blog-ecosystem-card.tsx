@@ -164,20 +164,34 @@ export default function BlogEcosystemCard({ blogSlug }: BlogEcosystemCardProps) 
               Facing architectural or scaling bottlenecks in your production environment?
             </p>
           </div>
-          <div style={{ marginTop: "14px" }}>
+          <div style={{ marginTop: "14px", display: "flex", flexDirection: "column", gap: "6px" }}>
             <Link
-              href="/pricing#inquiry"
+              href={`/services/${eco.serviceSlug}`}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "4px",
-                fontSize: "12.5px",
+                fontSize: "12px",
+                fontWeight: 700,
+                color: "#2563eb",
+                textDecoration: "none",
+              }}
+            >
+              View Service Specifications &rsaquo;
+            </Link>
+            <Link
+              href="/pricing#sow-builder"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "4px",
+                fontSize: "12px",
                 fontWeight: 700,
                 color: "#16a34a",
                 textDecoration: "none",
               }}
             >
-              Book Technical Discovery Call &rsaquo;
+              Configure Scope in SOW Builder &rsaquo;
             </Link>
           </div>
         </div>

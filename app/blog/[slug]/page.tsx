@@ -31,8 +31,16 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     return { title: "Article Not Found | Abu Hanif" };
   }
 
+  // Ensure title with template suffix (| Abu Hanif) remains strictly <= 90 chars for optimal SERP display
+  const title =
+    post.title === "Architecting Next.js 16 Applications for Cloudflare Pages: Lessons from Production"
+      ? "Architecting Next.js 16 for Cloudflare Pages: Production Lessons"
+      : post.title.length > 75
+      ? `${post.title.slice(0, 72)}...`
+      : post.title;
+
   return {
-    title: post.title,
+    title,
     description: post.excerpt,
     keywords: [
       post.title,

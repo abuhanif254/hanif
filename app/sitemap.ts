@@ -1,5 +1,11 @@
 import type { MetadataRoute } from "next";
-import { getProjects, getBlogPosts, getServices } from "./lib/portfolio-store";
+import {
+  getProjects,
+  getBlogPosts,
+  getServices,
+  PROJECT_SLUG_ALIASES,
+  SERVICE_SLUG_ALIASES,
+} from "./lib/portfolio-store";
 import { blogCategoryPillars } from "./data/blog-categories";
 
 const siteOrigin =
@@ -7,9 +13,10 @@ const siteOrigin =
   "https://abuhanifmia.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const currentDate = new Date().toISOString().split("T")[0];
+  const now = new Date();
+  const currentDate = now.toISOString().split("T")[0];
 
-  // Core static engineering routes
+  // Core static engineering routes (only indexable 200-OK public URLs)
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: `${siteOrigin}/`,
@@ -69,10 +76,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.85,
   }));
 
-  // Fetch dynamic projects from unified store (Supabase + fallback)
+  // Fetch dynamic projects from unified store (exclude aliases and drafts)
   const allProjects = await getProjects();
   const projectRoutes: MetadataRoute.Sitemap = allProjects
-    .filter((p) => p.published)
+    .filter((p) => p.published && !PROJECT_SLUG_ALIASES[p.slug])
     .map((project) => ({
       url: `${siteOrigin}/projects/${project.slug}`,
       lastModified: currentDate,
@@ -80,21 +87,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.85,
     }));
 
-  // Fetch dynamic blog posts from unified store (Supabase + fallback)
+  // Fetch dynamic blog posts from unified store (ensure valid past/present ISO timestamp)
   const allPosts = await getBlogPosts();
   const blogRoutes: MetadataRoute.Sitemap = allPosts
     .filter((b) => b.isPublished)
-    .map((post) => ({
-      url: `${siteOrigin}/blog/${post.slug}`,
-      lastModified: post.publishedAt || currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    }));
+    .map((post) => {
+      let postLastMod = currentDate;
+      if (post.publishedAt) {
+        const parsed = new Date(post.publishedAt);
+        if (!isNaN(parsed.getTime()) && parsed <= now) {
+          postLastMod = parsed.toISOString().split("T")[0];
+        }
+      }
+      return {
+        url: `${siteOrigin}/blog/${post.slug}`,
+        lastModified: postLastMod,
+        changeFrequency: "monthly",
+        priority: 0.8,
+      };
+    });
 
-  // Fetch dynamic services from unified store
+  // Fetch dynamic services from unified store (exclude aliases and inactive)
   const allServices = await getServices();
   const serviceRoutes: MetadataRoute.Sitemap = allServices
-    .filter((s) => s.isActive)
+    .filter((s) => s.isActive && !SERVICE_SLUG_ALIASES[s.slug])
     .map((service) => ({
       url: `${siteOrigin}/services/${service.slug}`,
       lastModified: currentDate,

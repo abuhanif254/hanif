@@ -1,10 +1,13 @@
 import { describe, it, expect } from "vitest";
+import fs from "fs";
+import path from "path";
 import {
   PROJECT_ARCHITECTURES,
   getProjectArchitecture,
   getProjectBenchmarkData,
 } from "../app/lib/project-architectures";
 import { initialProjects, initialServices } from "../app/data/portfolio-data";
+import { getEcosystemForProject } from "../app/lib/ecosystem-map";
 
 describe("Case Study Interactive Architecture Engine", () => {
   const serviceSlugs = new Set(initialServices.map((s) => s.slug));
@@ -148,6 +151,55 @@ describe("Case Study Interactive Architecture Engine", () => {
       expect(benchmark.k6Snippet).toContain("thresholds");
       expect(benchmark.k6Snippet).toContain("stages");
       expect(benchmark.loadLogs.length).toBeGreaterThanOrEqual(3);
+    });
+  });
+
+  describe("Case Study SVG Architectural Visual Parity", () => {
+    it("verifies every project in initialProjects has a valid imageUrl pointing to an existing SVG file on disk", () => {
+      expect(initialProjects.length).toBe(7);
+
+      initialProjects.forEach((proj) => {
+        expect(proj.imageUrl).toBeDefined();
+        expect(proj.imageUrl).toMatch(/^\/images\/projects\/[a-z0-9\-]+\.svg$/);
+
+        const relativePath = proj.imageUrl!.replace(/^\//, "");
+        const absolutePath = path.join(process.cwd(), "public", relativePath);
+        expect(fs.existsSync(absolutePath)).toBe(true);
+
+        const fileContent = fs.readFileSync(absolutePath, "utf-8");
+        expect(fileContent).toContain("<svg");
+        expect(fileContent).toContain('viewBox="0 0 1200 630"');
+        expect(fileContent).toContain("Abu Hanif");
+      });
+    });
+
+    it("verifies every project has a screenshots array containing its primary SVG diagram", () => {
+      initialProjects.forEach((proj) => {
+        expect(proj.screenshots).toBeDefined();
+        expect(proj.screenshots!.length).toBeGreaterThanOrEqual(1);
+        expect(proj.screenshots).toContain(proj.imageUrl);
+      });
+    });
+
+    it("verifies complete ecosystem mapping for all 7 project slugs with valid targets", () => {
+      const expectedSlugs = [
+        "financial-telemetry-pipeline",
+        "cloudflare-edge-ecommerce",
+        "enterprise-ai-document-search",
+        "postgres-performance-audit",
+        "zero-trust-auth-service",
+        "developer-docs-engine",
+        "etl-automation-engine",
+      ];
+
+      expectedSlugs.forEach((slug) => {
+        const eco = getEcosystemForProject(slug);
+        expect(eco).toBeDefined();
+        expect(eco.projectSlug).toBe(slug);
+        expect(eco.blogSlug).toBeTruthy();
+        expect(eco.serviceSlug).toBeTruthy();
+        expect(eco.labAnchor).toMatch(/^\/lab#/);
+      });
     });
   });
 });

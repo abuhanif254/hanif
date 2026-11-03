@@ -60,6 +60,12 @@ export default function SiteFooter() {
                 </a>
               </div>
               <div>
+                <strong>Direct Phone:</strong>{" "}
+                <a href="tel:+8801724010261" className="footer-highlight-link">
+                  +880 1724-010261
+                </a>
+              </div>
+              <div>
                 <strong>Location:</strong> Dhaka, Bangladesh (Global Remote)
               </div>
             </div>
@@ -122,13 +128,13 @@ export default function SiteFooter() {
               <li>
                 <Link href="/projects/enterprise-ai-document-search" className="footer-project-link">
                   <strong>Enterprise AI Document Search</strong>
-                  <span className="footer-meta-pill">$14,000 Scope • 500k Docs</span>
+                  <span className="footer-meta-pill">$14,000 Scope • 500k+ Docs</span>
                 </Link>
               </li>
               <li>
                 <Link href="/projects/postgres-performance-audit" className="footer-project-link">
                   <strong>PostgreSQL Performance Audit</strong>
-                  <span className="footer-meta-pill">$4,800 Scope • 10x Throughput</span>
+                  <span className="footer-meta-pill">$11,000 Scope • 10x Throughput</span>
                 </Link>
               </li>
               <li className="footer-cta-link-item">
@@ -146,25 +152,25 @@ export default function SiteFooter() {
               <li>
                 <Link href="/pricing" className="footer-price-item">
                   <span className="service-name">Codebase &amp; Architecture Audit</span>
-                  <span className="price-tag">$3,500</span>
+                  <span className="price-tag">$2,500</span>
                 </Link>
               </li>
               <li>
                 <Link href="/pricing" className="footer-price-item">
                   <span className="service-name">PostgreSQL Performance Tuning</span>
-                  <span className="price-tag">$4,800</span>
+                  <span className="price-tag">$4,500</span>
                 </Link>
               </li>
               <li>
                 <Link href="/pricing" className="footer-price-item">
                   <span className="service-name">Edge Web Platform Build</span>
-                  <span className="price-tag">$8,500</span>
+                  <span className="price-tag">$6,500</span>
                 </Link>
               </li>
               <li>
                 <Link href="/pricing" className="footer-price-item">
                   <span className="service-name">Full-Stack MVP Engineering</span>
-                  <span className="price-tag">$15,000</span>
+                  <span className="price-tag">$14,500</span>
                 </Link>
               </li>
               <li>
@@ -194,25 +200,25 @@ export default function SiteFooter() {
               <li>
                 <Link href="/blog/nextjs-16-cloudflare-pages-architecture" className="footer-article-link">
                   <span>Next.js 16 on Cloudflare Pages</span>
-                  <span className="read-time">12 min read</span>
+                  <span className="read-time">6 min read</span>
                 </Link>
               </li>
               <li>
                 <Link href="/blog/realtime-telemetry-supabase-postgres-cdc" className="footer-article-link">
                   <span>Supabase Postgres CDC Telemetry</span>
-                  <span className="read-time">9 min read</span>
+                  <span className="read-time">8 min read</span>
                 </Link>
               </li>
               <li>
                 <Link href="/blog/swapping-microservices-for-modular-monolith" className="footer-article-link">
                   <span>Microservices to Modular Monolith</span>
-                  <span className="read-time">11 min read</span>
+                  <span className="read-time">5 min read</span>
                 </Link>
               </li>
               <li>
                 <Link href="/blog/mastering-postgres-indexing-query-optimization" className="footer-article-link">
                   <span>Postgres Indexing for Concurrency</span>
-                  <span className="read-time">8 min read</span>
+                  <span className="read-time">7 min read</span>
                 </Link>
               </li>
               <li className="footer-cta-link-item">

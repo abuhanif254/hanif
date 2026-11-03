@@ -232,21 +232,21 @@ create policy "Admins can upload blog images" on storage.objects for insert with
 
 -- 1. Profile Seed
 insert into public.profiles (full_name, preferred_name, kicker, headline, bio, email, phone, location, availability_status, is_available)
-values (
+select
   'MD Abu Hanif Mia',
   'Abu Hanif',
   'Staff Software Engineer & Systems Architect',
   'Clean Architecture • High Performance • Scalable Systems',
   'Staff Software Engineer & Systems Architect with 9+ years building high-throughput distributed systems, Next.js applications, Supabase integrations, and Cloudflare Pages deployments.',
   'abuhanifmain@gmail.com',
-  'Direct Email / Scheduled Discovery Call',
+  '+880 1724-010261',
   'Dhaka, Bangladesh / Remote Worldwide',
   'Available for Architecture Consulting & High-Impact Contracts',
   true
-);
+where not exists (select 1 from public.profiles);
 
 -- 2. Projects Seed
-insert into public.projects (title, slug, summary, description_markdown, client_name, price_tag, impact_metric, tech_stack, sort_order, is_featured, is_published)
+insert into public.projects (title, slug, summary, description_markdown, client_name, image_url, thumbnail_url, screenshots, price_tag, impact_metric, tech_stack, sort_order, is_featured, is_published)
 values
 (
   'Real-Time Financial Telemetry Pipeline',
@@ -254,6 +254,9 @@ values
   'High-throughput WebSocket order book streaming and market depth aggregation engine processing 12M events/sec.',
   '## The Challenge\n\nAggregate and normalize raw order-book streams from 14 exchanges and fan out live market depth to over 45,000 concurrent browser clients with sub-25ms latency.\n\n## Architecture\n\n- Concurrent Go ingestion workers\n- Redis Pub/Sub cluster with pipelining\n- TimescaleDB continuous aggregates\n- Next.js WebSocket UI with Canvas charts\n\n## Results\n\nProcessed 12,000,000 events/sec at peak with 22ms P99 delivery and 99.995% uptime across 18 months.',
   'Apex Telemetry Labs',
+  '/images/projects/telemetry-pipeline-arch.svg',
+  '/images/projects/telemetry-pipeline-arch.svg',
+  ARRAY['/images/projects/telemetry-pipeline-arch.svg'],
   '$18,500 Scope',
   '<22ms P99 • 12M events/sec',
   ARRAY['Go', 'Redis', 'WebSockets', 'Next.js', 'TimescaleDB'],
@@ -267,6 +270,9 @@ values
   'Sub-100ms global commerce platform deployed on Cloudflare Pages with distributed edge database caching.',
   '## The Challenge\n\nHigh serverless cold starts and dynamic database queries caused slow product catalog loads and shopping cart abandonment during international flash sales.\n\n## Architecture\n\n- Next.js 16 App Router on Cloudflare Pages\n- Supabase PostgreSQL with read-replicas\n- Regional edge caching with Cloudflare Workers KV\n- Optimistic UI transitions\n\n## Results\n\nCut global page render time from 1.8s down to 95ms; lifted checkout conversions by 28% and reduced cloud hosting costs by 64%.',
   'Synthetix Retail',
+  '/images/projects/cloudflare-edge-arch.svg',
+  '/images/projects/cloudflare-edge-arch.svg',
+  ARRAY['/images/projects/cloudflare-edge-arch.svg'],
   '$24,000 Scope',
   '95ms Global P99 • -64% Cloud Spend',
   ARRAY['Next.js 16', 'Cloudflare Pages', 'Supabase', 'TypeScript', 'Tailwind CSS'],
@@ -277,9 +283,12 @@ values
 (
   'Enterprise AI Document Search & RAG Pipeline',
   'enterprise-ai-document-search',
-  'Autonomous document indexing, semantic chunking, and sub-second hybrid retrieval engine over 800,000 technical manuals.',
+  'Autonomous document indexing, semantic chunking, and sub-second hybrid retrieval engine over 500,000+ technical docs.',
   '## The Challenge\n\nEngineering and operations teams lost over 4 hours per week hunting down scattered technical documentation and API specifications across internal systems.\n\n## Architecture\n\n- Python & FastAPI asynchronous document processor\n- pgvector on PostgreSQL with HNSW index\n- Hybrid dense/sparse retrieval with cross-encoder re-ranking\n- Real-time streaming UI in React\n\n## Results\n\nSearch accuracy improved by 83%; average time to resolve internal support inquiries reduced from 26 minutes to 4 minutes.',
   'OmniCore Systems',
+  '/images/projects/ai-rag-pipeline-arch.svg',
+  '/images/projects/ai-rag-pipeline-arch.svg',
+  ARRAY['/images/projects/ai-rag-pipeline-arch.svg'],
   '$14,000 Scope',
   '83% Accuracy Lift • 4min Resolution',
   ARRAY['Python', 'pgvector', 'PostgreSQL', 'FastAPI', 'React', 'OpenAI'],
@@ -293,10 +302,61 @@ values
   'Diagnostic query profiling, connection pool tuning, and index redesign eliminating deadlocks for 3.5M active accounts.',
   '## The Challenge\n\nA SaaS platform faced persistent connection pool exhaustion and frequent transaction deadlocks during daily morning traffic spikes.\n\n## Solution\n\n- Conducted EXPLAIN (ANALYZE, BUFFERS) profiling on 50 highest-impact query paths\n- Rebuilt composite B-Tree indexes and partial indexes\n- Installed PgBouncer with transaction pooling\n- Optimized foreign-key cascaded deletes\n\n## Results\n\nReduced median CPU utilization from 92% to 28%; zero connection drops or deadlocks observed over 12 consecutive months.',
   'Nexus Cloud Platform',
+  '/images/projects/postgres-audit-arch.svg',
+  '/images/projects/postgres-audit-arch.svg',
+  ARRAY['/images/projects/postgres-audit-arch.svg'],
   '$11,000 Scope',
   '-68% CPU • 0 Deadlocks Observed',
   ARRAY['PostgreSQL', 'PgBouncer', 'Query Tuning', 'Linux Performance'],
   4,
+  true,
+  true
+),
+(
+  'Zero-Trust Distributed Auth & RBAC Microservice',
+  'zero-trust-auth-service',
+  'Centralized identity provider service supporting multi-organization tenancy, SAML SSO, and Passkeys.',
+  '## The Challenge\n\nA SaaS company with multiple sub-products needed to consolidate disparate login systems into a unified identity provider meeting enterprise SOC2 Type II requirements.\n\n## Architecture\n\n- RFC 6749 compliant OAuth2/OIDC provider with granular scope delegation\n- WebAuthn passkey registration & biometric sign-in\n- Instantaneous session revocation via Redis mesh\n- Immutable audit logging with SHA-256 hash chaining\n\n## Results\n\nManaging 3,500,000+ active enterprise user identities with zero critical or high vulnerabilities.',
+  'B2B SaaS Group',
+  '/images/projects/zero-trust-auth-arch.svg',
+  '/images/projects/zero-trust-auth-arch.svg',
+  ARRAY['/images/projects/zero-trust-auth-arch.svg'],
+  '$12,500 Scope',
+  '3.5M Identities • Zero Security Incidents',
+  ARRAY['Go', 'PostgreSQL', 'Redis', 'OAuth2', 'WebAuthn', 'Docker'],
+  5,
+  true,
+  true
+),
+(
+  'High-Performance Developer Documentation Engine',
+  'developer-docs-engine',
+  'Ultra-fast headless documentation portal with full-text search, live API playground, and dark mode.',
+  '## The Challenge\n\nDevelopers were bouncing from legacy docs due to sluggish navigation, lack of interactive code execution, and broken mobile formatting.\n\n## Architecture\n\n- Static-first Next.js portal utilizing Turbopack and MDX compilation\n- Embedded interactive API request builders with copyable curl/JavaScript/Python snippets\n- Algolia DocSearch with instant keyboard navigation (Cmd+K)\n\n## Results\n\nAchieved perfect 100/100 Lighthouse score and increased developer session duration by 140%.',
+  'Developer Tooling Startup',
+  '/images/projects/developer-docs-arch.svg',
+  '/images/projects/developer-docs-arch.svg',
+  ARRAY['/images/projects/developer-docs-arch.svg'],
+  '$8,500 Scope',
+  '100/100 Lighthouse • 140% Session Duration',
+  ARRAY['Next.js', 'TypeScript', 'MDX', 'Tailwind CSS', 'Algolia'],
+  6,
+  true,
+  true
+),
+(
+  'Autonomous Data Ingestion & ETL Automation Engine',
+  'etl-automation-engine',
+  'Fault-tolerant data extraction and pipeline engine processing daily multi-gigabyte client reporting feeds.',
+  '## The Challenge\n\nManual data entry and fragile overnight Python scripts caused frequent data corruption and delayed client reporting by up to 36 hours.\n\n## Architecture\n\n- Queue-backed Node.js and BullMQ worker pipeline with automated exponential backoff retries\n- Schema validation via Zod to quarantine corrupted inputs before database insertion\n- Automated notification webhooks for Slack alerts and Prometheus telemetry\n\n## Results\n\nSaved client $48,000 annually in developer hours; report delivery time dropped from 36 hours to under 8 minutes.',
+  'Logistics Platform',
+  '/images/projects/etl-automation-arch.svg',
+  '/images/projects/etl-automation-arch.svg',
+  ARRAY['/images/projects/etl-automation-arch.svg'],
+  '$11,000 Scope',
+  '8 Min Delivery (from 36h) • $48k/yr Saved',
+  ARRAY['Node.js', 'BullMQ', 'PostgreSQL', 'AWS S3', 'Zod', 'Docker'],
+  7,
   true,
   true
 )
@@ -359,7 +419,7 @@ on conflict (slug) do nothing;
 insert into public.blog_posts (title, slug, excerpt, content_markdown, tags, reading_time_minutes, is_published, published_at)
 values
 (
-  'Architecting Next.js 16 Applications for Cloudflare Pages: Lessons from Production',
+  'Architecting High-Throughput Next.js 16 Applications on Cloudflare Pages',
   'nextjs-16-cloudflare-pages-architecture',
   'How to deploy full-stack Next.js 16 applications to Cloudflare Pages edge network with zero cold starts and sub-50ms TTFB worldwide.',
   '# Architecting Next.js 16 Applications for Cloudflare Pages\n\nModern web architectures require near-zero latency and high uptime. In this article, Abu Hanif shares the exact techniques used to achieve sub-50ms time-to-first-byte (TTFB) on Cloudflare Pages using Next.js 16 static site generation.\n\n## 1. Static HTML Pre-Rendering\nBy pre-rendering your pages ahead of time with `generateStaticParams`, your web application can be deployed as pure HTML and JS assets on Cloudflare global edge network.\n\n## 2. Supabase Integration\nConnecting to Supabase PostgreSQL from static pages allows fast client-side hydration while maintaining instant initial renders from edge cache.\n\n## Conclusion\nCombining Next.js with Cloudflare Pages and Supabase provides a powerful, cost-effective infrastructure stack.',
@@ -561,6 +621,7 @@ drop policy if exists "Admins have full access to order milestones" on public.or
 drop policy if exists "Admins have full access to audit logs" on public.order_audit_logs;
 drop policy if exists "Clients can view their own order by token" on public.orders;
 drop policy if exists "Clients can view their own milestones" on public.order_milestones;
+drop policy if exists "Admins have full access to notification events" on public.notification_events;
 
 -- Admin access (Authenticated sessions or Service Role)
 create policy "Admins have full access to customers" on public.customers
@@ -608,6 +669,7 @@ create index if not exists idx_notification_events_created on public.notificatio
 
 alter table public.notification_events enable row level security;
 
+drop policy if exists "Admins have full access to notification events" on public.notification_events;
 create policy "Admins have full access to notification events" on public.notification_events
   for all using (auth.role() in ('authenticated', 'service_role'))
   with check (auth.role() in ('authenticated', 'service_role'));

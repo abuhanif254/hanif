@@ -102,8 +102,8 @@ export default function BottomContactStripe() {
             ) : (
               <form onSubmit={handleSubmit} className="form_designer" id="genericcontactform_bottom-scf" name="genericcontactform_bottom-scf">
                 <strong className="heading4 widget-title">
-                  <a href="#contactform">
-                    Contact Abu Hanif <span>Free Technical Consultation</span>
+                  <a href="#bottom-scf">
+                    Comprehensive Project Consultation <span>Direct Principal Architect Scope Review</span>
                   </a>
                 </strong>
                 <div className="cfyaw">
@@ -136,7 +136,7 @@ export default function BottomContactStripe() {
                     <input
                       id="40_Phone_Required"
                       name="40_Phone_Required"
-                      placeholder="Phone (Optional)"
+                      placeholder="+1 (555) 000-0000 or +880 1XXX-XXXXXX"
                       type="text"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -146,7 +146,8 @@ export default function BottomContactStripe() {
                     <label htmlFor="bcf_CaseType">Project Scope:</label>
                     <select
                       id="bcf_CaseType"
-                      name="40_Type_of_Case"
+                      name="project_scope"
+                      aria-label="Project Scope"
                       value={formData.projectType}
                       onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
                     >

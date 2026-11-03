@@ -155,7 +155,7 @@ describe("Automated Link Integrity & Core Web Vitals CI Test", () => {
 
       expect(page.title, `Missing title on ${page.relativePath}`).toBeTruthy();
       expect(page.title!.length).toBeGreaterThan(10);
-      expect(page.title!.length).toBeLessThanOrEqual(95);
+      expect(page.title!.length).toBeLessThanOrEqual(90);
       expect(page.title).toMatch(/Abu Hanif/i);
     }
   });
@@ -210,6 +210,7 @@ describe("Automated Link Integrity & Core Web Vitals CI Test", () => {
     // Build set of valid route paths
     const validRoutes = new Set<string>([
       "/",
+      "/services",
       "/projects",
       "/pricing",
       "/lab",

@@ -161,7 +161,7 @@ export default function AdminPage() {
     slug: "",
     description: "",
     pricingType: "fixed" as "fixed" | "retainer" | "hourly",
-    priceDisplay: "$3,500",
+    priceDisplay: "$2,500",
     timeline: "1-2 Weeks",
     deliverables: "Architecture review, Diagnostic report, Implementation",
     category: "growth-seo" as "growth-seo" | "web-saas" | "systems-architecture" | "systems-cloud",
@@ -271,61 +271,85 @@ export default function AdminPage() {
       })
       .catch(() => {});
 
-    // 2. Fetch from Supabase if configured
-    if (isSupabaseConfigured && supabase) {
-      // Inquiries
-      supabase
-        .from("inquiries")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .then(({ data, error }) => {
-          if (!error && data && data.length > 0) {
-            const mapped: InquiryRecord[] = data.map((d: any) => ({
-              id: d.id,
-              name: d.name,
-              email: d.email,
-              phone: d.phone,
-              projectType: d.project_type,
-              budgetRange: d.budget_range,
-              message: d.message,
-              status: d.status,
-              createdAt: d.created_at,
-            }));
-            setInquiries(mapped);
-          }
-        });
+    // 2. Fetch Inquiries via protected admin API
+    fetch("/api/admin/inquiries")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.inquiries) && data.inquiries.length > 0) {
+          setInquiries(data.inquiries);
+        } else {
+          throw new Error("No admin inquiries returned");
+        }
+      })
+      .catch(() => {
+        if (isSupabaseConfigured && supabase) {
+          supabase
+            .from("inquiries")
+            .select("*")
+            .order("created_at", { ascending: false })
+            .then(({ data, error }) => {
+              if (!error && data && data.length > 0) {
+                const mapped: InquiryRecord[] = data.map((d: any) => ({
+                  id: d.id,
+                  name: d.name,
+                  email: d.email,
+                  phone: d.phone,
+                  projectType: d.project_type,
+                  budgetRange: d.budget_range,
+                  message: d.message,
+                  status: d.status,
+                  createdAt: d.created_at,
+                }));
+                setInquiries(mapped);
+              }
+            });
+        }
+      });
 
-      // Projects
-      supabase
-        .from("projects")
-        .select("*")
-        .order("sort_order", { ascending: true })
-        .then(({ data, error }) => {
-          if (!error && data && data.length > 0) {
-            setProjects(
-              data.map((d: any) => ({
-                id: d.id,
-                title: d.title,
-                slug: d.slug,
-                summary: d.summary,
-                descriptionMarkdown: d.description_markdown,
-                clientName: d.client_name,
-                demoUrl: d.demo_url,
-                githubUrl: d.github_url,
-                priceTag: d.price_tag,
-                impactMetric: d.impact_metric,
-                techStack: d.tech_stack || [],
-                isFeatured: d.is_featured,
-                published: d.is_published,
-                imageUrl: d.image_url || d.thumbnail_url || undefined,
-                screenshots: d.screenshots || [],
-              }))
-            );
-          }
-        });
+    // 3. Fetch Projects via protected admin API
+    fetch("/api/admin/projects")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.projects) && data.projects.length > 0) {
+          setProjects(data.projects);
+        } else {
+          throw new Error("No admin projects returned");
+        }
+      })
+      .catch(() => {
+        if (isSupabaseConfigured && supabase) {
+          supabase
+            .from("projects")
+            .select("*")
+            .order("sort_order", { ascending: true })
+            .then(({ data, error }) => {
+              if (!error && data && data.length > 0) {
+                setProjects(
+                  data.map((d: any) => ({
+                    id: d.id,
+                    title: d.title,
+                    slug: d.slug,
+                    summary: d.summary,
+                    descriptionMarkdown: d.description_markdown,
+                    clientName: d.client_name,
+                    demoUrl: d.demo_url,
+                    githubUrl: d.github_url,
+                    priceTag: d.price_tag,
+                    impactMetric: d.impact_metric,
+                    techStack: d.tech_stack || [],
+                    isFeatured: d.is_featured,
+                    published: d.is_published,
+                    imageUrl: d.image_url || d.thumbnail_url || undefined,
+                    screenshots: d.screenshots || [],
+                  }))
+                );
+              }
+            });
+        }
+      });
 
-      // Services (Full control load via admin API with Supabase fallback)
-      fetch("/api/admin/services")
+    // 4. Fetch Services via protected admin API
+    fetch("/api/admin/services")
         .then((res) => res.json())
         .then((data) => {
           if (data.success && Array.isArray(data.services) && data.services.length > 0) {
@@ -370,30 +394,44 @@ export default function AdminPage() {
           }
         });
 
-      // Blog posts
-      supabase
-        .from("blog_posts")
-        .select("*")
-        .order("published_at", { ascending: false })
-        .then(({ data, error }) => {
-          if (!error && data && data.length > 0) {
-            setBlogPosts(
-              data.map((d: any) => ({
-                id: d.id,
-                title: d.title,
-                slug: d.slug,
-                excerpt: d.excerpt,
-                contentMarkdown: d.content_markdown,
-                tags: d.tags || [],
-                readingTimeMinutes: d.reading_time_minutes,
-                publishedAt: d.published_at,
-                isPublished: d.is_published,
-              }))
-            );
-          }
-        });
+    // 5. Fetch Blog posts via protected admin API
+    fetch("/api/admin/blog")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.posts) && data.posts.length > 0) {
+          setBlogPosts(data.posts);
+        } else {
+          throw new Error("No admin blog posts returned");
+        }
+      })
+      .catch(() => {
+        if (isSupabaseConfigured && supabase) {
+          supabase
+            .from("blog_posts")
+            .select("*")
+            .order("published_at", { ascending: false })
+            .then(({ data, error }) => {
+              if (!error && data && data.length > 0) {
+                setBlogPosts(
+                  data.map((d: any) => ({
+                    id: d.id,
+                    title: d.title,
+                    slug: d.slug,
+                    excerpt: d.excerpt,
+                    contentMarkdown: d.content_markdown,
+                    tags: d.tags || [],
+                    readingTimeMinutes: d.reading_time_minutes,
+                    publishedAt: d.published_at,
+                    isPublished: d.is_published,
+                  }))
+                );
+              }
+            });
+        }
+      });
 
-      // Profile
+    // Profile
+    if (isSupabaseConfigured && supabase) {
       supabase
         .from("profiles")
         .select("*")
@@ -440,24 +478,31 @@ export default function AdminPage() {
     };
     setProjects([item, ...projects]);
 
-    if (isSupabaseConfigured && supabase) {
-      supabase.from("projects").insert([{
-        title: item.title,
-        slug: item.slug,
-        summary: item.summary,
-        description_markdown: item.descriptionMarkdown,
-        client_name: item.clientName,
-        price_tag: item.priceTag,
-        impact_metric: item.impactMetric,
-        tech_stack: item.techStack,
-        demo_url: item.demoUrl,
-        github_url: item.githubUrl,
-        is_featured: true,
-        is_published: true,
-        image_url: item.imageUrl,
-        screenshots: item.screenshots,
-      }]).then();
-    }
+    // Persist via protected server API
+    fetch("/api/admin/projects", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(item),
+    }).catch(() => {
+      if (isSupabaseConfigured && supabase) {
+        supabase.from("projects").insert([{
+          title: item.title,
+          slug: item.slug,
+          summary: item.summary,
+          description_markdown: item.descriptionMarkdown,
+          client_name: item.clientName,
+          price_tag: item.priceTag,
+          impact_metric: item.impactMetric,
+          tech_stack: item.techStack,
+          demo_url: item.demoUrl,
+          github_url: item.githubUrl,
+          is_featured: true,
+          is_published: true,
+          image_url: item.imageUrl,
+          screenshots: item.screenshots,
+        }]).then();
+      }
+    });
 
     setNewProject({
       title: "",
@@ -483,28 +528,35 @@ export default function AdminPage() {
 
     setProjects(projects.map((p) => (p.id === editingProject.id ? editingProject : p)));
 
-    if (isSupabaseConfigured && supabase) {
-      supabase
-        .from("projects")
-        .update({
-          title: editingProject.title,
-          slug: editingProject.slug,
-          summary: editingProject.summary,
-          description_markdown: editingProject.descriptionMarkdown,
-          client_name: editingProject.clientName,
-          price_tag: editingProject.priceTag,
-          impact_metric: editingProject.impactMetric,
-          tech_stack: editingProject.techStack,
-          demo_url: editingProject.demoUrl || null,
-          github_url: editingProject.githubUrl || null,
-          is_featured: editingProject.isFeatured,
-          is_published: editingProject.published,
-          image_url: editingProject.imageUrl || null,
-          screenshots: editingProject.screenshots || [],
-        })
-        .eq("id", editingProject.id)
-        .then();
-    }
+    // Persist via protected server API
+    fetch("/api/admin/projects", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(editingProject),
+    }).catch(() => {
+      if (isSupabaseConfigured && supabase) {
+        supabase
+          .from("projects")
+          .update({
+            title: editingProject.title,
+            slug: editingProject.slug,
+            summary: editingProject.summary,
+            description_markdown: editingProject.descriptionMarkdown,
+            client_name: editingProject.clientName,
+            price_tag: editingProject.priceTag,
+            impact_metric: editingProject.impactMetric,
+            tech_stack: editingProject.techStack,
+            demo_url: editingProject.demoUrl || null,
+            github_url: editingProject.githubUrl || null,
+            is_featured: editingProject.isFeatured,
+            is_published: editingProject.published,
+            image_url: editingProject.imageUrl || null,
+            screenshots: editingProject.screenshots || [],
+          })
+          .eq("id", editingProject.id)
+          .then();
+      }
+    });
 
     setEditingProject(null);
     showNotification("Project successfully updated in database!");
@@ -516,9 +568,14 @@ export default function AdminPage() {
 
     setProjects(projects.filter((p) => p.id !== projectToDelete.id));
 
-    if (isSupabaseConfigured && supabase) {
-      supabase.from("projects").delete().eq("id", projectToDelete.id).then();
-    }
+    // Delete via protected server API
+    fetch(`/api/admin/projects?id=${encodeURIComponent(projectToDelete.id)}`, {
+      method: "DELETE",
+    }).catch(() => {
+      if (isSupabaseConfigured && supabase) {
+        supabase.from("projects").delete().eq("id", projectToDelete.id).then();
+      }
+    });
 
     setProjectToDelete(null);
     showNotification("Project deleted from portfolio and database.");
@@ -529,9 +586,15 @@ export default function AdminPage() {
     const updated = projects.map((p) => {
       if (p.id === id) {
         const nextPub = !p.published;
-        if (isSupabaseConfigured && supabase) {
-          supabase.from("projects").update({ is_published: nextPub }).eq("id", id).then();
-        }
+        fetch("/api/admin/projects", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "toggle_published", id }),
+        }).catch(() => {
+          if (isSupabaseConfigured && supabase) {
+            supabase.from("projects").update({ is_published: nextPub }).eq("id", id).then();
+          }
+        });
         return { ...p, published: nextPub };
       }
       return p;
@@ -627,7 +690,7 @@ export default function AdminPage() {
       tagline: "",
       roiMetric: "",
       pricingType: "fixed",
-      priceDisplay: "$3,500",
+      priceDisplay: "$2,500",
       timeline: "1-2 Weeks",
       deliverables: "Architecture review, Diagnostic report, Implementation",
       techStack: "Next.js 16, TypeScript, Supabase",
@@ -799,19 +862,26 @@ export default function AdminPage() {
     };
     setBlogPosts([item, ...blogPosts]);
 
-    if (isSupabaseConfigured && supabase) {
-      supabase.from("blog_posts").insert([{
-        title: item.title,
-        slug: item.slug,
-        excerpt: item.excerpt,
-        content_markdown: item.contentMarkdown,
-        tags: item.tags,
-        reading_time_minutes: item.readingTimeMinutes,
-        cover_image_url: item.coverImageUrl || null,
-        published_at: item.publishedAt,
-        is_published: true,
-      }]).then();
-    }
+    // Persist via protected server API
+    fetch("/api/admin/blog", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(item),
+    }).catch(() => {
+      if (isSupabaseConfigured && supabase) {
+        supabase.from("blog_posts").insert([{
+          title: item.title,
+          slug: item.slug,
+          excerpt: item.excerpt,
+          content_markdown: item.contentMarkdown,
+          tags: item.tags,
+          reading_time_minutes: item.readingTimeMinutes,
+          cover_image_url: item.coverImageUrl || null,
+          published_at: item.publishedAt,
+          is_published: true,
+        }]).then();
+      }
+    });
 
     setNewPost({
       title: "",
@@ -832,22 +902,29 @@ export default function AdminPage() {
 
     setBlogPosts(blogPosts.map((p) => (p.id === editingPost.id ? editingPost : p)));
 
-    if (isSupabaseConfigured && supabase) {
-      supabase
-        .from("blog_posts")
-        .update({
-          title: editingPost.title,
-          slug: editingPost.slug,
-          excerpt: editingPost.excerpt,
-          content_markdown: editingPost.contentMarkdown,
-          tags: editingPost.tags,
-          reading_time_minutes: editingPost.readingTimeMinutes,
-          cover_image_url: editingPost.coverImageUrl || null,
-          is_published: editingPost.isPublished,
-        })
-        .eq("id", editingPost.id)
-        .then();
-    }
+    // Persist via protected server API
+    fetch("/api/admin/blog", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(editingPost),
+    }).catch(() => {
+      if (isSupabaseConfigured && supabase) {
+        supabase
+          .from("blog_posts")
+          .update({
+            title: editingPost.title,
+            slug: editingPost.slug,
+            excerpt: editingPost.excerpt,
+            content_markdown: editingPost.contentMarkdown,
+            tags: editingPost.tags,
+            reading_time_minutes: editingPost.readingTimeMinutes,
+            cover_image_url: editingPost.coverImageUrl || null,
+            is_published: editingPost.isPublished,
+          })
+          .eq("id", editingPost.id)
+          .then();
+      }
+    });
 
     setEditingPost(null);
     showNotification("Article successfully updated in database!");
@@ -859,9 +936,14 @@ export default function AdminPage() {
 
     setBlogPosts(blogPosts.filter((p) => p.id !== postToDelete.id));
 
-    if (isSupabaseConfigured && supabase) {
-      supabase.from("blog_posts").delete().eq("id", postToDelete.id).then();
-    }
+    // Delete via protected server API
+    fetch(`/api/admin/blog?id=${encodeURIComponent(postToDelete.id)}`, {
+      method: "DELETE",
+    }).catch(() => {
+      if (isSupabaseConfigured && supabase) {
+        supabase.from("blog_posts").delete().eq("id", postToDelete.id).then();
+      }
+    });
 
     setPostToDelete(null);
     showNotification("Article deleted from technical blog and database.");
@@ -872,9 +954,15 @@ export default function AdminPage() {
     const updated = blogPosts.map((p) => {
       if (p.id === id) {
         const nextPub = !p.isPublished;
-        if (isSupabaseConfigured && supabase) {
-          supabase.from("blog_posts").update({ is_published: nextPub }).eq("id", id).then();
-        }
+        fetch("/api/admin/blog", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "toggle_published", id }),
+        }).catch(() => {
+          if (isSupabaseConfigured && supabase) {
+            supabase.from("blog_posts").update({ is_published: nextPub }).eq("id", id).then();
+          }
+        });
         return { ...p, isPublished: nextPub };
       }
       return p;
@@ -889,9 +977,15 @@ export default function AdminPage() {
       inquiries.map((inq) => (inq.id === id ? { ...inq, status } : inq))
     );
 
-    if (isSupabaseConfigured && supabase) {
-      supabase.from("inquiries").update({ status }).eq("id", id).then();
-    }
+    fetch("/api/admin/inquiries", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, status }),
+    }).catch(() => {
+      if (isSupabaseConfigured && supabase) {
+        supabase.from("inquiries").update({ status }).eq("id", id).then();
+      }
+    });
 
     showNotification(`Inquiry status updated to ${status}`);
   }
@@ -902,9 +996,15 @@ export default function AdminPage() {
       return;
     }
     setInquiries((prev) => prev.filter((inq) => inq.id !== id));
-    if (isSupabaseConfigured && supabase) {
-      supabase.from("inquiries").delete().eq("id", id).then();
-    }
+
+    fetch(`/api/admin/inquiries?id=${encodeURIComponent(id)}`, {
+      method: "DELETE",
+    }).catch(() => {
+      if (isSupabaseConfigured && supabase) {
+        supabase.from("inquiries").delete().eq("id", id).then();
+      }
+    });
+
     showNotification("Inquiry record deleted from system.");
   }
 

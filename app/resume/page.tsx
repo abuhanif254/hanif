@@ -63,6 +63,7 @@ const resumeJsonLd = {
         url: siteUrl,
         image: `${siteUrl}/images/profile.png`,
         email: "abuhanifmain@gmail.com",
+        telephone: "+8801724010261",
         sameAs: [
           "https://github.com/abuhanifmain-art",
           "https://github.com/abuhanif254",

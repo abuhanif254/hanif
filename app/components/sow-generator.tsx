@@ -519,6 +519,14 @@ export default function StatementOfWorkGenerator() {
     "configurator"
   );
   const [copied, setCopied] = useState<boolean>(false);
+  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState<boolean>(false);
+  const [submitEmail, setSubmitEmail] = useState<string>("");
+  const [submitPhone, setSubmitPhone] = useState<string>("");
+  const [submitNotes, setSubmitNotes] = useState<string>("");
+  const [submitConsent, setSubmitConsent] = useState<boolean>(true);
+  const [isSubmittingSow, setIsSubmittingSow] = useState<boolean>(false);
+  const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const selectedService: ServicePricing =
     initialServices.find((s) => s.slug === selectedServiceSlug) ||
@@ -656,6 +664,66 @@ ${breakdown.milestones
       if (el) {
         el.scrollIntoView({ behavior: "smooth" });
       }
+    }
+  }
+
+  async function handleSubmitSow(e: React.FormEvent) {
+    e.preventDefault();
+    setIsSubmittingSow(true);
+    setSubmitError(null);
+
+    const clientName = clientContact.trim() || "Technical Lead";
+    const structuredMessage = `[STATEMENT OF WORK SUBMISSION: Ref #${documentId}]
+Service Package: ${selectedService.title} (${selectedService.priceDisplay})
+Estimated Total Investment: $${breakdown.totalInvestment.toLocaleString()} USD
+Target Timeline: ${selectedService.timeline}
+Target Kick-off Date: ${targetStartDate}
+Client Organization: ${clientCompany || "Not specified"}
+Client Contact: ${clientName}
+
+--- Selected Architectural Add-ons ---
+${breakdown.chosenAddons.length > 0 ? breakdown.chosenAddons.map((a) => `• ${a.name} ($${a.price.toLocaleString()} USD)`).join("\n") : "• None"}
+
+--- Milestone & Payment Schedule ---
+• Phase 1 (25% Kick-off Deposit): $${breakdown.milestones[0].amount.toLocaleString()} USD
+• Phase 2 (50% Core Delivery): $${breakdown.milestones[1].amount.toLocaleString()} USD
+• Phase 3 (25% Production Sign-off): $${breakdown.milestones[2].amount.toLocaleString()} USD
+
+--- Invariants & Warranties ---
+• 100% Client IP Assignment upon settlement
+• 30-Day Post-Cutover Production Bug Warranty
+• Mutual Non-Disclosure Agreement (NDA) Active
+
+--- Client Notes ---
+${submitNotes || "Please review this configured SOW and schedule our 30-minute technical discovery call."}`;
+
+    try {
+      const res = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: clientName,
+          email: submitEmail.trim(),
+          phone: submitPhone.trim() || undefined,
+          projectType: `${selectedService.title} (SOW: ${documentId})`,
+          budgetRange: `$${breakdown.totalInvestment.toLocaleString()} USD`,
+          message: structuredMessage,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Failed to submit SOW for review.");
+      }
+
+      setSubmitSuccess(
+        `✓ Statement of Work successfully submitted (Inquiry ID: ${data.inquiryId})! Principal Architect Abu Hanif will review your scope and follow up within 24 hours.`
+      );
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Submission failed.";
+      setSubmitError(msg);
+    } finally {
+      setIsSubmittingSow(false);
     }
   }
 
@@ -1287,9 +1355,35 @@ ${breakdown.milestones
           <button
             type="button"
             className="mobile-full-width-btn"
+            onClick={() => {
+              setIsSubmitModalOpen(true);
+              setSubmitSuccess(null);
+              setSubmitError(null);
+            }}
+            style={{
+              flex: "1 1 180px",
+              padding: "11px 18px",
+              backgroundColor: "#10b981",
+              color: "#050e1d",
+              border: "none",
+              borderRadius: "6px",
+              fontWeight: "800",
+              fontSize: "13px",
+              cursor: "pointer",
+              textAlign: "center",
+              boxShadow: "0 2px 10px rgba(16,185,129,0.35)",
+              transition: "all 0.15s ease",
+            }}
+          >
+            🚀 Submit SOW for Review &rsaquo;
+          </button>
+
+          <button
+            type="button"
+            className="mobile-full-width-btn"
             onClick={handlePrefillInquiry}
             style={{
-              flex: "1 1 160px",
+              flex: "1 1 140px",
               padding: "11px 18px",
               backgroundColor: "#2563eb",
               color: "#ffffff",
@@ -1307,6 +1401,366 @@ ${breakdown.milestones
           </button>
         </div>
       </div>
+
+      {/* SOW Submission for Architect Review Modal */}
+      {isSubmitModalOpen && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            backgroundColor: "rgba(11, 25, 44, 0.75)",
+            backdropFilter: "blur(4px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 9999,
+            padding: "16px",
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsSubmitModalOpen(false);
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "#ffffff",
+              borderRadius: "10px",
+              maxWidth: "540px",
+              width: "100%",
+              maxHeight: "90vh",
+              overflowY: "auto",
+              boxShadow: "0 20px 40px rgba(0, 0, 0, 0.25)",
+              border: "1px solid #cbd5e1",
+              padding: "24px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                marginBottom: "16px",
+                borderBottom: "1px solid #f1f5f9",
+                paddingBottom: "12px",
+              }}
+            >
+              <div>
+                <h3
+                  style={{
+                    margin: "0 0 4px 0",
+                    fontSize: "18px",
+                    color: "#0f172a",
+                    fontWeight: "800",
+                  }}
+                >
+                  Submit Statement of Work
+                </h3>
+                <span
+                  style={{
+                    fontSize: "12px",
+                    color: "#2563eb",
+                    fontWeight: "700",
+                  }}
+                >
+                  {selectedService.title} • ${breakdown.totalInvestment.toLocaleString()} USD ({documentId})
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsSubmitModalOpen(false)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  fontSize: "20px",
+                  cursor: "pointer",
+                  color: "#64748b",
+                  padding: "4px 8px",
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {submitSuccess ? (
+              <div
+                style={{
+                  padding: "20px",
+                  backgroundColor: "#f0fdf4",
+                  border: "1px solid #86efac",
+                  borderRadius: "6px",
+                  color: "#166534",
+                  fontSize: "14px",
+                  lineHeight: "1.6",
+                }}
+              >
+                <strong
+                  style={{
+                    display: "block",
+                    fontSize: "16px",
+                    marginBottom: "8px",
+                  }}
+                >
+                  SOW Review Request Dispatched
+                </strong>
+                <p style={{ margin: "0 0 16px 0" }}>{submitSuccess}</p>
+                <button
+                  type="button"
+                  onClick={() => setIsSubmitModalOpen(false)}
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#166534",
+                    color: "#ffffff",
+                    border: "none",
+                    borderRadius: "4px",
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Close Window
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmitSow}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "12px",
+                    marginBottom: "16px",
+                  }}
+                >
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        fontSize: "12px",
+                        fontWeight: "700",
+                        color: "#334155",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      Technical Contact Name *
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      value={clientContact}
+                      onChange={(e) => setClientContact(e.target.value)}
+                      placeholder="e.g. Alex Mercer"
+                      style={{
+                        width: "100%",
+                        padding: "8px 12px",
+                        border: "1px solid #cbd5e1",
+                        borderRadius: "4px",
+                        fontSize: "13px",
+                      }}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        fontSize: "12px",
+                        fontWeight: "700",
+                        color: "#334155",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      Work Email Address *
+                    </label>
+                    <input
+                      required
+                      type="email"
+                      value={submitEmail}
+                      onChange={(e) => setSubmitEmail(e.target.value)}
+                      placeholder="e.g. alex@company.io"
+                      style={{
+                        width: "100%",
+                        padding: "8px 12px",
+                        border: "1px solid #cbd5e1",
+                        borderRadius: "4px",
+                        fontSize: "13px",
+                      }}
+                    />
+                  </div>
+
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr",
+                      gap: "12px",
+                    }}
+                  >
+                    <div>
+                      <label
+                        style={{
+                          display: "block",
+                          fontSize: "12px",
+                          fontWeight: "700",
+                          color: "#334155",
+                          marginBottom: "4px",
+                        }}
+                      >
+                        Organization / Company
+                      </label>
+                      <input
+                        type="text"
+                        value={clientCompany}
+                        onChange={(e) => setClientCompany(e.target.value)}
+                        placeholder="e.g. Acme Labs"
+                        style={{
+                          width: "100%",
+                          padding: "8px 12px",
+                          border: "1px solid #cbd5e1",
+                          borderRadius: "4px",
+                          fontSize: "13px",
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <label
+                        style={{
+                          display: "block",
+                          fontSize: "12px",
+                          fontWeight: "700",
+                          color: "#334155",
+                          marginBottom: "4px",
+                        }}
+                      >
+                        Phone / WhatsApp (Optional)
+                      </label>
+                      <input
+                        type="tel"
+                        value={submitPhone}
+                        onChange={(e) => setSubmitPhone(e.target.value)}
+                        placeholder="+1 (555) 000-0000 or +880 1XXX-XXXXXX"
+                        style={{
+                          width: "100%",
+                          padding: "8px 12px",
+                          border: "1px solid #cbd5e1",
+                          borderRadius: "4px",
+                          fontSize: "13px",
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        fontSize: "12px",
+                        fontWeight: "700",
+                        color: "#334155",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      Project Invariants &amp; Specific Scope Notes (Optional)
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={submitNotes}
+                      onChange={(e) => setSubmitNotes(e.target.value)}
+                      placeholder="Existing tech stack, production traffic numbers, specific deadline constraints..."
+                      style={{
+                        width: "100%",
+                        padding: "8px 12px",
+                        border: "1px solid #cbd5e1",
+                        borderRadius: "4px",
+                        fontSize: "13px",
+                      }}
+                    />
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      gap: "8px",
+                      marginTop: "4px",
+                    }}
+                  >
+                    <input
+                      required
+                      type="checkbox"
+                      id="sow-consent"
+                      checked={submitConsent}
+                      onChange={(e) => setSubmitConsent(e.target.checked)}
+                      style={{ marginTop: "3px" }}
+                    />
+                    <label
+                      htmlFor="sow-consent"
+                      style={{
+                        fontSize: "12px",
+                        color: "#475569",
+                        lineHeight: "1.4",
+                      }}
+                    >
+                      I consent to receive a formal Statement of Work review, milestone schedule, and 30-minute discovery invite.
+                    </label>
+                  </div>
+                </div>
+
+                {submitError && (
+                  <p
+                    style={{
+                      color: "#ef4444",
+                      fontSize: "12px",
+                      margin: "0 0 12px 0",
+                    }}
+                  >
+                    {submitError}
+                  </p>
+                )}
+
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    gap: "10px",
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setIsSubmitModalOpen(false)}
+                    style={{
+                      padding: "9px 16px",
+                      backgroundColor: "#f1f5f9",
+                      border: "1px solid #cbd5e1",
+                      borderRadius: "6px",
+                      color: "#334155",
+                      fontWeight: "700",
+                      fontSize: "13px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmittingSow}
+                    style={{
+                      padding: "9px 20px",
+                      backgroundColor: "#2563eb",
+                      border: "none",
+                      borderRadius: "6px",
+                      color: "#ffffff",
+                      fontWeight: "700",
+                      fontSize: "13px",
+                      cursor: isSubmittingSow ? "not-allowed" : "pointer",
+                    }}
+                  >
+                    {isSubmittingSow
+                      ? "Submitting..."
+                      : `Submit SOW ($${breakdown.totalInvestment.toLocaleString()})`}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

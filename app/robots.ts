@@ -10,12 +10,12 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin"],
+        disallow: ["/admin", "/admin/", "/api", "/api/", "/orders", "/orders/"],
       },
       {
         userAgent: ["Googlebot", "Bingbot", "Applebot", "Twitterbot", "LinkedInBot"],
         allow: "/",
-        disallow: ["/admin"],
+        disallow: ["/admin", "/admin/", "/api", "/api/", "/orders", "/orders/"],
       },
     ],
     sitemap: `${siteOrigin}/sitemap.xml`,

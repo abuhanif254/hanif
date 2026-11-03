@@ -13,6 +13,8 @@ import {
   Testimonial,
 } from "../data/portfolio-data";
 import { supabase, isSupabaseConfigured } from "./supabase";
+import { getServiceSupabase } from "./supabase-admin";
+import { InquiryRecord } from "./admin-leads-exporter";
 
 export async function getProfile(): Promise<ProfileData> {
   if (isSupabaseConfigured && supabase) {
@@ -59,10 +61,151 @@ export const SERVICE_SLUG_ALIASES: Record<string, string> = {
   "fractional-staff-architect": "fractional-staff-engineer",
 };
 
-export async function getProjects(): Promise<ProjectItem[]> {
-  if (isSupabaseConfigured && supabase) {
+let dynamicProjectsStore: ProjectItem[] = [...initialProjects];
+
+export async function getAllProjectsAdmin(): Promise<ProjectItem[]> {
+  await getProjects();
+  return [...dynamicProjectsStore];
+}
+
+export async function createProject(
+  projectData: Partial<ProjectItem>
+): Promise<ProjectItem> {
+  const id = projectData.id || `proj-${Date.now()}`;
+  const slug =
+    projectData.slug ||
+    (projectData.title || "project")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+
+  const newRecord: ProjectItem = {
+    id,
+    title: projectData.title || "Untitled Project",
+    slug,
+    summary: projectData.summary || "",
+    descriptionMarkdown: projectData.descriptionMarkdown || projectData.summary || "",
+    clientName: projectData.clientName || "Enterprise Client",
+    priceTag: projectData.priceTag || "$10,000 Scope",
+    impactMetric: projectData.impactMetric || "<30ms P99 • 99.99% Uptime",
+    techStack: projectData.techStack || ["Next.js", "TypeScript", "PostgreSQL"],
+    demoUrl: projectData.demoUrl,
+    githubUrl: projectData.githubUrl,
+    isFeatured: projectData.isFeatured !== false,
+    published: projectData.published !== false,
+    imageUrl: projectData.imageUrl,
+    screenshots: projectData.screenshots || [],
+  };
+
+  dynamicProjectsStore = [
+    newRecord,
+    ...dynamicProjectsStore.filter((p) => p.id !== id && p.slug !== slug),
+  ];
+
+  const dbClient = getServiceSupabase() || supabase;
+  if (dbClient) {
     try {
-      const { data, error } = await supabase
+      await dbClient.from("projects").insert([
+        {
+          id: newRecord.id,
+          title: newRecord.title,
+          slug: newRecord.slug,
+          summary: newRecord.summary,
+          description_markdown: newRecord.descriptionMarkdown,
+          client_name: newRecord.clientName,
+          price_tag: newRecord.priceTag,
+          impact_metric: newRecord.impactMetric,
+          tech_stack: newRecord.techStack,
+          demo_url: newRecord.demoUrl || null,
+          github_url: newRecord.githubUrl || null,
+          is_featured: newRecord.isFeatured,
+          is_published: newRecord.published,
+          image_url: newRecord.imageUrl || null,
+          screenshots: newRecord.screenshots,
+        },
+      ]);
+    } catch {
+      // Graceful fallback
+    }
+  }
+
+  return newRecord;
+}
+
+export async function updateProject(
+  id: string,
+  updates: Partial<ProjectItem>
+): Promise<ProjectItem | null> {
+  const index = dynamicProjectsStore.findIndex((p) => p.id === id || p.slug === id);
+  if (index === -1) return null;
+
+  const current = dynamicProjectsStore[index];
+  const updated: ProjectItem = {
+    ...current,
+    ...updates,
+    id: current.id,
+  };
+
+  dynamicProjectsStore[index] = updated;
+
+  const dbClient = getServiceSupabase() || supabase;
+  if (dbClient) {
+    try {
+      const dbUpdates: Record<string, any> = {};
+      if (updates.title !== undefined) dbUpdates.title = updates.title;
+      if (updates.slug !== undefined) dbUpdates.slug = updates.slug;
+      if (updates.summary !== undefined) dbUpdates.summary = updates.summary;
+      if (updates.descriptionMarkdown !== undefined)
+        dbUpdates.description_markdown = updates.descriptionMarkdown;
+      if (updates.clientName !== undefined) dbUpdates.client_name = updates.clientName;
+      if (updates.priceTag !== undefined) dbUpdates.price_tag = updates.priceTag;
+      if (updates.impactMetric !== undefined)
+        dbUpdates.impact_metric = updates.impactMetric;
+      if (updates.techStack !== undefined) dbUpdates.tech_stack = updates.techStack;
+      if (updates.demoUrl !== undefined) dbUpdates.demo_url = updates.demoUrl || null;
+      if (updates.githubUrl !== undefined) dbUpdates.github_url = updates.githubUrl || null;
+      if (updates.isFeatured !== undefined) dbUpdates.is_featured = updates.isFeatured;
+      if (updates.published !== undefined) dbUpdates.is_published = updates.published;
+      if (updates.imageUrl !== undefined) dbUpdates.image_url = updates.imageUrl || null;
+      if (updates.screenshots !== undefined) dbUpdates.screenshots = updates.screenshots;
+
+      await dbClient.from("projects").update(dbUpdates).eq("id", current.id);
+    } catch {
+      // Graceful fallback
+    }
+  }
+
+  return updated;
+}
+
+export async function deleteProject(id: string): Promise<boolean> {
+  const prevLen = dynamicProjectsStore.length;
+  dynamicProjectsStore = dynamicProjectsStore.filter((p) => p.id !== id && p.slug !== id);
+  const deleted = dynamicProjectsStore.length < prevLen;
+
+  const dbClient = getServiceSupabase() || supabase;
+  if (deleted && dbClient) {
+    try {
+      await dbClient.from("projects").delete().eq("id", id);
+    } catch {
+      // Graceful fallback
+    }
+  }
+
+  return deleted;
+}
+
+export async function toggleProjectPublished(id: string): Promise<ProjectItem | null> {
+  const match = dynamicProjectsStore.find((p) => p.id === id || p.slug === id);
+  if (!match) return null;
+  return updateProject(match.id, { published: !match.published });
+}
+
+export async function getProjects(): Promise<ProjectItem[]> {
+  const dbClient = getServiceSupabase() || supabase;
+  if (dbClient) {
+    try {
+      const { data, error } = await dbClient
         .from("projects")
         .select("*")
         .eq("is_published", true)
@@ -93,7 +236,7 @@ export async function getProjects(): Promise<ProjectItem[]> {
           };
         });
 
-        // Merge any initial projects not currently in Supabase by matching slug or aliases
+        // Merge any initial or dynamic projects not currently in Supabase by matching slug or aliases
         const existingSlugs = new Set(
           supabaseProjects.flatMap((p) => [
             p.slug,
@@ -104,8 +247,13 @@ export async function getProjects(): Promise<ProjectItem[]> {
         );
 
         const merged = [...supabaseProjects];
+        for (const item of dynamicProjectsStore) {
+          if (!existingSlugs.has(item.slug)) {
+            merged.push(item);
+          }
+        }
         for (const initProj of initialProjects) {
-          if (!existingSlugs.has(initProj.slug)) {
+          if (!existingSlugs.has(initProj.slug) && !merged.some((m) => m.slug === initProj.slug)) {
             merged.push(initProj);
           }
         }
@@ -115,7 +263,7 @@ export async function getProjects(): Promise<ProjectItem[]> {
       // Fallback
     }
   }
-  return initialProjects;
+  return [...dynamicProjectsStore];
 }
 
 export async function getProjectBySlug(slug: string): Promise<ProjectItem | undefined> {
@@ -347,16 +495,145 @@ export async function getServiceBySlug(slug: string): Promise<ServicePricing | u
   );
 }
 
-export async function getBlogPosts(): Promise<BlogPost[]> {
-  if (isSupabaseConfigured && supabase) {
+let dynamicBlogStore: BlogPost[] = [...initialBlogPosts];
+
+export async function getAllBlogPostsAdmin(): Promise<BlogPost[]> {
+  await getBlogPosts();
+  return [...dynamicBlogStore];
+}
+
+export async function createBlogPost(
+  postData: Partial<BlogPost>
+): Promise<BlogPost> {
+  const id = postData.id || `blog-${Date.now()}`;
+  const slug =
+    postData.slug ||
+    (postData.title || "article")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+
+  const newRecord: BlogPost = {
+    id,
+    title: postData.title || "Untitled Article",
+    slug,
+    excerpt: postData.excerpt || "",
+    contentMarkdown: postData.contentMarkdown || postData.excerpt || "",
+    tags: postData.tags || ["Architecture", "Performance"],
+    readingTimeMinutes: postData.readingTimeMinutes || 5,
+    publishedAt: postData.publishedAt || new Date().toISOString(),
+    isPublished: postData.isPublished !== false,
+    coverImageUrl: postData.coverImageUrl,
+  };
+
+  dynamicBlogStore = [
+    newRecord,
+    ...dynamicBlogStore.filter((b) => b.id !== id && b.slug !== slug),
+  ];
+
+  const dbClient = getServiceSupabase() || supabase;
+  if (dbClient) {
     try {
-      const { data, error } = await supabase
+      await dbClient.from("blog_posts").insert([
+        {
+          id: newRecord.id,
+          title: newRecord.title,
+          slug: newRecord.slug,
+          excerpt: newRecord.excerpt,
+          content_markdown: newRecord.contentMarkdown,
+          tags: newRecord.tags,
+          reading_time_minutes: newRecord.readingTimeMinutes,
+          cover_image_url: newRecord.coverImageUrl || null,
+          published_at: newRecord.publishedAt,
+          is_published: newRecord.isPublished,
+        },
+      ]);
+    } catch {
+      // Graceful fallback
+    }
+  }
+
+  return newRecord;
+}
+
+export async function updateBlogPost(
+  id: string,
+  updates: Partial<BlogPost>
+): Promise<BlogPost | null> {
+  const index = dynamicBlogStore.findIndex((b) => b.id === id || b.slug === id);
+  if (index === -1) return null;
+
+  const current = dynamicBlogStore[index];
+  const updated: BlogPost = {
+    ...current,
+    ...updates,
+    id: current.id,
+  };
+
+  dynamicBlogStore[index] = updated;
+
+  const dbClient = getServiceSupabase() || supabase;
+  if (dbClient) {
+    try {
+      const dbUpdates: Record<string, any> = {};
+      if (updates.title !== undefined) dbUpdates.title = updates.title;
+      if (updates.slug !== undefined) dbUpdates.slug = updates.slug;
+      if (updates.excerpt !== undefined) dbUpdates.excerpt = updates.excerpt;
+      if (updates.contentMarkdown !== undefined)
+        dbUpdates.content_markdown = updates.contentMarkdown;
+      if (updates.tags !== undefined) dbUpdates.tags = updates.tags;
+      if (updates.readingTimeMinutes !== undefined)
+        dbUpdates.reading_time_minutes = updates.readingTimeMinutes;
+      if (updates.coverImageUrl !== undefined)
+        dbUpdates.cover_image_url = updates.coverImageUrl || null;
+      if (updates.isPublished !== undefined)
+        dbUpdates.is_published = updates.isPublished;
+      if (updates.publishedAt !== undefined)
+        dbUpdates.published_at = updates.publishedAt;
+
+      await dbClient.from("blog_posts").update(dbUpdates).eq("id", current.id);
+    } catch {
+      // Graceful fallback
+    }
+  }
+
+  return updated;
+}
+
+export async function deleteBlogPost(id: string): Promise<boolean> {
+  const prevLen = dynamicBlogStore.length;
+  dynamicBlogStore = dynamicBlogStore.filter((b) => b.id !== id && b.slug !== id);
+  const deleted = dynamicBlogStore.length < prevLen;
+
+  const dbClient = getServiceSupabase() || supabase;
+  if (deleted && dbClient) {
+    try {
+      await dbClient.from("blog_posts").delete().eq("id", id);
+    } catch {
+      // Graceful fallback
+    }
+  }
+
+  return deleted;
+}
+
+export async function toggleBlogPostPublished(id: string): Promise<BlogPost | null> {
+  const match = dynamicBlogStore.find((b) => b.id === id || b.slug === id);
+  if (!match) return null;
+  return updateBlogPost(match.id, { isPublished: !match.isPublished });
+}
+
+export async function getBlogPosts(): Promise<BlogPost[]> {
+  const dbClient = getServiceSupabase() || supabase;
+  if (dbClient) {
+    try {
+      const { data, error } = await dbClient
         .from("blog_posts")
         .select("*")
         .eq("is_published", true)
         .order("published_at", { ascending: false });
       if (!error && data && data.length > 0) {
-        return data.map((item) => ({
+        const mapped = data.map((item) => ({
           id: item.id,
           title: item.title,
           slug: item.slug,
@@ -367,12 +644,160 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
           publishedAt: item.published_at,
           isPublished: item.is_published,
         }));
+        const existingSlugs = new Set(mapped.map((b) => b.slug));
+        const merged = [...mapped];
+        for (const item of dynamicBlogStore) {
+          if (!existingSlugs.has(item.slug)) {
+            merged.push(item);
+          }
+        }
+        for (const initPost of initialBlogPosts) {
+          if (!existingSlugs.has(initPost.slug) && !merged.some((m) => m.slug === initPost.slug)) {
+            merged.push(initPost);
+          }
+        }
+        return merged;
       }
     } catch {
       // Fallback
     }
   }
-  return initialBlogPosts;
+  return [...dynamicBlogStore];
+}
+
+let dynamicInquiriesStore: InquiryRecord[] = [
+  {
+    id: "inq-1",
+    name: "Sarah Jenkins",
+    email: "sarah@apexventures.co",
+    phone: "+1 (415) 555-0192",
+    projectType: "Full-Stack Web Application (Next.js/React)",
+    budgetRange: "$15,000 – $30,000 (Full-Stack Platform)",
+    message:
+      "We need an edge-deployed customer portal with Supabase authentication and Stripe subscription billing. Our target launch is 6 weeks.",
+    status: "new",
+    createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+  },
+  {
+    id: "inq-2",
+    name: "Marcus Thorne",
+    email: "m.thorne@cloudscale.io",
+    phone: "+1 (555) 019-2834",
+    projectType: "Database Optimization & Scale (PostgreSQL)",
+    budgetRange: "$5,000 – $15,000 (MVP / Feature Sprint)",
+    message:
+      "Our primary PostgreSQL database is hitting 90% CPU spikes during peak hours. Need an architectural query audit and indexing strategy.",
+    status: "reviewed",
+    createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
+  },
+];
+
+export async function getAllInquiriesAdmin(): Promise<InquiryRecord[]> {
+  const dbClient = getServiceSupabase() || supabase;
+  if (dbClient) {
+    try {
+      const { data, error } = await dbClient
+        .from("inquiries")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (!error && data && data.length > 0) {
+        const mapped: InquiryRecord[] = data.map((d: any) => ({
+          id: d.id,
+          name: d.name,
+          email: d.email,
+          phone: d.phone,
+          projectType: d.project_type,
+          budgetRange: d.budget_range,
+          message: d.message,
+          status: d.status || "new",
+          createdAt: d.created_at,
+        }));
+        const existingIds = new Set(mapped.map((i) => i.id));
+        for (const item of dynamicInquiriesStore) {
+          if (!existingIds.has(item.id)) {
+            mapped.push(item);
+          }
+        }
+        dynamicInquiriesStore = mapped;
+        return mapped;
+      }
+    } catch {
+      // Fallback
+    }
+  }
+  return [...dynamicInquiriesStore];
+}
+
+export async function recordInboundInquiry(
+  inquiry: Partial<InquiryRecord> & {
+    name: string;
+    email: string;
+    projectType: string;
+    message: string;
+  }
+): Promise<InquiryRecord> {
+  const fullRecord: InquiryRecord = {
+    id: inquiry.id || `inq-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    name: inquiry.name,
+    email: inquiry.email,
+    phone: inquiry.phone,
+    projectType: inquiry.projectType,
+    budgetRange: inquiry.budgetRange || "Flexible",
+    message: inquiry.message,
+    status: inquiry.status || "new",
+    createdAt: inquiry.createdAt || new Date().toISOString(),
+  };
+
+  const existingIdx = dynamicInquiriesStore.findIndex((i) => i.id === fullRecord.id);
+  if (existingIdx !== -1) {
+    dynamicInquiriesStore[existingIdx] = fullRecord;
+  } else {
+    dynamicInquiriesStore = [fullRecord, ...dynamicInquiriesStore];
+  }
+
+  return fullRecord;
+}
+
+export async function updateInquiryStatus(
+  id: string,
+  status: string,
+  notes?: string
+): Promise<InquiryRecord | null> {
+  await getAllInquiriesAdmin();
+  const index = dynamicInquiriesStore.findIndex((i) => i.id === id);
+  if (index === -1) return null;
+
+  const current = dynamicInquiriesStore[index];
+  const updated: InquiryRecord = {
+    ...current,
+    status: status as any,
+  };
+  dynamicInquiriesStore[index] = updated;
+
+  const dbClient = getServiceSupabase() || supabase;
+  if (dbClient) {
+    try {
+      await dbClient.from("inquiries").update({ status }).eq("id", id);
+    } catch {}
+  }
+
+  return updated;
+}
+
+export async function deleteInquiry(id: string): Promise<boolean> {
+  const prevLen = dynamicInquiriesStore.length;
+  dynamicInquiriesStore = dynamicInquiriesStore.filter((i) => i.id !== id);
+  const deleted = dynamicInquiriesStore.length < prevLen;
+
+  const dbClient = getServiceSupabase() || supabase;
+  if (dbClient) {
+    try {
+      await dbClient.from("inquiries").delete().eq("id", id);
+    } catch {}
+  }
+
+  return true;
 }
 
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | undefined> {

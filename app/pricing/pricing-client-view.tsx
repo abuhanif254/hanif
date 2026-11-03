@@ -969,7 +969,7 @@ export default function PricingClientView({
                                     type="tel"
                                     value={formState.phone}
                                     onChange={(e) => setFormState({ ...formState, phone: e.target.value })}
-                                    placeholder="+1 (555) 000-0000"
+                                    placeholder="+1 (555) 000-0000 or +880 1XXX-XXXXXX"
                                     style={{ width: "100%", padding: "10px", border: "1px solid #cbd5e1", borderRadius: "4px", fontSize: "14px" }}
                                   />
                                 </div>
@@ -1120,6 +1120,7 @@ export default function PricingClientView({
                       </h4>
                       <div style={{ fontSize: "12px", color: "#475569", lineHeight: "1.6" }}>
                         <div><strong>Email:</strong> <a href="mailto:abuhanifmain@gmail.com" style={{ color: "#2563eb" }}>abuhanifmain@gmail.com</a></div>
+                        <div><strong>Phone:</strong> <a href="tel:+8801724010261" style={{ color: "#2563eb" }}>+880 1724-010261</a></div>
                         <div><strong>Location:</strong> Dhaka, Bangladesh / Worldwide Remote</div>
                         <div><strong>GitHub:</strong> <a href="https://github.com/abuhanif254" target="_blank" rel="noopener noreferrer" style={{ color: "#2563eb" }}>abuhanif254</a></div>
                       </div>

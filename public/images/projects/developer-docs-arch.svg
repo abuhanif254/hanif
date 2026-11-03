@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg6" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#060b19" />
+      <stop offset="100%" stop-color="#071b2e" />
+    </linearGradient>
+    <pattern id="grid6" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.7" opacity="0.55" />
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg6)" />
+  <rect width="1200" height="630" fill="url(#grid6)" />
+
+  <!-- Top Header Banner -->
+  <rect x="48" y="36" width="1104" height="84" rx="10" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" />
+  <rect x="48" y="36" width="6" height="84" rx="3" fill="#06b6d4" />
+  <text x="76" y="68" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700" fill="#38bdf8" letter-spacing="1.5">SYSTEMS ARCHITECTURE BLUEPRINT • CASE STUDY 06</text>
+  <text x="76" y="100" font-family="'Inter', system-ui, sans-serif" font-size="26" font-weight="800" fill="#f8fafc">High-Performance Developer Documentation Engine</text>
+  <rect x="920" y="56" width="208" height="44" rx="8" fill="#064e3b" stroke="#10b981" stroke-width="1.2" />
+  <text x="1024" y="83" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#34d399" text-anchor="middle">100/100 Lighthouse • +140% Dur</text>
+
+  <!-- Pipeline Nodes -->
+  <!-- Node 1: MDX & OpenAPI AST Compiler -->
+  <rect x="56" y="185" width="210" height="230" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.5" />
+  <text x="161" y="220" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" fill="#94a3b8" text-anchor="middle">COMPILER TIER</text>
+  <text x="161" y="248" font-family="'Inter', sans-serif" font-size="18" font-weight="800" fill="#ffffff" text-anchor="middle">MDX / OpenAPI AST</text>
+  <rect x="78" y="270" width="166" height="32" rx="5" fill="#1e293b" />
+  <text x="161" y="291" font-family="'JetBrains Mono', monospace" font-size="12" fill="#38bdf8" text-anchor="middle">Turbopack AST Parser</text>
+  <rect x="78" y="312" width="166" height="32" rx="5" fill="#1e293b" />
+  <text x="161" y="333" font-family="'JetBrains Mono', monospace" font-size="12" fill="#cbd5e1" text-anchor="middle">Swagger 3.1 Ingestion</text>
+  <rect x="78" y="354" width="166" height="32" rx="5" fill="#1e293b" />
+  <text x="161" y="375" font-family="'JetBrains Mono', monospace" font-size="12" fill="#34d399" text-anchor="middle">Zero-JS Static Prerender</text>
+
+  <!-- Arrow 1 -->
+  <line x1="266" y1="300" x2="322" y2="300" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="5,4" />
+  <polygon points="322,294 334,300 322,306" fill="#38bdf8" />
+
+  <!-- Node 2: Hybrid Search Index -->
+  <rect x="334" y="185" width="225" height="230" rx="10" fill="#0f172a" stroke="#06b6d4" stroke-width="2" />
+  <text x="446" y="220" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" fill="#38bdf8" text-anchor="middle">HYBRID SEARCH</text>
+  <text x="446" y="248" font-family="'Inter', sans-serif" font-size="18" font-weight="800" fill="#ffffff" text-anchor="middle">Vector + BM25 Index</text>
+  <rect x="356" y="270" width="180" height="32" rx="5" fill="#1e293b" />
+  <text x="446" y="291" font-family="'JetBrains Mono', monospace" font-size="12" fill="#38bdf8" text-anchor="middle">Instant Cmd+K Palette</text>
+  <rect x="356" y="312" width="180" height="32" rx="5" fill="#1e293b" />
+  <text x="446" y="333" font-family="'JetBrains Mono', monospace" font-size="12" fill="#cbd5e1" text-anchor="middle">Algolia DocSearch Sync</text>
+  <rect x="356" y="354" width="180" height="32" rx="5" fill="#1e293b" />
+  <text x="446" y="375" font-family="'JetBrains Mono', monospace" font-size="12" fill="#34d399" text-anchor="middle">&lt; 12ms Query Response</text>
+
+  <!-- Arrow 2 -->
+  <line x1="559" y1="300" x2="615" y2="300" stroke="#06b6d4" stroke-width="2.5" stroke-dasharray="5,4" />
+  <polygon points="615,294 627,300 615,306" fill="#06b6d4" />
+
+  <!-- Node 3: Cloudflare Edge CDN Cache -->
+  <rect x="627" y="185" width="235" height="230" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" />
+  <text x="744" y="220" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" fill="#38bdf8" text-anchor="middle">GLOBAL EDGE TIER</text>
+  <text x="744" y="248" font-family="'Inter', sans-serif" font-size="18" font-weight="800" fill="#ffffff" text-anchor="middle">Cloudflare Edge CDN</text>
+  <rect x="649" y="270" width="190" height="32" rx="5" fill="#1e293b" />
+  <text x="744" y="291" font-family="'JetBrains Mono', monospace" font-size="12" fill="#38bdf8" text-anchor="middle">330+ Global PoPs</text>
+  <rect x="649" y="312" width="190" height="32" rx="5" fill="#1e293b" />
+  <text x="744" y="333" font-family="'JetBrains Mono', monospace" font-size="12" fill="#cbd5e1" text-anchor="middle">Sub-25ms Global TTFB</text>
+  <rect x="649" y="354" width="190" height="32" rx="5" fill="#1e293b" />
+  <text x="744" y="375" font-family="'JetBrains Mono', monospace" font-size="12" fill="#34d399" text-anchor="middle">Stale-While-Revalidate</text>
+
+  <!-- Arrow 3 -->
+  <line x1="862" y1="300" x2="918" y2="300" stroke="#10b981" stroke-width="2.5" stroke-dasharray="5,4" />
+  <polygon points="918,294 930,300 918,306" fill="#10b981" />
+
+  <!-- Node 4: Interactive API Playground Sandbox -->
+  <rect x="930" y="185" width="218" height="230" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="2" />
+  <text x="1039" y="220" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" fill="#34d399" text-anchor="middle">DEVELOPER EXPERIENCE</text>
+  <text x="1039" y="248" font-family="'Inter', sans-serif" font-size="18" font-weight="800" fill="#ffffff" text-anchor="middle">Live API Playground</text>
+  <rect x="952" y="270" width="174" height="32" rx="5" fill="#1e293b" />
+  <text x="1039" y="291" font-family="'JetBrains Mono', monospace" font-size="12" fill="#38bdf8" text-anchor="middle">cURL / Node / Python</text>
+  <rect x="952" y="312" width="174" height="32" rx="5" fill="#1e293b" />
+  <text x="1039" y="333" font-family="'JetBrains Mono', monospace" font-size="12" fill="#cbd5e1" text-anchor="middle">In-Browser Execution</text>
+  <rect x="952" y="354" width="174" height="32" rx="5" fill="#1e293b" />
+  <text x="1039" y="375" font-family="'JetBrains Mono', monospace" font-size="12" fill="#34d399" text-anchor="middle">WASM Fast Mock Server</text>
+
+  <!-- Bottom Telemetry Metrics Strip -->
+  <rect x="48" y="470" width="1104" height="112" rx="10" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" />
+  <text x="84" y="512" font-family="'JetBrains Mono', monospace" font-size="12" fill="#94a3b8">LIGHTHOUSE SCORE</text>
+  <text x="84" y="550" font-family="'Inter', sans-serif" font-size="28" font-weight="800" fill="#10b981">100 / 100 All Audits</text>
+
+  <text x="390" y="512" font-family="'JetBrains Mono', monospace" font-size="12" fill="#94a3b8">SEARCH LATENCY</text>
+  <text x="390" y="550" font-family="'Inter', sans-serif" font-size="28" font-weight="800" fill="#38bdf8">&lt; 12 ms P99</text>
+
+  <text x="680" y="512" font-family="'JetBrains Mono', monospace" font-size="12" fill="#94a3b8">SESSION RETENTION</text>
+  <text x="680" y="550" font-family="'Inter', sans-serif" font-size="28" font-weight="800" fill="#f8fafc">+140% Duration Lift</text>
+
+  <text x="970" y="512" font-family="'JetBrains Mono', monospace" font-size="12" fill="#94a3b8">ARCHITECT</text>
+  <text x="970" y="550" font-family="'Inter', sans-serif" font-size="22" font-weight="800" fill="#e2e8f0">Abu Hanif</text>
+</svg>
