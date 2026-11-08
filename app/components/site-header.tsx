@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import { Menu, X, Search } from "lucide-react";
 
 interface SiteHeaderProps {
   activePath?: string;
@@ -91,14 +92,20 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
       setIsVisible(true);
     }
 
+    function onCloseMobileMenu() {
+      setMobileMenuOpen(false);
+    }
+
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("open-command-palette", onOpenPalette);
     window.addEventListener("toggle-mobile-menu", onToggleMobileMenu);
+    window.addEventListener("close-mobile-menu", onCloseMobileMenu);
 
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("open-command-palette", onOpenPalette);
       window.removeEventListener("toggle-mobile-menu", onToggleMobileMenu);
+      window.removeEventListener("close-mobile-menu", onCloseMobileMenu);
     };
   }, []);
 
@@ -252,33 +259,40 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
               </Link>
             </div>
 
-            {/* Mobile Hamburger Button */}
-            <button
-              type="button"
-              className="mobile-menu-toggle-btn"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label={
-                mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"
-              }
-              aria-expanded={mobileMenuOpen}
-              style={{
-                display: "none",
-                position: "absolute",
-                right: "12px",
-                top: "16px",
-                background: "#0b132b",
-                color: "#ffffff",
-                border: "1px solid #1e293b",
-                borderRadius: "4px",
-                padding: "8px 12px",
-                fontSize: "14px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                zIndex: 100,
-              }}
-            >
-              {mobileMenuOpen ? "✕ Close" : "☰ Menu"}
-            </button>
+            {/* Mobile Actions Container (Search + Menu) */}
+            <div className="mobile-header-actions">
+              <button
+                type="button"
+                className="mobile-header-search-btn"
+                onClick={() => {
+                  if (typeof window !== "undefined") {
+                    window.dispatchEvent(new CustomEvent("open-command-palette"));
+                  }
+                }}
+                aria-label="Open Spotlight Search"
+                title="Search"
+              >
+                <Search size={19} />
+              </button>
+
+              <button
+                type="button"
+                className="mobile-menu-toggle-btn"
+                onClick={() => {
+                  const next = !mobileMenuOpen;
+                  setMobileMenuOpen(next);
+                  if (typeof window !== "undefined") {
+                    window.dispatchEvent(new CustomEvent(next ? "toggle-mobile-menu" : "close-mobile-menu"));
+                  }
+                }}
+                aria-label={
+                  mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"
+                }
+                aria-expanded={mobileMenuOpen}
+              >
+                {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              </button>
+            </div>
           </div>
 
           {/* Desktop Navigation */}
@@ -299,20 +313,48 @@ export default function SiteHeader({ activePath = "/" }: SiteHeaderProps) {
             </ul>
           </div>
 
+          {/* Mobile Backdrop Overlay */}
+          {mobileMenuOpen && (
+            <div
+              className="mobile-drawer-backdrop"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (typeof window !== "undefined") {
+                  window.dispatchEvent(new CustomEvent("close-mobile-menu"));
+                }
+              }}
+              style={{
+                position: "fixed",
+                inset: 0,
+                backgroundColor: "rgba(6, 11, 25, 0.72)",
+                backdropFilter: "blur(6px)",
+                WebkitBackdropFilter: "blur(6px)",
+                zIndex: 9990,
+              }}
+            />
+          )}
+
           {/* Mobile Drawer Navigation (Native App Style) */}
           {mobileMenuOpen && (
             <div
               className="mobile-nav-drawer"
               style={{
-                background: "#070f1e",
+                position: "fixed",
+                top: "60px",
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: "rgba(7, 15, 30, 0.98)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
                 borderTop: "2px solid #2563eb",
-                padding: "16px",
+                padding: "16px 16px calc(var(--app-dock-height, 74px) + 24px) 16px",
                 display: "flex",
                 flexDirection: "column",
                 gap: "10px",
-                maxHeight: "82vh",
                 overflowY: "auto",
                 boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
+                zIndex: 9995,
               }}
             >
               {/* Profile Card in Drawer */}

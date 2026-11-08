@@ -56,33 +56,32 @@ export default function CommandPalette() {
 
   return (
     <div
+      className="command-palette-backdrop"
       style={{
         position: "fixed",
         inset: 0,
         zIndex: 99999,
         backgroundColor: "rgba(4, 31, 54, 0.75)",
-        backdropFilter: "blur(4px)",
+        backdropFilter: "blur(6px)",
+        WebkitBackdropFilter: "blur(6px)",
         display: "flex",
         alignItems: "flex-start",
         justifyContent: "center",
-        padding: "min(80px, 8vh) 16px 20px 16px",
       }}
       onClick={(e) => {
         if (e.target === e.currentTarget) setOpen(false);
       }}
     >
       <div
+        className="command-palette-modal"
         style={{
           width: "100%",
-          maxWidth: "680px",
           backgroundColor: "#ffffff",
-          borderRadius: "8px",
           overflow: "hidden",
           boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px #2563eb",
           border: "2px solid #2563eb",
           display: "flex",
           flexDirection: "column",
-          maxHeight: "80vh",
         }}
       >
         <Command label="Global Command Palette">
@@ -91,39 +90,48 @@ export default function CommandPalette() {
             style={{
               display: "flex",
               alignItems: "center",
-              padding: "14px 18px",
+              padding: "12px 16px",
               borderBottom: "1px solid #e2e8f0",
               backgroundColor: "#f8fafc",
               gap: "10px",
             }}
           >
-            <span style={{ fontSize: "16px", color: "#2563eb" }}>🔍</span>
+            <span style={{ fontSize: "18px", color: "#2563eb", display: "inline-flex" }}>🔍</span>
             <Command.Input
               autoFocus
-              placeholder="Search projects, technical articles, topic pillars, pricing, or actions..."
+              placeholder="Search projects, lab, articles, pricing..."
               style={{
                 width: "100%",
                 border: "none",
                 outline: "none",
                 background: "transparent",
-                fontSize: "15px",
+                fontSize: "16px",
                 color: "#0f172a",
                 fontWeight: "500",
               }}
             />
-            <kbd
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
               style={{
-                fontSize: "11px",
-                padding: "2px 6px",
-                backgroundColor: "#e2e8f0",
+                minWidth: "40px",
+                minHeight: "40px",
+                padding: "4px 8px",
+                backgroundColor: "#f1f5f9",
                 color: "#475569",
-                borderRadius: "3px",
+                borderRadius: "6px",
                 border: "1px solid #cbd5e1",
-                fontFamily: "monospace",
+                fontSize: "12px",
+                fontWeight: 700,
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
+              title="Close search"
             >
-              ESC
-            </kbd>
+              Close
+            </button>
           </div>
 
           {/* Copied Feedback Alert */}
@@ -555,13 +563,39 @@ export default function CommandPalette() {
               alignItems: "center",
               fontSize: "12px",
               color: "#64748b",
+              flexWrap: "wrap",
+              gap: "8px",
             }}
           >
-            <div style={{ display: "flex", gap: "12px" }}>
+            <div className="hidden sm:flex" style={{ gap: "12px" }}>
               <span>Use <kbd style={{ padding: "1px 5px", backgroundColor: "#e2e8f0", borderRadius: "2px" }}>↑</kbd> <kbd style={{ padding: "1px 5px", backgroundColor: "#e2e8f0", borderRadius: "2px" }}>↓</kbd> to navigate</span>
               <span><kbd style={{ padding: "1px 5px", backgroundColor: "#e2e8f0", borderRadius: "2px" }}>↵</kbd> to select</span>
             </div>
-            <span>MD Abu Hanif Mia • Staff Software Engineer</span>
+            <div className="flex sm:hidden" style={{ gap: "6px", alignItems: "center" }}>
+              <span style={{ fontSize: "11px", fontWeight: "bold", color: "#2563eb" }}>Quick:</span>
+              <button
+                type="button"
+                onClick={() => runCommand(() => router.push("/projects"))}
+                style={{ fontSize: "11px", background: "#eff6ff", border: "1px solid #bfdbfe", padding: "3px 8px", borderRadius: "4px", color: "#1d4ed8", cursor: "pointer" }}
+              >
+                Projects
+              </button>
+              <button
+                type="button"
+                onClick={() => runCommand(() => router.push("/lab"))}
+                style={{ fontSize: "11px", background: "#eff6ff", border: "1px solid #bfdbfe", padding: "3px 8px", borderRadius: "4px", color: "#1d4ed8", cursor: "pointer" }}
+              >
+                Lab
+              </button>
+              <button
+                type="button"
+                onClick={() => runCommand(() => router.push("/pricing"))}
+                style={{ fontSize: "11px", background: "#eff6ff", border: "1px solid #bfdbfe", padding: "3px 8px", borderRadius: "4px", color: "#1d4ed8", cursor: "pointer" }}
+              >
+                Pricing
+              </button>
+            </div>
+            <span style={{ fontSize: "11px" }}>Abu Hanif • Staff Engineer</span>
           </div>
         </Command>
       </div>

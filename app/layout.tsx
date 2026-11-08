@@ -66,12 +66,19 @@ export const metadata: Metadata = {
     canonical: siteUrl,
   },
   manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Abu Hanif",
+  },
 };
 
 export const viewport = {
   themeColor: "#0b132b",
   width: "device-width",
   initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover" as const,
 };
 
 const jsonLd = {

@@ -1328,12 +1328,26 @@ export default function LabPostgresPlanner() {
         </div>
 
         {/* View Mode Tabs: Visual Query Plan Tree vs Raw Output vs DDL */}
-        <div style={{ borderBottom: "1px solid #e2e8f0", marginBottom: "16px", display: "flex", gap: "8px" }}>
+        <div
+          style={{
+            borderBottom: "1px solid #e2e8f0",
+            marginBottom: "16px",
+            display: "flex",
+            gap: "8px",
+            overflowX: "auto",
+            WebkitOverflowScrolling: "touch",
+            scrollbarWidth: "none",
+            flexWrap: "nowrap",
+          }}
+        >
           <button
             type="button"
             onClick={() => setActiveTab("visual_tree")}
             style={{
-              padding: "8px 16px",
+              padding: "10px 14px",
+              minHeight: "44px",
+              flexShrink: 0,
+              whiteSpace: "nowrap",
               border: "none",
               borderBottom: activeTab === "visual_tree" ? "2px solid #2563eb" : "2px solid transparent",
               color: activeTab === "visual_tree" ? "#2563eb" : "#64748b",
@@ -1349,7 +1363,10 @@ export default function LabPostgresPlanner() {
             type="button"
             onClick={() => setActiveTab("raw_plan")}
             style={{
-              padding: "8px 16px",
+              padding: "10px 14px",
+              minHeight: "44px",
+              flexShrink: 0,
+              whiteSpace: "nowrap",
               border: "none",
               borderBottom: activeTab === "raw_plan" ? "2px solid #2563eb" : "2px solid transparent",
               color: activeTab === "raw_plan" ? "#2563eb" : "#64748b",
@@ -1365,7 +1382,10 @@ export default function LabPostgresPlanner() {
             type="button"
             onClick={() => setActiveTab("ddl")}
             style={{
-              padding: "8px 16px",
+              padding: "10px 14px",
+              minHeight: "44px",
+              flexShrink: 0,
+              whiteSpace: "nowrap",
               border: "none",
               borderBottom: activeTab === "ddl" ? "2px solid #2563eb" : "2px solid transparent",
               color: activeTab === "ddl" ? "#2563eb" : "#64748b",
@@ -1400,8 +1420,8 @@ export default function LabPostgresPlanner() {
                     border: node.isHotspot ? "1px solid #fecaca" : "1px solid #e2e8f0",
                     borderLeft: node.isHotspot ? "4px solid #ef4444" : "4px solid #10b981",
                     borderRadius: "6px",
-                    padding: "12px 16px",
-                    marginLeft: `${idx * 16}px`,
+                    padding: "12px 14px",
+                    marginLeft: `clamp(0px, ${idx * 2}vw, ${idx * 12}px)`,
                   }}
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }}>

@@ -81,7 +81,7 @@ export default function SystemsLabPage() {
                   <div id="img1">
                     <div className="banner-text-wrapper">
                       <div>
-                        <h1 style={{ margin: 0, fontSize: "28px", textTransform: "uppercase", letterSpacing: "1px" }}>
+                        <h1 className="subpage-banner-title" style={{ margin: 0, textTransform: "uppercase", letterSpacing: "1px" }}>
                           Interactive Systems Architecture Lab
                         </h1>
                         <p style={{ margin: "8px 0 0 0", fontSize: "14px", fontWeight: "normal", color: "#e2e8f0" }}>

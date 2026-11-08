@@ -510,6 +510,7 @@ export default function CaseStudyArchitectureViewer({
   const [chaosState, setChaosState] = useState<"idle" | "running" | "recovered">("idle");
   const [visibleLogCount, setVisibleLogCount] = useState<number>(0);
   const [copiedCode, setCopiedCode] = useState<boolean>(false);
+  const [showBlueprintModal, setShowBlueprintModal] = useState<boolean>(false);
 
   // Benchmark Simulator State
   const benchmarkData = getProjectBenchmarkData(arch.projectSlug);
@@ -636,12 +637,7 @@ export default function CaseStudyArchitectureViewer({
   }
 
   function handlePrintBlueprint() {
-    if (typeof window === "undefined") return;
-    const printWindow = window.open("", "_blank", "width=960,height=1000");
-    if (!printWindow) return;
-    const html = generateArchitectureBlueprintHtml(arch);
-    printWindow.document.write(html);
-    printWindow.document.close();
+    setShowBlueprintModal(true);
   }
 
   return (
@@ -848,13 +844,17 @@ export default function CaseStudyArchitectureViewer({
           backgroundColor: "#f1f5f9",
           borderBottom: "1px solid #cbd5e1",
           overflowX: "auto",
+          WebkitOverflowScrolling: "touch",
+          scrollbarWidth: "none",
+          flexWrap: "nowrap",
         }}
       >
         <button
           type="button"
           onClick={() => setActiveTab("topology")}
           style={{
-            flex: 1,
+            flex: "0 0 auto",
+            minHeight: "44px",
             padding: "12px 16px",
             fontSize: "13px",
             fontWeight: 700,
@@ -874,7 +874,8 @@ export default function CaseStudyArchitectureViewer({
           type="button"
           onClick={() => setActiveTab("dataflow")}
           style={{
-            flex: 1,
+            flex: "0 0 auto",
+            minHeight: "44px",
             padding: "12px 16px",
             fontSize: "13px",
             fontWeight: 700,
@@ -894,7 +895,8 @@ export default function CaseStudyArchitectureViewer({
           type="button"
           onClick={() => setActiveTab("chaos")}
           style={{
-            flex: 1,
+            flex: "0 0 auto",
+            minHeight: "44px",
             padding: "12px 16px",
             fontSize: "13px",
             fontWeight: 700,
@@ -914,7 +916,8 @@ export default function CaseStudyArchitectureViewer({
           type="button"
           onClick={() => setActiveTab("tradeoffs")}
           style={{
-            flex: 1,
+            flex: "0 0 auto",
+            minHeight: "44px",
             padding: "12px 16px",
             fontSize: "13px",
             fontWeight: 700,
@@ -934,7 +937,8 @@ export default function CaseStudyArchitectureViewer({
           type="button"
           onClick={() => setActiveTab("benchmarks")}
           style={{
-            flex: 1,
+            flex: "0 0 auto",
+            minHeight: "44px",
             padding: "12px 16px",
             fontSize: "13px",
             fontWeight: 700,
@@ -2209,6 +2213,134 @@ export default function CaseStudyArchitectureViewer({
           </Link>
         </div>
       </div>
+
+      {/* Mobile-Friendly Architecture Blueprint Modal */}
+      {showBlueprintModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Architecture Blueprint Dossier"
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 99999,
+            backgroundColor: "rgba(11, 19, 43, 0.82)",
+            backdropFilter: "blur(6px)",
+            WebkitBackdropFilter: "blur(6px)",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-end",
+          }}
+          onClick={() => setShowBlueprintModal(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              backgroundColor: "#ffffff",
+              borderTopLeftRadius: "16px",
+              borderTopRightRadius: "16px",
+              width: "100%",
+              maxWidth: "1000px",
+              margin: "0 auto",
+              height: "90vh",
+              maxHeight: "92vh",
+              display: "flex",
+              flexDirection: "column",
+              boxShadow: "0 -8px 32px rgba(0,0,0,0.35)",
+              overflow: "hidden",
+            }}
+          >
+            {/* Modal Header */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "14px 18px",
+                borderBottom: "1px solid #1e293b",
+                backgroundColor: "#0b132b",
+                color: "#ffffff",
+                gap: "10px",
+                flexWrap: "wrap",
+              }}
+            >
+              <div>
+                <div style={{ fontSize: "11px", fontWeight: 700, color: "#38bdf8", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  Verified Architecture Specification
+                </div>
+                <div style={{ fontSize: "14px", fontWeight: 800, color: "#ffffff" }}>
+                  {arch.title} Blueprint
+                </div>
+              </div>
+
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const iframe = document.getElementById("blueprint-modal-frame") as HTMLIFrameElement;
+                    if (iframe && iframe.contentWindow) {
+                      iframe.contentWindow.focus();
+                      iframe.contentWindow.print();
+                    } else {
+                      window.print();
+                    }
+                  }}
+                  style={{
+                    backgroundColor: "#2563eb",
+                    color: "#ffffff",
+                    border: "none",
+                    padding: "8px 14px",
+                    borderRadius: "6px",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    minHeight: "44px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  🖨️ Print / Save PDF
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowBlueprintModal(false)}
+                  style={{
+                    backgroundColor: "rgba(255, 255, 255, 0.12)",
+                    color: "#ffffff",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                    padding: "8px 14px",
+                    borderRadius: "6px",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    minHeight: "44px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                  }}
+                >
+                  ✕ Close
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body / Iframe View */}
+            <div style={{ flex: 1, overflow: "hidden", backgroundColor: "#f8fafc" }}>
+              <iframe
+                id="blueprint-modal-frame"
+                srcDoc={generateArchitectureBlueprintHtml(arch)}
+                title={`Blueprint Dossier - ${arch.title}`}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  border: "none",
+                  backgroundColor: "#ffffff",
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -616,5 +616,16 @@ footer#footer.global-site-footer a:after {
   .legal-meta-row {
     flex-direction: column !important;
     align-items: flex-start !important;
+    gap: 12px !important;
+  }
+  .global-footer-legal {
+    padding-bottom: calc(var(--app-dock-height, 68px) + var(--sab, 0px) + 28px) !important;
+  }
+  .compliance-links a,
+  .admin-access-link {
+    min-height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 6px 0 !important;
   }
 }

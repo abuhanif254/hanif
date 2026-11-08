@@ -96,7 +96,7 @@ export default function StatusPage() {
                         <span style={{ fontSize: "12px", color: "#38bdf8", fontWeight: 800, textTransform: "uppercase", letterSpacing: "1px" }}>
                           Production Telemetry &bull; Empirical Observability
                         </span>
-                        <h1 style={{ margin: "4px 0 0 0", fontSize: "28px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                        <h1 className="subpage-banner-title" style={{ margin: "4px 0 0 0", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                           Live Systems Status &amp; Edge Health
                         </h1>
                         <p style={{ margin: "8px 0 0 0", fontSize: "14px", fontWeight: "normal", color: "#e2e8f0" }}>

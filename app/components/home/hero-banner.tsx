@@ -281,6 +281,7 @@ export default function HeroBanner() {
 
           {/* Interactive Workspace Navigation Tabs */}
           <div
+            className="hero-slider-tabs-container"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -291,6 +292,9 @@ export default function HeroBanner() {
               borderRadius: "24px",
               backdropFilter: "blur(10px)",
               boxShadow: "0 4px 14px rgba(0,0,0,0.4)",
+              maxWidth: "100%",
+              overflowX: "auto",
+              WebkitOverflowScrolling: "touch",
             }}
           >
             {heroSlides.map((slide, idx) => {
@@ -307,7 +311,7 @@ export default function HeroBanner() {
                     color: isCurrent ? "#ffffff" : "#94a3b8",
                     border: "none",
                     borderRadius: "16px",
-                    padding: "4px 10px",
+                    padding: "6px 12px",
                     fontSize: "11px",
                     fontWeight: isCurrent ? 700 : 500,
                     cursor: "pointer",
@@ -316,6 +320,9 @@ export default function HeroBanner() {
                     gap: "5px",
                     transition: "all 0.2s ease",
                     boxShadow: isCurrent ? "0 2px 8px rgba(37,99,235,0.5)" : "none",
+                    whiteSpace: "nowrap",
+                    flexShrink: 0,
+                    minHeight: "36px",
                   }}
                 >
                   <span
@@ -518,11 +525,12 @@ export default function HeroBanner() {
             <div
               className="hero-action-buttons"
               style={{
-                marginTop: "12px",
+                marginTop: "14px",
                 display: "flex",
                 alignItems: "center",
                 gap: "10px",
                 flexWrap: "wrap",
+                width: "100%",
               }}
             >
               <Link
@@ -532,16 +540,17 @@ export default function HeroBanner() {
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "6px",
-                  minHeight: "38px",
-                  padding: "8px 16px",
+                  minHeight: "44px",
+                  padding: "10px 18px",
                   background: "#2563eb",
                   color: "#ffffff",
-                  borderRadius: "6px",
+                  borderRadius: "8px",
                   fontWeight: 700,
                   fontSize: "13px",
                   textDecoration: "none",
                   boxShadow: "0 2px 10px rgba(37,99,235,0.4)",
                   transition: "all 0.15s ease",
+                  flex: "1 1 140px",
                 }}
               >
                 Explore Case Studies ⚡
@@ -554,16 +563,17 @@ export default function HeroBanner() {
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "6px",
-                  minHeight: "38px",
-                  padding: "8px 15px",
+                  minHeight: "44px",
+                  padding: "10px 16px",
                   background: "rgba(15, 23, 42, 0.88)",
                   color: "#f8fafc",
                   border: "1px solid #38bdf8",
-                  borderRadius: "6px",
+                  borderRadius: "8px",
                   fontWeight: 600,
                   fontSize: "13px",
                   textDecoration: "none",
                   transition: "all 0.15s ease",
+                  flex: "1 1 140px",
                 }}
               >
                 Instant SOW Builder 📋
@@ -576,16 +586,17 @@ export default function HeroBanner() {
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "6px",
-                  minHeight: "38px",
-                  padding: "8px 15px",
+                  minHeight: "44px",
+                  padding: "10px 16px",
                   background: "rgba(15, 23, 42, 0.6)",
                   color: "#cbd5e1",
                   border: "1px solid #475569",
-                  borderRadius: "6px",
+                  borderRadius: "8px",
                   fontWeight: 600,
                   fontSize: "13px",
                   textDecoration: "none",
                   transition: "all 0.15s ease",
+                  flex: "1 1 100%",
                 }}
               >
                 Book Discovery Call 📅

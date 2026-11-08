@@ -1405,34 +1405,12 @@ ${submitNotes || "Please review this configured SOW and schedule our 30-minute t
       {/* SOW Submission for Architect Review Modal */}
       {isSubmitModalOpen && (
         <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            backgroundColor: "rgba(11, 25, 44, 0.75)",
-            backdropFilter: "blur(4px)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 9999,
-            padding: "16px",
-          }}
+          className="sow-modal-backdrop"
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsSubmitModalOpen(false);
           }}
         >
-          <div
-            style={{
-              backgroundColor: "#ffffff",
-              borderRadius: "10px",
-              maxWidth: "540px",
-              width: "100%",
-              maxHeight: "90vh",
-              overflowY: "auto",
-              boxShadow: "0 20px 40px rgba(0, 0, 0, 0.25)",
-              border: "1px solid #cbd5e1",
-              padding: "24px",
-            }}
-          >
+          <div className="sow-modal-sheet">
             <div
               style={{
                 display: "flex",

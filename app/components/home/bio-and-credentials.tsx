@@ -1,8 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
+import { Award, ChevronDown, ChevronUp, ExternalLink, ShieldCheck } from "lucide-react";
 
 export default function BioAndCredentials() {
+  const [isBioExpanded, setIsBioExpanded] = useState(false);
+
   function handleOpenCertificate(e: React.MouseEvent) {
     e.preventDefault();
     if (typeof window !== "undefined") {
@@ -13,7 +17,7 @@ export default function BioAndCredentials() {
 
   return (
     <>
-      {/* Desktop Profile Pic Float */}
+      {/* Desktop Profile Pic Float (Hidden on Mobile) */}
       <div className="profilepic-wrap-desktop" style={{ position: "relative", float: "right", margin: "0 0 20px 24px" }}>
         <div
           style={{
@@ -43,189 +47,171 @@ export default function BioAndCredentials() {
         </div>
       </div>
 
-      {/* Facebook-Style Native Mobile Profile Card (Visible on <= 768px only) */}
-      <div className="mobile-profile-card">
-        <div style={{ position: "relative", width: "96px", height: "96px", marginBottom: "12px" }}>
-          <Image
-            src="/images/profile.png"
-            alt="MD Abu Hanif Mia"
-            width={96}
-            height={96}
-            style={{
-              width: "100%",
-              height: "100%",
-              borderRadius: "50%",
-              objectFit: "cover",
-              border: "3px solid #2563eb",
-              boxShadow: "0 4px 12px rgba(11,25,44,0.25)",
-            }}
-          />
-          <span
-            style={{
-              position: "absolute",
-              bottom: "2px",
-              right: "2px",
-              backgroundColor: "#10b981",
-              color: "#050e1d",
-              borderRadius: "50%",
-              width: "22px",
-              height: "22px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "12px",
-              fontWeight: "900",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
-            }}
-          >
-            ✓
+      {/* Section Header */}
+      <div className="bio-section-header" style={{ marginBottom: "16px" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", backgroundColor: "#eff6ff", border: "1px solid #bfdbfe", padding: "4px 10px", borderRadius: "20px", marginBottom: "8px" }}>
+          <ShieldCheck size={14} className="text-blue-600" />
+          <span style={{ fontSize: "11px", fontWeight: "800", color: "#1d4ed8", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+            Verified Systems Architect
           </span>
         </div>
-        <h2 style={{ fontSize: "20px", margin: "0 0 4px 0", color: "#0f172a", fontWeight: "800" }}>
+        <h1 id="about" className="heading-about-desktop" style={{ margin: "4px 0 2px 0", color: "#0f172a", fontSize: "24px", fontWeight: "800" }}>
           MD Abu Hanif Mia (Abu Hanif)
-        </h2>
-        <span style={{ fontSize: "12px", fontWeight: "700", color: "#2563eb", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>
+        </h1>
+        <strong className="heading4 heading-title-desktop" style={{ color: "#2563eb", margin: "0 0 14px 0", display: "block", fontSize: "14px" }}>
           Staff Software Engineer &amp; Systems Architect
-        </span>
-        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "6px", marginBottom: "12px" }}>
-          <span style={{ fontSize: "11px", fontWeight: "700", background: "#ecfdf5", color: "#047857", border: "1px solid #a7f3d0", padding: "3px 8px", borderRadius: "12px" }}>
-            ● Available for Contracts
-          </span>
-          <span style={{ fontSize: "11px", fontWeight: "700", background: "#f1f5f9", color: "#0f172a", border: "1px solid #cbd5e1", padding: "3px 8px", borderRadius: "12px" }}>
-            Batch-12 • ID: WEB12-3991
-          </span>
+        </strong>
+      </div>
+
+      {/* Primary Bio Paragraphs (Always Visible) */}
+      <div className="bio-text-container" style={{ color: "#334155", fontSize: "14.5px", lineHeight: "1.7" }}>
+        <p style={{ margin: "0 0 14px 0" }}>
+          <strong>MD Abu Hanif Mia</strong> (known professionally as <strong>Abu Hanif</strong>) is a{" "}
+          <strong>Staff Software Engineer and Systems Architect</strong> holding a{" "}
+          <strong>Bachelor of Science in Computer Science &amp; Engineering (B.Sc. in CSE)</strong> with over 9 years of
+          hands-on experience designing high-concurrency, fault-tolerant production platforms for startups and enterprise
+          organizations worldwide. He combines modern <strong>Next.js 16 App Router</strong>,{" "}
+          <strong>React 19</strong>, and <strong>Cloudflare Edge</strong> delivery with low-level systems programming in{" "}
+          <strong>Rust (Tokio/Axum)</strong>, <strong>Go</strong>, and high-throughput <strong>PostgreSQL 16</strong>{" "}
+          database architecture. Formally recognized with the{" "}
+          <em>Certificate of Completion with Excellence</em> from <strong>Programming Hero</strong> (Batch-12 •{" "}
+          <code style={{ background: "#f1f5f9", padding: "1px 5px", borderRadius: "3px", fontSize: "12px", color: "#0f172a" }}>WEB12-3991</code>) and verified <strong>freeCodeCamp</strong> accreditations across JavaScript,
+          TypeScript, and Python, he pairs deep computer science fundamentals with rapid full-stack execution.
+        </p>
+
+        <p style={{ margin: "0 0 14px 0" }}>
+          Specializing in distributed systems, PostgreSQL query tuning, Cloudflare Pages, and memory-safe concurrent
+          backends, Abu Hanif operates at the intersection of clean architecture, database performance, and edge network
+          delivery. Whether eliminating complex architectural bottlenecks, restructuring legacy codebases, or
+          deploying new greenfield products from technical requirements to production, Abu Hanif brings over 9 years
+          of battle-tested engineering leadership. Every system is built with high observability, rigorous test
+          coverage, and strict performance SLAs.
+        </p>
+
+        {/* Expandable Extended Bio on Mobile */}
+        <div className={`bio-extended-content ${isBioExpanded ? "block" : "hidden md:block"}`}>
+          <p style={{ margin: "0 0 14px 0" }}>
+            His core technical philosophy centers on empirical proof of execution: avoiding over-engineered microservice
+            sprawl in favor of modular monoliths, pushing computation to the edge via Cloudflare Workers &amp; Pages, and
+            extracting maximum throughput from PostgreSQL through connection pooling with PgBouncer, covering indexes, and
+            write-ahead log (WAL) change-data-capture streaming.
+          </p>
+          <p style={{ margin: "0 0 14px 0" }}>
+            Beyond systems engineering, Abu Hanif works closely with CTOs, VP of Engineering, and technical founders
+            offering fixed-scope sprint execution, zero-budget-creep Statements of Work, and fractional Staff Engineer
+            retainers. All deliverables include automated CI/CD pipelines, architectural RFC specifications, full test
+            suites, and guaranteed 30-day post-launch warranty support.
+          </p>
         </div>
-        <div style={{ display: "flex", width: "100%", gap: "8px" }}>
-          <a
-            href="#contactform"
-            style={{
-              flex: 1,
-              padding: "10px",
-              backgroundColor: "#2563eb",
-              color: "#ffffff",
-              borderRadius: "4px",
-              fontWeight: "700",
-              fontSize: "12px",
-              textDecoration: "none",
-              textAlign: "center",
-            }}
-          >
-            Discuss Project &rsaquo;
-          </a>
+
+        {/* Mobile Accordion Toggle Button */}
+        <div className="md:hidden" style={{ margin: "10px 0 20px 0" }}>
           <button
             type="button"
-            onClick={handleOpenCertificate}
+            onClick={() => setIsBioExpanded(!isBioExpanded)}
             style={{
-              flex: 1,
-              padding: "10px",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "6px",
+              width: "100%",
+              minHeight: "44px",
+              padding: "10px 16px",
               backgroundColor: "#f1f5f9",
-              color: "#0f172a",
               border: "1px solid #cbd5e1",
-              borderRadius: "4px",
-              fontWeight: "700",
-              fontSize: "12px",
+              borderRadius: "8px",
+              color: "#0f172a",
+              fontWeight: 700,
+              fontSize: "13px",
               cursor: "pointer",
+              transition: "background-color 0.15s ease",
             }}
           >
-            Inspect Certificate ↗
+            {isBioExpanded ? (
+              <>
+                <span>Show Compact Overview</span>
+                <ChevronUp size={16} />
+              </>
+            ) : (
+              <>
+                <span>Read Full Architectural Bio</span>
+                <ChevronDown size={16} />
+              </>
+            )}
           </button>
         </div>
       </div>
-
-      <h1 id="about" className="heading-about-desktop" style={{ marginTop: 0, color: "#0f172a" }}>
-        MD Abu Hanif Mia (Abu Hanif)
-      </h1>
-      <strong className="heading4 heading-title-desktop" style={{ color: "#2563eb", marginTop: 0, display: "block" }}>
-        Staff Software Engineer &amp; Systems Architect
-      </strong>
-
-      <p style={{ lineHeight: "1.7", color: "#334155" }}>
-        <strong>MD Abu Hanif Mia</strong> (known professionally as <strong>Abu Hanif</strong>) is a{" "}
-        <strong>Staff Software Engineer and Systems Architect</strong> holding a{" "}
-        <strong>Bachelor of Science in Computer Science &amp; Engineering (B.Sc. in CSE)</strong> with over 9 years of
-        hands-on experience designing high-concurrency, fault-tolerant production platforms for startups and enterprise
-        organizations worldwide. He combines modern <strong>Next.js 16 App Router</strong>,{" "}
-        <strong>React 19</strong>, and <strong>Cloudflare Edge</strong> delivery with low-level systems programming in{" "}
-        <strong>Rust (Tokio/Axum)</strong>, <strong>Go</strong>, and high-throughput <strong>PostgreSQL 16</strong>{" "}
-        database architecture. Formally recognized with the{" "}
-        <em>Certificate of Completion with Excellence</em> from <strong>Programming Hero</strong> (Batch-12 •{" "}
-        <code>WEB12-3991</code>) and verified <strong>freeCodeCamp</strong> accreditations across JavaScript,
-        TypeScript, and Python, he pairs deep computer science fundamentals with rapid full-stack execution.
-      </p>
-      <p style={{ lineHeight: "1.7", color: "#334155" }}>
-        Specializing in distributed systems, PostgreSQL query tuning, Cloudflare Pages, and memory-safe concurrent
-        backends, Abu Hanif operates at the intersection of clean architecture, database performance, and edge network
-        delivery. Whether eliminating complex architectural bottlenecks, restructuring legacy codebases, or
-        deploying new greenfield products from technical requirements to production, Abu Hanif brings over 9 years
-        of battle-tested engineering leadership. Every system is built with high observability, rigorous test
-        coverage, and strict performance SLAs.
-      </p>
 
       {/* VERIFIED CERTIFICATIONS & ACCREDITATIONS SECTION */}
       <div
         id="competencies"
         style={{
-          margin: "32px 0",
+          margin: "24px 0",
           background: "#ffffff",
           border: "1px solid #e2e8f0",
           borderTop: "4px solid #2563eb",
-          borderRadius: "8px",
-          padding: "24px 28px",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+          borderRadius: "10px",
+          padding: "20px",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
         }}
       >
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "baseline",
+            alignItems: "center",
             flexWrap: "wrap",
             gap: "10px",
             marginBottom: "14px",
             borderBottom: "1px solid #e2e8f0",
-            paddingBottom: "10px",
+            paddingBottom: "12px",
           }}
         >
           <div>
             <h3
               style={{
                 margin: 0,
-                fontSize: "18px",
+                fontSize: "16px",
                 color: "#0f172a",
                 textTransform: "uppercase",
                 letterSpacing: "0.5px",
                 fontWeight: "800",
               }}
             >
-              Verified Certifications &amp; Technical Accreditations
+              Verified Accreditations &amp; Credentials
             </h3>
-            <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "#475569" }}>
-              Formally accredited training and verified software development credentials:
+            <p style={{ margin: "2px 0 0 0", fontSize: "12.5px", color: "#64748b" }}>
+              Formally accredited development distinctions and verified technical certifications:
             </p>
           </div>
           <button
             type="button"
             onClick={handleOpenCertificate}
             style={{
-              fontSize: "12px",
+              fontSize: "12.5px",
               fontWeight: "bold",
-              color: "#0f172a",
-              background: "#f1f5f9",
-              border: "1px solid #cbd5e1",
-              padding: "6px 14px",
-              borderRadius: "4px",
+              color: "#2563eb",
+              background: "#eff6ff",
+              border: "1px solid #bfdbfe",
+              padding: "8px 14px",
+              borderRadius: "6px",
               cursor: "pointer",
+              minHeight: "44px",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
             }}
           >
-            🔍 Expand Certificate Modal
+            <Award size={16} />
+            <span>Inspect Full Certificate</span>
           </button>
         </div>
 
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-            gap: "16px",
+            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gap: "14px",
           }}
         >
           {/* Credential 1: Programming Hero */}
@@ -233,7 +219,7 @@ export default function BioAndCredentials() {
             style={{
               background: "#ffffff",
               border: "1px solid #e2e8f0",
-              borderRadius: "6px",
+              borderRadius: "8px",
               padding: "16px",
               display: "flex",
               flexDirection: "column",
@@ -246,7 +232,7 @@ export default function BioAndCredentials() {
                 style={{
                   position: "relative",
                   marginBottom: "10px",
-                  borderRadius: "4px",
+                  borderRadius: "6px",
                   overflow: "hidden",
                   border: "1px solid #2563eb",
                   background: "#f1f5f9",
@@ -260,39 +246,41 @@ export default function BioAndCredentials() {
                   height={220}
                   style={{ width: "100%", height: "auto", display: "block" }}
                 />
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    background: "rgba(11,25,44,0.45)",
-                    opacity: 0,
-                    transition: "opacity 0.2s",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "#fff",
-                    fontWeight: "bold",
-                    fontSize: "12px",
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
-                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "0")}
-                >
-                  🔍 Click to Inspect Full Size
-                </div>
               </div>
-              <span style={{ fontSize: "11px", fontWeight: 800, color: "#2563eb", textTransform: "uppercase" }}>
+
+              <div
+                style={{
+                  display: "inline-block",
+                  padding: "3px 8px",
+                  background: "#fef3c7",
+                  color: "#92400e",
+                  fontWeight: "bold",
+                  fontSize: "11px",
+                  borderRadius: "4px",
+                  marginBottom: "6px",
+                }}
+              >
+                ★ Batch-12 Distinction
+              </div>
+              <span
+                style={{
+                  fontSize: "11px",
+                  fontWeight: 800,
+                  color: "#2563eb",
+                  textTransform: "uppercase",
+                  display: "block",
+                }}
+              >
                 Programming Hero
               </span>
-              <h4 style={{ margin: "2px 0 4px 0", fontSize: "14px", color: "#0f172a" }}>
+              <h4 style={{ margin: "2px 0 4px 0", fontSize: "14px", color: "#0f172a", fontWeight: "700" }}>
                 Complete Web Development Course with Excellence
               </h4>
-              <div style={{ fontSize: "11.5px", color: "#334155", fontWeight: 700, marginBottom: "6px" }}>
-                Batch-12 • Credential ID:{" "}
-                <span style={{ fontFamily: "monospace", color: "#2563eb" }}>WEB12-3991</span>
-              </div>
-              <p style={{ margin: 0, fontSize: "12px", color: "#475569", lineHeight: "1.5" }}>
-                Rigorous training across modern JavaScript, React, HTML5/CSS3, asynchronous state handling, and
-                multi-tier production projects under CEO Jhankar Mahbub.
+              <p style={{ margin: "0 0 6px 0", fontSize: "11.5px", color: "#047857", fontWeight: "bold" }}>
+                Credential ID: WEB12-3991 • Certified by CEO Jhankar Mahbub
+              </p>
+              <p style={{ margin: "0", fontSize: "12px", color: "#475569", lineHeight: "1.5" }}>
+                Distinction certified across modern JavaScript (ES6+), React 19, HTML5/CSS3 responsive layouts, asynchronous state handling, and multi-tier production architectures.
               </p>
             </div>
             <div style={{ marginTop: "12px", paddingTop: "8px", borderTop: "1px dotted #e2e8f0" }}>
@@ -302,15 +290,19 @@ export default function BioAndCredentials() {
                 style={{
                   background: "none",
                   border: "none",
-                  padding: 0,
-                  fontSize: "12px",
-                  fontWeight: "bold",
                   color: "#2563eb",
-                  textDecoration: "underline",
+                  fontSize: "12.5px",
+                  fontWeight: "700",
                   cursor: "pointer",
+                  padding: 0,
+                  minHeight: "44px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
                 }}
               >
-                Verify &amp; View Credential ›
+                <span>Verify &amp; View Credential</span>
+                <ExternalLink size={14} />
               </button>
             </div>
           </div>
@@ -320,7 +312,7 @@ export default function BioAndCredentials() {
             style={{
               background: "#ffffff",
               border: "1px solid #e2e8f0",
-              borderRadius: "6px",
+              borderRadius: "8px",
               padding: "16px",
               display: "flex",
               flexDirection: "column",
@@ -332,11 +324,11 @@ export default function BioAndCredentials() {
                 style={{
                   display: "inline-block",
                   padding: "3px 8px",
-                  background: "#070f1e",
-                  color: "#fde047",
+                  background: "#0a0a23",
+                  color: "#facc15",
                   fontWeight: "bold",
                   fontSize: "11px",
-                  borderRadius: "3px",
+                  borderRadius: "4px",
                   marginBottom: "8px",
                 }}
               >
@@ -353,21 +345,18 @@ export default function BioAndCredentials() {
               >
                 freeCodeCamp
               </span>
-              <h4 style={{ margin: "2px 0 6px 0", fontSize: "14px", color: "#0f172a" }}>
+              <h4 style={{ margin: "2px 0 6px 0", fontSize: "14px", color: "#0f172a", fontWeight: "700" }}>
                 JavaScript, TypeScript &amp; Python Accreditations
               </h4>
-              <ul style={{ margin: "0 0 10px 16px", padding: 0, fontSize: "12px", color: "#475569", lineHeight: "1.5" }}>
+              <ul style={{ margin: "0 0 10px 16px", padding: 0, fontSize: "12px", color: "#475569", lineHeight: "1.55" }}>
                 <li>
-                  <strong>JavaScript Algorithms &amp; Data Structures:</strong> Algorithmic problem solving, recursion,
-                  OOP &amp; functional programming.
+                  <strong>JavaScript Algorithms &amp; Data Structures:</strong> Algorithmic problem solving, recursion, OOP &amp; functional programming.
                 </li>
                 <li>
-                  <strong>TypeScript Platform Development:</strong> Static typing, generics, strict compiler configs,
-                  and interface design.
+                  <strong>TypeScript Platform Development:</strong> Static typing, generics, strict compiler configs, and interface design.
                 </li>
                 <li>
-                  <strong>Scientific Computing with Python:</strong> Data manipulation, automation scripting, algorithms,
-                  and backend utilities.
+                  <strong>Scientific Computing with Python:</strong> Data manipulation, automation scripting, algorithms, and backend utilities.
                 </li>
               </ul>
             </div>
@@ -390,7 +379,7 @@ export default function BioAndCredentials() {
             style={{
               background: "#ffffff",
               border: "1px solid #e2e8f0",
-              borderRadius: "6px",
+              borderRadius: "8px",
               padding: "16px",
               display: "flex",
               flexDirection: "column",
@@ -406,7 +395,7 @@ export default function BioAndCredentials() {
                   color: "#fb923c",
                   fontWeight: "bold",
                   fontSize: "11px",
-                  borderRadius: "3px",
+                  borderRadius: "4px",
                   marginBottom: "8px",
                 }}
               >
@@ -423,64 +412,24 @@ export default function BioAndCredentials() {
               >
                 Systems Architecture
               </span>
-              <h4 style={{ margin: "2px 0 6px 0", fontSize: "14px", color: "#0f172a" }}>
+              <h4 style={{ margin: "2px 0 6px 0", fontSize: "14px", color: "#0f172a", fontWeight: "700" }}>
                 Rust &amp; Go Production Pipelines
               </h4>
               <p style={{ margin: "0 0 8px 0", fontSize: "12px", color: "#475569", lineHeight: "1.5" }}>
                 Engineering zero-cost abstractions, fearless memory safety without garbage collection pauses (Rust/Tokio/Axum),
                 and lock-free concurrent workers (Go goroutines) for sub-25ms edge telemetry.
               </p>
-              <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
-                <span
-                  style={{
-                    fontSize: "10px",
-                    background: "#f1f5f9",
-                    border: "1px solid #cbd5e1",
-                    padding: "2px 6px",
-                    borderRadius: "3px",
-                    fontWeight: "bold",
-                    color: "#0f172a",
-                  }}
-                >
+              <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                <span style={{ fontSize: "11px", background: "#f1f5f9", border: "1px solid #cbd5e1", padding: "2px 8px", borderRadius: "4px", fontWeight: "bold", color: "#0f172a" }}>
                   Rust Tokio
                 </span>
-                <span
-                  style={{
-                    fontSize: "10px",
-                    background: "#f1f5f9",
-                    border: "1px solid #cbd5e1",
-                    padding: "2px 6px",
-                    borderRadius: "3px",
-                    fontWeight: "bold",
-                    color: "#0f172a",
-                  }}
-                >
+                <span style={{ fontSize: "11px", background: "#f1f5f9", border: "1px solid #cbd5e1", padding: "2px 8px", borderRadius: "4px", fontWeight: "bold", color: "#0f172a" }}>
                   WebAssembly
                 </span>
-                <span
-                  style={{
-                    fontSize: "10px",
-                    background: "#f1f5f9",
-                    border: "1px solid #cbd5e1",
-                    padding: "2px 6px",
-                    borderRadius: "3px",
-                    fontWeight: "bold",
-                    color: "#0f172a",
-                  }}
-                >
+                <span style={{ fontSize: "11px", background: "#f1f5f9", border: "1px solid #cbd5e1", padding: "2px 8px", borderRadius: "4px", fontWeight: "bold", color: "#0f172a" }}>
                   Go CSP
                 </span>
-                <span
-                  style={{
-                    fontSize: "10px",
-                    background: "#f1f5f9",
-                    border: "1px solid #cbd5e1",
-                    padding: "2px 6px",
-                    borderRadius: "3px",
-                    fontWeight: "bold",
-                    color: "#0f172a",
-                  }}
-                >
+                <span style={{ fontSize: "11px", background: "#f1f5f9", border: "1px solid #cbd5e1", padding: "2px 8px", borderRadius: "4px", fontWeight: "bold", color: "#0f172a" }}>
                   Next.js 16
                 </span>
               </div>
