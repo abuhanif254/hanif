@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Live Systems Status & Edge Observability | Abu Hanif",
     description: "99.994% Uptime • Real-time Cloudflare Edge & PostgreSQL Telemetry.",
-    creator: "@abuhanif",
+    creator: "@MohammadBitull1",
   },
 };
 

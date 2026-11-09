@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: "Interactive Systems Architecture Lab | Abu Hanif",
     description:
       "Test live browser edge latency and simulate PostgreSQL index plans with Staff Software Engineer Abu Hanif.",
-    creator: "@abuhanif",
+    creator: "@MohammadBitull1",
   },
 };
 

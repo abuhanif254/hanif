@@ -728,7 +728,7 @@ export default function HeroBanner() {
               </a>
               <span style={{ color: "#334155" }}>•</span>
               <a
-                href="https://www.linkedin.com/in/abuhanif254"
+                href="https://www.linkedin.com/in/md-abu-hanif-mia"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: "#cbd5e1", textDecoration: "none" }}

@@ -478,7 +478,7 @@ export function generateInvoiceForOrder(
       name: "Abu Hanif Mia",
       title: "Principal Full-Stack & Cloud Systems Architect",
       email: "contact@abuhanifmia.com",
-      address: "Dhaka, Bangladesh • Global Remote Consulting",
+      address: "Sadar Upazila, Kishoreganj, Dhaka, Bangladesh",
       taxId: "TAX-ENG-2026-HANIF",
       wireDetails: {
         bankName: "Standard Chartered Bank / Wise Commercial Routing",

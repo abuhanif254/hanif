@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
       card: "summary_large_image",
       title: `${pillar.name} | Abu Hanif Technical Blog`,
       description: pillar.description,
-      creator: "@abuhanif",
+      creator: "@MohammadBitull1",
     },
   };
 }

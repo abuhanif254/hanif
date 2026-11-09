@@ -18,8 +18,9 @@ export default function ResumeClientView() {
     const plainText = `
 MD ABU HANIF MIA (ABU HANIF)
 Staff Software Engineer & Systems Architect
-Dhaka, Bangladesh | Global Remote (US Pacific, Central European, Asia Timezones)
+Sadar Upazila, Kishoreganj, Dhaka, Bangladesh | Global Remote (US Pacific, Central European, Asia Timezones)
 Email: abuhanifmain@gmail.com | Phone: +880 1724-010261 | Portfolio: https://abuhanifmia.com
+LinkedIn: https://www.linkedin.com/in/md-abu-hanif-mia | GitHub: https://github.com/abuhanif254 | X: https://x.com/MohammadBitull1
 
 EXECUTIVE SUMMARY
 Senior Full-Stack Software Engineer & Systems Architect with 9+ years of production experience architecting high-concurrency distributed systems, edge-computed web applications, and database infrastructure. Battle-tested track record maintaining 99.99% production uptime for 10M+ daily users, cutting global P99 latency below 25ms, and reducing cloud infrastructure costs by up to 64%.
@@ -192,11 +193,31 @@ EDUCATION & ACCREDITATIONS
                           Staff Software Engineer &amp; Systems Architect
                         </div>
                         <div style={{ display: "flex", flexWrap: "wrap", gap: "14px", fontSize: "13px", color: "#475569" }}>
-                          <span>📍 <strong>Location:</strong> Dhaka, Bangladesh (Global Remote)</span>
+                          <span>📍 <strong>Address:</strong> Sadar Upazila, Kishoreganj, Dhaka, Bangladesh</span>
                           <span>📞 <strong>Phone:</strong> <a href="tel:+8801724010261" style={{ color: "#2563eb", fontWeight: "bold" }}>+880 1724-010261</a></span>
                           <span>✉️ <strong>Direct:</strong> <a href="mailto:abuhanifmain@gmail.com" style={{ color: "#2563eb", fontWeight: "bold" }}>abuhanifmain@gmail.com</a></span>
                           <span>🌐 <strong>Portfolio:</strong> <a href="https://abuhanifmia.com" style={{ color: "#2563eb" }}>https://abuhanifmia.com</a></span>
-                          <span>⏱️ <strong>Timezones:</strong> US Pacific (UTC-8) • Europe (UTC+2) • Asia (UTC+6)</span>
+                        </div>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", fontSize: "12.5px", color: "#2563eb", marginTop: "8px" }}>
+                          <a href="https://github.com/abuhanif254" target="_blank" rel="noopener noreferrer" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
+                            GitHub ↗
+                          </a>
+                          <span>•</span>
+                          <a href="https://www.linkedin.com/in/md-abu-hanif-mia" target="_blank" rel="noopener noreferrer" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
+                            LinkedIn ↗
+                          </a>
+                          <span>•</span>
+                          <a href="https://x.com/MohammadBitull1" target="_blank" rel="noopener noreferrer" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
+                            X (Twitter) ↗
+                          </a>
+                          <span>•</span>
+                          <a href="https://www.facebook.com/bitulla" target="_blank" rel="noopener noreferrer" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
+                            Facebook ↗
+                          </a>
+                          <span>•</span>
+                          <a href="https://www.instagram.com/bitullah_aj" target="_blank" rel="noopener noreferrer" style={{ color: "#2563eb", textDecoration: "none", fontWeight: "600" }}>
+                            Instagram ↗
+                          </a>
                         </div>
                       </div>
 

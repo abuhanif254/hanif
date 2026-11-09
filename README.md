@@ -168,5 +168,10 @@ pnpm build
 - **Principal Architect**: MD Abu Hanif Mia (Abu Hanif)
 - **Direct Email**: [abuhanifmain@gmail.com](mailto:abuhanifmain@gmail.com)
 - **Phone / WhatsApp**: [+880 1724-010261](tel:+8801724010261)
-- **Location**: Dhaka, Bangladesh / Remote Worldwide
-- **Availability**: Available for Q4/Q1 Architecture Contracts, Performance Audits & Technical Advisory
+- **Address**: Sadar Upazila, Kishoreganj, Dhaka, Bangladesh
+- **LinkedIn**: [linkedin.com/in/md-abu-hanif-mia](https://www.linkedin.com/in/md-abu-hanif-mia)
+- **GitHub**: [github.com/abuhanif254](https://github.com/abuhanif254)
+- **X (Twitter)**: [@MohammadBitull1](https://x.com/MohammadBitull1)
+- **Facebook**: [facebook.com/bitulla](https://www.facebook.com/bitulla)
+- **Instagram**: [instagram.com/bitullah_aj](https://www.instagram.com/bitullah_aj)
+- **Availability**: Available for Strategic Engineering Contracts, Performance Audits & Technical Advisory

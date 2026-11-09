@@ -184,7 +184,7 @@ export default function Image() {
           }}
         >
           <span style={{ color: "#cbd5e1", fontSize: "16px", fontWeight: 600 }}>
-            https://abuhanifmia.com &bull; abuhanifmain@gmail.com &bull; Dhaka, Bangladesh (Global Remote)
+            https://abuhanifmia.com &bull; abuhanifmain@gmail.com &bull; Kishoreganj, Dhaka, Bangladesh
           </span>
           <span style={{ color: "#38bdf8", fontSize: "15px", fontWeight: 700 }}>
             B.Sc. in CSE &bull; 9+ Years Systems Architecture

@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     title: "Abu Hanif (MD Abu Hanif Mia) | Staff Software Engineer & Systems Architect",
     description:
       "Scalable Systems • Distributed Architecture • High-Performance Web Applications. View portfolio work showcase, transparent pricing, and technical blog.",
-    creator: "@abuhanif",
+    creator: "@MohammadBitull1",
   },
   alternates: {
     canonical: siteUrl,
@@ -106,7 +106,9 @@ const jsonLd = {
       telephone: "+8801724010261",
       address: {
         "@type": "PostalAddress",
-        addressLocality: "Dhaka",
+        streetAddress: "Sadar Upazila",
+        addressLocality: "Kishoreganj",
+        addressRegion: "Dhaka",
         addressCountry: "Bangladesh",
       },
       alumniOf: {
@@ -154,8 +156,10 @@ const jsonLd = {
       ],
       sameAs: [
         "https://github.com/abuhanif254",
-        "https://linkedin.com/in/abuhanif",
-        "https://x.com/abuhanif",
+        "https://www.linkedin.com/in/md-abu-hanif-mia",
+        "https://x.com/MohammadBitull1",
+        "https://www.facebook.com/bitulla",
+        "https://www.instagram.com/bitullah_aj",
       ],
     },
     {
@@ -166,6 +170,20 @@ const jsonLd = {
       image: `${siteUrl}/images/profile.png`,
       email: "abuhanifmain@gmail.com",
       telephone: "+8801724010261",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Sadar Upazila",
+        addressLocality: "Kishoreganj",
+        addressRegion: "Dhaka",
+        addressCountry: "Bangladesh",
+      },
+      sameAs: [
+        "https://github.com/abuhanif254",
+        "https://www.linkedin.com/in/md-abu-hanif-mia",
+        "https://x.com/MohammadBitull1",
+        "https://www.facebook.com/bitulla",
+        "https://www.instagram.com/bitullah_aj",
+      ],
       priceRange: "$2,500 - $24,000+",
       areaServed: "Worldwide",
       founder: { "@id": `${siteUrl}/#person` },

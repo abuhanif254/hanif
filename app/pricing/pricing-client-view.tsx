@@ -1121,8 +1121,10 @@ export default function PricingClientView({
                       <div style={{ fontSize: "12px", color: "#475569", lineHeight: "1.6" }}>
                         <div><strong>Email:</strong> <a href="mailto:abuhanifmain@gmail.com" style={{ color: "#2563eb" }}>abuhanifmain@gmail.com</a></div>
                         <div><strong>Phone:</strong> <a href="tel:+8801724010261" style={{ color: "#2563eb" }}>+880 1724-010261</a></div>
-                        <div><strong>Location:</strong> Dhaka, Bangladesh / Worldwide Remote</div>
+                        <div><strong>Address:</strong> Sadar Upazila, Kishoreganj, Dhaka, Bangladesh</div>
+                        <div><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/md-abu-hanif-mia" target="_blank" rel="noopener noreferrer" style={{ color: "#2563eb" }}>md-abu-hanif-mia</a></div>
                         <div><strong>GitHub:</strong> <a href="https://github.com/abuhanif254" target="_blank" rel="noopener noreferrer" style={{ color: "#2563eb" }}>abuhanif254</a></div>
+                        <div><strong>X (Twitter):</strong> <a href="https://x.com/MohammadBitull1" target="_blank" rel="noopener noreferrer" style={{ color: "#2563eb" }}>@MohammadBitull1</a></div>
                       </div>
                     </div>
 

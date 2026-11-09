@@ -43,7 +43,7 @@ describe("Global Command Palette & Quick Discovery Hub", () => {
   it("indexes quick executive actions (email copy, LinkedIn copy, ATS PDF)", () => {
     expect(paletteSource).toContain("Quick Actions & Direct Contact");
     expect(paletteSource).toContain("abuhanifmain@gmail.com");
-    expect(paletteSource).toContain("linkedin.com/in/abuhanif254");
+    expect(paletteSource).toContain("linkedin.com/in/md-abu-hanif-mia");
     expect(paletteSource).toContain("/pricing#inquiry");
     expect(paletteSource).toContain("/resume");
   });

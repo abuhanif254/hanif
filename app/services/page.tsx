@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     title: "Engineering & Growth Services | Abu Hanif",
     description:
       "Programmatic SEO, autonomous social media bots, sub-50ms landing pages, custom SaaS platforms, and database optimization.",
-    creator: "@abuhanif",
+    creator: "@MohammadBitull1",
   },
 };
 

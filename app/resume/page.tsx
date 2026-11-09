@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     title: "Technical Resume & Credentials | MD Abu Hanif Mia",
     description:
       "Staff Software Engineer & Systems Architect resume. 9+ years experience, Programming Hero Batch-12 honor, freeCodeCamp certifications, and Rust systems expertise.",
-    creator: "@abuhanif",
+    creator: "@MohammadBitull1",
   },
 };
 
@@ -64,11 +64,19 @@ const resumeJsonLd = {
         image: `${siteUrl}/images/profile.png`,
         email: "abuhanifmain@gmail.com",
         telephone: "+8801724010261",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "Sadar Upazila",
+          addressLocality: "Kishoreganj",
+          addressRegion: "Dhaka",
+          addressCountry: "Bangladesh",
+        },
         sameAs: [
-          "https://github.com/abuhanifmain-art",
           "https://github.com/abuhanif254",
-          "https://linkedin.com/in/abuhanif",
-          "https://x.com/abuhanif",
+          "https://www.linkedin.com/in/md-abu-hanif-mia",
+          "https://x.com/MohammadBitull1",
+          "https://www.facebook.com/bitulla",
+          "https://www.instagram.com/bitullah_aj",
         ],
         alumniOf: [
           {

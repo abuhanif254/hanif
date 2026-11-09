@@ -12,7 +12,9 @@ export interface ProfileData {
     github: string;
     linkedin: string;
     twitter: string;
-    discord: string;
+    facebook?: string;
+    instagram?: string;
+    discord?: string;
   };
 }
 
@@ -98,13 +100,15 @@ export const initialProfile: ProfileData = {
   bio: "Senior Full-Stack Software Engineer & Systems Architect with 9+ years designing high-throughput distributed applications, edge networks, and developer platforms. Specializing in TypeScript, Next.js, Go, PostgreSQL, and Cloudflare Pages.",
   email: "abuhanifmain@gmail.com",
   phone: "+880 1724-010261",
-  location: "Dhaka, Bangladesh / Remote Worldwide",
+  location: "Sadar Upazila, Kishoreganj, Dhaka, Bangladesh",
   availabilityStatus: "Available for Q4 Contracts & High-Impact Roles",
   isAvailable: true,
   socialLinks: {
     github: "https://github.com/abuhanif254",
-    linkedin: "https://linkedin.com/in/abuhanif",
-    twitter: "https://x.com/abuhanif",
+    linkedin: "https://www.linkedin.com/in/md-abu-hanif-mia",
+    twitter: "https://x.com/MohammadBitull1",
+    facebook: "https://www.facebook.com/bitulla",
+    instagram: "https://www.instagram.com/bitullah_aj",
     discord: "https://discord.com",
   },
 };

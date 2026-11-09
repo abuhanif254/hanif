@@ -199,7 +199,7 @@ export default function CommandPalette() {
               </Command.Item>
 
               <Command.Item
-                onSelect={() => handleCopy("https://www.linkedin.com/in/abuhanif254", "LinkedIn Profile URL")}
+                onSelect={() => handleCopy("https://www.linkedin.com/in/md-abu-hanif-mia", "LinkedIn Profile URL")}
                 style={{
                   padding: "8px 12px",
                   borderRadius: "4px",
@@ -211,7 +211,41 @@ export default function CommandPalette() {
                   color: "#1e293b",
                 }}
               >
-                <span>🔗 Copy LinkedIn Profile (linkedin.com/in/abuhanif254)</span>
+                <span>🔗 Copy LinkedIn Profile (linkedin.com/in/md-abu-hanif-mia)</span>
+                <span style={{ fontSize: "11px", color: "#64748b" }}>Action</span>
+              </Command.Item>
+
+              <Command.Item
+                onSelect={() => handleCopy("https://x.com/MohammadBitull1", "X (Twitter) Profile URL")}
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontSize: "13.5px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  color: "#1e293b",
+                }}
+              >
+                <span>🐦 Copy X Profile (@MohammadBitull1)</span>
+                <span style={{ fontSize: "11px", color: "#64748b" }}>Action</span>
+              </Command.Item>
+
+              <Command.Item
+                onSelect={() => handleCopy("https://github.com/abuhanif254", "GitHub Profile URL")}
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontSize: "13.5px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  color: "#1e293b",
+                }}
+              >
+                <span>💻 Copy GitHub Profile (github.com/abuhanif254)</span>
                 <span style={{ fontSize: "11px", color: "#64748b" }}>Action</span>
               </Command.Item>
 

@@ -18,13 +18,15 @@ create table if not exists public.profiles (
   bio text not null default 'Staff Software Engineer & Systems Architect with 9+ years building high-throughput distributed systems, Next.js applications, Supabase integrations, and Cloudflare Pages deployments.',
   email text not null default 'abuhanifmain@gmail.com',
   phone text not null default 'Available upon request (Direct Email / Calendly)',
-  location text not null default 'Dhaka, Bangladesh / Remote Worldwide',
+  location text not null default 'Sadar Upazila, Kishoreganj, Dhaka, Bangladesh',
   availability_status text not null default 'Available for Architecture Consulting & High-Impact Contracts',
   is_available boolean not null default true,
   social_links jsonb not null default '{
     "github": "https://github.com/abuhanif254",
-    "linkedin": "https://linkedin.com/in/abuhanif",
-    "twitter": "https://x.com/abuhanif",
+    "linkedin": "https://www.linkedin.com/in/md-abu-hanif-mia",
+    "twitter": "https://x.com/MohammadBitull1",
+    "facebook": "https://www.facebook.com/bitulla",
+    "instagram": "https://www.instagram.com/bitullah_aj",
     "discord": "https://discord.com"
   }'::jsonb,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
@@ -240,7 +242,7 @@ select
   'Staff Software Engineer & Systems Architect with 9+ years building high-throughput distributed systems, Next.js applications, Supabase integrations, and Cloudflare Pages deployments.',
   'abuhanifmain@gmail.com',
   '+880 1724-010261',
-  'Dhaka, Bangladesh / Remote Worldwide',
+  'Sadar Upazila, Kishoreganj, Dhaka, Bangladesh',
   'Available for Architecture Consulting & High-Impact Contracts',
   true
 where not exists (select 1 from public.profiles);

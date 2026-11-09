@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
-      creator: "@abuhanif",
+      creator: "@MohammadBitull1",
     },
   };
 }
@@ -287,8 +287,23 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     author: {
       "@type": "Person",
       name: "MD Abu Hanif Mia",
+      alternateName: ["Abu Hanif", "md abu hanif mia"],
       url: siteUrl,
       jobTitle: "Staff Software Engineer & Systems Architect",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Sadar Upazila",
+        addressLocality: "Kishoreganj",
+        addressRegion: "Dhaka",
+        addressCountry: "Bangladesh",
+      },
+      sameAs: [
+        "https://github.com/abuhanif254",
+        "https://www.linkedin.com/in/md-abu-hanif-mia",
+        "https://x.com/MohammadBitull1",
+        "https://www.facebook.com/bitulla",
+        "https://www.instagram.com/bitullah_aj",
+      ],
     },
     publisher: {
       "@type": "Person",

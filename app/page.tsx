@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     title: "Abu Hanif (MD Abu Hanif Mia) | Staff Software Engineer & Systems Architect",
     description:
       "Scalable Systems • Distributed Architecture • High-Performance Web Applications. View portfolio work showcase, transparent pricing, systems lab, and technical blog.",
-    creator: "@abuhanif",
+    creator: "@MohammadBitull1",
   },
 };
 

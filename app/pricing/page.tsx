@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     title: "Engineering Services & Work Pricing | Abu Hanif",
     description:
       "Transparent engineering tiers: Architecture Audits, Postgres Query Sprints, Edge Migrations, and Full-Stack MVP builds.",
-    creator: "@abuhanif",
+    creator: "@MohammadBitull1",
   },
 };
 

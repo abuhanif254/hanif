@@ -11,7 +11,7 @@ export default function BlogSocialShare({ title, slug }: BlogSocialShareProps) {
   const [copied, setCopied] = useState(false);
 
   const fullUrl = `https://abuhanifmia.com/blog/${slug}`;
-  const encodedTitle = encodeURIComponent(`${title} by @abuhanif`);
+  const encodedTitle = encodeURIComponent(`${title} by @MohammadBitull1`);
   const twitterUrl = `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodeURIComponent(
     `${fullUrl}?utm_source=twitter&utm_medium=social_share`
   )}`;

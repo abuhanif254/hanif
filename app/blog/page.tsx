@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     title: "Technical Architecture Blog | Abu Hanif",
     description:
       "Deep dives into high-throughput systems, Next.js 16, PostgreSQL optimization, and cloud architecture.",
-    creator: "@abuhanif",
+    creator: "@MohammadBitull1",
   },
 };
 

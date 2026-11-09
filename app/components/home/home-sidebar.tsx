@@ -142,7 +142,7 @@ export default function HomeSidebar() {
                   +880 1724-010261
                 </a>
                 <br />
-                Dhaka, Bangladesh • Global Remote
+                Sadar Upazila, Kishoreganj, Dhaka, Bangladesh
               </span>
             </div>
             <div className="col-1">

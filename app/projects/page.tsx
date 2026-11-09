@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     title: "Engineering Projects & Systems Showcase | Abu Hanif",
     description:
       "Explore production systems, distributed pipelines, and database optimization case studies delivered by Staff Software Engineer Abu Hanif.",
-    creator: "@abuhanif",
+    creator: "@MohammadBitull1",
   },
 };
 

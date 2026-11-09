@@ -66,8 +66,25 @@ export default function SiteFooter() {
                 </a>
               </div>
               <div>
-                <strong>Location:</strong> Dhaka, Bangladesh (Global Remote)
+                <strong>Address:</strong> Sadar Upazila, Kishoreganj, Dhaka, Bangladesh
               </div>
+            </div>
+            <div className="footer-social-links" style={{ display: "flex", flexWrap: "wrap", gap: "6px", margin: "12px 0 10px 0" }}>
+              <a href="https://github.com/abuhanif254" target="_blank" rel="noopener noreferrer" className="eco-badge" aria-label="GitHub Profile">
+                GitHub ↗
+              </a>
+              <a href="https://www.linkedin.com/in/md-abu-hanif-mia" target="_blank" rel="noopener noreferrer" className="eco-badge" aria-label="LinkedIn Profile">
+                LinkedIn ↗
+              </a>
+              <a href="https://x.com/MohammadBitull1" target="_blank" rel="noopener noreferrer" className="eco-badge" aria-label="X (Twitter) Profile">
+                X ↗
+              </a>
+              <a href="https://www.facebook.com/bitulla" target="_blank" rel="noopener noreferrer" className="eco-badge" aria-label="Facebook Profile">
+                Facebook ↗
+              </a>
+              <a href="https://www.instagram.com/bitullah_aj" target="_blank" rel="noopener noreferrer" className="eco-badge" aria-label="Instagram Profile">
+                Instagram ↗
+              </a>
             </div>
             <div className="footer-ecosystem-badges">
               <span className="eco-badge">Rust</span>

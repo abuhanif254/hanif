@@ -753,7 +753,7 @@ export default function ProjectsClientView({ initialProjects }: ProjectsClientVi
                         +880 1724-010261
                       </a>
                       <br />
-                      Dhaka, Bangladesh • Global Remote
+                      Sadar Upazila, Kishoreganj, Dhaka, Bangladesh
                     </span>
                   </div>
                   <div style={{ padding: "0 0 10px 0" }}>
