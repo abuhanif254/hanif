@@ -987,6 +987,7 @@ By pairing Next.js App Router with Cloudflare Pages and Supabase PostgreSQL, dev
     readingTimeMinutes: 6,
     publishedAt: "2026-09-28T10:00:00Z",
     isPublished: true,
+    coverImageUrl: "/images/projects/cloudflare-edge-arch.svg",
   },
   {
     id: "blog-2",
@@ -1044,6 +1045,7 @@ Postgres is not just a storage warehouse; configured properly, it is a high-spee
     readingTimeMinutes: 8,
     publishedAt: "2026-08-14T14:30:00Z",
     isPublished: true,
+    coverImageUrl: "/images/projects/telemetry-pipeline-arch.svg",
   },
   {
     id: "blog-3",
@@ -1084,6 +1086,7 @@ Deployment takes 2 minutes instead of 45, unit tests run in seconds, and our tea
     readingTimeMinutes: 5,
     publishedAt: "2026-07-02T09:15:00Z",
     isPublished: true,
+    coverImageUrl: "/images/projects/ai-rag-pipeline-arch.svg",
   },
   {
     id: "blog-4",
@@ -1127,6 +1130,7 @@ Never guess—always measure with \`EXPLAIN ANALYZE\`.`,
     readingTimeMinutes: 7,
     publishedAt: "2026-05-19T11:00:00Z",
     isPublished: true,
+    coverImageUrl: "/images/projects/postgres-audit-arch.svg",
   },
 ];
 

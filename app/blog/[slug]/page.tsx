@@ -75,10 +75,27 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 }
 
 function renderInlineMarkdown(text: string): React.ReactNode {
-  const tokenRegex = /(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`)/g;
+  const tokenRegex = /(!\[[^\]]*\]\([^)]+\)|\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`)/g;
   const parts = text.split(tokenRegex);
   return parts.map((part, i) => {
     if (!part) return null;
+    if (part.startsWith("![") && part.includes("](") && part.endsWith(")")) {
+      const match = part.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+      if (match) {
+        const [, alt, src] = match;
+        return (
+          <img
+            key={i}
+            src={src}
+            alt={alt}
+            width={800}
+            height={450}
+            className="blog-inline-img"
+            loading="lazy"
+          />
+        );
+      }
+    }
     if (part.startsWith("[") && part.includes("](") && part.endsWith(")")) {
       const match = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
       if (match) {
@@ -207,14 +224,27 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 </a>
               </h3>
             );
-          } else if (trimmed.startsWith("![") && trimmed.includes("](") && trimmed.endsWith(")")) {
-            const imgMatch = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
-            if (imgMatch) {
-              const [, alt, src] = imgMatch;
+          } else if (trimmed.startsWith("![")) {
+            const lines = trimmed.split("\n").map((l) => l.trim()).filter(Boolean);
+            if (lines.length > 0 && lines[0].startsWith("![") && lines[0].includes("](") && lines[0].endsWith(")")) {
+              const imgMatch = lines[0].match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+              if (imgMatch) {
+                const [, alt, src] = imgMatch;
+                const captionLine = lines.slice(1).join(" ").replace(/^\*|\*$/g, "").trim();
+                elements.push(
+                  <figure key={`img-${index}-${pIdx}`} className="blog-figure">
+                    <img src={src} alt={alt} width={1200} height={675} loading="lazy" />
+                    {captionLine ? <figcaption className="figure-caption">{captionLine}</figcaption> : null}
+                  </figure>
+                );
+              } else {
+                elements.push(
+                  <p key={`p-${index}-${pIdx}`}>{renderInlineMarkdown(trimmed)}</p>
+                );
+              }
+            } else {
               elements.push(
-                <figure key={`img-${index}-${pIdx}`}>
-                  <img src={src} alt={alt} />
-                </figure>
+                <p key={`p-${index}-${pIdx}`}>{renderInlineMarkdown(trimmed)}</p>
               );
             }
           } else if (trimmed.startsWith("*Figure ") || trimmed.startsWith("*Caption: ")) {
@@ -455,6 +485,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
                       {/* 1-Click Social Sharing with UTM tracking */}
                       <BlogSocialShare title={post.title} slug={post.slug} />
+
+                      {/* Blog Feature Image (Direct Hero Rendering) */}
+                      {post.coverImageUrl && (
+                        <div className="blog-feature-image-hero">
+                          <img
+                            src={post.coverImageUrl}
+                            alt={post.title}
+                            width={1200}
+                            height={630}
+                            className="blog-feature-image-img"
+                            loading="eager"
+                          />
+                        </div>
+                      )}
 
                       {/* Executive Abstract / Key Takeaways Box */}
                       <div

@@ -633,19 +633,23 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
         .eq("is_published", true)
         .order("published_at", { ascending: false });
       if (!error && data && data.length > 0) {
-        const mapped = data.map((item) => ({
-          id: item.id,
-          title: item.title,
-          slug: item.slug,
-          excerpt: item.excerpt,
-          contentMarkdown: item.content_markdown,
-          tags: item.tags || [],
-          readingTimeMinutes: item.reading_time_minutes,
-          publishedAt: item.published_at,
-          isPublished: item.is_published,
-        }));
+        const mapped: BlogPost[] = data.map((item) => {
+          const initMatch = initialBlogPosts.find((p) => p.slug === item.slug);
+          return {
+            id: item.id,
+            title: item.title,
+            slug: item.slug,
+            excerpt: item.excerpt,
+            contentMarkdown: item.content_markdown,
+            tags: item.tags || [],
+            readingTimeMinutes: item.reading_time_minutes,
+            publishedAt: item.published_at,
+            isPublished: item.is_published,
+            coverImageUrl: item.cover_image_url || initMatch?.coverImageUrl,
+          };
+        });
         const existingSlugs = new Set(mapped.map((b) => b.slug));
-        const merged = [...mapped];
+        const merged: BlogPost[] = [...mapped];
         for (const item of dynamicBlogStore) {
           if (!existingSlugs.has(item.slug)) {
             merged.push(item);

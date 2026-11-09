@@ -4238,19 +4238,35 @@ export default function AdminPage() {
                       }}
                     >
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "14px", flexWrap: "wrap" }}>
-                        <div>
-                          <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", marginBottom: "4px" }}>
-                            <strong style={{ fontSize: "17px", color: "#ffffff" }}>{post.title}</strong>
-                            <code style={{ fontSize: "11px", backgroundColor: "#071324", padding: "2px 6px", borderRadius: "3px", color: "#94a3b8" }}>
-                              /{post.slug}
-                            </code>
-                          </div>
-                          <div style={{ display: "flex", alignItems: "center", gap: "12px", fontSize: "12px", color: "#94a3b8" }}>
-                            <span>⏱ {post.readingTimeMinutes} min read</span>
-                            <span>•</span>
-                            <span>📅 {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recent"}</span>
-                            <span>•</span>
-                            <span>✍️ MD Abu Hanif Mia</span>
+                        <div style={{ display: "flex", gap: "14px", alignItems: "flex-start", flex: 1, minWidth: "260px" }}>
+                          {post.coverImageUrl && (
+                            <img
+                              src={post.coverImageUrl}
+                              alt={post.title}
+                              style={{
+                                width: "72px",
+                                height: "52px",
+                                objectFit: "cover",
+                                borderRadius: "4px",
+                                border: "1px solid #1e293b",
+                                flexShrink: 0,
+                              }}
+                            />
+                          )}
+                          <div>
+                            <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", marginBottom: "4px" }}>
+                              <strong style={{ fontSize: "17px", color: "#ffffff" }}>{post.title}</strong>
+                              <code style={{ fontSize: "11px", backgroundColor: "#071324", padding: "2px 6px", borderRadius: "3px", color: "#94a3b8" }}>
+                                /{post.slug}
+                              </code>
+                            </div>
+                            <div style={{ display: "flex", alignItems: "center", gap: "12px", fontSize: "12px", color: "#94a3b8" }}>
+                              <span>⏱ {post.readingTimeMinutes} min read</span>
+                              <span>•</span>
+                              <span>📅 {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recent"}</span>
+                              <span>•</span>
+                              <span>✍️ MD Abu Hanif Mia</span>
+                            </div>
                           </div>
                         </div>
 

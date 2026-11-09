@@ -36,6 +36,35 @@ export default function TechnicalBlogFeed({ articles }: TechnicalBlogFeedProps) 
                 return (
                   <li key={item.slug} className="rss_item jwfeed-post" id={`jwfeeds-item-${idx}`}>
                     <meta content={item.publishedAt} itemProp="dateCreated" name="dateCreated" />
+                    {item.coverImageUrl && (
+                      <Link
+                        href={`/blog/${item.slug}`}
+                        style={{
+                          display: "block",
+                          marginBottom: "8px",
+                          borderRadius: "4px",
+                          overflow: "hidden",
+                          border: "1px solid #e2e8f0",
+                          backgroundColor: "#071324",
+                          maxHeight: "120px",
+                        }}
+                      >
+                        <img
+                          src={item.coverImageUrl}
+                          alt={item.title}
+                          width={360}
+                          height={180}
+                          style={{
+                            width: "100%",
+                            maxHeight: "120px",
+                            objectFit: "cover",
+                            objectPosition: "top center",
+                            display: "block",
+                          }}
+                          loading="lazy"
+                        />
+                      </Link>
+                    )}
                     <strong>
                       <Link href={`/blog/${item.slug}`} itemProp="url" rel="bookmark">
                         <span className="entry-title" itemProp="name">

@@ -215,6 +215,36 @@ export default async function BlogCategoryPage({ params }: CategoryPageProps) {
                               boxShadow: "0 2px 8px -2px rgba(11, 19, 43, 0.05)",
                             }}
                           >
+                            {post.coverImageUrl && (
+                              <Link
+                                href={`/blog/${post.slug}`}
+                                style={{
+                                  display: "block",
+                                  borderRadius: "6px",
+                                  overflow: "hidden",
+                                  marginBottom: "16px",
+                                  border: "1px solid #e2e8f0",
+                                  backgroundColor: "#071324",
+                                  maxHeight: "220px",
+                                }}
+                              >
+                                <img
+                                  src={post.coverImageUrl}
+                                  alt={post.title}
+                                  width={720}
+                                  height={360}
+                                  style={{
+                                    width: "100%",
+                                    maxHeight: "220px",
+                                    objectFit: "cover",
+                                    objectPosition: "top center",
+                                    display: "block",
+                                  }}
+                                  loading="lazy"
+                                />
+                              </Link>
+                            )}
+
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: "8px", marginBottom: "8px" }}>
                               <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
                                 {post.tags.map((t) => (

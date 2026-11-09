@@ -187,6 +187,18 @@ export default function BlogClientView({
                             </span>
                           </div>
 
+                          {featuredPost.coverImageUrl && (
+                            <Link href={`/blog/${featuredPost.slug}`} className="blog-featured-hero-media">
+                              <img
+                                src={featuredPost.coverImageUrl}
+                                alt={featuredPost.title}
+                                width={800}
+                                height={400}
+                                className="blog-featured-hero-img"
+                              />
+                            </Link>
+                          )}
+
                           <h3 style={{ fontSize: "22px", margin: "6px 0 10px 0", lineHeight: "1.3" }}>
                             <Link href={`/blog/${featuredPost.slug}`} style={{ color: "#ffffff", textDecoration: "none" }}>
                               {featuredPost.title}
@@ -263,6 +275,36 @@ export default function BlogClientView({
                               boxShadow: "0 2px 8px -2px rgba(11, 19, 43, 0.05)",
                             }}
                           >
+                            {post.coverImageUrl && (
+                              <Link
+                                href={`/blog/${post.slug}`}
+                                style={{
+                                  display: "block",
+                                  borderRadius: "6px",
+                                  overflow: "hidden",
+                                  marginBottom: "16px",
+                                  border: "1px solid #e2e8f0",
+                                  backgroundColor: "#071324",
+                                  maxHeight: "220px",
+                                }}
+                              >
+                                <img
+                                  src={post.coverImageUrl}
+                                  alt={post.title}
+                                  width={720}
+                                  height={360}
+                                  style={{
+                                    width: "100%",
+                                    maxHeight: "220px",
+                                    objectFit: "cover",
+                                    objectPosition: "top center",
+                                    display: "block",
+                                  }}
+                                  loading="lazy"
+                                />
+                              </Link>
+                            )}
+
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px", fontSize: "12px", color: "#64748b" }}>
                               <div>
                                 <strong style={{ color: "#0f172a" }}>
