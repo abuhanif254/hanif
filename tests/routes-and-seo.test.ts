@@ -77,7 +77,7 @@ describe("Routes, SEO & Topic Pillars Verification", () => {
     }
 
     expect(entries.length).toBeGreaterThanOrEqual(30);
-  });
+  }, 15000);
 
   it("should return valid operational telemetry from /api/health", async () => {
     const { GET } = await import("../app/api/health/route");

@@ -15,6 +15,20 @@ export interface EcosystemRelation {
 
 export const ecosystemRelations: EcosystemRelation[] = [
   {
+    projectSlug: "cloudflare-edge-ecommerce",
+    projectTitle: "Cloudflare Edge Multi-Tenant E-Commerce Platform",
+    blogSlug: "nextjs-300-tools-platform-architecture-seo",
+    blogTitle: "How I Built a 300+ Tool Calculator Platform with Next.js (Architecture & SEO Lessons)",
+    blogExcerpt: "How a unified registry, next-intl localized routing, and client bundle isolation cut First Load JS by 94.9% across 3,200+ statically generated pages.",
+    labAnchor: "/lab#edge-radar",
+    labToolName: "Global Edge Latency Radar & Bundle Profiler",
+    labBadge: "Static Edge SSG",
+    serviceSlug: "technical-programmatic-seo",
+    serviceTitle: "Technical & Programmatic SEO Engineering",
+    servicePrice: "$3,800",
+    serviceTimeline: "1-2 Weeks",
+  },
+  {
     projectSlug: "financial-telemetry-pipeline",
     projectTitle: "Real-Time Financial Telemetry Pipeline",
     blogSlug: "realtime-telemetry-supabase-postgres-cdc",

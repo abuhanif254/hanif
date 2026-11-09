@@ -33,10 +33,12 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
   // Ensure title with template suffix (| Abu Hanif) remains strictly <= 90 chars for optimal SERP display
   const title =
-    post.title === "Architecting Next.js 16 Applications for Cloudflare Pages: Lessons from Production"
+    post.slug === "nextjs-300-tools-platform-architecture-seo"
+      ? "How I Built a 300+ Tool Platform with Next.js"
+      : post.title === "Architecting Next.js 16 Applications for Cloudflare Pages: Lessons from Production"
       ? "Architecting Next.js 16 for Cloudflare Pages: Production Lessons"
-      : post.title.length > 75
-      ? `${post.title.slice(0, 72)}...`
+      : post.title.length + 12 > 88
+      ? `${post.title.slice(0, 85 - 12)}...`
       : post.title;
 
   return {
@@ -60,14 +62,63 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       url: `${siteUrl}/blog/${post.slug}`,
       publishedTime: post.publishedAt,
       tags: post.tags,
+      images: post.coverImageUrl ? [`${siteUrl}${post.coverImageUrl}`] : [`${siteUrl}/images/og-card.png`],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
       creator: "@MohammadBitull1",
+      images: post.coverImageUrl ? [`${siteUrl}${post.coverImageUrl}`] : [`${siteUrl}/images/og-card.png`],
     },
   };
+}
+
+function renderInlineMarkdown(text: string): React.ReactNode {
+  const tokenRegex = /(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`)/g;
+  const parts = text.split(tokenRegex);
+  return parts.map((part, i) => {
+    if (!part) return null;
+    if (part.startsWith("[") && part.includes("](") && part.endsWith(")")) {
+      const match = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+      if (match) {
+        const [, label, url] = match;
+        const isExternal = url.startsWith("http");
+        return (
+          <a
+            key={i}
+            href={url}
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noopener noreferrer" : undefined}
+          >
+            {label}
+          </a>
+        );
+      }
+    }
+    if (part.startsWith("**") && part.endsWith("**") && part.length >= 4) {
+      return (
+        <strong key={i}>
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    if (part.startsWith("*") && part.endsWith("*") && !part.startsWith("**") && part.length >= 2) {
+      return (
+        <em key={i}>
+          {part.slice(1, -1)}
+        </em>
+      );
+    }
+    if (part.startsWith("`") && part.endsWith("`") && part.length >= 2) {
+      return (
+        <code key={i}>
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    return part;
+  });
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
@@ -130,30 +181,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             const headingText = trimmed.replace("## ", "").trim();
             const id = headingText.toLowerCase().replace(/[^a-z0-9]+/g, "-");
             elements.push(
-              <h2
-                key={`h2-${index}-${pIdx}`}
-                id={id}
-                style={{
-                  fontSize: "22px",
-                  color: "#0f172a",
-                  margin: "32px 0 12px 0",
-                  borderBottom: "1px solid #e2e8f0",
-                  paddingBottom: "6px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
+              <h2 key={`h2-${index}-${pIdx}`} id={id}>
                 <span>{headingText}</span>
                 <a
                   href={`#${id}`}
-                  style={{
-                    color: "#94a3b8",
-                    textDecoration: "none",
-                    fontSize: "15px",
-                    fontWeight: "normal",
-                    marginLeft: "8px",
-                  }}
+                  className="heading-anchor"
                   title="Permanent link to this section"
                 >
                   #
@@ -164,107 +196,93 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             const headingText = trimmed.replace("### ", "").trim();
             const id = headingText.toLowerCase().replace(/[^a-z0-9]+/g, "-");
             elements.push(
-              <h3
-                key={`h3-${index}-${pIdx}`}
-                id={id}
-                style={{
-                  fontSize: "18px",
-                  color: "#0f172a",
-                  margin: "24px 0 10px 0",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
+              <h3 key={`h3-${index}-${pIdx}`} id={id}>
                 <span>{headingText}</span>
                 <a
                   href={`#${id}`}
-                  style={{
-                    color: "#94a3b8",
-                    textDecoration: "none",
-                    fontSize: "14px",
-                    fontWeight: "normal",
-                    marginLeft: "8px",
-                  }}
+                  className="heading-anchor"
                   title="Permanent link to this subsection"
                 >
                   #
                 </a>
               </h3>
             );
+          } else if (trimmed.startsWith("![") && trimmed.includes("](") && trimmed.endsWith(")")) {
+            const imgMatch = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+            if (imgMatch) {
+              const [, alt, src] = imgMatch;
+              elements.push(
+                <figure key={`img-${index}-${pIdx}`}>
+                  <img src={src} alt={alt} />
+                </figure>
+              );
+            }
+          } else if (trimmed.startsWith("*Figure ") || trimmed.startsWith("*Caption: ")) {
+            elements.push(
+              <p key={`caption-${index}-${pIdx}`} className="figure-caption">
+                {trimmed.replace(/^\*|\*$/g, "")}
+              </p>
+            );
+          } else if (trimmed.startsWith("|") && trimmed.includes("\n|")) {
+            const tableRows = trimmed.split("\n").filter((r) => r.trim().startsWith("|"));
+            if (tableRows.length >= 2) {
+              const parseCells = (row: string) =>
+                row.split("|").slice(1, -1).map((c) => c.trim());
+              const headerCells = parseCells(tableRows[0]);
+              const bodyRows = tableRows.slice(2).map(parseCells);
+              elements.push(
+                <div key={`table-${index}-${pIdx}`} className="blog-table-container">
+                  <table>
+                    <thead>
+                      <tr>
+                        {headerCells.map((th, thIdx) => (
+                          <th key={thIdx}>{renderInlineMarkdown(th)}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {bodyRows.map((row, rIdx) => (
+                        <tr key={rIdx}>
+                          {row.map((td, tdIdx) => (
+                            <td key={tdIdx}>{renderInlineMarkdown(td)}</td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              );
+            }
           } else if (trimmed.startsWith("> ")) {
             const quoteText = trimmed.replace(/^> /gm, "");
             elements.push(
-              <blockquote
-                key={`quote-${index}-${pIdx}`}
-                style={{
-                  margin: "18px 0",
-                  padding: "12px 18px",
-                  backgroundColor: "#f8fafc",
-                  borderLeft: "4px solid #2563eb",
-                  borderRadius: "4px",
-                  fontStyle: "italic",
-                  fontSize: "14px",
-                  color: "#334155",
-                  lineHeight: "1.6",
-                }}
-              >
-                {quoteText}
+              <blockquote key={`quote-${index}-${pIdx}`}>
+                {renderInlineMarkdown(quoteText)}
               </blockquote>
             );
           } else if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
             const items = trimmed.split("\n").map((item) => item.replace(/^[-*] /, "").trim());
             elements.push(
-              <ul
-                key={`ul-${index}-${pIdx}`}
-                style={{
-                  margin: "14px 0",
-                  paddingLeft: "22px",
-                  fontSize: "14px",
-                  color: "#334155",
-                  lineHeight: "1.7",
-                }}
-              >
+              <ul key={`ul-${index}-${pIdx}`}>
                 {items.map((item, itemIdx) => (
-                  <li key={itemIdx} style={{ marginBottom: "6px" }}>
-                    {item}
-                  </li>
+                  <li key={itemIdx}>{renderInlineMarkdown(item)}</li>
                 ))}
               </ul>
             );
           } else if (/^\d+\. /.test(trimmed)) {
             const items = trimmed.split("\n").map((item) => item.replace(/^\d+\. /, "").trim());
             elements.push(
-              <ol
-                key={`ol-${index}-${pIdx}`}
-                style={{
-                  margin: "14px 0",
-                  paddingLeft: "22px",
-                  fontSize: "14px",
-                  color: "#334155",
-                  lineHeight: "1.7",
-                }}
-              >
+              <ol key={`ol-${index}-${pIdx}`}>
                 {items.map((item, itemIdx) => (
-                  <li key={itemIdx} style={{ marginBottom: "6px" }}>
-                    {item}
-                  </li>
+                  <li key={itemIdx}>{renderInlineMarkdown(item)}</li>
                 ))}
               </ol>
             );
           } else {
             // Regular paragraph with inline formatting
             elements.push(
-              <p
-                key={`p-${index}-${pIdx}`}
-                style={{
-                  fontSize: "14px",
-                  lineHeight: "1.75",
-                  color: "#334155",
-                  margin: "0 0 16px 0",
-                }}
-              >
-                {trimmed}
+              <p key={`p-${index}-${pIdx}`}>
+                {renderInlineMarkdown(trimmed)}
               </p>
             );
           }
@@ -280,7 +298,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     "@type": "TechArticle",
     headline: post.title,
     description: post.excerpt,
-    image: [`${siteUrl}/images/og-card.png`],
+    image: post.coverImageUrl ? [`${siteUrl}${post.coverImageUrl}`] : [`${siteUrl}/images/og-card.png`],
     url: `${siteUrl}/blog/${post.slug}`,
     datePublished: post.publishedAt,
     dateModified: post.publishedAt,
@@ -484,7 +502,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                       )}
 
                       {/* Structured Technical Content */}
-                      <div className="article-rendered-body" style={{ marginBottom: "32px" }}>
+                      <div className="article-rendered-body blog-prose-content" style={{ marginBottom: "32px" }}>
                         {renderMarkdownContent(post.contentMarkdown)}
                       </div>
 
