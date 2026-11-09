@@ -35,6 +35,7 @@ export default function BioAndCredentials() {
             alt="MD Abu Hanif Mia - Staff Software Engineer"
             width={180}
             height={180}
+            loading="lazy"
             className="profilepic"
             style={{
               width: "100%",

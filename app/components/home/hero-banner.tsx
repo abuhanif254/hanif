@@ -646,6 +646,7 @@ export default function HeroBanner() {
                 alt="MD Abu Hanif Mia - Staff Software Engineer & Systems Architect"
                 width={84}
                 height={84}
+                loading="lazy"
                 style={{
                   width: "100%",
                   height: "100%",
