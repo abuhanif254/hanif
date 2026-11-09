@@ -739,8 +739,14 @@ a, button, input, select, textarea {
   }
 
   #index .imgwrap #img1 #banner-tagline {
-    font-size: 11px !important;
+    font-size: 10.5px !important;
     margin-bottom: 6px !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    padding: 3px 10px !important;
   }
 
   .hero-slider-header-bar {

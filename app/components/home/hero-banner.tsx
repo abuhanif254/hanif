@@ -262,6 +262,8 @@ export default function HeroBanner() {
               borderRadius: "999px",
               boxShadow: "0 2px 10px rgba(0, 0, 0, 0.4)",
               backdropFilter: "blur(8px)",
+              maxWidth: "100%",
+              overflow: "hidden",
             }}
           >
             <span
@@ -272,10 +274,12 @@ export default function HeroBanner() {
                 backgroundColor: "#10b981",
                 boxShadow: "0 0 8px #10b981",
                 display: "inline-block",
+                flexShrink: 0,
               }}
             />
-            <span style={{ fontSize: "11px", fontWeight: 800, color: "#38bdf8", textTransform: "uppercase", letterSpacing: "0.8px" }}>
-              Clean Architecture • High Performance • Scalable Systems
+            <span style={{ fontSize: "11px", fontWeight: 800, color: "#38bdf8", textTransform: "uppercase", letterSpacing: "0.8px", whiteSpace: "nowrap" }}>
+              <span className="hidden sm:inline">Clean Architecture • High Performance • Scalable Systems</span>
+              <span className="inline sm:hidden">Scalable Systems • Distributed Arch</span>
             </span>
           </div>
 
@@ -642,7 +646,6 @@ export default function HeroBanner() {
                 alt="MD Abu Hanif Mia - Staff Software Engineer & Systems Architect"
                 width={84}
                 height={84}
-                priority
                 style={{
                   width: "100%",
                   height: "100%",
