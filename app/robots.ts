@@ -17,7 +17,6 @@ export default function robots(): MetadataRoute.Robots {
           "/api/",
           "/orders",
           "/orders/",
-          "/*?*",
         ],
       },
       {
@@ -30,7 +29,6 @@ export default function robots(): MetadataRoute.Robots {
           "/api/",
           "/orders",
           "/orders/",
-          "/*?*",
         ],
       },
     ],
