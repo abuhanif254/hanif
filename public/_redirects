@@ -6,3 +6,6 @@
 /services/architecture-codebase-audit /services/architecture-audit 301
 /services/database-query-optimization /services/database-optimization 301
 /services/greenfield-mvp /services/mvp-feature-sprint 301
+/404 / 301
+/$ /pricing 301
+/& / 301

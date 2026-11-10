@@ -114,6 +114,22 @@ const nextConfig: NextConfig = {
         destination: "/services/mvp-feature-sprint",
         permanent: true,
       },
+      // Cleanup of anomalous legacy crawled 404 paths
+      {
+        source: "/404",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/$",
+        destination: "/pricing",
+        permanent: true,
+      },
+      {
+        source: "/&",
+        destination: "/",
+        permanent: true,
+      },
     ];
   },
   async headers() {
