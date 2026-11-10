@@ -162,6 +162,9 @@ export default async function Image({ params }: OgProps) {
     ),
     {
       ...size,
+      headers: {
+        "X-Robots-Tag": "noindex",
+      },
     }
   );
 }

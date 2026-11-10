@@ -209,6 +209,9 @@ export default function Image() {
     ),
     {
       ...size,
+      headers: {
+        "X-Robots-Tag": "noindex",
+      },
     }
   );
 }
