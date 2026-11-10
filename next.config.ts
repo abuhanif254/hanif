@@ -82,6 +82,38 @@ const nextConfig: NextConfig = {
         destination: "/pricing",
         permanent: true,
       },
+      // Project Slug Aliases (SEO 301 Permanent Redirects)
+      {
+        source: "/projects/edge-ecommerce-platform",
+        destination: "/projects/cloudflare-edge-ecommerce",
+        permanent: true,
+      },
+      {
+        source: "/projects/enterprise-rag-pipeline",
+        destination: "/projects/enterprise-ai-document-search",
+        permanent: true,
+      },
+      // Service Slug Aliases (SEO 301 Permanent Redirects)
+      {
+        source: "/services/fractional-staff-architect",
+        destination: "/services/fractional-staff-engineer",
+        permanent: true,
+      },
+      {
+        source: "/services/architecture-codebase-audit",
+        destination: "/services/architecture-audit",
+        permanent: true,
+      },
+      {
+        source: "/services/database-query-optimization",
+        destination: "/services/database-optimization",
+        permanent: true,
+      },
+      {
+        source: "/services/greenfield-mvp",
+        destination: "/services/mvp-feature-sprint",
+        permanent: true,
+      },
     ];
   },
   async headers() {

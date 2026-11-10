@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { getProjectBySlug, getProjects, PROJECT_SLUG_ALIASES } from "../../lib/portfolio-store";
 import { initialTestimonials } from "../../data/portfolio-data";
@@ -157,12 +157,11 @@ type ProjectPageProps = {
 
 export async function generateStaticParams() {
   const projects = await getProjects();
-  const slugSet = new Set<string>();
-  projects.forEach((p) => slugSet.add(p.slug));
-  Object.keys(PROJECT_SLUG_ALIASES).forEach((alias) => slugSet.add(alias));
-  return Array.from(slugSet).map((slug) => ({
-    slug,
-  }));
+  return projects
+    .filter((p) => !PROJECT_SLUG_ALIASES[p.slug])
+    .map((p) => ({
+      slug: p.slug,
+    }));
 }
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
@@ -206,6 +205,9 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
 
 export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   const { slug } = await params;
+  if (PROJECT_SLUG_ALIASES[slug]) {
+    redirect(`/projects/${PROJECT_SLUG_ALIASES[slug]}`);
+  }
   const project = await getProjectBySlug(slug);
 
   if (!project) {

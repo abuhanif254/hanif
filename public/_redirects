@@ -1,2 +1,8 @@
-# Cloudflare Pages Redirects
-/work-prices /pricing 308
+# Cloudflare Pages 301 Permanent Redirects
+/work-prices /pricing 301
+/projects/edge-ecommerce-platform /projects/cloudflare-edge-ecommerce 301
+/projects/enterprise-rag-pipeline /projects/enterprise-ai-document-search 301
+/services/fractional-staff-architect /services/fractional-staff-engineer 301
+/services/architecture-codebase-audit /services/architecture-audit 301
+/services/database-query-optimization /services/database-optimization 301
+/services/greenfield-mvp /services/mvp-feature-sprint 301

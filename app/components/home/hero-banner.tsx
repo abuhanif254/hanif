@@ -792,10 +792,10 @@ export default function HeroBanner() {
       {/* Bottom 3 Quick Access Buttons (Preserved exactly) */}
       <div id="img2">
         <div className="wrapper">
-          <Link className="pabttn pa1" href="/projects?category=systems" title="View Distributed Systems Architecture">
+          <Link className="pabttn pa1" href="/projects" title="View Distributed Systems Architecture">
             Distributed Systems ⚡
           </Link>
-          <Link className="pabttn pa2" href="/projects?category=web" title="Explore Full-Stack Engineering Case Studies">
+          <Link className="pabttn pa2" href="/projects" title="Explore Full-Stack Engineering Case Studies">
             Full-Stack Engineering 🛠
           </Link>
           <Link className="pabttn pa3" href="/pricing" title="View Fixed Sprints & SOW Pricing Matrix">

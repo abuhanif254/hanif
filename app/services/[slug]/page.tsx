@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { getServices, getServiceBySlug, SERVICE_SLUG_ALIASES } from "../../lib/portfolio-store";
 import { getEcosystemForService } from "../../lib/ecosystem-map";
@@ -12,12 +12,11 @@ type ServicePageProps = {
 
 export async function generateStaticParams() {
   const services = await getServices();
-  const slugSet = new Set<string>();
-  services.forEach((s) => slugSet.add(s.slug));
-  Object.keys(SERVICE_SLUG_ALIASES).forEach((alias) => slugSet.add(alias));
-  return Array.from(slugSet).map((slug) => ({
-    slug,
-  }));
+  return services
+    .filter((s) => !SERVICE_SLUG_ALIASES[s.slug])
+    .map((s) => ({
+      slug: s.slug,
+    }));
 }
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abuhanifmia.com";
@@ -178,6 +177,9 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
 
 export default async function ServiceDetailPage({ params }: ServicePageProps) {
   const { slug } = await params;
+  if (SERVICE_SLUG_ALIASES[slug]) {
+    redirect(`/services/${SERVICE_SLUG_ALIASES[slug]}`);
+  }
   const service = await getServiceBySlug(slug);
 
   if (!service) {

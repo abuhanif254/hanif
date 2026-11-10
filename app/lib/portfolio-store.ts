@@ -459,6 +459,7 @@ export async function getServices(): Promise<ServicePricing[]> {
         // Add any additional active services from Supabase that were not in initialServices
         const seenSlugs = new Set(dynamicServicesStore.map((s) => s.slug));
         for (const item of data) {
+          if (SERVICE_SLUG_ALIASES[item.slug]) continue;
           if (!seenSlugs.has(item.slug)) {
             dynamicServicesStore.push({
               id: item.id,
@@ -481,7 +482,7 @@ export async function getServices(): Promise<ServicePricing[]> {
       // Fallback
     }
   }
-  return dynamicServicesStore.filter((s) => s.isActive !== false);
+  return dynamicServicesStore.filter((s) => s.isActive !== false && !SERVICE_SLUG_ALIASES[s.slug]);
 }
 
 export async function getServiceBySlug(slug: string): Promise<ServicePricing | undefined> {

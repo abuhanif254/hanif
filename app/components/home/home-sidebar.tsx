@@ -343,8 +343,8 @@ export default function HomeSidebar() {
                 <Link href="#work">Systems &amp; Architecture</Link>
               </strong>
               <ul>
-                <li className="li1"><Link href="/projects?category=systems">Distributed Systems</Link></li>
-                <li className="li2"><Link href="/projects?category=systems">High-Throughput APIs</Link></li>
+                <li className="li1"><Link href="/projects/financial-telemetry-pipeline">Distributed Systems</Link></li>
+                <li className="li2"><Link href="/services/distributed-telemetry-engine">High-Throughput APIs</Link></li>
                 <li className="li3"><Link href="/lab">PostgreSQL Optimization</Link></li>
                 <li className="li4"><Link href="/lab">Cloudflare Edge Architecture</Link></li>
                 <li className="li5"><Link href="/pricing">Zero-Trust Authentication</Link></li>
@@ -357,9 +357,9 @@ export default function HomeSidebar() {
               </strong>
               <ul>
                 <li className="li1"><Link href="/blog/nextjs-16-cloudflare-pages-architecture">Next.js 16 App Router</Link></li>
-                <li className="li2"><Link href="/projects?category=web">React 19 &amp; Server Components</Link></li>
+                <li className="li2"><Link href="/services/high-converting-landing-pages">React 19 &amp; Server Components</Link></li>
                 <li className="li3"><Link href="/resume">TypeScript Architecture</Link></li>
-                <li className="li4"><Link href="/projects?category=ai">AI &amp; LLM RAG Pipelines</Link></li>
+                <li className="li4"><Link href="/projects/enterprise-ai-document-search">AI &amp; LLM RAG Pipelines</Link></li>
                 <li className="li5"><Link href="/pricing">CI/CD &amp; Infrastructure as Code</Link></li>
                 <li className="li6"><Link href="/pricing">System Performance Audits</Link></li>
               </ul>

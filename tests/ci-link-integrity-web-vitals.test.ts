@@ -298,7 +298,14 @@ describe("Automated Link Integrity & Core Web Vitals CI Test", () => {
 
   it("satisfies Core Web Vitals best practices: viewport meta tag, semantic H1, and image layout protection", () => {
     for (const page of parsedPages) {
-      if (page.relativePath.includes("admin") || page.relativePath.includes("orders")) continue;
+      if (
+        page.relativePath.includes("admin") ||
+        page.relativePath.includes("orders") ||
+        page.htmlContent.includes("NEXT_REDIRECT") ||
+        page.htmlContent.includes("http-equiv=\"refresh\"")
+      ) {
+        continue;
+      }
 
       // 1. Viewport tag present
       expect(page.hasViewport, `Missing viewport on ${page.relativePath}`).toBe(true);
